@@ -50,7 +50,7 @@ public class UserEntity {
     private String userId;
 
     @Column(name = "user_password")
-    private String password;
+    private String userPassword;
 
     @Column(name = "social_code")
     private int socialCode;
