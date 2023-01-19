@@ -1,24 +1,28 @@
-import './App.css';
-import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Nav from './another/Nav.js'
-import Calendar from './main/Calendar.js'
-import SignIn from './account/SignIn.js'
-import NotFound from './NotFound.js'
+import "./App.css";
+import React, { Component } from "react";
+import { Routes, Route } from "react-router-dom";
+import Nav from "./another/Nav.js";
+import Calendar from "./main/Calendar.js";
+import BookCase from "./main/BookCase.js";
+import SignIn from "./account/SignIn.js";
+import NotFound from "./NotFound.js";
 
 function App() {
-  const isLogin = true
+  const isCalendar = true;
 
   return (
     <div className="App">
-      <Nav/>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Calendar/>}></Route>
-          <Route path="/youshallnotpass" element={<SignIn/>}></Route>
-          <Route path="*" element={<NotFound />}></Route>
-        </Routes>
-      </BrowserRouter>
+      <Nav />
+      <Routes>
+        {isCalendar ? (
+          <Route path="/" element={<Calendar />}></Route>
+        ) : (
+          <Route path="/" element={<BookCase />}></Route>
+        )}
+
+        <Route path="/youshallnotpass" element={<SignIn />}></Route>
+        <Route path="*" element={<NotFound />}></Route>
+      </Routes>
     </div>
   );
 }
