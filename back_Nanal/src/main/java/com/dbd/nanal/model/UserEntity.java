@@ -55,6 +55,7 @@ public class UserEntity {
     @Column(name = "social_code")
     private int socialCode;
 
+
     
     // 연결관계
 
