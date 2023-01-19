@@ -34,11 +34,17 @@ public class UserProfileEntity {
     private String img;
 
     @Column
-    private String Introduction;
+    private String introduction;
 
     @Column(name = "is_private")
     private Boolean isPrivate;
 
+    public UserProfileEntity (String nickname, String introduction, String img, Boolean isPrivate) {
+        this.nickname = nickname;
+        this.introduction = introduction;
+        this.img = img;
+        this.isPrivate = isPrivate;
+    }
 
 
 }
