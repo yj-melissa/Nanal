@@ -1,15 +1,15 @@
 @font-face {
-  font-family: "Cafe24Danjunghae";
-  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_twelve@1.1/Cafe24Danjunghae.woff")
+  font-family: "Cafe24SsurroundAir";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2105_2@1.0/Cafe24SsurroundAir.woff")
     format("woff");
   font-weight: normal;
   font-style: normal;
 }
 
 * {
-  font-family: Cafe24Danjunghae;
+  font-family: "Cafe24SsurroundAir";
   font-style: normal;
-  font-weight: normal;
+  font-weight: bold;
 }
 
 nav {
