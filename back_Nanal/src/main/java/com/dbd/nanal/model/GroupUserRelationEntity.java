@@ -1,19 +1,29 @@
 package com.dbd.nanal.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
 
 @Entity
 @Table(name = "group_user_relation")
+@Getter
+@NoArgsConstructor
 public class GroupUserRelationEntity {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "group_user_idx")
     private int groupUserIdx;
+
+    @Column(name = "is_notice")
+    private boolean isNotice;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "group_idx")
+    private GroupMemberEntity groupMember;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_idx")
+    private UserEntity user;
+
 
 }
