@@ -1,5 +1,5 @@
 function Notice() {
-    return <div></div>
+  return <div>notice</div>;
 }
 
-export default Notice
+export default Notice;
