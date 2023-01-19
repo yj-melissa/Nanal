@@ -1,3 +1,17 @@
+@font-face {
+  font-family: "Cafe24Danjunghae";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_twelve@1.1/Cafe24Danjunghae.woff")
+    format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+* {
+  font-family: Cafe24Danjunghae;
+  font-style: normal;
+  font-weight: normal;
+}
+
 nav {
   position: fixed;
   bottom: 0;
