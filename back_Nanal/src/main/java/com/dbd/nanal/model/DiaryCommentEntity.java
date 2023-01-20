@@ -44,8 +44,8 @@ public class DiaryCommentEntity {
         this.diary=diary;
         this.content=content;
         this.creationDate=creationDate;
+        this.parentCommentIdx=parentCommentIdx;
         this.user=user;
         this.groupMember=groupMember;
     }
-
 }
