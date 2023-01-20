@@ -21,7 +21,7 @@ function App() {
           <Route path="/" element={<BookCase />}></Route>
         )}
         <Route path="/SignUp" element={<SignUp />}></Route>
-        <Route path="/youshallnotpass" element={<SignIn />}></Route>
+        <Route path="/SignIn" element={<SignIn />}></Route>
         <Route path="*" element={<NotFound />}></Route>
       </Routes>
     </div>
