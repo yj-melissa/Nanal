@@ -1,11 +1,11 @@
 import * as React from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import logo from "../src_assets/home.png";
-import menu from "../src_assets/menu.png";
-import close from "../src_assets/close.png";
-import downarrow from "../src_assets/down-arrow.png";
-import uparrow from "../src_assets/up-arrow.png";
+import logo from "../src_assets/img/home.png";
+import menu from "../src_assets/img/menu.png";
+import close from "../src_assets/img/close.png";
+import downarrow from "../src_assets/img/down-arrow.png";
+import uparrow from "../src_assets/img/up-arrow.png";
 
 function Nav(props) {
   const [isToggle, setToggle] = useState(true);
