@@ -1,0 +1,18 @@
+/* font */
+@font-face {
+  font-family: "Cafe24Ssurround";
+  src: url("./src_assets/fonts/Cafe24Ssurround.ttf") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Cafe24SsurroundAir";
+  src: url("./src_assets/fonts/Cafe24SsurroundAir.ttf") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+* {
+  font-family: "Cafe24SsurroundAir";
+}
