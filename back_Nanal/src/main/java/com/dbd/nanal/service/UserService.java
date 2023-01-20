@@ -1,23 +1,31 @@
 package com.dbd.nanal.service;
 
 import com.dbd.nanal.model.UserEntity;
+import com.dbd.nanal.model.UserProfileEntity;
+import com.dbd.nanal.repository.UserProfileRepository;
 import com.dbd.nanal.repository.UserRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.apache.catalina.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class UserService {
 
-    private final UserRepository userRepository;
+    @Autowired private final UserRepository userRepository;
+    @Autowired private final UserProfileRepository userProfileRepository;
 
     public int join(UserEntity user) {
         checkDuplicate(user);
         userRepository.save(user);
+
+        UserProfileEntity userProfile = new UserProfileEntity();
+        userProfile.setUser(user);
+        userProfileRepository.save(userProfile);
+
         return user.getUserIdx();
     }
 
@@ -34,9 +42,4 @@ public class UserService {
 
 
 
-
-
-
-
 }
-
