@@ -2,16 +2,18 @@ package com.dbd.nanal.model;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
 @Table(name = "group_member")
 @Getter
+@NoArgsConstructor
 public class GroupMemberEntity {
 
     @Id // Primary key
@@ -30,7 +32,7 @@ public class GroupMemberEntity {
 
     @Column(name = "creation_date")
     @CreationTimestamp
-    private Timestamp creationDate;
+    private Date creationDate;
 
 
     // 태그 검색할 때 사용
@@ -47,7 +49,7 @@ public class GroupMemberEntity {
     private List<DiaryCommentEntity> diaryComments = new ArrayList<>();
 
     @Builder
-    public GroupMemberEntity(int groupIdx, String groupName, boolean isPrivate, String groupImg, Timestamp creationDate) {
+    public GroupMemberEntity(int groupIdx, String groupName, boolean isPrivate, String groupImg, Date creationDate) {
         this.groupIdx = groupIdx;
         this.groupName = groupName;
         this.isPrivate = isPrivate;
@@ -55,9 +57,8 @@ public class GroupMemberEntity {
         this.creationDate = creationDate;
     }
 
-    public GroupMemberEntity() {
 
-    }
+
 
 //    @PrePersist
 //    public void prePersist() {

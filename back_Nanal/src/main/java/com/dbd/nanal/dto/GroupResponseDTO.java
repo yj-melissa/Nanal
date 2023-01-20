@@ -2,8 +2,10 @@ package com.dbd.nanal.dto;
 
 import com.dbd.nanal.model.GroupMemberEntity;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 public class GroupResponseDTO {
@@ -21,4 +23,6 @@ public class GroupResponseDTO {
         this.groupImg = groupEntity.getGroupImg();
         this.creationTime = groupEntity.getCreationDate();
     }
+
+
 }
