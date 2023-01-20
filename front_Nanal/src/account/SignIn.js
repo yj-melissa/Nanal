@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import SingUp from "./SignUp";
 
 function SignIn() {
   return (
@@ -15,7 +14,7 @@ function SignIn() {
             <p>Password</p>
             <input type="text" id="user-password" />
             <div>
-              <Link to="{SingUp}">SignUp</Link>
+              <Link to="/SignUp">SignUp</Link>
 
               <button>SignIn</button>
             </div>
