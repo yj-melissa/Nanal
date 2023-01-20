@@ -1,22 +1,34 @@
 package com.dbd.nanal.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import lombok.*;
 
+import javax.persistence.*;
+
+@Getter
+@NoArgsConstructor
 @Entity
 @Table(name = "emotion")
 public class EmotionEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "emotion_idx")
+    @Column(name="emotion_idx")
     private int emotionIdx;
 
-    @OneToOne(mappedBy = "emotion")
-    private UserEntity user;
+    private String joy; // 기쁨
+    private String sad; // 슬픔
+    private String emb; // 당황
+    private String ang; // 분노
+    private String nerv; // 불안
+    private String calm; // 평온
 
+    @Builder
+    public EmotionEntity(int emotionIdx, String joy, String sad, String emb, String ang, String nerv, String calm) {
+        this.emotionIdx=emotionIdx;
+        this.joy=joy;
+        this.sad=sad;
+        this.emb=emb;
+        this.ang=ang;
+        this.nerv=nerv;
+        this.calm=calm;
+    }
 }

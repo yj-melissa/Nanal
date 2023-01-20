@@ -19,10 +19,7 @@ public class UserForm {
     private String userId;
 
     @NotEmpty
-    private String password1;
-
-    @NotEmpty
-    private String password2;
+    private String password;
 
     @NotEmpty
     private String nickname;

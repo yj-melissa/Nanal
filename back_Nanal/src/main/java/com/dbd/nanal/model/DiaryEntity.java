@@ -1,21 +1,23 @@
 package com.dbd.nanal.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.CreatedDate;
 
+import javax.persistence.*;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+
+@Getter
+@NoArgsConstructor
 @Entity
 @Table(name = "diary")
-@Getter
-@Setter
 public class DiaryEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="diary_idx")
+    private int diaryIdx;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name="user_idx")
@@ -56,4 +58,20 @@ public class DiaryEntity {
 
     @OneToMany(mappedBy = "diary")
     private List<GroupDiaryRelationEntity> groupDiaryRelations=new ArrayList<>();
+
+    @Builder
+    public DiaryEntity(int diaryIdx, UserEntity user, Timestamp creation_date,
+                       String content, PaintingEntity painting, MusicEntity music, boolean isDeleted,
+                       Timestamp deleteDate, Timestamp expireDate, String emo) {
+        this.diaryIdx=diaryIdx;
+        this.user=user;
+        this.creation_date=creation_date;
+        this.content=content;
+        this.painting=painting;
+        this.music=music;
+        this.isDeleted=isDeleted;
+        this.deleteDate=deleteDate;
+        this.expireDate=expireDate;
+        this.emo=emo;
+    }
 }
