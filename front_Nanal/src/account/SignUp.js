@@ -106,7 +106,7 @@ function SignUp() {
                 value={email}
                 onChange={onChangeEmail}
               />
-              <button>인증요청</button>
+              <button onClick={this.sendEmail}>인증요청</button>
             </div>
             <p className="message">{emailMessage}</p>
           </form>
