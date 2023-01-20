@@ -5,7 +5,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +24,7 @@ public class DiaryEntity {
     private UserEntity user;
 
     @CreationTimestamp
-    private Timestamp creation_date;
+    private Date creation_date;
 
     private String content;
 
@@ -40,10 +40,10 @@ public class DiaryEntity {
     private boolean isDeleted;
 
     @Column(name="delete_date")
-    private Timestamp deleteDate;
+    private Date deleteDate;
 
     @Column(name="expire_date")
-    private Timestamp expireDate;
+    private Date expireDate;
 
     private String emo;
 
@@ -60,9 +60,9 @@ public class DiaryEntity {
     private List<GroupDiaryRelationEntity> groupDiaryRelations=new ArrayList<>();
 
     @Builder
-    public DiaryEntity(int diaryIdx, UserEntity user, Timestamp creation_date,
+    public DiaryEntity(int diaryIdx, UserEntity user, Date creation_date,
                        String content, PaintingEntity painting, MusicEntity music, boolean isDeleted,
-                       Timestamp deleteDate, Timestamp expireDate, String emo) {
+                       Date deleteDate, Date expireDate, String emo) {
         this.diaryIdx=diaryIdx;
         this.user=user;
         this.creation_date=creation_date;
