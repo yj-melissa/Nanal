@@ -5,9 +5,11 @@ import com.dbd.nanal.model.UserProfileEntity;
 import com.dbd.nanal.repository.UserProfileRepository;
 import com.dbd.nanal.repository.UserRepository;
 import com.dbd.nanal.service.UserService;
+import java.time.LocalDateTime;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,28 +25,27 @@ public class UserController {
 
     private final UserService userService;
     private final UserProfileRepository userProfileRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/signup")
     public String signUp(@Valid UserForm form) {
 
         UserEntity user = new UserEntity();
         user.setUserName(form.getUserName());
+        user.setLoginType("normal");
         user.setEmail(form.getEmail());
         user.setUserId(form.getUserId());
-        user.setUserPassword(form.getPassword());
+        user.setUserPassword(passwordEncoder.encode(form.getPassword()));
+        user.setCreationDate(LocalDateTime.now());
+        user.setLastAccessDate(LocalDateTime.now());
 
-        int userIdx = userService.join(user);
-
-//        UserProfileEntity userProfile = new UserProfileEntity(form.getNickname(), form.getIntroduction(), form.getImg(), form.getIsPrivate());
-
-//        userProfile.setUser(user);
-//        userProfile.save(userProfile);
-
-
-        UserProfileEntity userProfile = userProfileRepository.findById((long)userIdx);
+        UserProfileEntity userProfile = new UserProfileEntity();
         userProfile.setNickname(form.getNickname());
+        userProfile.setIntroduction(form.getIntroduction());
+        userProfile.setImg(form.getImg());
+        userProfile.setIsPrivate(form.getIsPrivate());
 
-        userProfileRepository.save(userProfile);
+        userService.join(user, userProfile);
 
         return null;
     }

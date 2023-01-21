@@ -18,11 +18,11 @@ public class UserService {
     @Autowired private final UserRepository userRepository;
     @Autowired private final UserProfileRepository userProfileRepository;
 
-    public int join(UserEntity user) {
+    public int join(UserEntity user, UserProfileEntity userProfile) {
         checkDuplicate(user);
         userRepository.save(user);
 
-        UserProfileEntity userProfile = new UserProfileEntity();
+        checkNickname(userProfile);
         userProfile.setUser(user);
         userProfileRepository.save(userProfile);
 
@@ -40,6 +40,12 @@ public class UserService {
         }
     }
 
-
+    private void checkNickname(UserProfileEntity userProfile) {
+        UserProfileEntity checkNickname = userProfileRepository.findByNickname(
+            userProfile.getNickname());
+        if (checkNickname != null) {
+            throw new IllegalStateException("사용할 수 없는 닉네임");
+        }
+    }
 
 }
