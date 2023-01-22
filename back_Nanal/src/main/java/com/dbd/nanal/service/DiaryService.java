@@ -37,8 +37,8 @@ public class DiaryService {
     }
 
     //get diary list
-//    public List<DiaryResponseDTO> diaryList(int groupId){
-//        List<DiaryEntity> diaryEntityList= diaryRepository.findGroupDiaryList(groupId);
-//        return diaryEntityList.stream().map(x-> new DiaryResponseDTO(x)).collect(Collectors.toList());
-//    }
+    public List<DiaryResponseDTO> diaryList(int groupId){
+        List<DiaryEntity> diaryEntityList= diaryRepository.findGroupDiaryList(groupId);
+        return diaryEntityList.stream().map(x-> new DiaryResponseDTO(x)).collect(Collectors.toList());
+    }
 }
