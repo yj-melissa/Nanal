@@ -1,18 +1,23 @@
 package com.dbd.nanal.dto;
 
 import com.dbd.nanal.model.GroupTagEntity;
+import lombok.Getter;
 
+import java.util.ArrayList;
+import java.util.List;
+
+@Getter
 public class GroupTagResponseDTO {
 
-    private int tagIdx;
+    private final List<String> tags;
 
-    private int groupIdx;
+    public GroupTagResponseDTO(List<GroupTagEntity> groupTagEntities) {
 
-    private String tag;
-
-    public GroupTagResponseDTO(GroupTagEntity groupTag){
-        this.tagIdx = groupTag.getTagIdx();
-        this.groupIdx = groupTag.getGroupMember().getGroupIdx();
-        this.tag = groupTag.getTag();
+        // tag 리스트만 리턴
+        this.tags = new ArrayList<>();
+        for (GroupTagEntity groupTagEntity : groupTagEntities) {
+            this.tags.add(groupTagEntity.getTag());
+        }
     }
+
 }

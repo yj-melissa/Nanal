@@ -25,13 +25,13 @@ public class GroupDiaryRelationEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "group_idx")
-    private GroupMemberEntity groupMember;
+    private GroupDetailEntity groupDetail;
 
 
     @Builder
-    public GroupDiaryRelationEntity(int group_diary_idx, DiaryEntity diary, GroupMemberEntity groupMember) {
+    public GroupDiaryRelationEntity(int group_diary_idx, DiaryEntity diary, GroupDetailEntity groupDetail) {
         this.group_diary_idx = group_diary_idx;
         this.diary = diary;
-        this.groupMember = groupMember;
+        this.groupDetail = groupDetail;
     }
 }
