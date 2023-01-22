@@ -71,19 +71,19 @@ public class DiaryController {
         }
     }
 
-//    @ApiOperation(value = "groupIdx로 일기 리스트 리턴", notes =
-//            "일기를 삭제합니다.\n" +
-//                    "[Front] \n" +
-//                    "{groupIdx(int)} \n\n" +
-//                    "[Back] \n" +
-//                    "[{diaryIdx(int), userIdx(int), creationDate(Date), content(String), picture(String), music(int), emo(String)}]")
-//    @GetMapping("/list/{groupIdx}")
-//    public ResponseEntity<?> DiaryList(@PathVariable("groupIdx") int groupIdx){
-//        try{
-//            List<DiaryResponseDTO> diaryRequestDTOList=diaryService.diaryList(groupIdx);
-//            return ResponseEntity.status(HttpStatus.OK).body(diaryRequestDTOList);
-//        }catch (Exception e){
-//            return new ResponseEntity<>("서버오류", HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
+    @ApiOperation(value = "groupIdx로 일기 리스트 리턴", notes =
+            "일기를 삭제합니다.\n" +
+                    "[Front] \n" +
+                    "{groupIdx(int)} \n\n" +
+                    "[Back] \n" +
+                    "[{diaryIdx(int), userIdx(int), creationDate(Date), content(String), picture(String), music(int), emo(String)}]")
+    @GetMapping("/list/{groupIdx}")
+    public ResponseEntity<?> DiaryList(@PathVariable("groupIdx") int groupIdx){
+        try{
+            List<DiaryResponseDTO> diaryRequestDTOList=diaryService.diaryList(groupIdx);
+            return ResponseEntity.status(HttpStatus.OK).body(diaryRequestDTOList);
+        }catch (Exception e){
+            return new ResponseEntity<>("서버오류", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
