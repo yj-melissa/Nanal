@@ -1,11 +1,17 @@
 package com.dbd.nanal.service;
 
-import com.dbd.nanal.dto.GroupResponseDTO;
-import com.dbd.nanal.model.GroupMemberEntity;
+import com.dbd.nanal.dto.GroupDetailRequestDTO;
+import com.dbd.nanal.dto.GroupDetailResponseDTO;
+import com.dbd.nanal.dto.GroupTagRequestDTO;
+import com.dbd.nanal.dto.GroupTagResponseDTO;
+import com.dbd.nanal.model.GroupDetailEntity;
 import com.dbd.nanal.model.GroupTagEntity;
 import com.dbd.nanal.repository.GroupRepository;
 import com.dbd.nanal.repository.GroupTagRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Service
@@ -20,23 +26,30 @@ public class GroupService {
         this.groupTagRepository = groupTagRepository;
     }
 
-    public GroupMemberEntity saveGroup(GroupMemberEntity groupEntity) {
-        System.out.println("서비스ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ");
-        groupRepository.save(groupEntity);
-
-        return groupEntity;
+    public GroupDetailResponseDTO saveGroup(GroupDetailRequestDTO groupDetailRequestDTO) {
+        return new GroupDetailResponseDTO(groupRepository.save(groupDetailRequestDTO.toEntity()));
     }
-    public GroupTagEntity saveGroupTag(GroupTagEntity groupTagEntity){
-        groupTagRepository.save(groupTagEntity);
-        return groupTagEntity;
+    public GroupTagResponseDTO saveGroupTags(GroupDetailRequestDTO groupDetailRequestDTO){
+        List<String> groupTagRequestDTOs = groupDetailRequestDTO.getTags();
+
+        List<GroupTagEntity> groupTagEntities = new ArrayList<>();
+
+        for(String tag : groupTagRequestDTOs){
+            GroupTagRequestDTO groupTagRequestDTO = new GroupTagRequestDTO();
+            groupTagRequestDTO.setTag(tag);
+            groupTagRequestDTO.setGroupDetail(groupDetailRequestDTO.toEntity());
+
+            groupTagEntities.add(groupTagRepository.save(groupTagRequestDTO.toEntity()));
+        }
+//        return null;
+        return new GroupTagResponseDTO(groupTagEntities);
     }
 
-    public GroupResponseDTO findGroupById(int groupIdx) {
+    public GroupDetailResponseDTO findGroupById(int groupIdx) {
 
-        GroupMemberEntity groupEntity = groupRepository.getById(groupIdx);
+        GroupDetailEntity groupEntity = groupRepository.getById(groupIdx);
 
-        return new GroupResponseDTO(groupEntity);
-
+        return new GroupDetailResponseDTO(groupEntity);
     }
 
 }

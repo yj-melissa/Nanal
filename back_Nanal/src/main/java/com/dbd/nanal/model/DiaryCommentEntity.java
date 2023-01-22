@@ -35,17 +35,17 @@ public class DiaryCommentEntity {
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name="group_idx")
-    private GroupMemberEntity groupMember;
+    private GroupDetailEntity groupDetail;
 
     @Builder
     public DiaryCommentEntity(int commentIdx, DiaryEntity diary, String content, Timestamp creationDate,
-                              int parentCommentIdx, UserEntity user, GroupMemberEntity groupMember) {
+                              int parentCommentIdx, UserEntity user, GroupDetailEntity groupDetail) {
         this.commentIdx=commentIdx;
         this.diary=diary;
         this.content=content;
         this.creationDate=creationDate;
         this.parentCommentIdx=parentCommentIdx;
         this.user=user;
-        this.groupMember=groupMember;
+        this.groupDetail=groupDetail;
     }
 }

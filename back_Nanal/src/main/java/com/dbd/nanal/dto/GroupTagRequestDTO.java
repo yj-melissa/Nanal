@@ -1,27 +1,21 @@
 package com.dbd.nanal.dto;
 
-import com.dbd.nanal.model.GroupMemberEntity;
+import com.dbd.nanal.model.GroupDetailEntity;
 import com.dbd.nanal.model.GroupTagEntity;
-import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 
 @Getter
+@Setter
+@NoArgsConstructor
 public class GroupTagRequestDTO {
+    GroupDetailEntity groupDetail;
     private int tagIdx;
-
-    private int groupMemberIdx;
-
     private String tag;
 
-    @Builder
-    public GroupTagRequestDTO(int tagIdx, int groupMemberIdx, String tag) {
-        this.tagIdx = tagIdx;
-        this.groupMemberIdx = groupMemberIdx;
-        this.tag = tag;
-    }
-
-    public GroupTagEntity toEntity(GroupMemberEntity groupMember){
-        return GroupTagEntity.builder().tagIdx(tagIdx).groupMember(groupMember).tag(tag).build();
+    public GroupTagEntity toEntity() {
+        return GroupTagEntity.builder().groupDetail(groupDetail).tagIdx(tagIdx).tag(tag).build();
     }
 }
