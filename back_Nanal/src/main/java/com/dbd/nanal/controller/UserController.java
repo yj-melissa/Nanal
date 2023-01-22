@@ -2,19 +2,12 @@ package com.dbd.nanal.controller;
 
 import com.dbd.nanal.model.UserEntity;
 import com.dbd.nanal.model.UserProfileEntity;
-import com.dbd.nanal.repository.UserProfileRepository;
-import com.dbd.nanal.repository.UserRepository;
 import com.dbd.nanal.service.UserService;
 import java.time.LocalDateTime;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     private final UserService userService;
-    private final UserProfileRepository userProfileRepository;
     private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/signup")
@@ -47,7 +39,7 @@ public class UserController {
 
         userService.join(user, userProfile);
 
-        return null;
+        return user.getUserId();
     }
 
 }

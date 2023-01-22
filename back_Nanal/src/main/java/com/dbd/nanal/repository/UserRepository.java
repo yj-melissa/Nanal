@@ -1,6 +1,7 @@
 package com.dbd.nanal.repository;
 
 import com.dbd.nanal.model.UserEntity;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -8,9 +9,9 @@ import org.springframework.stereotype.Repository;
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
 
-    UserEntity findByUserName(String UserName);
-    UserEntity findByEmail(String email);
-    UserEntity findByUserNameAndUserPassword(String username, String userPassword);
+    Optional<UserEntity> findByUserId(String userId);
+    Optional<UserEntity> findByEmail(String email);
+    UserEntity findByUserIdx(int userIdx);
 
 }
 
