@@ -6,10 +6,18 @@ import com.dbd.nanal.repository.DiaryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class DiaryService {
+
+    private final DiaryRepository diaryRepository;
+
     @Autowired
-    private DiaryRepository diaryRepository;
+    public DiaryService(DiaryRepository diaryRepository){
+        this.diaryRepository=diaryRepository;
+    }
 
     // write diary
     public DiaryEntity save(DiaryEntity diary){
@@ -19,12 +27,18 @@ public class DiaryService {
 
     // get diary
     public DiaryResponseDTO getDiary(int diaryIdx){
-//        System.out.println(diaryRepository.getById(diaryIdx).getContent());
-        return new DiaryResponseDTO(diaryRepository.getById(diaryIdx));
+        DiaryEntity diaryEntity=diaryRepository.getReferenceById(diaryIdx);
+        return new DiaryResponseDTO(diaryEntity);
+    }
+
+    // delete diary
+    public void deleteDiary(int diaryIdx){
+        diaryRepository.deleteById(diaryIdx);
     }
 
     //get diary list
-//    public List<DiaryEntity> diaryList(int groupId){
-//        return diaryRepository.findGroupDiaryList(groupId);
+//    public List<DiaryResponseDTO> diaryList(int groupId){
+//        List<DiaryEntity> diaryEntityList= diaryRepository.findGroupDiaryList(groupId);
+//        return diaryEntityList.stream().map(x-> new DiaryResponseDTO(x)).collect(Collectors.toList());
 //    }
 }
