@@ -21,15 +21,15 @@ public class GroupTagEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "group_idx")
-    private GroupMemberEntity groupMember;
+    private GroupDetailEntity groupDetail;
 
     @Column
     private String tag;
 
     @Builder
-    public GroupTagEntity(int tagIdx, GroupMemberEntity groupMember, String tag) {
+    public GroupTagEntity(int tagIdx, GroupDetailEntity groupDetail, String tag) {
         this.tagIdx = tagIdx;
-        this.groupMember = groupMember;
+        this.groupDetail = groupDetail;
         this.tag = tag;
     }
 
