@@ -6,6 +6,8 @@ function Calendar() {
     <div>
       캘린더 페이지 입니다.
       <Link to="/SignIn"> 로그인 </Link>
+      {/* 일기쓰기 테스트용 */}
+      <Link to="/New"> 일기쓰기 </Link>
     </div>
   );
 }
