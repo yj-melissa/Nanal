@@ -1,23 +1,49 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import SingUp from "./SignUp";
 
 function SignIn() {
+  const [userId, setUserId] = useState("");
+  const [pw, setPw] = useState("");
+
+  const onChangeId = (e) => {
+    setUserId(e.target.value);
+  };
+
+  const onChangePw = (e) => {
+    setPw(e.target.value);
+  };
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+  };
+
   return (
     <div>
       <div>
         <h1> SignIn to 나날</h1>
         <div id="sign-in-form">
-          <form action="">
-            <p>UserName</p>
-            <input type="text" id="user-id" />
+          <form action="" onSubmit={onSubmit}>
+            <label for="user-id">ID</label>
+            <input
+              type="text"
+              id="user-id"
+              placeholder="아이디"
+              onChange={onChangeId}
+              value={userId}
+            />
             <br />
-            <p>Password</p>
-            <input type="text" id="user-password" />
+            <label for="user-password">PW</label>
+            <input
+              type="text"
+              id="user-password"
+              placeholder="비밀번호"
+              onChange={onChangePw}
+              value={pw}
+            />
             <div>
-              <Link to="{SingUp}">SignUp</Link>
-
-              <button>SignIn</button>
+              <button>Sign In</button>
+              <br />
+              <Link to="/SignUp">SignUp</Link>
             </div>
           </form>
         </div>

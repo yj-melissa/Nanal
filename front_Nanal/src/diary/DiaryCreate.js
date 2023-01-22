@@ -1,5 +1,5 @@
 function DiaryCreate() {
-    return <div></div>
+  return <div></div>;
 }
 
-export default DiaryCreate
+export default DiaryCreate;
