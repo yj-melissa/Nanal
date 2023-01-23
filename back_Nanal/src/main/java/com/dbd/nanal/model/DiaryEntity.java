@@ -74,4 +74,10 @@ public class DiaryEntity {
         this.expireDate=expireDate;
         this.emo=emo;
     }
+
+    public void deleteDiary(Boolean isDeleted, Date deleteDate, Date expireDate){
+        this.isDeleted=isDeleted;
+        this.deleteDate=deleteDate;
+        this.expireDate=expireDate;
+    }
 }
