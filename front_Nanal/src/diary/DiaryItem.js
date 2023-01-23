@@ -1,6 +1,10 @@
-import { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 function DiaryItem({ id, content, group, created_at, onRemove, onEdit }) {
+  //
+  useEffect(() => {
+    console.log(`${id}번 째 아이템 렌더!`);
+  });
   // 포커스 기능을 할 객체 생성
   const localContentInput = useRef();
   // 삭제하기 클릭 시 실행되는 함수
@@ -73,4 +77,5 @@ function DiaryItem({ id, content, group, created_at, onRemove, onEdit }) {
   );
 }
 
-export default DiaryItem;
+// 최적화를 위해
+export default React.memo(DiaryItem);

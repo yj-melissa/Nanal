@@ -1,5 +1,5 @@
 import "./App.css";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import { Routes, Route } from "react-router-dom";
 import Nav from "./another/Nav.js";
 import Calendar from "./main/Calendar.js";
@@ -53,7 +53,8 @@ function App() {
   const [data, setData] = useState([]);
   // id는 useRef로 생성
   const dataId = useRef(0);
-  const onCreate = (content, group) => {
+  // 바뀌는 게 없다면 재렌더링 안되도록 useCallback 사용
+  const onCreate = useCallback((content, group) => {
     const created_at = new Date().getTime();
     const newItem = {
       id: dataId.current,
@@ -62,24 +63,24 @@ function App() {
       created_at,
     };
     dataId.current += 1;
-    // 새로운 일기를 가장 위로
-    setData([newItem, ...data]);
-  };
+    // 새로운 일기를 가장 위로 - 함수를 전달해도 된다.
+    setData((data) => [newItem, ...data]);
+  }, []);
 
   // 일기 삭제 함수 - id 다른 것들은 삭제에서 제외하여 새로운 배열로 표현
-  const onRemove = (targetId) => {
-    const newDiaryList = data.filter((it) => it.id !== targetId);
-    setData(newDiaryList);
-  };
+  const onRemove = useCallback((targetId) => {
+    // useCallback을 사용하기 위해 함수형으로 전달
+    setData((data) => data.filter((it) => it.id !== targetId));
+  }, []);
 
   // 일기 수정 함수 - id 같은 것을 수정
-  const onEdit = (targetId, newContent) => {
-    setData(
+  const onEdit = useCallback((targetId, newContent) => {
+    setData((data) =>
       data.map((it) =>
         it.id === targetId ? { ...it, content: newContent } : it
       )
     );
-  };
+  }, []);
 
   return (
     <div className="App">
