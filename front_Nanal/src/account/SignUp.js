@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 
+
 function SignUp() {
   // 이메일 E-mail
   const [email, setEmail] = useState("");
   const [emailMessage, setEmailMessage] = useState("");
-  const [isEmail, setIsEmail] = useState("");
+  const [isEmail, setIsEmail] = useState(false);
   const onChangeEmail = (e) => {
     const currentEmail = e.target.value;
     setEmail(currentEmail);
@@ -96,8 +97,8 @@ function SignUp() {
         <h1 className="p-3">SignUp</h1>
         <form action="">
           {/* 이메일 email */}
-          <form id="form-el">
-            <label for="email">Email</label>
+          <div id="form-el">
+            <label htmlFor="email">Email</label>
             <br />
             <div>
               <input
@@ -106,10 +107,11 @@ function SignUp() {
                 value={email}
                 onChange={onChangeEmail}
               />
-              <button onClick={this.sendEmail}>인증요청</button>
+              {/* onClick={this.sendEmail} */}
+              <button >인증요청</button>
             </div>
             <p className="message">{emailMessage}</p>
-          </form>
+          </div>
           {/* 유저아이디 id */}
           <div className="form-el">
             <label htmlFor="id">UserId</label> <br />
