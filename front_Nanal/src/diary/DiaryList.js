@@ -1,13 +1,13 @@
 import DiaryItem from "./DiaryItem";
 
-function DiaryList({ diaryList }) {
+function DiaryList({ diaryList, onDelete }) {
   return (
     <div className="DiaryList">
       <h2>일기 리스트</h2>
       <div>
         {diaryList.map((it) => (
           // 작성되는 일기를 prop으로 보내기
-          <DiaryItem key={it.id} {...it} />
+          <DiaryItem key={it.id} {...it} onDelete={onDelete} />
         ))}
       </div>
     </div>

@@ -1,5 +1,5 @@
 import "./App.css";
-import React, { useState, useReducer, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { Routes, Route } from "react-router-dom";
 import Nav from "./another/Nav.js";
 import Calendar from "./main/Calendar.js";
@@ -66,6 +66,12 @@ function App() {
     setData([newItem, ...data]);
   };
 
+  // 일기 삭제 함수 - 삭제 후 새로운 배열
+  const onDelete = (targetId) => {
+    const newDiaryList = data.filter((it) => it.id !== targetId);
+    setData(newDiaryList);
+  };
+
   return (
     <div className="App">
       <Nav />
@@ -81,7 +87,7 @@ function App() {
         <Route path="*" element={<NotFound />}></Route>
       </Routes>
       <DiaryEditor onCreate={onCreate} />
-      <DiaryList diaryList={data} />
+      <DiaryList diaryList={data} onDelete={onDelete} />
     </div>
   );
 }
