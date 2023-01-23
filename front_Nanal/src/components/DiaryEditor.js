@@ -1,5 +1,5 @@
 // 일기 작성, 수정 부분에서 사용할 컴포넌트
-import { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 // 오늘 날짜를 YYYY-MM-DDTHH:mm:ss 형태로 변환해주는 함수
 const getStringDate = (date) => {
@@ -79,4 +79,5 @@ function DiaryEditor({ onCreate }) {
   );
 }
 
-export default DiaryEditor;
+//
+export default React.memo(DiaryEditor);
