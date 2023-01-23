@@ -6,6 +6,8 @@ import com.dbd.nanal.repository.DiaryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,7 +35,15 @@ public class DiaryService {
 
     // delete diary
     public void deleteDiary(int diaryIdx){
-        diaryRepository.deleteById(diaryIdx);
+        DiaryEntity diaryEntity=diaryRepository.getReferenceById(diaryIdx);
+
+        Calendar cal=Calendar.getInstance();
+        cal.setTime(new Date());
+        cal.add(Calendar.DATE, 30);
+        Date date=cal.getTime();
+
+        diaryEntity.deleteDiary(true, new Date(),date );
+        diaryRepository.save(diaryEntity);
     }
 
     //get diary list
