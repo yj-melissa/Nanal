@@ -66,10 +66,19 @@ function App() {
     setData([newItem, ...data]);
   };
 
-  // 일기 삭제 함수 - 삭제 후 새로운 배열
-  const onDelete = (targetId) => {
+  // 일기 삭제 함수 - id 다른 것들은 삭제에서 제외하여 새로운 배열로 표현
+  const onRemove = (targetId) => {
     const newDiaryList = data.filter((it) => it.id !== targetId);
     setData(newDiaryList);
+  };
+
+  // 일기 수정 함수 - id 같은 것을 수정
+  const onEdit = (targetId, newContent) => {
+    setData(
+      data.map((it) =>
+        it.id === targetId ? { ...it, content: newContent } : it
+      )
+    );
   };
 
   return (
@@ -87,7 +96,7 @@ function App() {
         <Route path="*" element={<NotFound />}></Route>
       </Routes>
       <DiaryEditor onCreate={onCreate} />
-      <DiaryList diaryList={data} onDelete={onDelete} />
+      <DiaryList diaryList={data} onRemove={onRemove} onEdit={onEdit} />
     </div>
   );
 }
