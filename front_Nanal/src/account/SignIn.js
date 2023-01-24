@@ -23,7 +23,7 @@ function SignIn() {
         <h1> SignIn to 나날</h1>
         <div id="sign-in-form">
           <form action="" onSubmit={onSubmit}>
-            <label for="user-id">ID</label>
+            <label htmlFor="user-id">ID</label>
             <input
               type="text"
               id="user-id"
@@ -32,7 +32,7 @@ function SignIn() {
               value={userId}
             />
             <br />
-            <label for="user-password">PW</label>
+            <label htmlFor="user-password">PW</label>
             <input
               type="text"
               id="user-password"

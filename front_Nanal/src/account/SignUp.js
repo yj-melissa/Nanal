@@ -2,6 +2,12 @@ import React, { useState } from "react";
 
 
 function SignUp() {
+  // 기본 형식 설명
+  // [실질적인 내용부분]
+  // [오류발생시 내용부분]
+  // [형식 Boolean 값 나타내는 부분]
+  // 형식 올바름 판별하는 함수()
+
   // 이메일 E-mail
   const [email, setEmail] = useState("");
   const [emailMessage, setEmailMessage] = useState("");
