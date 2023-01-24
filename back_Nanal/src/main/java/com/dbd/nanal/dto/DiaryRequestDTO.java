@@ -11,12 +11,15 @@ import java.util.Date;
 
 @Getter
 public class DiaryRequestDTO {
+    private int diaryIdx;
     private int userIdx;
     private Date creationDate;
     private String content;
     private int picture;
     private int music;
     private String emo;
+
+    private  int groupIdx;
 
 //    @Builder
 //    public DiaryRequestDTO(int diaryIdx, UserEntity user, Timestamp creationDate, String content, PaintingEntity picture, MusicEntity music, boolean isDeleted, Timestamp deleteDate, Timestamp expireDate, String emo) {
@@ -35,6 +38,7 @@ public class DiaryRequestDTO {
     public DiaryEntity toEntity(){
         return DiaryEntity.builder()
                 .creationDate(creationDate)
+                .diaryIdx(diaryIdx)
 //                .user(userIdx)
                 .content(content)
 //                .painting(picture)
