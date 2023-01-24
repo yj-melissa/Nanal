@@ -30,10 +30,10 @@ function DiaryEditor({ onCreate }) {
     <div className="DiaryEditor">
       <div>
         {/* 날짜 선택란 */}
-        <section>
+        <section className="flex justify-center">
           <div className="input-box">
             <input
-              className="input-box"
+              className="input-box max-w-xs"
               value={date}
               onChange={(e) => setDate(e.target.value)}
               type="date"
