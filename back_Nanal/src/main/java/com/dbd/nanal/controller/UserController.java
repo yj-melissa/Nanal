@@ -1,6 +1,6 @@
 package com.dbd.nanal.controller;
 
-import com.dbd.nanal.config.security.JWTTokenProvider;
+import com.dbd.nanal.config.security.JwtTokenProvider;
 import com.dbd.nanal.dto.UserDTO;
 import com.dbd.nanal.dto.UserResponseDTO;
 import com.dbd.nanal.model.UserEntity;
@@ -10,7 +10,9 @@ import com.dbd.nanal.service.UserService;
 import java.time.LocalDateTime;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,10 +23,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/user")
 public class UserController {
 
-    private final UserService userService;
-    private final PasswordEncoder passwordEncoder;
+    @Autowired  private final UserService userService;
 
-    private JWTTokenProvider jwtTokenProvider;
+    @Autowired private JwtTokenProvider jwtTokenProvider;
+
+    private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@Valid UserDTO userDTO) {
@@ -50,6 +53,7 @@ public class UserController {
                 .introduction(userDTO.getIntroduction())
                 .isPrivate(userDTO.getIsPrivate())
                 .build();
+
             UserEntity newUser = userService.join(user, userProfile);
 
             UserDTO responseUserDTO = UserDTO.builder()
@@ -69,7 +73,6 @@ public class UserController {
 
     }
 
-
     @PostMapping("/login")
     public ResponseEntity<?> authenticate(@Valid UserDTO userDTO) {
         UserEntity user = userService.getByCredentials(
@@ -78,9 +81,13 @@ public class UserController {
             passwordEncoder);
 
         if(user != null) {
+
+            String token = jwtTokenProvider.create(user);
+
             final UserDTO responseUserDTO = UserDTO.builder()
                 .userIdx(user.getUserIdx())
                 .userId(user.getUserId())
+                .jwtToken(token)
                 .build();
             return ResponseEntity.ok().body(responseUserDTO);
         } else {
