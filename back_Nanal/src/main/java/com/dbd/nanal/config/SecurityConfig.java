@@ -22,21 +22,21 @@ public class SecurityConfig {
                     .permitAll() // 로그인 없이도 이용 가능한 상태
 
             .and()
-                .csrf().disable()
+                .csrf().disable();
 
             // 로그인 설정
-            .formLogin()
-//            .loginPage("/user/login")             // 커스텀 로그인 폼 사용
-            .loginProcessingUrl("/user/loginProcess")       // Security에서 해당 주소로 오는 요청을 낚아채서 수행
-            .usernameParameter("userId")
-            .defaultSuccessUrl("/")
+//            .formLogin()
+////            .loginPage("/user/login")             // 커스텀 로그인 폼 사용
+//            .loginProcessingUrl("/user/login")       // Security에서 해당 주소로 오는 요청을 낚아채서 수행
+//            .usernameParameter("userId")
+//            .defaultSuccessUrl("/")
 
             // 로그아웃
-            .and()
-                .logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
-                .logoutSuccessUrl("/")
-                .invalidateHttpSession(true);
+//            .and()
+//                .logout()
+//                .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
+//                .logoutSuccessUrl("/")
+//                .invalidateHttpSession(true);
         return http.build();
 
     }
