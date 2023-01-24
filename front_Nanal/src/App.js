@@ -6,7 +6,7 @@ import Calendar from "./main/Calendar.js";
 import BookCase from "./main/BookCase.js";
 import SignIn from "./account/SignIn.js";
 import SignUp from "./account/SignUp.js";
-import NotFound from "./NotFound.js";
+import NotFound from "./another/NotFound.js";
 import DiaryCreate from "./diary/DiaryCreate";
 import DiaryList from "./diary/DiaryList";
 import DiaryEditor from "./components/DiaryEditor";
