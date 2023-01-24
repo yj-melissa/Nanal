@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 
-
 function SignUp() {
   // 기본 형식 설명
   // [실질적인 내용부분]
@@ -99,7 +98,7 @@ function SignUp() {
   };
   return (
     <div className="flex justify-center">
-      <div className="box-border p-4 w-80 border-4 border-black">
+      <div className="box-border p-4 w-80 border-2 border-black">
         <h1 className="p-3">SignUp</h1>
         <form action="">
           {/* 이메일 email */}
@@ -114,7 +113,7 @@ function SignUp() {
                 onChange={onChangeEmail}
               />
               {/* onClick={this.sendEmail} */}
-              <button >인증요청</button>
+              <button>인증요청</button>
             </div>
             <p className="message">{emailMessage}</p>
           </div>
