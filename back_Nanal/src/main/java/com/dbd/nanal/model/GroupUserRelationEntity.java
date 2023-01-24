@@ -12,6 +12,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class GroupUserRelationEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)// auto_increment
     @Column(name = "group_user_idx")
     private int groupUserIdx;
 
