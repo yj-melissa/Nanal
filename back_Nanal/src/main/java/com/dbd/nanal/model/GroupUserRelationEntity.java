@@ -1,5 +1,6 @@
 package com.dbd.nanal.model;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -19,11 +20,17 @@ public class GroupUserRelationEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "group_idx")
-    private GroupMemberEntity groupMember;
+    private GroupDetailEntity groupDetail;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_idx")
     private UserEntity user;
 
-
+    @Builder
+    public GroupUserRelationEntity(int groupUserIdx, boolean isNotice, GroupDetailEntity groupDetail, UserEntity user) {
+        this.groupUserIdx = groupUserIdx;
+        this.isNotice = isNotice;
+        this.groupDetail = groupDetail;
+        this.user = user;
+    }
 }

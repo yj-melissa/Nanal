@@ -2,17 +2,21 @@ package com.dbd.nanal.model;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "group_member")
+@Table(name = "group_detail")
 @Getter
-public class GroupMemberEntity {
+@Setter
+@NoArgsConstructor
+public class GroupDetailEntity {
 
     @Id // Primary key
     @GeneratedValue(strategy = GenerationType.IDENTITY)// auto_increment
@@ -30,39 +34,44 @@ public class GroupMemberEntity {
 
     @Column(name = "creation_date")
     @CreationTimestamp
-    private Timestamp creationDate;
+    private Date creationDate;
 
 
     // 태그 검색할 때 사용
-    @OneToMany(mappedBy = "groupMember") // 읽기만 가능
+    @OneToMany(mappedBy = "groupDetail") // 읽기만 가능
     private List<GroupTagEntity> groupTags = new ArrayList<>();
 
-    @OneToMany(mappedBy = "groupMember") // 읽기만 가능
+    @OneToMany(mappedBy = "groupDetail") // 읽기만 가능
     private List<GroupUserRelationEntity> groupUserRelations = new ArrayList<>();
 
-    @OneToMany(mappedBy = "groupMember") // 읽기만 가능
+    @OneToMany(mappedBy = "groupDetail") // 읽기만 가능
     private List<GroupDiaryRelationEntity> groupDiaries = new ArrayList<>();
 
-    @OneToMany(mappedBy = "groupMember")
+    @OneToMany(mappedBy = "groupDetail")
     private List<DiaryCommentEntity> diaryComments = new ArrayList<>();
 
+//    @Builder
+//    public GroupMemberEntity(int groupIdx, String groupName, boolean isPrivate, String groupImg, Date creationDate) {
+//        this.groupIdx = groupIdx;
+//        this.groupName = groupName;
+//        this.isPrivate = isPrivate;
+//        this.groupImg = groupImg;
+//        this.creationDate = creationDate;
+//    }
+
     @Builder
-    public GroupMemberEntity(int groupIdx, String groupName, boolean isPrivate, String groupImg, Timestamp creationDate) {
+    public GroupDetailEntity(int groupIdx, String groupName, boolean isPrivate, String groupImg, Date creationDate, List<GroupTagEntity> groupTags, List<GroupUserRelationEntity> groupUserRelations, List<GroupDiaryRelationEntity> groupDiaries, List<DiaryCommentEntity> diaryComments) {
         this.groupIdx = groupIdx;
         this.groupName = groupName;
         this.isPrivate = isPrivate;
         this.groupImg = groupImg;
         this.creationDate = creationDate;
+        this.groupTags = groupTags;
+        this.groupUserRelations = groupUserRelations;
+        this.groupDiaries = groupDiaries;
+        this.diaryComments = diaryComments;
     }
 
-    public GroupMemberEntity() {
-
-    }
-
-//    @PrePersist
-//    public void prePersist() {
-//        this.isPrivate = false;
-//    }
 
     public boolean getIsPrivate() {
         return isPrivate;
