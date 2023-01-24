@@ -11,13 +11,14 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
 @Entity
 @Builder
 @Table(name = "user_profile")
+@Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserProfileEntity {

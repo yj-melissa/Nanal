@@ -44,10 +44,9 @@ public class UserService {
     }
 
 
-    public UserEntity getByCredentials(final String userId, final String userPassword, final
-        PasswordEncoder passwordEncoder) {
-        final UserEntity user = userRepository.findByUserId(userId);
+    public UserEntity getByCredentials(final String userId, final String userPassword, final PasswordEncoder passwordEncoder) {
 
+        final UserEntity user = userRepository.findByUserId(userId);
         if(user != null && passwordEncoder.matches(userPassword, user.getUserPassword())) {
             return user;
         }

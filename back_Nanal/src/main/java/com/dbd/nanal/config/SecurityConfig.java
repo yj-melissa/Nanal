@@ -1,48 +1,47 @@
 package com.dbd.nanal.config;
 
+import com.dbd.nanal.config.security.JwtAuthenticationFilter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig {
+public class SecurityConfig{
+
+    @Autowired
+    JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests().requestMatchers(
-                new AntPathRequestMatcher("/**"))
-                    .permitAll() // 로그인 없이도 이용 가능한 상태
+        http.httpBasic().disable()
+            .csrf().disable()
+            // 인증 안 해도 되는 경로 : 현재 기본 경로와 /user/** 경로
+            .authorizeHttpRequests()
+                .antMatchers("/").permitAll();
+            // 인증 해야 하는 경로
+//            .anyRequest()
+//                .authenticated();
 
-            .and()
-                .csrf().disable();
-
-            // 로그인 설정
-//            .formLogin()
-////            .loginPage("/user/login")             // 커스텀 로그인 폼 사용
-//            .loginProcessingUrl("/user/login")       // Security에서 해당 주소로 오는 요청을 낚아채서 수행
-//            .usernameParameter("userId")
-//            .defaultSuccessUrl("/")
-
-            // 로그아웃
-//            .and()
-//                .logout()
-//                .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
-//                .logoutSuccessUrl("/")
-//                .invalidateHttpSession(true);
+        http.addFilterAfter(
+            jwtAuthenticationFilter,
+            CorsFilter.class
+        );
         return http.build();
-
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
+
         return new BCryptPasswordEncoder();
     }
 
