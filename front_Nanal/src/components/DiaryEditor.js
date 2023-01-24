@@ -1,5 +1,5 @@
 // 일기 작성, 수정 부분에서 사용할 컴포넌트
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 
 // 오늘 날짜를 YYYY-MM-DDTHH:mm:ss 형태로 변환해주는 함수
 const getStringDate = (date) => {
@@ -8,7 +8,7 @@ const getStringDate = (date) => {
 
 function DiaryEditor({ onCreate }) {
   const [date, setDate] = useState(getStringDate(new Date()));
-  // 한 글자도 적지 않은 경우 포커스 해주기
+  // 한 글자도 적지 않았을 때 작성완료를 누른 경우 작성 창 포커스 해주기
   const contentRef = useRef();
   const [content, setContent] = useState("");
   const [group, setGroup] = useState("private");

@@ -7,7 +7,7 @@ import close from "../src_assets/img/close.png";
 import downarrow from "../src_assets/img/down-arrow.png";
 import uparrow from "../src_assets/img/up-arrow.png";
 
-function Nav(props) {
+function Nav() {
   const [isToggle, setToggle] = useState(true);
   const toggleMenu = () => {
     setToggle((isToggle) => !isToggle);
@@ -20,14 +20,20 @@ function Nav(props) {
   return (
     <nav className="flex w-auto justify-between space-x-4">
       <div className="flex items-center">
-        {[[<img src={logo} />, "/"]].map(([title, url]) => (
+        {/* {[[<img src={logo} />, "/"]].map(([title, url]) => (
           <Link
             to={url}
             className="rounded-lg px-3 py-2 text-slate-700 font-medium hover:bg-slate-100 hover:text-slate-900"
           >
             {title}
           </Link>
-        ))}
+        ))} */}
+        <Link
+          to="/"
+          className="rounded-lg px-3 py-2 text-slate-700 font-medium hover:bg-slate-100 hover:text-slate-900"
+        >
+          <img src={logo} />
+        </Link>
         {isToggle ? (
           <div className="w-4 h-4">
             <img src={downarrow} onClick={() => toggleMenu()} className="" />
