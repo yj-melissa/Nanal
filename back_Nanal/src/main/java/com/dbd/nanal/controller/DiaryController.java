@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
-@Api(tags = {"Diary관련 API"})
+@Api(tags = {"Diary 관련 API"})
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("diary")
@@ -50,6 +50,25 @@ public class DiaryController {
                 return new ResponseEntity<>(diaryResponseDTO, HttpStatus.OK);
             else
                 return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+        }catch (Exception e){
+            return new ResponseEntity<>("서버오류", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @ApiOperation(value = "일기 내용 수정", notes =
+            "일기 내용을 수정합니다.\n" +
+                    "[Front] \n" +
+                    "{diaryIdx(int), content(String), creationDate(Date), picture(String), music(int), emo(String)}\n\n" +
+                    "[Back] \n" +
+                    "ok(200)")
+    @PutMapping("")
+    public ResponseEntity<?> updateDiary(@ApiParam(value = "일기 수정 정보")@RequestBody DiaryRequestDTO diary, HttpSession session) {
+        try{
+            //diary keyword analyze
+            //picture
+            //music
+            diaryService.updateDiary(diary.toEntity());
+            return new ResponseEntity<>("수정 완료", HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>("서버오류", HttpStatus.INTERNAL_SERVER_ERROR);
         }

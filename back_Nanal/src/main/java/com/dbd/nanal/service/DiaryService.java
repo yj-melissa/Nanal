@@ -3,7 +3,7 @@ package com.dbd.nanal.service;
 import com.dbd.nanal.dto.DiaryResponseDTO;
 import com.dbd.nanal.model.DiaryEntity;
 import com.dbd.nanal.repository.DiaryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
@@ -12,19 +12,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class DiaryService {
 
     private final DiaryRepository diaryRepository;
 
-    @Autowired
-    public DiaryService(DiaryRepository diaryRepository){
-        this.diaryRepository=diaryRepository;
-    }
-
     // write diary
-    public DiaryEntity save(DiaryEntity diary){
-        diaryRepository.save(diary);
-        return diary;
+    public DiaryResponseDTO save(DiaryEntity diary){
+        return new DiaryResponseDTO(diaryRepository.save(diary));
     }
 
     // get diary
@@ -43,6 +38,14 @@ public class DiaryService {
         Date date=cal.getTime();
 
         diaryEntity.deleteDiary(true, new Date(),date );
+        diaryRepository.save(diaryEntity);
+    }
+
+    // update diary
+    public void updateDiary(DiaryEntity diary){
+        DiaryEntity diaryEntity=diaryRepository.getReferenceById(diary.getDiaryIdx());
+
+        diaryEntity.updateDiary(diary.getCreationDate(), diary.getContent(), diary.getPainting(), diary.getMusic(), diary.getEmo());
         diaryRepository.save(diaryEntity);
     }
 

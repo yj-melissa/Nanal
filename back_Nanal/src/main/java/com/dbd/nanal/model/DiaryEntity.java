@@ -80,4 +80,12 @@ public class DiaryEntity {
         this.deleteDate=deleteDate;
         this.expireDate=expireDate;
     }
+
+    public void updateDiary(Date creationDate, String content, PaintingEntity painting, MusicEntity music, String emo){
+        this.creationDate=creationDate;
+        this.content=content;
+        this.painting=painting;
+        this.music=music;
+        this.emo=emo;
+    }
 }
