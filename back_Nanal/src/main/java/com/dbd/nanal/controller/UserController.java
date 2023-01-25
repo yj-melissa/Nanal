@@ -14,10 +14,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@CrossOrigin
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/user")
@@ -30,7 +33,8 @@ public class UserController {
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signUp(@Valid UserDTO userDTO) {
+    public ResponseEntity<?> signUp(@RequestBody UserDTO userDTO) {
+        System.out.println("signUp : "+userDTO.getUserId()+userDTO.getUserPassword());
         try {
             if (userDTO == null || userDTO.getUserPassword() == null) {
                 throw new RuntimeException("비밀번호 값이 유효하지 않습니다");
@@ -90,6 +94,7 @@ public class UserController {
                 .jwtToken(token)
                 .build();
             return ResponseEntity.ok().body(responseUserDTO);
+
         } else {
             String errorMsg;
             Boolean isUserExist = userService.findUserId(userDTO.getUserId());
