@@ -4,7 +4,6 @@ package com.dbd.nanal.config;
 import com.dbd.nanal.config.common.DefaultRes;
 import com.dbd.nanal.config.common.ResponseMessage;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +20,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<?> handleRuntimeException(Exception e) {
-        System.out.println("RuntimeException");
         log.error("handleRuntimeException : {}", e.getMessage());
         responseDTO.put("responseMessage", ResponseMessage.RUNTIME);
         return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
@@ -35,13 +33,6 @@ public class GlobalExceptionHandler {
     }
 
 //    @ExceptionHandler(NoD)
-
-    @ExceptionHandler(DuplicateKeyException.class)
-    public ResponseEntity<?> handleDuplicateKeyException(String key) {
-        log.error("handleDuplicateKeyException : {}", key);
-        responseDTO.put("responseMessage", ResponseMessage.DUPLICATED_VALUE);
-        return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
-    }
 
 
 
