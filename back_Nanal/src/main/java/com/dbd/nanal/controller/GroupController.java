@@ -102,7 +102,7 @@ public class GroupController {
 
                 return new ResponseEntity<>(DefaultRes.res(StatusCode.OK, ResponseMessage.GROUP_FIND_SUCCESS, responseDTO), HttpStatus.OK);
             } else {
-                return new ResponseEntity<>(DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.GROUP_FIND_FAIL), HttpStatus.NO_CONTENT);
+                return new ResponseEntity<>(DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResponseMessage.GROUP_FIND_FAIL), HttpStatus.NO_CONTENT);
             }
         }
         // Exception 발생
@@ -136,7 +136,7 @@ public class GroupController {
 
                 return new ResponseEntity<>(DefaultRes.res(StatusCode.OK, ResponseMessage.GROUP_FIND_SUCCESS, responseDTO), HttpStatus.OK);
             } else {
-                return new ResponseEntity<>(DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.GROUP_FIND_FAIL), HttpStatus.NO_CONTENT);
+                return new ResponseEntity<>(DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResponseMessage.GROUP_FIND_FAIL), HttpStatus.NO_CONTENT);
             }
 
         } catch (Exception e) {
@@ -166,7 +166,7 @@ public class GroupController {
 
                 return new ResponseEntity<>(DefaultRes.res(StatusCode.OK, ResponseMessage.GROUP_FIND_SUCCESS, responseDTO), HttpStatus.OK);
             } else {
-                return new ResponseEntity<>(DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.GROUP_FIND_FAIL), HttpStatus.NO_CONTENT);
+                return new ResponseEntity<>(DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResponseMessage.GROUP_FIND_FAIL), HttpStatus.NO_CONTENT);
             }
 
         } catch (Exception e) {
