@@ -32,7 +32,7 @@ public class DiaryController {
             //music
 
             //save diary
-            DiaryResponseDTO diaryResponseDTO=diaryService.save(diary.toEntity());
+            DiaryResponseDTO diaryResponseDTO=diaryService.save(diary);
             //save diary-group
             GroupDiaryRelationDTO groupDiaryRelationDTO=new GroupDiaryRelationDTO(diaryResponseDTO.getDiaryIdx(), diary.getGroupIdx());
             diaryService.saveDiaryGroup(groupDiaryRelationDTO);

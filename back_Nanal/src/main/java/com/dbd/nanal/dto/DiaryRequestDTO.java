@@ -6,10 +6,12 @@ import com.dbd.nanal.model.PaintingEntity;
 import com.dbd.nanal.model.UserEntity;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Date;
 
 @Getter
+@Setter
 public class DiaryRequestDTO {
     private int diaryIdx;
     private int userIdx;
@@ -35,11 +37,22 @@ public class DiaryRequestDTO {
 //        this.emo = emo;
 //    }
 
+    public DiaryEntity toEntity(UserEntity user){
+        return DiaryEntity.builder()
+                .creationDate(creationDate)
+                .diaryIdx(diaryIdx)
+                .user(user)
+                .content(content)
+//                .painting(picture)
+//                .music(music)
+                .emo(emo)
+                .build();
+    }
+
     public DiaryEntity toEntity(){
         return DiaryEntity.builder()
                 .creationDate(creationDate)
                 .diaryIdx(diaryIdx)
-//                .user(userIdx)
                 .content(content)
 //                .painting(picture)
 //                .music(music)
