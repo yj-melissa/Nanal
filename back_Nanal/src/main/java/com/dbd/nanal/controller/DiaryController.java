@@ -2,6 +2,7 @@ package com.dbd.nanal.controller;
 
 import com.dbd.nanal.config.common.DefaultRes;
 import com.dbd.nanal.config.common.ResponseMessage;
+import com.dbd.nanal.dto.DiaryCommentRequestDTO;
 import com.dbd.nanal.dto.DiaryRequestDTO;
 import com.dbd.nanal.dto.DiaryResponseDTO;
 import com.dbd.nanal.dto.GroupDiaryRelationDTO;
@@ -141,5 +142,17 @@ public class DiaryController {
             responseDTO.put("responseMessage", ResponseMessage.DIARY_LIST_FIND_FAIL);
             return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
         }
+    }
+
+    @ApiOperation(value = "일기 댓글 작성", notes =
+            "일기 댓글을 작성합니다.\n" +
+                    "[Front] \n" +
+                    "{diaryIdx(int), userIdx(int), groupIdx(int), content(String)} \n\n" +
+                    "[Back] \n" +
+                    "")
+    @PostMapping("/comment")
+    public ResponseEntity<?> writeComment(@ApiParam(value = "댓글 정보") @RequestBody DiaryCommentRequestDTO diaryCommentRequestDTO) {
+        diaryService.saveComment(diaryCommentRequestDTO);
+        return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK); // temp
     }
 }
