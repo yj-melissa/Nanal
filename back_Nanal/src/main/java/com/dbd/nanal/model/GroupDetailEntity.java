@@ -15,7 +15,7 @@ import java.util.List;
 @Table(name = "group_detail")
 @Getter
 @Setter
-@NoArgsConstructor
+@NoArgsConstructor // 엔티티는 기본 생성자 필수
 public class GroupDetailEntity {
 
     @Id // Primary key
