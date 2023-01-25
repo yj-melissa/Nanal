@@ -18,9 +18,7 @@ public class UserService {
     @Autowired private final UserProfileRepository userProfileRepository;
 
     public UserEntity join(final UserEntity userEntity, final UserProfileEntity userProfileEntity) {
-        try {
-//            userEntity == null || userProfileEntity == null || userEntity.getUserId() == null || userEntity.getEmail() == null || userProfileEntity.getNickname() == null;
-        } catch {
+        if (userEntity == null || userProfileEntity == null || userEntity.getUserId() == null || userEntity.getEmail() == null || userProfileEntity.getNickname() == null) {
             throw new NullPointerException("");
         }
 
@@ -46,19 +44,22 @@ public class UserService {
         return newUser;
     }
 
-
     public UserEntity getByCredentials(final String userId, final String userPassword, final PasswordEncoder passwordEncoder) {
 
         final UserEntity user = userRepository.findByUserId(userId);
-        if(user != null && passwordEncoder.matches(userPassword, user.getUserPassword())) {
+        if(user != null && passwordEncoder.matches(userPassword, user.getPassword())) {
             return user;
         }
         return null;
     }
 
-    public Boolean findUserId(String userId) {
+    public Boolean checkUserId(String userId) {
         Boolean result = userRepository.existsByUserId(userId);
         return result;
     }
 
+    public UserEntity loadByUserId(String userId) {
+      return userRepository.findByUserId(userId);
+    };
 }
+

@@ -10,26 +10,28 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDTO {
+public class UserRequestDTO {
 
     private int userIdx;
 
-    private String userName;
+    private String name;
 
     @Email
     private String email;
 
     private String userId;
 
-    private String userPassword;
+    private String password;
 
     private String nickname;
 
-    private String jwtToken;
+    private String refreshToken;
+
+    private String accessToken;
 
     private String img;
 
-    private String Introduction;
+    private String introduction;
 
     private Boolean isPrivate;
 

@@ -1,7 +1,5 @@
 package com.dbd.nanal.model;
 
-import static javax.persistence.FetchType.LAZY;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,11 +30,8 @@ public class UserEntity {
     @Column(name = "user_idx")
     private int userIdx;
 
-    @Column(name = "user_name")
-    private String userName;
-
-    @Column(name = "login_type")
-    private String loginType;
+    @Column(name = "name")
+    private String name;
 
     @Column(name = "creation_date")
     private LocalDateTime creationDate;
@@ -44,17 +39,14 @@ public class UserEntity {
     @Column(name = "last_access_date")
     private LocalDateTime lastAccessDate;
 
-    @Column(name = "access_token")
-    private String accessToken;
-
     @Column(name = "email", unique = true)
     private String email;
 
     @Column(name = "user_id", unique = true)
     private String userId;
 
-    @Column(name = "user_password")
-    private String userPassword;
+    @Column(name = "password")
+    private String password;
 
     @Column(name = "social_code")
     private int socialCode;
@@ -62,7 +54,7 @@ public class UserEntity {
 
     // 연결관계
 
-    @OneToOne(mappedBy = "user", fetch = LAZY)
+    @OneToOne(mappedBy = "user")
     private UserProfileEntity userProfile;
 
     @OneToOne
