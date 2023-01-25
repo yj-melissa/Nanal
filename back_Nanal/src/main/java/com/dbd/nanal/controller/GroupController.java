@@ -2,7 +2,6 @@ package com.dbd.nanal.controller;
 
 import com.dbd.nanal.config.common.DefaultRes;
 import com.dbd.nanal.config.common.ResponseMessage;
-import com.dbd.nanal.config.common.StatusCode;
 import com.dbd.nanal.dto.GroupDetailRequestDTO;
 import com.dbd.nanal.dto.GroupDetailResponseDTO;
 import com.dbd.nanal.dto.GroupUserRelationRequestDTO;
@@ -41,6 +40,7 @@ public class GroupController {
     @PostMapping
     @Transactional
     public ResponseEntity<?> save(@ApiParam(value = "그룹 생성 정보") @RequestBody GroupDetailRequestDTO groupDetailRequestDTO) {
+        HashMap<String, Object> responseDTO = new HashMap<>();
 
         try {
             // 1. group_detail table save, 결과 responseDTO에 저장
@@ -57,24 +57,27 @@ public class GroupController {
                 // 저장 성공
                 if (groupDetailResponseDTO.getTags() != null) {
                     // FRONT - responseDTO(그룹 상세 정보) 전달
-                    HashMap<String, Object> responseDTO = new HashMap<>();
+                    responseDTO.put("responseMessage", ResponseMessage.GROUP_SAVE_SUCCESS);
                     responseDTO.put("groupDetail", groupDetailResponseDTO);
-                    return new ResponseEntity<>(DefaultRes.res(StatusCode.OK, ResponseMessage.GROUP_FIND_SUCCESS, responseDTO), HttpStatus.OK);
+                    return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
                 }
                 // 반환 실패
                 else {
-                    return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+                    responseDTO.put("responseMessage", ResponseMessage.GROUP_SAVE_FAIL);
+                    return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
                 }
             }
             // 반환 실패
             else {
-                return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+                responseDTO.put("responseMessage", ResponseMessage.GROUP_SAVE_FAIL);
+                return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.INTERNAL_SERVER_ERROR);
             }
 
         }
         // Exception 발생
         catch (Exception e) {
-            return new ResponseEntity<>(DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResponseMessage.INTERNAL_SERVER_ERROR), HttpStatus.NO_CONTENT);
+            responseDTO.put("responseMessage", ResponseMessage.EXCEPTION);
+            return new ResponseEntity<>(DefaultRes.res(500, ResponseMessage.INTERNAL_SERVER_ERROR), HttpStatus.NO_CONTENT);
         }
 
     }
@@ -89,25 +92,27 @@ public class GroupController {
                     "{groupIdx(int), groupImg(String), groupName(String), private(boolean), tags(List(String)), creationDate(String)} ")
     @GetMapping("/{groupIdx}")
     public ResponseEntity<?> getGroupDTO(@ApiParam(value = "그룹 id", required = true) @PathVariable int groupIdx) {
+        HashMap<String, Object> responseDTO = new HashMap<>();
         try {
-            // groupIdx 이용해서 group_detail table에서 정보 찾기
             GroupDetailResponseDTO groupDetailResponseDTO = groupService.findGroupById(groupIdx);
+            // groupIdx 이용해서 group_detail table에서 정보 찾기
 
             // 반환 성공
             if (groupDetailResponseDTO != null) {
                 // FRONT로 responseDTO(그룹 상세 정보) 전달
                 // 결과 넣기!!
-                HashMap<String, Object> responseDTO = new HashMap<>();
                 responseDTO.put("groupDetail", groupDetailResponseDTO);
-
-                return new ResponseEntity<>(DefaultRes.res(StatusCode.OK, ResponseMessage.GROUP_FIND_SUCCESS, responseDTO), HttpStatus.OK);
+                responseDTO.put("responseMessage", ResponseMessage.GROUP_FIND_SUCCESS);
+                return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
             } else {
-                return new ResponseEntity<>(DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResponseMessage.GROUP_FIND_FAIL), HttpStatus.NO_CONTENT);
+                responseDTO.put("responseMessage", ResponseMessage.GROUP_FIND_FAIL);
+                return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
         // Exception 발생
         catch (Exception e) {
-            return new ResponseEntity<>(DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResponseMessage.INTERNAL_SERVER_ERROR), HttpStatus.NO_CONTENT);
+            responseDTO.put("responseMessage", ResponseMessage.EXCEPTION);
+            return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -123,24 +128,24 @@ public class GroupController {
 
     @PostMapping("/join")
     public ResponseEntity<?> groupJoin(@ApiParam(value = "groupIdx, userIdx", required = true) @RequestBody Map<String, Integer> requestDTO) {
+
+        HashMap<String, Object> responseDTO = new HashMap<>();
         try {
             GroupUserRelationRequestDTO groupUserRelationRequestDTO = new GroupUserRelationRequestDTO(requestDTO.get("userIdx"), requestDTO.get("groupIdx"));
-            System.out.println(groupUserRelationRequestDTO.getUserIdx() + " groupIdx : " + groupUserRelationRequestDTO.getGroupIdx());
-
             GroupUserRelationResponseDTO groupUserRelationResponseDTO = groupService.saveGroupUserRelation(groupUserRelationRequestDTO);
 
             if (groupUserRelationResponseDTO != null) {
                 // 반환값 고민중 !
-                HashMap<String, Object> responseDTO = new HashMap<>();
-                responseDTO.put("RESULT", null);
-
-                return new ResponseEntity<>(DefaultRes.res(StatusCode.OK, ResponseMessage.GROUP_FIND_SUCCESS, responseDTO), HttpStatus.OK);
+                responseDTO.put("responseMessage", ResponseMessage.GROUP_JOIN_SUCCESS);
+                return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
             } else {
-                return new ResponseEntity<>(DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResponseMessage.GROUP_FIND_FAIL), HttpStatus.NO_CONTENT);
+                responseDTO.put("responseMessage", ResponseMessage.GROUP_JOIN_FAIL);
+                return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.INTERNAL_SERVER_ERROR);
             }
 
         } catch (Exception e) {
-            return new ResponseEntity<>(DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResponseMessage.INTERNAL_SERVER_ERROR), HttpStatus.NO_CONTENT);
+            responseDTO.put("responseMessage", ResponseMessage.EXCEPTION);
+            return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -154,6 +159,8 @@ public class GroupController {
                     "{List<GroupDetailResponse>}")
     @GetMapping("/list/{userIdx}")
     public ResponseEntity<?> getGroupList(@ApiParam(value = "유저 idx", required = true) @PathVariable int userIdx) {
+        HashMap<String, Object> responseDTO = new HashMap<>();
+
         try {
 
             // group_user_relation 테이블에서 userIdx가 포함된 group찾기
@@ -161,16 +168,17 @@ public class GroupController {
                     groupService.getGroupList(userIdx);
 
             if (groupDetailResponseDTOS != null) {
-                HashMap<String, Object> responseDTO = new HashMap<>();
                 responseDTO.put("groupList", groupDetailResponseDTOS);
-
-                return new ResponseEntity<>(DefaultRes.res(StatusCode.OK, ResponseMessage.GROUP_FIND_SUCCESS, responseDTO), HttpStatus.OK);
+                responseDTO.put("responseMessage", ResponseMessage.GROUP_LIST_FIND_SUCCESS);
+                return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
             } else {
-                return new ResponseEntity<>(DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResponseMessage.GROUP_FIND_FAIL), HttpStatus.NO_CONTENT);
+                responseDTO.put("responseMessage", ResponseMessage.GROUP_LIST_FIND_FAIL);
+                return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.INTERNAL_SERVER_ERROR);
             }
 
         } catch (Exception e) {
-            return new ResponseEntity<>(DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResponseMessage.INTERNAL_SERVER_ERROR), HttpStatus.NO_CONTENT);
+            responseDTO.put("responseMessage", ResponseMessage.EXCEPTION);
+            return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
 
