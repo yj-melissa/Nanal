@@ -18,7 +18,7 @@ function Nav() {
   };
 
   return (
-    <nav className="flex w-auto justify-between space-x-4">
+    <nav className="flex max-w-sm justify-between space-x-4">
       <div className="flex items-center">
         {/* {[[<img src={logo} />, "/"]].map(([title, url]) => (
           <Link
@@ -36,7 +36,7 @@ function Nav() {
         </Link>
         {isToggle ? (
           <div className="w-4 h-4">
-            <img src={downarrow} onClick={() => toggleMenu()} className="" />
+            <img src={downarrow} onClick={() => toggleMenu()} />
           </div>
         ) : (
           <div className="w-4 h-4">
@@ -45,11 +45,11 @@ function Nav() {
         )}
       </div>
       {isToggle2 ? (
-        <div className="rounded-lg w-4 h-4 text-slate-700 font-medium hover:bg-slate-100 hover:text-slate-900">
-          <img src={menu} onClick={() => toggle2Menu()} className="" />
+        <div className="w-6 h-6 my-3">
+          <img src={menu} onClick={() => toggle2Menu()} />
         </div>
       ) : (
-        <div className="rounded-lg w-4 h-4 text-slate-700 font-medium hover:bg-slate-100 hover:text-slate-900">
+        <div className="w-6 h-6 my-3">
           <img src={close} onClick={() => toggle2Menu()} />
         </div>
       )}
