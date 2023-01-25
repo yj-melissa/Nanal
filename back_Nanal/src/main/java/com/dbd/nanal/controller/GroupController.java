@@ -70,14 +70,14 @@ public class GroupController {
             // 반환 실패
             else {
                 responseDTO.put("responseMessage", ResponseMessage.GROUP_SAVE_FAIL);
-                return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.INTERNAL_SERVER_ERROR);
+                return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
             }
 
         }
         // Exception 발생
         catch (Exception e) {
             responseDTO.put("responseMessage", ResponseMessage.EXCEPTION);
-            return new ResponseEntity<>(DefaultRes.res(500, ResponseMessage.INTERNAL_SERVER_ERROR), HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(DefaultRes.res(500, ResponseMessage.INTERNAL_SERVER_ERROR), HttpStatus.OK);
         }
 
     }
@@ -106,13 +106,13 @@ public class GroupController {
                 return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
             } else {
                 responseDTO.put("responseMessage", ResponseMessage.GROUP_FIND_FAIL);
-                return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.INTERNAL_SERVER_ERROR);
+                return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
             }
         }
         // Exception 발생
         catch (Exception e) {
             responseDTO.put("responseMessage", ResponseMessage.EXCEPTION);
-            return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
         }
     }
 
@@ -173,12 +173,12 @@ public class GroupController {
                 return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
             } else {
                 responseDTO.put("responseMessage", ResponseMessage.GROUP_LIST_FIND_FAIL);
-                return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.INTERNAL_SERVER_ERROR);
+                return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
             }
 
         } catch (Exception e) {
             responseDTO.put("responseMessage", ResponseMessage.EXCEPTION);
-            return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
         }
 
 

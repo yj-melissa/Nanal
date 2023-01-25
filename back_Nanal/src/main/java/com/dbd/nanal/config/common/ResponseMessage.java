@@ -32,4 +32,6 @@ public class ResponseMessage {
 
     // Exception
     public static final String EXCEPTION = "exception 발생";
+    public static final String EMPTY = "EMPTY";
+    public static final String RUNTIME = "RUNTIME";
 }
