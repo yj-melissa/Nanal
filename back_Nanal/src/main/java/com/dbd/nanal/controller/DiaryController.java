@@ -2,6 +2,7 @@ package com.dbd.nanal.controller;
 
 import com.dbd.nanal.dto.DiaryRequestDTO;
 import com.dbd.nanal.dto.DiaryResponseDTO;
+import com.dbd.nanal.dto.GroupDiaryRelationDTO;
 import com.dbd.nanal.service.DiaryService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -29,7 +30,13 @@ public class DiaryController {
             //diary keyword analyze
             //picture
             //music
-            return new ResponseEntity<>(diaryService.save(diary.toEntity()), HttpStatus.OK);
+
+            //save diary
+            DiaryResponseDTO diaryResponseDTO=diaryService.save(diary.toEntity());
+            //save diary-group
+            GroupDiaryRelationDTO groupDiaryRelationDTO=new GroupDiaryRelationDTO(diaryResponseDTO.getDiaryIdx(), diary.getGroupIdx());
+            diaryService.saveDiaryGroup(groupDiaryRelationDTO);
+            return new ResponseEntity<>(HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>("서버오류", HttpStatus.INTERNAL_SERVER_ERROR);
         }

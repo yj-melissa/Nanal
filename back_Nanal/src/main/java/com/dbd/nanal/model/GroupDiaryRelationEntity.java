@@ -29,8 +29,8 @@ public class GroupDiaryRelationEntity {
 
 
     @Builder
-    public GroupDiaryRelationEntity(int group_diary_idx, DiaryEntity diary, GroupDetailEntity groupDetail) {
-        this.group_diary_idx = group_diary_idx;
+    public GroupDiaryRelationEntity(DiaryEntity diary, GroupDetailEntity groupDetail) {
+//        this.group_diary_idx = group_diary_idx;
         this.diary = diary;
         this.groupDetail = groupDetail;
     }

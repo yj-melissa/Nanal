@@ -1,8 +1,13 @@
 package com.dbd.nanal.service;
 
 import com.dbd.nanal.dto.DiaryResponseDTO;
+import com.dbd.nanal.dto.GroupDiaryRelationDTO;
 import com.dbd.nanal.model.DiaryEntity;
+import com.dbd.nanal.model.GroupDetailEntity;
+import com.dbd.nanal.model.GroupDiaryRelationEntity;
 import com.dbd.nanal.repository.DiaryRepository;
+import com.dbd.nanal.repository.GroupDiaryRelationRepository;
+import com.dbd.nanal.repository.GroupRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +21,8 @@ import java.util.stream.Collectors;
 public class DiaryService {
 
     private final DiaryRepository diaryRepository;
+    private final GroupRepository groupRepository;
+    private final GroupDiaryRelationRepository groupDiaryRelationRepository;
 
     // write diary
     public DiaryResponseDTO save(DiaryEntity diary){
@@ -53,5 +60,13 @@ public class DiaryService {
     public List<DiaryResponseDTO> diaryList(int groupId){
         List<DiaryEntity> diaryEntityList= diaryRepository.findGroupDiaryList(groupId);
         return diaryEntityList.stream().map(x-> new DiaryResponseDTO(x)).collect(Collectors.toList());
+    }
+
+    // save diary-group
+    public void saveDiaryGroup(GroupDiaryRelationDTO groupDiaryRelationDTO){
+        DiaryEntity diaryEntity=diaryRepository.getReferenceById(groupDiaryRelationDTO.getDiaryIdx());
+        GroupDetailEntity groupDetailEntity=groupRepository.getReferenceById(groupDiaryRelationDTO.getGroupIdx());
+        GroupDiaryRelationEntity groupDiaryRelationEntity=new GroupDiaryRelationEntity(diaryEntity, groupDetailEntity);
+        groupDiaryRelationRepository.save(groupDiaryRelationEntity);
     }
 }
