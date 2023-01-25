@@ -1,5 +1,8 @@
 package com.dbd.nanal.controller;
 
+import com.dbd.nanal.config.common.DefaultRes;
+import com.dbd.nanal.config.common.ResponseMessage;
+import com.dbd.nanal.config.common.StatusCode;
 import com.dbd.nanal.dto.GroupDetailRequestDTO;
 import com.dbd.nanal.dto.GroupDetailResponseDTO;
 import com.dbd.nanal.dto.GroupUserRelationRequestDTO;
@@ -14,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -53,7 +57,9 @@ public class GroupController {
                 // 저장 성공
                 if (groupDetailResponseDTO.getTags() != null) {
                     // FRONT - responseDTO(그룹 상세 정보) 전달
-                    return new ResponseEntity<>(groupDetailResponseDTO, HttpStatus.OK);
+                    HashMap<String, Object> responseDTO = new HashMap<>();
+                    responseDTO.put("groupDetail", groupDetailResponseDTO);
+                    return new ResponseEntity<>(DefaultRes.res(StatusCode.OK, ResponseMessage.GROUP_FIND_SUCCESS, responseDTO), HttpStatus.OK);
                 }
                 // 반환 실패
                 else {
@@ -68,7 +74,7 @@ public class GroupController {
         }
         // Exception 발생
         catch (Exception e) {
-            return new ResponseEntity<>("서버오류", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResponseMessage.INTERNAL_SERVER_ERROR), HttpStatus.NO_CONTENT);
         }
 
     }
@@ -90,14 +96,18 @@ public class GroupController {
             // 반환 성공
             if (groupDetailResponseDTO != null) {
                 // FRONT로 responseDTO(그룹 상세 정보) 전달
-                return new ResponseEntity<>(groupDetailResponseDTO, HttpStatus.OK);
+                // 결과 넣기!!
+                HashMap<String, Object> responseDTO = new HashMap<>();
+                responseDTO.put("groupDetail", groupDetailResponseDTO);
+
+                return new ResponseEntity<>(DefaultRes.res(StatusCode.OK, ResponseMessage.GROUP_FIND_SUCCESS, responseDTO), HttpStatus.OK);
             } else {
-                return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+                return new ResponseEntity<>(DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.GROUP_FIND_FAIL), HttpStatus.NO_CONTENT);
             }
         }
         // Exception 발생
         catch (Exception e) {
-            return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResponseMessage.INTERNAL_SERVER_ERROR), HttpStatus.NO_CONTENT);
         }
     }
 
@@ -121,13 +131,16 @@ public class GroupController {
 
             if (groupUserRelationResponseDTO != null) {
                 // 반환값 고민중 !
-                return new ResponseEntity<>(true, HttpStatus.OK);
+                HashMap<String, Object> responseDTO = new HashMap<>();
+                responseDTO.put("RESULT", null);
+
+                return new ResponseEntity<>(DefaultRes.res(StatusCode.OK, ResponseMessage.GROUP_FIND_SUCCESS, responseDTO), HttpStatus.OK);
             } else {
-                return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+                return new ResponseEntity<>(DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.GROUP_FIND_FAIL), HttpStatus.NO_CONTENT);
             }
 
         } catch (Exception e) {
-            return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResponseMessage.INTERNAL_SERVER_ERROR), HttpStatus.NO_CONTENT);
         }
     }
 
@@ -148,13 +161,16 @@ public class GroupController {
                     groupService.getGroupList(userIdx);
 
             if (groupDetailResponseDTOS != null) {
-                return new ResponseEntity<>(groupDetailResponseDTOS, HttpStatus.OK);
+                HashMap<String, Object> responseDTO = new HashMap<>();
+                responseDTO.put("groupList", groupDetailResponseDTOS);
+
+                return new ResponseEntity<>(DefaultRes.res(StatusCode.OK, ResponseMessage.GROUP_FIND_SUCCESS, responseDTO), HttpStatus.OK);
             } else {
-                return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+                return new ResponseEntity<>(DefaultRes.res(StatusCode.NO_CONTENT, ResponseMessage.GROUP_FIND_FAIL), HttpStatus.NO_CONTENT);
             }
 
         } catch (Exception e) {
-            return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, ResponseMessage.INTERNAL_SERVER_ERROR), HttpStatus.NO_CONTENT);
         }
 
 
