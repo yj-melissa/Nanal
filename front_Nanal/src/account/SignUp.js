@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios_api from "../config/Axios";
 
 function SignUp() {
   // 기본 형식 설명
@@ -14,16 +15,16 @@ function SignUp() {
   const onChangeEmail = (e) => {
     const currentEmail = e.target.value;
     setEmail(currentEmail);
-    const emailRegExp =
-      /^[A-Za-z0-9_]+[A-Za-z0-9]*[@]{1}[A-Za-z0-9]+[A-Za-z0-9]*[.]{1}[A-Za-z]{1,3}$/;
-
-    if (!emailRegExp.test(currentEmail)) {
-      setEmailMessage("이메일의 형식이 올바르지 않습니다!");
-      setIsEmail(false);
-    } else {
-      setEmailMessage("이메일의 형식이 올바릅니다.");
-      setIsEmail(true);
-    }
+    // const emailRegExp =
+    //   /^[A-Za-z0-9_]+[A-Za-z0-9]*[@]{1}[A-Za-z0-9]+[A-Za-z0-9]*[.]{1}[A-Za-z]{1,3}$/;
+    // if (!emailRegExp.test(currentEmail)) {
+    //   setEmailMessage("이메일의 형식이 올바르지 않습니다!");
+    //   setIsEmail(false);
+    // } else {
+    //   setEmailMessage("이메일의 형식이 올바릅니다.");
+    //   setIsEmail(true);
+    // }
+    setIsEmail(true);
   };
 
   // 아이디 userId
@@ -96,18 +97,51 @@ function SignUp() {
       setIsNickName(true);
     }
   };
+
+  // 회원가입
+  const SignUp = (e) => {
+    e.preventDefault();
+
+    axios_api
+      .post("user/signup", {
+        email: email,
+        userId: id,
+        userPassword: password,
+        nickname: nickName,
+      })
+      .then(({ data }) => {
+        // console.log(data);
+        // console.log(data.data);
+        // console.log(data.statusCode);
+        // console.log(data.data.statusCode);
+        // console.log(data.ResponseMessage);
+        // console.log(data.data.ResponseMessage);
+        if (data.statusCode === 200) {
+          if (data.data.ResponseMessage === "회원 가입 성공") {
+            alert("회원 가입 성공!!!");
+          }
+        } else {
+          if (data.data.ResponseMessage === "회원 가입 실패") {
+          }
+        }
+      })
+      .catch((error) => {
+        console.log("회원 가입 오류: " + error);
+      });
+  };
+
   return (
     <div className="flex justify-center">
-      <div className="box-border p-4 w-80 border-2 border-black">
+      <div className="box-border p-4 w-80 border-[1px] border-gray-500 border-solid">
         <h1 className="p-3">SignUp</h1>
-        <form action="">
+        <form action="" onSubmit={SignUp}>
           {/* 이메일 email */}
           <div id="form-el">
             <label htmlFor="email">Email</label>
             <br />
             <div>
               <input
-                type="text"
+                type="email"
                 id="email"
                 value={email}
                 onChange={onChangeEmail}
@@ -120,13 +154,20 @@ function SignUp() {
           {/* 유저아이디 id */}
           <div className="form-el">
             <label htmlFor="id">UserId</label> <br />
-            <input id="id" name="id" value={id} onChange={onChangeId} />
+            <input
+              type="text"
+              id="id"
+              name="id"
+              value={id}
+              onChange={onChangeId}
+            />
             <p className="message"> {idMessage} </p>
           </div>
           {/* 비밀번호 password */}
           <div className="form-el">
             <label htmlFor="password">Password</label> <br />
             <input
+              type="password"
               id="password"
               name="password"
               value={password}
@@ -138,6 +179,7 @@ function SignUp() {
           <div className="form-el">
             <label htmlFor="passwordConfirm">Password Confirm</label> <br />
             <input
+              type="password"
               id="passwordConfirm"
               name="passwordConfirm"
               value={passwordConfirm}
@@ -149,6 +191,7 @@ function SignUp() {
           <div className="form-el">
             <label htmlFor="user-nick-name">Nick Name</label> <br />
             <input
+              type="text"
               id="user-nick-name"
               name="user-nick-name"
               value={nickName}
@@ -156,7 +199,7 @@ function SignUp() {
             />
             <p className="message">{nickNameMessage}</p>
           </div>
-          <button>SignUp</button>
+          <button type="submit">SignUp</button>
         </form>
       </div>
     </div>

@@ -4,7 +4,6 @@ import { Routes, Route } from "react-router-dom";
 import Nav from "./another/Nav.js";
 import Calendar from "./main/Calendar.js";
 import BookCase from "./main/BookCase.js";
-import MyPage from "./mypage/MyPage.js";
 import SignIn from "./account/SignIn.js";
 import SignUp from "./account/SignUp.js";
 import NotFound from "./another/NotFound.js";
@@ -22,7 +21,6 @@ function App() {
         ) : (
           <Route path="/" element={<BookCase />}></Route>
         )}
-        <Route path="/MyPage" element={<MyPage />}></Route>
         <Route path="/SignUp" element={<SignUp />}></Route>
         <Route path="/SignIn" element={<SignIn />}></Route>
         <Route path="/New" element={<DiaryCreate />}></Route>
