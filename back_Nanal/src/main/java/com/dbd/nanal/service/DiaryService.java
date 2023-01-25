@@ -54,11 +54,11 @@ public class DiaryService {
     }
 
     // update diary
-    public void updateDiary(DiaryEntity diary){
+    public DiaryResponseDTO updateDiary(DiaryEntity diary){
         DiaryEntity diaryEntity=diaryRepository.getReferenceById(diary.getDiaryIdx());
 
         diaryEntity.updateDiary(diary.getCreationDate(), diary.getContent(), diary.getPainting(), diary.getMusic(), diary.getEmo());
-        diaryRepository.save(diaryEntity);
+        return new DiaryResponseDTO(diaryRepository.save(diaryEntity));
     }
 
     //get diary list
