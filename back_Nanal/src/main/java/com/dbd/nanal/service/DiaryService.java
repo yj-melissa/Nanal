@@ -1,5 +1,6 @@
 package com.dbd.nanal.service;
 
+import com.dbd.nanal.dto.DiaryCommentRequestDTO;
 import com.dbd.nanal.dto.DiaryRequestDTO;
 import com.dbd.nanal.dto.DiaryResponseDTO;
 import com.dbd.nanal.dto.GroupDiaryRelationDTO;
@@ -7,10 +8,7 @@ import com.dbd.nanal.model.DiaryEntity;
 import com.dbd.nanal.model.GroupDetailEntity;
 import com.dbd.nanal.model.GroupDiaryRelationEntity;
 import com.dbd.nanal.model.UserEntity;
-import com.dbd.nanal.repository.DiaryRepository;
-import com.dbd.nanal.repository.GroupDiaryRelationRepository;
-import com.dbd.nanal.repository.GroupRepository;
-import com.dbd.nanal.repository.UserRepository;
+import com.dbd.nanal.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +25,7 @@ public class DiaryService {
     private final GroupRepository groupRepository;
     private final GroupDiaryRelationRepository groupDiaryRelationRepository;
     private final UserRepository userRepository;
+    private final DiaryCommentRepository diaryCommentRepository;
 
     // write diary
     public DiaryResponseDTO save(DiaryRequestDTO diary){
@@ -73,5 +72,13 @@ public class DiaryService {
         GroupDetailEntity groupDetailEntity=groupRepository.getReferenceById(groupDiaryRelationDTO.getGroupIdx());
         GroupDiaryRelationEntity groupDiaryRelationEntity=new GroupDiaryRelationEntity(diaryEntity, groupDetailEntity);
         groupDiaryRelationRepository.save(groupDiaryRelationEntity);
+    }
+
+    // save diary comment
+    public void saveComment(DiaryCommentRequestDTO diaryCommentRequestDTO){
+        UserEntity user=userRepository.getReferenceById(diaryCommentRequestDTO.getUserIdx());
+        DiaryEntity diary=diaryRepository.getReferenceById(diaryCommentRequestDTO.getDiaryIdx());
+        GroupDetailEntity group=groupRepository.getReferenceById(diaryCommentRequestDTO.getGroupIdx());
+        diaryCommentRepository.save(diaryCommentRequestDTO.toEntity(diary,user, group));
     }
 }
