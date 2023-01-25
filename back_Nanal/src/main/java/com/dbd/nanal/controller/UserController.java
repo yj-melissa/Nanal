@@ -35,15 +35,52 @@ public class UserController {
 
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
+//    @PostMapping("/signup")
+//    public ResponseEntity<?> signUp(@RequestBody UserDTO userDTO) {
+//        try {
+//            // 정보가 들어오지 않았을 때
+//            if (userDTO == null || userDTO.getUserPassword() == null || userDTO.getUserId() == null | userDTO.getEmail() == null) {
+//                throw new RuntimeException(ResponseMessage.USER_SIGNUP_FAIL);
+//                HashMap<String, Object> responseDTO = new HashMap<>();
+//                responseDTO.put("ResponseMessage", ResponseMessage.USER_SIGNUP_FAIL);
+//                return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
+//            }
+//
+//            UserEntity user = UserEntity.builder()
+//                .userId(userDTO.getUserId())
+//                .userName(userDTO.getUserName())
+//                .email(userDTO.getEmail())
+//                .userPassword(passwordEncoder.encode(userDTO.getUserPassword()))
+//                .creationDate(LocalDateTime.now())
+//                .lastAccessDate(LocalDateTime.now())
+//                .build();
+//
+//
+//            UserProfileEntity userProfile = UserProfileEntity.builder()
+//                .user(user)
+//                .nickname(userDTO.getNickname())
+//                .img(userDTO.getImg())
+//                .introduction(userDTO.getIntroduction())
+//                .isPrivate(userDTO.getIsPrivate())
+//                .build();
+//
+//            UserEntity newUser = userService.join(user, userProfile);
+//
+//
+//            HashMap<String, Object> responseDTO = new HashMap<>();
+//            responseDTO.put("ResponseMessage", ResponseMessage.USER_SIGNUP_SUCCESS);
+//            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+//        }   catch (RuntimeException e) {
+//            HashMap<String, Object> responseDTO = new HashMap<>();
+//            responseDTO.put("ResponseMessage", ResponseMessage.USER_SIGNUP_FAIL);
+//            return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
+//        }
+//    }
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody UserDTO userDTO) {
-        System.out.println("signUp : "+userDTO.getUserId()+userDTO.getUserPassword());
-        try {
             // 정보가 들어오지 않았을 때
-            if (userDTO == null || userDTO.getUserPassword() == null) {
-                HashMap<String, Object> responseDTO = new HashMap<>();
-                responseDTO.put("ResponseMessage", ResponseMessage.USER_SIGNUP_FAIL);
-                return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
+            if (userDTO == null || userDTO.getUserPassword() == null || userDTO.getUserId() == null | userDTO.getEmail() == null) {
+                throw new NullPointerException(ResponseMessage.USER_SIGNUP_FAIL);
             }
 
             UserEntity user = UserEntity.builder()
@@ -70,13 +107,8 @@ public class UserController {
             HashMap<String, Object> responseDTO = new HashMap<>();
             responseDTO.put("ResponseMessage", ResponseMessage.USER_SIGNUP_SUCCESS);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-        }   catch (RuntimeException e) {
-            HashMap<String, Object> responseDTO = new HashMap<>();
-            responseDTO.put("ResponseMessage", ResponseMessage.USER_SIGNUP_FAIL);
-            return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
         }
 
-    }
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticate(@Valid UserDTO userDTO) {

@@ -19,6 +19,7 @@ public class ResponseMessage {
     public static final String USER_SIGNUP_FAIL = "회원 가입 실패";
     public static final String UPDATE_USER = "회원 정보 수정 성공";
     public static final String DELETE_USER = "회원 탈퇴 성공";
+    public static final String DUPLICATED_VALUE = "이미 다른 유저가 사용 중입니다";
 
     // NULL
     public static final String INTERNAL_SERVER_ERROR = "서버 내부 에러";
