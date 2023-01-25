@@ -1,9 +1,7 @@
-import React, { useState, useRef, useContext } from "react";
-import { DiaryDispatchContext } from "./DiaryCreate";
+import React, { useState, useRef } from "react";
+import axios_api from "../config/Axios";
 
-function DiaryItem({ id, content, group, created_at }) {
-  // context에서 함수를 가져와 사용
-  const { onRemove, onEdit } = useContext(DiaryDispatchContext);
+function DiaryItem({ id, content, group, created_at, onRemove, onEdit }) {
   // 포커스 기능을 할 객체 생성
   const localContentInput = useRef();
   // 삭제하기 클릭 시 실행되는 함수
@@ -25,12 +23,24 @@ function DiaryItem({ id, content, group, created_at }) {
     setLocalContent(content);
   };
   // 수정 완료 버튼 클릭 시 함수
-  const handleEdit = () => {
+  const handleEdit = (e) => {
+    e.preventDefault();
+
     if (localContent.length < 2) {
       localContentInput.current.focus();
       return;
     }
+
     if (window.confirm(`${id}번째 일기를 수정하시겠습니까?`)) {
+      axios_api.put("diary", {
+        content: localContent,
+        diaryIdx: 0,
+        emo: "string",
+        groupIdx: 0,
+        music: 0,
+        picture: 0,
+        userIdx: 0,
+      });
       onEdit(id, localContent);
       toggleIsEdit();
     }
