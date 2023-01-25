@@ -3,7 +3,7 @@ package com.dbd.nanal.controller;
 import com.dbd.nanal.config.common.DefaultRes;
 import com.dbd.nanal.config.common.ResponseMessage;
 import com.dbd.nanal.config.security.JwtTokenProvider;
-import com.dbd.nanal.dto.UserDTO;
+import com.dbd.nanal.dto.UserRequestDTO;
 import com.dbd.nanal.model.UserEntity;
 import com.dbd.nanal.model.UserProfileEntity;
 import com.dbd.nanal.service.UserService;
@@ -35,59 +35,19 @@ public class UserController {
 
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-//    @PostMapping("/signup")
-//    public ResponseEntity<?> signUp(@RequestBody UserDTO userDTO) {
-//        try {
-//            // 정보가 들어오지 않았을 때
-//            if (userDTO == null || userDTO.getUserPassword() == null || userDTO.getUserId() == null | userDTO.getEmail() == null) {
-//                throw new RuntimeException(ResponseMessage.USER_SIGNUP_FAIL);
-//                HashMap<String, Object> responseDTO = new HashMap<>();
-//                responseDTO.put("ResponseMessage", ResponseMessage.USER_SIGNUP_FAIL);
-//                return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
-//            }
-//
-//            UserEntity user = UserEntity.builder()
-//                .userId(userDTO.getUserId())
-//                .userName(userDTO.getUserName())
-//                .email(userDTO.getEmail())
-//                .userPassword(passwordEncoder.encode(userDTO.getUserPassword()))
-//                .creationDate(LocalDateTime.now())
-//                .lastAccessDate(LocalDateTime.now())
-//                .build();
-//
-//
-//            UserProfileEntity userProfile = UserProfileEntity.builder()
-//                .user(user)
-//                .nickname(userDTO.getNickname())
-//                .img(userDTO.getImg())
-//                .introduction(userDTO.getIntroduction())
-//                .isPrivate(userDTO.getIsPrivate())
-//                .build();
-//
-//            UserEntity newUser = userService.join(user, userProfile);
-//
-//
-//            HashMap<String, Object> responseDTO = new HashMap<>();
-//            responseDTO.put("ResponseMessage", ResponseMessage.USER_SIGNUP_SUCCESS);
-//            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-//        }   catch (RuntimeException e) {
-//            HashMap<String, Object> responseDTO = new HashMap<>();
-//            responseDTO.put("ResponseMessage", ResponseMessage.USER_SIGNUP_FAIL);
-//            return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
-//        }
-//    }
     @PostMapping("/signup")
-    public ResponseEntity<?> signUp(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<?> signUp(@RequestBody UserRequestDTO userRequestDTO) {
             // 정보가 들어오지 않았을 때
-            if (userDTO == null || userDTO.getUserPassword() == null || userDTO.getUserId() == null | userDTO.getEmail() == null) {
-                throw new NullPointerException(ResponseMessage.USER_SIGNUP_FAIL);
+            if (userRequestDTO
+                == null || userRequestDTO.getPassword() == null || userRequestDTO.getUserId() == null | userRequestDTO.getEmail() == null) {
+                throw new NullPointerException(ResponseMessage.EMPTY);
             }
 
             UserEntity user = UserEntity.builder()
-                .userId(userDTO.getUserId())
-                .userName(userDTO.getUserName())
-                .email(userDTO.getEmail())
-                .userPassword(passwordEncoder.encode(userDTO.getUserPassword()))
+                .userId(userRequestDTO.getUserId())
+                .name(userRequestDTO.getName())
+                .email(userRequestDTO.getEmail())
+                .password(passwordEncoder.encode(userRequestDTO.getPassword()))
                 .creationDate(LocalDateTime.now())
                 .lastAccessDate(LocalDateTime.now())
                 .build();
@@ -95,31 +55,30 @@ public class UserController {
 
             UserProfileEntity userProfile = UserProfileEntity.builder()
                 .user(user)
-                .nickname(userDTO.getNickname())
-                .img(userDTO.getImg())
-                .introduction(userDTO.getIntroduction())
-                .isPrivate(userDTO.getIsPrivate())
+                .nickname(userRequestDTO.getNickname())
+                .img(userRequestDTO.getImg())
+                .introduction(userRequestDTO.getIntroduction())
+                .isPrivate(userRequestDTO.getIsPrivate())
                 .build();
 
             UserEntity newUser = userService.join(user, userProfile);
 
 
             HashMap<String, Object> responseDTO = new HashMap<>();
-            responseDTO.put("ResponseMessage", ResponseMessage.USER_SIGNUP_SUCCESS);
+            responseDTO.put("ResponseMessage", ResponseMessage.CREATED_USER);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }
 
 
     @PostMapping("/login")
-    public ResponseEntity<?> authenticate(@Valid UserDTO userDTO) {
+    public ResponseEntity<?> authenticate(@RequestBody UserRequestDTO userRequestDTO) {
         UserEntity user = userService.getByCredentials(
-            userDTO.getUserId(),
-            userDTO.getUserPassword(),
+            userRequestDTO.getUserId(),
+            userRequestDTO.getPassword(),
             passwordEncoder);
 
         if(user != null) {
-
-            String token = jwtTokenProvider.create(user);
+            String token = jwtTokenProvider.createAccessToken(user);
 
             String userIdx = Integer.toString(user.getUserIdx());
             HashMap<String, String> User = new HashMap<>();
@@ -133,7 +92,7 @@ public class UserController {
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
 
         } else {
-            Boolean isUserExist = userService.findUserId(userDTO.getUserId());
+            Boolean isUserExist = userService.checkUserId(userRequestDTO.getUserId());
 
             if (isUserExist) {
                 HashMap<String, Object> responseDTO = new HashMap<>();
@@ -144,7 +103,6 @@ public class UserController {
                 responseDTO.put("ResponseMessage", ResponseMessage.NOT_FOUND_USER);
                 return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
             }
-
         }
     }
 }

@@ -4,10 +4,6 @@ import com.dbd.nanal.model.UserEntity;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
-import javax.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -25,7 +21,7 @@ public class JwtTokenProvider {
         Instant.now()
             .plus(1, ChronoUnit.DAYS));
 
-    public String create(UserEntity userEntity) {
+    public String createAccessToken(UserEntity userEntity) {
         System.out.println("token create");
 
         String token = Jwts.builder()
