@@ -2,7 +2,8 @@ package com.dbd.nanal.controller;
 
 import com.dbd.nanal.dto.GroupDetailRequestDTO;
 import com.dbd.nanal.dto.GroupDetailResponseDTO;
-import com.dbd.nanal.dto.GroupTagResponseDTO;
+import com.dbd.nanal.dto.GroupUserRelationRequestDTO;
+import com.dbd.nanal.dto.GroupUserRelationResponseDTO;
 import com.dbd.nanal.service.GroupService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -10,9 +11,12 @@ import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-// Api tag는 제목 역할을 한다.
+import java.util.List;
+import java.util.Map;
+
 @Api(tags = {"Group관련 API"})
 @RestController
 @RequiredArgsConstructor
@@ -29,27 +33,26 @@ public class GroupController {
                     "[Back] \n" +
                     "JSON\n" +
                     "{groupIdx(int), groupImg(String), groupName(String), private(boolean), tags(List(String)), creationDate(String)} ")
+
     @PostMapping
+    @Transactional
     public ResponseEntity<?> save(@ApiParam(value = "그룹 생성 정보") @RequestBody GroupDetailRequestDTO groupDetailRequestDTO) {
 
         try {
-            // 1. group_detail table insert, 결과 responseDTO에 저장
+            // 1. group_detail table save, 결과 responseDTO에 저장
             GroupDetailResponseDTO groupDetailResponseDTO = groupService.saveGroup(groupDetailRequestDTO);
 
-            // 반환 성공
+            // group_detail table save 성공, 반환
             if (groupDetailResponseDTO != null) {
-                // 반환값 이용해서 idx 저장
+                // 반환값에서 idx(auto_increment) 가져와서 request의 idx 채우기
                 groupDetailRequestDTO.setGroupIdx(groupDetailResponseDTO.getGroupIdx());
 
-                // 2. group_tag table insert
-                GroupTagResponseDTO groupTagResponseDTO = groupService.saveGroupTags(groupDetailRequestDTO);
+                // 2. group_tag table save, 결과 responseDTO에 저장
+                groupDetailResponseDTO.setTags(groupService.saveGroupTags(groupDetailRequestDTO).getTags());
 
-                // 반환 성공
-                if (groupTagResponseDTO != null) {
-                    // 반환할 responseDTO에 tag리스트 저장
-                    groupDetailResponseDTO.setTags(groupTagResponseDTO.getTags());
-
-                    // FRONT로 responseDTO(그룹 상세 정보) 전달
+                // 저장 성공
+                if (groupDetailResponseDTO.getTags() != null) {
+                    // FRONT - responseDTO(그룹 상세 정보) 전달
                     return new ResponseEntity<>(groupDetailResponseDTO, HttpStatus.OK);
                 }
                 // 반환 실패
@@ -70,8 +73,8 @@ public class GroupController {
 
     }
 
-    @ApiOperation(value = "groupIdx로 그룹 상세 정보 조회", notes =
-            "그룹 상세 정보를 조회합니다.\n" +
+    @ApiOperation(value = "그룹 상세 정보 조회", notes =
+            "groupIdx 값으로 그룹 상세 정보를 조회합니다.\n" +
                     "[Front] \n" +
                     "JSON\n" +
                     "{groupIdx(int)} \n\n" +
@@ -96,6 +99,65 @@ public class GroupController {
         catch (Exception e) {
             return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+
+    @ApiOperation(value = "그룹 가입", notes =
+            "(초대 수락) userIdx 사용자가 groupIdx 그룹에 가입합니다.\n" +
+                    "[Front] \n" +
+                    "JSON\n" +
+                    "{groupIdx(int), userIdx(int)} \n\n" +
+                    "[Back] \n" +
+                    "JSON\n" +
+                    "{success(boolean)}")
+
+    @PostMapping("/join")
+    public ResponseEntity<?> groupJoin(@ApiParam(value = "groupIdx, userIdx", required = true) @RequestBody Map<String, Integer> requestDTO) {
+        try {
+            GroupUserRelationRequestDTO groupUserRelationRequestDTO = new GroupUserRelationRequestDTO(requestDTO.get("userIdx"), requestDTO.get("groupIdx"));
+            System.out.println(groupUserRelationRequestDTO.getUserIdx() + " groupIdx : " + groupUserRelationRequestDTO.getGroupIdx());
+
+            GroupUserRelationResponseDTO groupUserRelationResponseDTO = groupService.saveGroupUserRelation(groupUserRelationRequestDTO);
+
+            if (groupUserRelationResponseDTO != null) {
+                // 반환값 고민중 !
+                return new ResponseEntity<>(true, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+            }
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @ApiOperation(value = "그룹 리스트 조회", notes =
+            "userIdx 사용자가 소속된 그룹 리스트를 조회합니다.\n" +
+                    "[Front] \n" +
+                    "JSON\n" +
+                    "{userIdx(int)} \n\n" +
+                    "[Back] \n" +
+                    "JSON\n" +
+                    "{List<GroupDetailResponse>}")
+    @GetMapping("/list/{userIdx}")
+    public ResponseEntity<?> getGroupList(@ApiParam(value = "유저 idx", required = true) @PathVariable int userIdx) {
+        try {
+
+            // group_user_relation 테이블에서 userIdx가 포함된 group찾기
+            List<GroupDetailResponseDTO> groupDetailResponseDTOS =
+                    groupService.getGroupList(userIdx);
+
+            if (groupDetailResponseDTOS != null) {
+                return new ResponseEntity<>(groupDetailResponseDTOS, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+            }
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+
     }
 
 
