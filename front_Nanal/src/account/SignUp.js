@@ -109,15 +109,30 @@ function SignUp() {
         userPassword: password,
         nickname: nickName,
       })
-      .then((response) => {
-        console.log(response);
+      .then(({ data }) => {
+        // console.log(data);
+        // console.log(data.data);
+        // console.log(data.statusCode);
+        // console.log(data.data.statusCode);
+        // console.log(data.ResponseMessage);
+        // console.log(data.data.ResponseMessage);
+        if (data.statusCode === 200) {
+          if (data.data.ResponseMessage === "회원 가입 성공") {
+            alert("회원 가입 성공!!!");
+          }
+        } else {
+          if (data.data.ResponseMessage === "회원 가입 실패") {
+          }
+        }
       })
-      .catch(console.log("NONONNNONNON"));
+      .catch((error) => {
+        console.log("회원 가입 오류: " + error);
+      });
   };
 
   return (
     <div className="flex justify-center">
-      <div className="box-border p-4 w-80 border-2 border-black">
+      <div className="box-border p-4 w-80 border-[1px] border-gray-500 border-solid">
         <h1 className="p-3">SignUp</h1>
         <form action="" onSubmit={SignUp}>
           {/* 이메일 email */}
