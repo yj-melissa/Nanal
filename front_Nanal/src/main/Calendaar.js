@@ -26,7 +26,9 @@ function Calendaar() {
       <hr className="border-black" />
       <br />
       <DiaryList />
-      <Link to="/New"> 일기 쓰러 가기~! 🖊 </Link>
+      <div className="flex justify-center">
+        <Link to="/New" className="m-3"> 일기 쓰러 가기~! 🖊 </Link>
+      </div>
     </div>
   );
 }
