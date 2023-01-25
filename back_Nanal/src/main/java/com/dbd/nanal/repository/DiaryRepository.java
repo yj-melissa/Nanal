@@ -10,8 +10,8 @@ import java.util.List;
 
 @Repository
 public interface DiaryRepository extends JpaRepository<DiaryEntity, Integer> {
-    @Query("select a from  DiaryEntity a join GroupDiaryRelationEntity b on  b.diary.diaryIdx=a.diaryIdx where b.group_diary_idx=:groupIdx")
-    List<DiaryEntity> findGroupDiaryList(@Param("groupId") int groupIdx);
+    @Query("select a from  DiaryEntity a join GroupDiaryRelationEntity b on  b.diary.diaryIdx=a.diaryIdx where b.groupDetail.groupIdx=:groupIdx")
+    List<DiaryEntity> findGroupDiaryList(@Param("groupIdx") int groupIdx);
 
 
 }
