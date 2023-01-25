@@ -1,10 +1,9 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useContext } from "react";
+import { DiaryDispatchContext } from "./DiaryCreate";
 
-function DiaryItem({ id, content, group, created_at, onRemove, onEdit }) {
-  //
-  useEffect(() => {
-    console.log(`${id}번 째 아이템 렌더!`);
-  });
+function DiaryItem({ id, content, group, created_at }) {
+  // context에서 함수를 가져와 사용
+  const { onRemove, onEdit } = useContext(DiaryDispatchContext);
   // 포커스 기능을 할 객체 생성
   const localContentInput = useRef();
   // 삭제하기 클릭 시 실행되는 함수
