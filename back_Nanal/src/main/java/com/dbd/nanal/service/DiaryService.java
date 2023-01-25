@@ -1,13 +1,16 @@
 package com.dbd.nanal.service;
 
+import com.dbd.nanal.dto.DiaryRequestDTO;
 import com.dbd.nanal.dto.DiaryResponseDTO;
 import com.dbd.nanal.dto.GroupDiaryRelationDTO;
 import com.dbd.nanal.model.DiaryEntity;
 import com.dbd.nanal.model.GroupDetailEntity;
 import com.dbd.nanal.model.GroupDiaryRelationEntity;
+import com.dbd.nanal.model.UserEntity;
 import com.dbd.nanal.repository.DiaryRepository;
 import com.dbd.nanal.repository.GroupDiaryRelationRepository;
 import com.dbd.nanal.repository.GroupRepository;
+import com.dbd.nanal.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,10 +26,12 @@ public class DiaryService {
     private final DiaryRepository diaryRepository;
     private final GroupRepository groupRepository;
     private final GroupDiaryRelationRepository groupDiaryRelationRepository;
+    private final UserRepository userRepository;
 
     // write diary
-    public DiaryResponseDTO save(DiaryEntity diary){
-        return new DiaryResponseDTO(diaryRepository.save(diary));
+    public DiaryResponseDTO save(DiaryRequestDTO diary){
+        UserEntity user=userRepository.getReferenceById(diary.getUserIdx());
+        return new DiaryResponseDTO(diaryRepository.save(diary.toEntity(user)));
     }
 
     // get diary
