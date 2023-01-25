@@ -1,13 +1,16 @@
 import * as React from "react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../src_assets/img/home.png";
-import menu from "../src_assets/img/menu.png";
+import profile from "../src_assets/img/profile.png";
 import close from "../src_assets/img/close.png";
 import downarrow from "../src_assets/img/down-arrow.png";
 import uparrow from "../src_assets/img/up-arrow.png";
 
 function Nav() {
+  // useNavigate == 뒤로가기나 앞으로가기를 위한 react 내장 객체
+  const navigate = useNavigate();
+
   const [isToggle, setToggle] = useState(true);
   const toggleMenu = () => {
     setToggle((isToggle) => !isToggle);
@@ -45,12 +48,18 @@ function Nav() {
         )}
       </div>
       {isToggle2 ? (
-        <div className="w-6 h-6 my-3">
-          <img src={menu} onClick={() => toggle2Menu()} />
-        </div>
+        <Link to="/MyPage" className="w-6 h-6 my-3">
+          <img src={profile} onClick={() => toggle2Menu()} />
+        </Link>
       ) : (
         <div className="w-6 h-6 my-3">
-          <img src={close} onClick={() => toggle2Menu()} />
+          <img
+            src={close}
+            onClick={() => {
+              navigate(-1);
+              toggle2Menu();
+            }}
+          />
         </div>
       )}
     </nav>
