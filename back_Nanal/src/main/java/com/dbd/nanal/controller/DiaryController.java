@@ -1,5 +1,7 @@
 package com.dbd.nanal.controller;
 
+import com.dbd.nanal.config.common.DefaultRes;
+import com.dbd.nanal.config.common.ResponseMessage;
 import com.dbd.nanal.dto.DiaryRequestDTO;
 import com.dbd.nanal.dto.DiaryResponseDTO;
 import com.dbd.nanal.dto.GroupDiaryRelationDTO;
@@ -12,16 +14,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.List;
 
 @Api(tags = {"Diary 관련 API"})
+@CrossOrigin
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("diary")
 public class DiaryController {
 
     private final DiaryService diaryService;
+
+    HashMap<String, Object> responseDTO = new HashMap<>();
 
     @ApiOperation(value = "일기 생성", notes =
             "일기를 생성합니다.\n" +
@@ -30,7 +35,7 @@ public class DiaryController {
                     "[Back] \n" +
                     "{diaryIdx(int), userIdx(int), creationDate(Date), content(String), picture(String), music(int), emo(String)} ")
     @PostMapping("")
-    public ResponseEntity<?> writeDiary(@ApiParam(value = "일기 정보")@RequestBody DiaryRequestDTO diary, HttpSession session) {
+    public ResponseEntity<?> writeDiary(@ApiParam(value = "일기 정보")@RequestBody DiaryRequestDTO diary) {
         try{
             //diary keyword analyze
             //picture
@@ -39,13 +44,15 @@ public class DiaryController {
             //save diary
             DiaryResponseDTO diaryResponseDTO=diaryService.save(diary);
             int diaryIdx=diaryResponseDTO.getDiaryIdx();
-
+            System.out.println(diary.getContent());
             //save diary-group
             for(int i=0; i<diary.getGroupIdxList().size(); i++){
                 GroupDiaryRelationDTO groupDiaryRelationDTO=new GroupDiaryRelationDTO(diaryIdx, diary.getGroupIdxList().get(i));
                 diaryService.saveDiaryGroup(groupDiaryRelationDTO);
             }
-            return new ResponseEntity<>(diaryResponseDTO,HttpStatus.OK);
+            responseDTO.put("responseMessage", ResponseMessage.DIARY_SAVE_SUCCESS);
+            responseDTO.put("diary", diaryResponseDTO);
+            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>("서버오류", HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -62,12 +69,17 @@ public class DiaryController {
     public ResponseEntity<?> getDiary(@ApiParam(value = "일기 id")@PathVariable("diaryIdx") int diaryIdx){
         try{
             DiaryResponseDTO diaryResponseDTO=diaryService.getDiary(diaryIdx);
-            if(diaryResponseDTO!=null)
-                return new ResponseEntity<>(diaryResponseDTO, HttpStatus.OK);
-            else
-                return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+            if(diaryResponseDTO!=null) {
+                responseDTO.put("responseMessage", ResponseMessage.DIARY_GET_SUCCESS);
+                responseDTO.put("diary", diaryResponseDTO);
+                return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+            }else{
+                responseDTO.put("responseMessage", ResponseMessage.DIARY_GET_FAIL);
+                return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
+            }
         }catch (Exception e){
-            return new ResponseEntity<>("서버오류", HttpStatus.INTERNAL_SERVER_ERROR);
+            responseDTO.put("responseMessage", ResponseMessage.DIARY_GET_FAIL);
+            return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
         }
     }
 
@@ -78,15 +90,19 @@ public class DiaryController {
                     "[Back] \n" +
                     "ok(200)")
     @PutMapping("")
-    public ResponseEntity<?> updateDiary(@ApiParam(value = "일기 수정 정보")@RequestBody DiaryRequestDTO diary, HttpSession session) {
+    public ResponseEntity<?> updateDiary(@ApiParam(value = "일기 수정 정보")@RequestBody DiaryRequestDTO diary) {
         try{
+            System.out.println("update: "+diary.getDiaryIdx());
             //diary keyword analyze
             //picture
             //music
-            diaryService.updateDiary(diary.toEntity());
-            return new ResponseEntity<>("수정 완료", HttpStatus.OK);
+            DiaryResponseDTO diaryResponseDTO=diaryService.updateDiary(diary.toEntity());
+            responseDTO.put("responseMessage", ResponseMessage.DIARY_UPDATE_SUCCESS);
+            responseDTO.put("diary", diaryResponseDTO);
+            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }catch (Exception e){
-            return new ResponseEntity<>("서버오류", HttpStatus.INTERNAL_SERVER_ERROR);
+            responseDTO.put("responseMessage", ResponseMessage.DIARY_UPDATE_FAIL);
+            return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
         }
     }
 
@@ -100,9 +116,11 @@ public class DiaryController {
     public ResponseEntity<?> deleteDiary(@ApiParam(value="일기 id") @PathVariable("diaryIdx") int diaryIdx){
         try{
             diaryService.deleteDiary(diaryIdx);
-            return new ResponseEntity<>("삭제 완료", HttpStatus.OK);
+            responseDTO.put("responseMessage", ResponseMessage.DIARY_DELETE_SUCCESS);
+            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }catch (Exception e){
-            return new ResponseEntity<>("서버오류", HttpStatus.INTERNAL_SERVER_ERROR);
+            responseDTO.put("responseMessage", ResponseMessage.DIARY_DELETE_FAIL);
+            return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
         }
     }
 
@@ -116,9 +134,12 @@ public class DiaryController {
     public ResponseEntity<?> DiaryList(@PathVariable("groupIdx") int groupIdx){
         try{
             List<DiaryResponseDTO> diaryRequestDTOList=diaryService.diaryList(groupIdx);
-            return ResponseEntity.status(HttpStatus.OK).body(diaryRequestDTOList);
+            responseDTO.put("responseMessage", ResponseMessage.DIARY_LIST_FIND_SUCCESS);
+            responseDTO.put("diary", diaryRequestDTOList);
+            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }catch (Exception e){
-            return new ResponseEntity<>("서버오류", HttpStatus.INTERNAL_SERVER_ERROR);
+            responseDTO.put("responseMessage", ResponseMessage.DIARY_LIST_FIND_FAIL);
+            return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
         }
     }
 }
