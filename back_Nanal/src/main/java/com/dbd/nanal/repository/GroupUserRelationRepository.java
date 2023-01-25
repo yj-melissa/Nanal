@@ -13,6 +13,6 @@ import java.util.List;
 @Repository
 public interface GroupUserRelationRepository extends JpaRepository<GroupUserRelationEntity, Integer> {
 
-    @Query("select a from GroupDetailEntity a join fetch GroupUserRelationEntity b on a.groupIdx=b.groupDetail.groupIdx where b.user.userIdx=:userIdx")
+    @Query("select d from GroupDetailEntity d join fetch GroupUserRelationEntity r on d.groupIdx=r.groupDetail.groupIdx where r.user.userIdx=:userIdx")
     List<GroupDetailEntity> findGroupList(@Param("userIdx") int userIdx);
 }
