@@ -9,14 +9,18 @@ import javax.persistence.JoinColumn;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
+@Builder
 @Table(name = "user_profile")
 @Getter @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class UserProfileEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,11 +38,10 @@ public class UserProfileEntity {
     private String img;
 
     @Column
-    private String Introduction;
+    private String introduction;
 
     @Column(name = "is_private")
     private Boolean isPrivate;
-
 
 
 }
