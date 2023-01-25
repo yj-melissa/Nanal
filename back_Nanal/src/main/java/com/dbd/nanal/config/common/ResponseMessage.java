@@ -17,6 +17,15 @@ public class ResponseMessage {
     public static final String CREATED_USER = "회원 가입 성공";
     public static final String UPDATE_USER = "회원 정보 수정 성공";
     public static final String DELETE_USER = "회원 탈퇴 성공";
+    public static final String DIARY_SAVE_SUCCESS="일기 생성 성공";
+    public static final String DIARY_GET_SUCCESS="일기 조회 성공";
+    public static final String DIARY_GET_FAIL="일기 조회 실패";
+    public static final String DIARY_UPDATE_SUCCESS="일기 수정 성공";
+    public static final String DIARY_UPDATE_FAIL="일기 수정 실패";
+    public static final String DIARY_DELETE_SUCCESS="일기 삭제 성공";
+    public static final String DIARY_DELETE_FAIL="일기 삭제 성공";
+    public static final String DIARY_LIST_FIND_SUCCESS="일기 리스트 조회 성공";
+    public static final String DIARY_LIST_FIND_FAIL="일기 리스트 조회 실패";
 
     // NULL
     public static final String INTERNAL_SERVER_ERROR = "서버 내부 에러";
