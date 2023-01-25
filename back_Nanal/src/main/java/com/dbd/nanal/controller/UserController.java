@@ -1,16 +1,19 @@
 package com.dbd.nanal.controller;
 
+import com.dbd.nanal.config.common.DefaultRes;
+import com.dbd.nanal.config.common.ResponseMessage;
 import com.dbd.nanal.config.security.JwtTokenProvider;
 import com.dbd.nanal.dto.UserDTO;
-import com.dbd.nanal.dto.UserResponseDTO;
 import com.dbd.nanal.model.UserEntity;
 import com.dbd.nanal.model.UserProfileEntity;
 import com.dbd.nanal.service.UserService;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -36,8 +39,11 @@ public class UserController {
     public ResponseEntity<?> signUp(@RequestBody UserDTO userDTO) {
         System.out.println("signUp : "+userDTO.getUserId()+userDTO.getUserPassword());
         try {
+            // 정보가 들어오지 않았을 때
             if (userDTO == null || userDTO.getUserPassword() == null) {
-                throw new RuntimeException("비밀번호 값이 유효하지 않습니다");
+                HashMap<String, Object> responseDTO = new HashMap<>();
+                responseDTO.put("ResponseMessage", ResponseMessage.USER_SIGNUP_FAIL);
+                return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
             }
 
             UserEntity user = UserEntity.builder()
@@ -60,19 +66,14 @@ public class UserController {
 
             UserEntity newUser = userService.join(user, userProfile);
 
-            UserDTO responseUserDTO = UserDTO.builder()
-                .userIdx(newUser.getUserIdx())
-                .userId(newUser.getUserId())
-                .build();
 
-
-            return ResponseEntity.ok().body(responseUserDTO);
+            HashMap<String, Object> responseDTO = new HashMap<>();
+            responseDTO.put("ResponseMessage", ResponseMessage.USER_SIGNUP_SUCCESS);
+            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }   catch (RuntimeException e) {
-
-            UserResponseDTO responseDTO = UserResponseDTO.builder().error(e.getMessage()).build();
-            return ResponseEntity
-                .badRequest()
-                .body(responseDTO);
+            HashMap<String, Object> responseDTO = new HashMap<>();
+            responseDTO.put("ResponseMessage", ResponseMessage.USER_SIGNUP_FAIL);
+            return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
         }
 
     }
@@ -88,30 +89,30 @@ public class UserController {
 
             String token = jwtTokenProvider.create(user);
 
-            final UserDTO responseUserDTO = UserDTO.builder()
-                .userIdx(user.getUserIdx())
-                .userId(user.getUserId())
-                .jwtToken(token)
-                .build();
-            return ResponseEntity.ok().body(responseUserDTO);
+            String userIdx = Integer.toString(user.getUserIdx());
+            HashMap<String, String> User = new HashMap<>();
+            User.put("userIdx", userIdx);
+            User.put("userId", user.getUserId());
+            User.put("accessToken", token);
+
+            HashMap<String, Object> responseDTO = new HashMap<>();
+            responseDTO.put("ResponseMessage", ResponseMessage.LOGIN_SUCCESS);
+            responseDTO.put("User", User);
+            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
 
         } else {
-            String errorMsg;
             Boolean isUserExist = userService.findUserId(userDTO.getUserId());
 
             if (isUserExist) {
-                errorMsg = "비밀번호가 일치하지 않습니다";
+                HashMap<String, Object> responseDTO = new HashMap<>();
+                responseDTO.put("ResponseMessage", ResponseMessage.LOGIN_FAIL);
+                return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
             } else {
-                errorMsg = "존재하지 않는 아이디입니다";
+                HashMap<String, Object> responseDTO = new HashMap<>();
+                responseDTO.put("ResponseMessage", ResponseMessage.NOT_FOUND_USER);
+                return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
             }
 
-            UserResponseDTO userResponseDTO = UserResponseDTO.builder()
-                .error(errorMsg)
-                .build();
-
-            return ResponseEntity
-                .badRequest()
-                .body(userResponseDTO);
         }
     }
 }
