@@ -68,6 +68,7 @@ function SignIn() {
               placeholder="아이디"
               onChange={onChangeId}
               value={userId}
+              className="max-w-full"
             />
             <br />
             <label htmlFor="user-password">PW: </label>
@@ -77,6 +78,7 @@ function SignIn() {
               placeholder="비밀번호"
               onChange={onChangePw}
               value={pw}
+              className="max-w-full"
             />
             <div>
               <button>Sign In</button>
