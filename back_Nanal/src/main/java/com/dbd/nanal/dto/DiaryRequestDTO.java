@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -21,7 +22,7 @@ public class DiaryRequestDTO {
     private int music;
     private String emo;
 
-    private  int groupIdx;
+    private List<Integer> groupIdxList;
 
 //    @Builder
 //    public DiaryRequestDTO(int diaryIdx, UserEntity user, Timestamp creationDate, String content, PaintingEntity picture, MusicEntity music, boolean isDeleted, Timestamp deleteDate, Timestamp expireDate, String emo) {

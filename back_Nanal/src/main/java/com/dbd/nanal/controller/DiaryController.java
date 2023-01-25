@@ -23,7 +23,12 @@ public class DiaryController {
 
     private final DiaryService diaryService;
 
-    @ApiOperation(value = "일기 생성", notes = "새로운 일기를 생성합니다.")
+    @ApiOperation(value = "일기 생성", notes =
+            "일기를 생성합니다.\n" +
+                    "[Front] \n" +
+                    "{userIdx(int), creationDate(Date), groupIdx(List<Integer>)} \n\n" +
+                    "[Back] \n" +
+                    "{diaryIdx(int), userIdx(int), creationDate(Date), content(String), picture(String), music(int), emo(String)} ")
     @PostMapping("")
     public ResponseEntity<?> writeDiary(@ApiParam(value = "일기 정보")@RequestBody DiaryRequestDTO diary, HttpSession session) {
         try{
@@ -33,10 +38,14 @@ public class DiaryController {
 
             //save diary
             DiaryResponseDTO diaryResponseDTO=diaryService.save(diary);
+            int diaryIdx=diaryResponseDTO.getDiaryIdx();
+
             //save diary-group
-            GroupDiaryRelationDTO groupDiaryRelationDTO=new GroupDiaryRelationDTO(diaryResponseDTO.getDiaryIdx(), diary.getGroupIdx());
-            diaryService.saveDiaryGroup(groupDiaryRelationDTO);
-            return new ResponseEntity<>(HttpStatus.OK);
+            for(int i=0; i<diary.getGroupIdxList().size(); i++){
+                GroupDiaryRelationDTO groupDiaryRelationDTO=new GroupDiaryRelationDTO(diaryIdx, diary.getGroupIdxList().get(i));
+                diaryService.saveDiaryGroup(groupDiaryRelationDTO);
+            }
+            return new ResponseEntity<>(diaryResponseDTO,HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>("서버오류", HttpStatus.INTERNAL_SERVER_ERROR);
         }
