@@ -2,7 +2,7 @@ import axios, { AxiosInstance } from "axios";
 import cookies from "js-cookie";
 
 const axios_api = axios.create({
-  baseURL: "http://192.168.100.93:8080/nanal/",
+  baseURL: process.env.REACT_APP_API_BASE_URL,
   headers: {
     access_token: cookies.get("access_token"),
   },

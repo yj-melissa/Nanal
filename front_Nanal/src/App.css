@@ -18,49 +18,14 @@ body {
 }
 
 .App {
+  font-family: "Cafe24Ssurround";
   font-family: "Cafe24SsurroundAir";
   min-height: 100vh;
   padding-left: 20px;
   padding-right: 20px;
 }
 
-.DiaryEditor {
-  border: 1px solid gray;
-  text-align: center;
-  padding: 20px;
-
-  cursor: pointer;
-  font-size: 16px;
-}
-
-.DiaryEditor input {
-  margin-bottom: 20px;
-  width: 500px;
-  padding: 10px;
-}
-
-.DiaryEditor textarea {
-  box-sizing: border-box;
-  width: 90%;
-  min-height: 200px;
-  resize: vertical;
-
-  padding: 20px;
-}
-
-.DiaryEditor select {
-  width: 300px;
-  padding: 10px;
-  margin-bottom: 20px;
-}
-
-.DiaryEditor .control-box {
-  padding: 10px;
-  cursor: pointer;
-}
-
 /* List */
-
 .DiaryList {
   border: 1px solid gray;
   padding: 20px;
