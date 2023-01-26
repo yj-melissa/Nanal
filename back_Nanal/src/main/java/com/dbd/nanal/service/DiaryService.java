@@ -60,6 +60,18 @@ public class DiaryService {
         return diaryEntityList.stream().map(x-> new DiaryResponseDTO(x)).collect(Collectors.toList());
     }
 
+    // get date diary list
+    public List<DiaryResponseDTO> getDateDiaryList(Date findDate){
+        List<DiaryEntity> diaryEntityList=diaryRepository.findDateDiaryList(findDate);
+        return diaryEntityList.stream().map(x->new DiaryResponseDTO(x)).collect(Collectors.toList());
+    }
+
+    // get Month diary list
+    public List<DiaryResponseDTO> getMonthDiaryList(String findDate){
+        List<DiaryEntity> diaryEntityList=diaryRepository.findMonthDiaryList(Integer.parseInt(findDate.substring(0,4)), Integer.parseInt(findDate.substring(5,7)));
+        return diaryEntityList.stream().map(x->new DiaryResponseDTO(x)).collect(Collectors.toList());
+    }
+
     // save diary-group
     public void saveDiaryGroup(GroupDiaryRelationDTO groupDiaryRelationDTO){
         GroupDiaryRelationEntity groupDiaryRelationEntity=GroupDiaryRelationEntity.builder()
