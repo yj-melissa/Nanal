@@ -83,11 +83,11 @@ public class UserEntity implements UserDetails {
     private List<DiaryEntity> diaries = new ArrayList<>();
 
     // 스프링 시큐리티 UserDetails
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
     }
-
 
     @Override
     public String getUsername() {

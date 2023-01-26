@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/user")
@@ -35,8 +37,10 @@ public class UserController {
 
     @Autowired private JwtTokenProvider jwtTokenProvider;
 
-    private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
+    
+    // 회원가입
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody @Valid UserFormDTO userformDTO) {
             // 정보가 들어오지 않았을 때
@@ -65,25 +69,26 @@ public class UserController {
                 .build();
 
             UserEntity createdUser = userService.join(user, userProfile);
-            
+            log.info("createdUser : "+createdUser.getUserIdx());
+            log.info("createdUser : "+createdUser.getUserId());
+
 //          JWT 토큰 발행
             JwtTokenDTO jwtTokenDTO = jwtTokenProvider.createJwtTokens(createdUser);
 
+            log.info("jwtTokenDTO"+jwtTokenDTO);
             String userIdx = Integer.toString(createdUser.getUserIdx());
-            HashMap<String, String> UserInfo = new HashMap<>();
-            UserInfo.put("userIdx", userIdx);
-            UserInfo.put("userId", createdUser.getUserId());
-            UserInfo.put("accessToken", jwtTokenDTO.getAccessToken());
-            UserInfo.put("refreshToken", jwtTokenDTO.getRefreshToken());
-            
+            HashMap<String, String> Token = new HashMap<>();
+            Token.put("accessToken", jwtTokenDTO.getAccessToken());
+            Token.put("refreshToken", jwtTokenDTO.getRefreshToken());
 
             HashMap<String, Object> responseDTO = new HashMap<>();
             responseDTO.put("ResponseMessage", ResponseMessage.CREATED_USER);
-            responseDTO.put("USER", UserInfo);
+            responseDTO.put("Token", Token);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }
 
 
+    // 로그인
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid UserRequestDTO userRequestDTO) {
         UserEntity user = userService.getByCredentials(
@@ -96,15 +101,13 @@ public class UserController {
             JwtTokenDTO jwtTokenDTO = jwtTokenProvider.createJwtTokens(user);
 
             String userIdx = Integer.toString(user.getUserIdx());
-            HashMap<String, String> User = new HashMap<>();
-            User.put("userIdx", userIdx);
-            User.put("userId", user.getUserId());
-            User.put("accessToken", jwtTokenDTO.getAccessToken());
-            User.put("refreshToken", jwtTokenDTO.getRefreshToken());
+            HashMap<String, String> Token = new HashMap<>();
+            Token.put("accessToken", jwtTokenDTO.getAccessToken());
+            Token.put("refreshToken", jwtTokenDTO.getRefreshToken());
 
             HashMap<String, Object> responseDTO = new HashMap<>();
             responseDTO.put("ResponseMessage", ResponseMessage.LOGIN_SUCCESS);
-            responseDTO.put("User", User);
+            responseDTO.put("Token", Token);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
 
         } else {
@@ -124,4 +127,5 @@ public class UserController {
             }
         }
     }
+
 }

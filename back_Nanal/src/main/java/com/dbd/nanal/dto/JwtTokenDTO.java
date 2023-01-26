@@ -15,5 +15,6 @@ public class JwtTokenDTO {
     private String accessToken;
     private String refreshToken;
     private String userId;
+    private int userIdx;
 
 }
