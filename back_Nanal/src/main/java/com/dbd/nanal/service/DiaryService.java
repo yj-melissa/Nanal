@@ -42,7 +42,7 @@ public class DiaryService {
         cal.add(Calendar.DATE, 30);
         Date date=cal.getTime();
 
-        diaryEntity.deleteDiary(true, new Date(),date );
+        diaryEntity.flagDiary(true, new Date(),date );
         diaryRepository.save(diaryEntity);
     }
 
@@ -92,5 +92,25 @@ public class DiaryService {
     // delete diary comment
     public void deleteDiaryComment(int commentIdx){
         diaryCommentRepository.deleteById(commentIdx);
+    }
+
+    // TrashBin
+    // get TrashBin Diary List
+    public List<DiaryResponseDTO> getTrashDiary(int userIdx){
+        List<DiaryEntity> diaryEntityList=diaryRepository.findByUserIdx(userIdx);
+        return diaryEntityList.stream().map(x-> new DiaryResponseDTO(x)).collect(Collectors.toList());
+    }
+
+    // delete TrashBin
+    public void deleteTrashBin(int userIdx){
+        List<DiaryEntity> diaryEntityList=diaryRepository.findByUserIdx(userIdx);
+        diaryRepository.deleteAll(diaryEntityList);
+    }
+
+    // get back diary
+    public DiaryResponseDTO reDiary(int diaryIdx){
+        DiaryEntity diaryEntity=diaryRepository.getReferenceById(diaryIdx);
+        diaryEntity.flagDiary(false, null, null );
+        return new DiaryResponseDTO(diaryRepository.save(diaryEntity));
     }
 }
