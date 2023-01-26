@@ -22,27 +22,29 @@ public class JwtTokenEntity {
     @Column(name = "refresh_token_id")
     private int refreshTokenId;
 
+    @Column(name = "user_idx")
+    private int userIdx;
+
     @Column(name = "user_id")
     private String userId;
-
 
     @Column(name = "refresh_token")
     private String refreshToken;
 
-    private JwtTokenEntity(String userId, Integer refreshTokenId, String refreshToken) {
+    private JwtTokenEntity(String userId, Integer userIdx, Integer refreshTokenId, String refreshToken) {
         this.userId = userId;
+        this.userIdx = userIdx;
         this.refreshTokenId = refreshTokenId;
         this.refreshToken = refreshToken;
     }
 
     @Builder
-    public static JwtTokenEntity createToken(String userId, Integer refreshTokenId, String refreshToken) {
-        return new JwtTokenEntity(userId, refreshTokenId, refreshToken);
+    public static JwtTokenEntity createToken(String userId,Integer userIdx, Integer refreshTokenId, String refreshToken) {
+        return new JwtTokenEntity(userId, userIdx, refreshTokenId, refreshToken);
     }
 
 
     public void changeToken(String token) {
-
         this.refreshToken = refreshToken;
     }
 
