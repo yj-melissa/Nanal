@@ -16,7 +16,7 @@ public class DiaryCommentEntity {
     @Column(name="comment_idx")
     private int commentIdx;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="diary_idx")
     private DiaryEntity diary;
 
@@ -29,11 +29,11 @@ public class DiaryCommentEntity {
     @Column(name="parent_comment_idx")
     private int parentCommentIdx;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_idx")
     private UserEntity user;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="group_idx")
     private GroupDetailEntity groupDetail;
 
@@ -47,5 +47,9 @@ public class DiaryCommentEntity {
         this.parentCommentIdx=parentCommentIdx;
         this.user=user;
         this.groupDetail=groupDetail;
+    }
+
+    public void updateComment(String content){
+        this.content=content;
     }
 }
