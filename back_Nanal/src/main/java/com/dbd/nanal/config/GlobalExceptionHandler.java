@@ -51,7 +51,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> handleMethodArgumentNotValidException(Exception e) {
         log.error("handleMethodArgumentNotValidException : {}", e.getMessage());
-        responseDTO.put("responseMessage", ResponseMessage.METHOD_NOT_VALID);
+        responseDTO.put("responseMessage", ResponseMessage.NOT_VALID_METHOD);
         return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
     }
 

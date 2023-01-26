@@ -3,6 +3,8 @@ package com.dbd.nanal.controller;
 import com.dbd.nanal.config.common.DefaultRes;
 import com.dbd.nanal.config.common.ResponseMessage;
 import com.dbd.nanal.config.security.JwtTokenProvider;
+import com.dbd.nanal.dto.JwtTokenDTO;
+import com.dbd.nanal.dto.UserFormDTO;
 import com.dbd.nanal.dto.UserRequestDTO;
 import com.dbd.nanal.model.UserEntity;
 import com.dbd.nanal.model.UserProfileEntity;
@@ -36,18 +38,19 @@ public class UserController {
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signUp(@RequestBody @Valid UserRequestDTO userRequestDTO) {
+    public ResponseEntity<?> signUp(@RequestBody @Valid UserFormDTO userformDTO) {
             // 정보가 들어오지 않았을 때
-            if (userRequestDTO
-                == null || userRequestDTO.getPassword() == null || userRequestDTO.getUserId() == null | userRequestDTO.getEmail() == null) {
+            if (userformDTO
+                == null || userformDTO.getPassword() == null || userformDTO.getUserId() == null | userformDTO.getEmail() == null) {
                 throw new NullPointerException(ResponseMessage.EMPTY);
             }
 
             UserEntity user = UserEntity.builder()
-                .userId(userRequestDTO.getUserId())
-                .name(userRequestDTO.getName())
-                .email(userRequestDTO.getEmail())
-                .password(passwordEncoder.encode(userRequestDTO.getPassword()))
+                .userId(userformDTO.getUserId())
+                .name(userformDTO.getName())
+                .email(userformDTO.getEmail())
+                .password(passwordEncoder.encode(userformDTO.getPassword()))
+                .role("ROLE_USER")
                 .creationDate(LocalDateTime.now())
                 .lastAccessDate(LocalDateTime.now())
                 .build();
@@ -55,36 +58,49 @@ public class UserController {
 
             UserProfileEntity userProfile = UserProfileEntity.builder()
                 .user(user)
-                .nickname(userRequestDTO.getNickname())
-                .img(userRequestDTO.getImg())
-                .introduction(userRequestDTO.getIntroduction())
-                .isPrivate(userRequestDTO.getIsPrivate())
+                .nickname(userformDTO.getNickname())
+                .img(userformDTO.getImg())
+                .introduction(userformDTO.getIntroduction())
+                .isPrivate(userformDTO.getIsPrivate())
                 .build();
 
-            UserEntity newUser = userService.join(user, userProfile);
+            UserEntity createdUser = userService.join(user, userProfile);
+            
+//          JWT 토큰 발행
+            JwtTokenDTO jwtTokenDTO = jwtTokenProvider.createJwtTokens(createdUser);
 
+            String userIdx = Integer.toString(createdUser.getUserIdx());
+            HashMap<String, String> UserInfo = new HashMap<>();
+            UserInfo.put("userIdx", userIdx);
+            UserInfo.put("userId", createdUser.getUserId());
+            UserInfo.put("accessToken", jwtTokenDTO.getAccessToken());
+            UserInfo.put("refreshToken", jwtTokenDTO.getRefreshToken());
+            
 
             HashMap<String, Object> responseDTO = new HashMap<>();
             responseDTO.put("ResponseMessage", ResponseMessage.CREATED_USER);
+            responseDTO.put("USER", UserInfo);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }
 
 
     @PostMapping("/login")
-    public ResponseEntity<?> authenticate(@RequestBody @Valid UserRequestDTO userRequestDTO) {
+    public ResponseEntity<?> login(@RequestBody @Valid UserRequestDTO userRequestDTO) {
         UserEntity user = userService.getByCredentials(
             userRequestDTO.getUserId(),
             userRequestDTO.getPassword(),
             passwordEncoder);
 
         if(user != null) {
-            String token = jwtTokenProvider.createAccessToken(user);
+            // 로그인 성공
+            JwtTokenDTO jwtTokenDTO = jwtTokenProvider.createJwtTokens(user);
 
             String userIdx = Integer.toString(user.getUserIdx());
             HashMap<String, String> User = new HashMap<>();
             User.put("userIdx", userIdx);
             User.put("userId", user.getUserId());
-            User.put("accessToken", token);
+            User.put("accessToken", jwtTokenDTO.getAccessToken());
+            User.put("refreshToken", jwtTokenDTO.getRefreshToken());
 
             HashMap<String, Object> responseDTO = new HashMap<>();
             responseDTO.put("ResponseMessage", ResponseMessage.LOGIN_SUCCESS);
@@ -92,13 +108,16 @@ public class UserController {
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
 
         } else {
+            // 로그인 실패
             Boolean isUserExist = userService.checkUserId(userRequestDTO.getUserId());
 
             if (isUserExist) {
+                // 비밀번호 미일치
                 HashMap<String, Object> responseDTO = new HashMap<>();
                 responseDTO.put("ResponseMessage", ResponseMessage.LOGIN_FAIL);
                 return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
             } else {
+                // 해당 아이디 없음
                 HashMap<String, Object> responseDTO = new HashMap<>();
                 responseDTO.put("ResponseMessage", ResponseMessage.NOT_FOUND_USER);
                 return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);

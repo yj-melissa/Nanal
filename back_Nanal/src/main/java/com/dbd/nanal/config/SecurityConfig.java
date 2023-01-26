@@ -9,9 +9,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.filter.CorsFilter;
 
 @Configuration
@@ -25,17 +27,14 @@ public class SecurityConfig{
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.httpBasic().disable()
             .csrf().disable()
-            // 인증 안 해도 되는 경로 : 현재 기본 경로와 /user/** 경로
             .authorizeHttpRequests()
-                .antMatchers("/").permitAll();
-            // 인증 해야 하는 경로
-//            .anyRequest()
-//                .authenticated();
-
+                .antMatchers("/diary").hasRole("USER")
+                .antMatchers("/**").permitAll();
         http.addFilterAfter(
-            jwtAuthenticationFilter,
-            CorsFilter.class
-        );
+                jwtAuthenticationFilter,
+                CorsFilter.class
+            );
+//        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS); // 세션 미사용 설정
         return http.build();
     }
 
