@@ -1,13 +1,7 @@
 package com.dbd.nanal.service;
 
-import com.dbd.nanal.dto.DiaryCommentRequestDTO;
-import com.dbd.nanal.dto.DiaryRequestDTO;
-import com.dbd.nanal.dto.DiaryResponseDTO;
-import com.dbd.nanal.dto.GroupDiaryRelationDTO;
-import com.dbd.nanal.model.DiaryEntity;
-import com.dbd.nanal.model.GroupDetailEntity;
-import com.dbd.nanal.model.GroupDiaryRelationEntity;
-import com.dbd.nanal.model.UserEntity;
+import com.dbd.nanal.dto.*;
+import com.dbd.nanal.model.*;
 import com.dbd.nanal.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -55,7 +49,6 @@ public class DiaryService {
     // update diary
     public DiaryResponseDTO updateDiary(DiaryEntity diary){
         DiaryEntity diaryEntity=diaryRepository.getReferenceById(diary.getDiaryIdx());
-
         diaryEntity.updateDiary(diary.getCreationDate(), diary.getContent(), diary.getPainting(), diary.getMusic(), diary.getEmo());
         return new DiaryResponseDTO(diaryRepository.save(diaryEntity));
     }
@@ -75,10 +68,29 @@ public class DiaryService {
     }
 
     // save diary comment
-    public void saveComment(DiaryCommentRequestDTO diaryCommentRequestDTO){
+    public DiaryCommentResponseDTO saveComment(DiaryCommentRequestDTO diaryCommentRequestDTO){
         UserEntity user=userRepository.getReferenceById(diaryCommentRequestDTO.getUserIdx());
         DiaryEntity diary=diaryRepository.getReferenceById(diaryCommentRequestDTO.getDiaryIdx());
         GroupDetailEntity group=groupRepository.getReferenceById(diaryCommentRequestDTO.getGroupIdx());
-        diaryCommentRepository.save(diaryCommentRequestDTO.toEntity(diary,user, group));
+        DiaryCommentEntity diaryCommentEntity=DiaryCommentEntity.builder().content(diaryCommentRequestDTO.getContent()).user(user).diary(diary).groupDetail(group).build();
+        return new DiaryCommentResponseDTO(diaryCommentRepository.save(diaryCommentEntity));
+    }
+
+    // update diary comment
+    public DiaryCommentResponseDTO updateComment(DiaryCommentRequestDTO diaryCommentRequestDTO){
+        DiaryCommentEntity diaryCommentEntity=diaryCommentRepository.getReferenceById(diaryCommentRequestDTO.getCommentIdx());
+        diaryCommentEntity.updateComment(diaryCommentRequestDTO.getContent());
+        return new DiaryCommentResponseDTO(diaryCommentRepository.save(diaryCommentEntity));
+    }
+
+    // get diary comment List
+    public List<DiaryCommentResponseDTO> getDiaryCommentList(int groupIdx, int diaryIdx){
+        List<DiaryCommentEntity> diaryCommentEntityList= diaryCommentRepository.findGroupDiaryCommentList(groupIdx, diaryIdx);
+        return diaryCommentEntityList.stream().map(x-> new DiaryCommentResponseDTO(x)).collect(Collectors.toList());
+    }
+
+    // delete diary comment
+    public void deleteDiaryComment(int commentIdx){
+        diaryCommentRepository.deleteById(commentIdx);
     }
 }
