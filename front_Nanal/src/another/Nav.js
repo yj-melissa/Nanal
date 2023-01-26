@@ -8,19 +8,19 @@ import close from "../src_assets/img/close.png";
 import downarrow from "../src_assets/img/down-arrow.png";
 import uparrow from "../src_assets/img/up-arrow.png";
 
-function Nav({ setIsCalendaar }) {
+function Nav({ changeCalendaar }) {
   // useNavigate == 뒤로가기나 앞으로가기를 위한 react 내장 객체
   const navigate = useNavigate();
-
+  // Home 옆의 화살표 토글
   const [isToggle, setToggle] = useState(true);
   const toggleMenu = () => {
     setToggle((isToggle) => !isToggle);
   };
+  // 마이페이지와 X표시 토글
   const [isToggle2, setToggle2] = useState(true);
   const toggle2Menu = () => {
     setToggle2((isToggle2) => !isToggle2);
   };
-
   return (
     <nav className="flex w-80 justify-between space-x-4 m-auto">
       <div className="flex items-center">
@@ -52,7 +52,7 @@ function Nav({ setIsCalendaar }) {
                 className="bg-slate-500 text-white p-1"
                 onClick={() => {
                   toggleMenu();
-                  setIsCalendaar = true;
+                  changeCalendaar(true);
                 }}
               >
                 캘린더
@@ -61,7 +61,7 @@ function Nav({ setIsCalendaar }) {
                 className="bg-sky-700 text-white p-1"
                 onClick={() => {
                   toggleMenu();
-                  setIsCalendaar = false;
+                  changeCalendaar(false);
                 }}
               >
                 책장
