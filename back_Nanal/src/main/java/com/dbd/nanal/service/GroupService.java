@@ -89,4 +89,13 @@ public class GroupService {
 
         return new GroupUserRelationResponseDTO(groupUserRelationEntity);
     }
+
+    public boolean deleteGroupUser(int userIdx, int groupIdx) {
+
+        GroupUserRelationEntity groupUserRelationEntity = groupUserRelationRepository.findByUserIdGroupID(userIdx, groupIdx);
+        System.out.println(groupUserRelationEntity.getGroupUserIdx());
+        groupUserRelationRepository.delete(groupUserRelationEntity);
+
+        return false;
+    }
 }
