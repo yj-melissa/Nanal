@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -44,6 +45,13 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> handleJwtException(Exception e) {
         log.error("handleDuplicateKeyException : {}", e.getMessage());
         responseDTO.put("responseMessage", ResponseMessage.DUPLICATED_KEY);
+        return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<?> handleMethodArgumentNotValidException(Exception e) {
+        log.error("handleMethodArgumentNotValidException : {}", e.getMessage());
+        responseDTO.put("responseMessage", ResponseMessage.METHOD_NOT_VALID);
         return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
     }
 

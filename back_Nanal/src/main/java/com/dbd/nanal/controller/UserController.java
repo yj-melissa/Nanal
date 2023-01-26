@@ -36,7 +36,7 @@ public class UserController {
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signUp(@RequestBody UserRequestDTO userRequestDTO) {
+    public ResponseEntity<?> signUp(@RequestBody @Valid UserRequestDTO userRequestDTO) {
             // 정보가 들어오지 않았을 때
             if (userRequestDTO
                 == null || userRequestDTO.getPassword() == null || userRequestDTO.getUserId() == null | userRequestDTO.getEmail() == null) {
@@ -71,7 +71,7 @@ public class UserController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<?> authenticate(@RequestBody UserRequestDTO userRequestDTO) {
+    public ResponseEntity<?> authenticate(@RequestBody @Valid UserRequestDTO userRequestDTO) {
         UserEntity user = userService.getByCredentials(
             userRequestDTO.getUserId(),
             userRequestDTO.getPassword(),
