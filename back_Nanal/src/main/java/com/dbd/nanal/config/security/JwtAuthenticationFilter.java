@@ -1,10 +1,12 @@
 package com.dbd.nanal.config.security;
 
 import java.io.IOException;
+
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -30,10 +32,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             // 토큰 검사 : JWT이므로 인가 서버에 요청하지 않고 검증 가능하다
             if (token != null && !token.equalsIgnoreCase("null")) {
                 // userId 가져오기. 위조된 경우 예외처리됨
-                String userId = jwtTokenProvider.validateAndGetUserId(token);
+                String userId = jwtTokenProvider.getUserId(token);
                 // 인증 완료 : SecurityContextHolder에 등록해야 인증된 사용자라고 생각함
                 AbstractAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                    userId,                         // 인증된 사용자의 정보. 문자열이 아니라도 아무거나 넣을 수 있고 보통 UserDetails라는 오브젝트 넣음.
+                    userId,                         // 인증된 사용자의 정보
                     null,
                     AuthorityUtils.NO_AUTHORITIES);
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
