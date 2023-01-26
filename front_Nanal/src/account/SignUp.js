@@ -106,7 +106,7 @@ function SignUp() {
       .post("user/signup", {
         email: email,
         userId: id,
-        userPassword: password,
+        password: password,
         nickname: nickName,
       })
       .then(({ data }) => {
@@ -119,10 +119,16 @@ function SignUp() {
         if (data.statusCode === 200) {
           if (data.data.ResponseMessage === "회원 가입 성공") {
             alert("회원 가입 성공!!!");
+            window.location.replace("/SignIn");
           }
         } else {
-          if (data.data.ResponseMessage === "회원 가입 실패") {
-          }
+          console.log(data.data.ResponseMessage);
+          alert("이미 가입된 이메일입니다!");
+          setEmail("");
+          setId("");
+          setPassword("");
+          setPasswordConfirm("");
+          setNickName("");
         }
       })
       .catch((error) => {
@@ -136,7 +142,7 @@ function SignUp() {
         <h1 className="p-3">SignUp</h1>
         <form action="" onSubmit={SignUp}>
           {/* 이메일 email */}
-          <div id="form-el">
+          <div className="m-1">
             <label htmlFor="email">Email</label>
             <br />
             <div>
@@ -146,13 +152,14 @@ function SignUp() {
                 value={email}
                 onChange={onChangeEmail}
               />
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               {/* onClick={this.sendEmail} */}
               <button>인증요청</button>
             </div>
             <p className="message">{emailMessage}</p>
           </div>
           {/* 유저아이디 id */}
-          <div className="form-el">
+          <div className="m-1">
             <label htmlFor="id">UserId</label> <br />
             <input
               type="text"
@@ -164,7 +171,7 @@ function SignUp() {
             <p className="message"> {idMessage} </p>
           </div>
           {/* 비밀번호 password */}
-          <div className="form-el">
+          <div className="m-1">
             <label htmlFor="password">Password</label> <br />
             <input
               type="password"
@@ -176,7 +183,7 @@ function SignUp() {
             <p className="message">{passwordMessage}</p>
           </div>
           {/* 비밀번호 확인 passwordConfirm */}
-          <div className="form-el">
+          <div className="m-1">
             <label htmlFor="passwordConfirm">Password Confirm</label> <br />
             <input
               type="password"
@@ -188,7 +195,7 @@ function SignUp() {
             <p className="message">{passwordConfirmMessage}</p>
           </div>
           {/* 닉네임 nickName */}
-          <div className="form-el">
+          <div className="m-1">
             <label htmlFor="user-nick-name">Nick Name</label> <br />
             <input
               type="text"
@@ -199,7 +206,9 @@ function SignUp() {
             />
             <p className="message">{nickNameMessage}</p>
           </div>
-          <button type="submit">SignUp</button>
+          <div className="mx-1 mt-2">
+            <button type="submit">SignUp</button>
+          </div>
         </form>
       </div>
     </div>

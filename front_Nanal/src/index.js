@@ -3,9 +3,6 @@ import React from "react";
 // import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 import { createRoot } from "react-dom/client";
-import { Provider } from "react-redux";
-import { CookiesProvider } from "react-cookie";
-import store from "./config";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
@@ -13,16 +10,9 @@ import reportWebVitals from "./reportWebVitals";
 const rootElement = document.getElementById("root");
 const root = createRoot(rootElement);
 root.render(
-  <CookiesProvider>
-    <Provider store={store}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </Provider>
-  </CookiesProvider>
-  // <BrowserRouter>
-  //   <App />
-  // </BrowserRouter>
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>
   // <React.StrictMode>
   //   <App />
   // </React.StrictMode>

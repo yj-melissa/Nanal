@@ -1,16 +1,10 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router";
-import { useDispatch } from "react-redux";
-import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
-
-import { loginUser } from "../config/Users";
-import { setRefreshToken } from "../config/Cookie";
-import { SET_TOKEN } from "../config/Auth";
+import axios_api from "../config/Axios";
 
 function SignIn() {
   const [userId, setUserId] = useState("");
-  const [pw, setPw] = useState("");
+  const [userPw, setPw] = useState("");
 
   const onChangeId = (e) => {
     setUserId(e.target.value);
@@ -20,69 +14,61 @@ function SignIn() {
     setPw(e.target.value);
   };
 
-  const onSubmit = (e) => {
+  const SignIn = (e) => {
     e.preventDefault();
-  };
-
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-
-  // useForm 사용을 위한 선언
-  const {
-    register,
-    setValue,
-    formState: { errors },
-    handleSubmit,
-  } = useForm();
-
-  // submit 이후 동작할 코드
-  // 백으로 유저 정보 전달
-  const onValid = async ({ userid, password }) => {
-    // input 태그 값 비워주는 코드
-    setValue("password", "");
-
-    // 백으로부터 받은 응답
-    const response = await loginUser({ userid, password });
-
-    if (response.status) {
-      // 쿠키에 Refresh Token, store에 Access Token 저장
-      setRefreshToken(response.json.refresh_token);
-      dispatch(SET_TOKEN(response.json.access_token));
-
-      return navigate("/");
-    } else {
-      console.log(response.json);
-    }
+    axios_api
+      .post("/user/login", {
+        userId: userId,
+        password: userPw,
+      })
+      .then(({ data }) => {
+        console.log(data.statusCode);
+        if (data.statusCode === 200) {
+          if (data.data.ResponseMessage === "로그인 성공") {
+            console.log(data.data.User);
+            // window.location.replace("/");
+          }
+        } else {
+          console.log(data.statusCode);
+          console.log(data.data.ResponseMessage);
+        }
+      })
+      .catch(({ error }) => {
+        console.log("회원 가입 오류: " + error);
+      });
   };
 
   return (
-    <div>
-      <div className="DiaryEditor">
-        <h1> SignIn to 나날</h1>
+    <div className="flex justify-center">
+      <div className="box-border p-4 w-80 border-[1px] border-gray-500 border-solid">
+        <h1 className="m-3"> SignIn to 나날</h1>
         <div id="sign-in-form">
-          <form action="" onSubmit={onSubmit}>
-            <label htmlFor="user-id">ID: </label>
-            <input
-              type="text"
-              id="user-id"
-              placeholder="아이디"
-              onChange={onChangeId}
-              value={userId}
-              className="max-w-full"
-            />
-            <br />
-            <label htmlFor="user-password">PW: </label>
-            <input
-              type="text"
-              id="user-password"
-              placeholder="비밀번호"
-              onChange={onChangePw}
-              value={pw}
-              className="max-w-full"
-            />
-            <div>
-              <button>Sign In</button>
+          <form action="" onSubmit={SignIn}>
+            <div className="m-1">
+              <label htmlFor="user-id">ID &nbsp;&nbsp;: </label>
+              <input
+                type="text"
+                id="user-id"
+                placeholder="아이디"
+                onChange={onChangeId}
+                value={userId}
+                className="max-w-full"
+              />
               <br />
+            </div>
+            <div className="m-1">
+              <label htmlFor="user-password">Pw : </label>
+              <input
+                type="password"
+                id="user-password"
+                placeholder="비밀번호"
+                onChange={onChangePw}
+                value={userPw}
+                className="max-w-full"
+              />
+            </div>
+            <div className="m-1">
+              <button type="submit">Sign In</button>{" "}
               <Link to="/SignUp">SignUp</Link>
             </div>
           </form>
