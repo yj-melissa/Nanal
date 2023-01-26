@@ -162,7 +162,6 @@ public class GroupController {
         HashMap<String, Object> responseDTO = new HashMap<>();
 
         try {
-
             // group_user_relation 테이블에서 userIdx가 포함된 group찾기
             List<GroupDetailResponseDTO> groupDetailResponseDTOS =
                     groupService.getGroupList(userIdx);
@@ -185,4 +184,20 @@ public class GroupController {
     }
 
 
+    @ApiOperation(value = "그룹 탈퇴하기", notes =
+            "userIdx 사용자가 groupIdx 그룹을 탈퇴합니다.\n" +
+                    "[Front] \n" +
+                    "JSON\n" +
+                    "{userIdx(int), groupIdx(int)} \n\n" +
+                    "[Back] \n" +
+                    "JSON\n" +
+                    "{}")
+    @DeleteMapping("/{userIdx}/{groupIdx}")
+    public ResponseEntity<?> withDrawGroup(@ApiParam(value = "유저 idx", required = true) @PathVariable int userIdx, @ApiParam(value = "유저 idx", required = true) @PathVariable int groupIdx) {
+        HashMap<String, Object> responseDTO = new HashMap<>();
+
+        groupService.deleteGroupUser(userIdx, groupIdx);
+        responseDTO.put("responseMessage", ResponseMessage.GROUP_USER_DELETE_SUCCESS);
+        return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+    }
 }
