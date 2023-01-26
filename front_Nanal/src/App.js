@@ -1,5 +1,5 @@
 import "./App.css";
-import React from "react";
+import React, { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import Nav from "./another/Nav.js";
 import Calendar from "./main/Calendaar.js";
@@ -11,11 +11,14 @@ import NotFound from "./another/NotFound.js";
 import DiaryCreate from "./diary/DiaryCreate";
 
 function App() {
-  const isCalendar = true;
+  const [isCalendar, setIsCalendaar] = useState(true);
+  const changeCalendaar = (tfbool) => {
+    setIsCalendaar(tfbool);
+  };
 
   return (
     <div className="App max-w-sm justify-center">
-      <Nav />
+      <Nav changeCalendaar={changeCalendaar} />
       <Routes>
         {isCalendar ? (
           <Route path="/" element={<Calendar />}></Route>
