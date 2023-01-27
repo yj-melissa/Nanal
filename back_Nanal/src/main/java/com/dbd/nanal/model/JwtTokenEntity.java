@@ -6,14 +6,19 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+
 public class JwtTokenEntity {
 
 
@@ -31,22 +36,18 @@ public class JwtTokenEntity {
     @Column(name = "refresh_token")
     private String refreshToken;
 
-    private JwtTokenEntity(String userId, Integer userIdx, Integer refreshTokenId, String refreshToken) {
-        this.userId = userId;
-        this.userIdx = userIdx;
-        this.refreshTokenId = refreshTokenId;
-        this.refreshToken = refreshToken;
-    }
-
-    @Builder
-    public static JwtTokenEntity createToken(String userId,Integer userIdx, Integer refreshTokenId, String refreshToken) {
-        return new JwtTokenEntity(userId, userIdx, refreshTokenId, refreshToken);
-    }
-
-
-    public void changeToken(String token) {
-        this.refreshToken = refreshToken;
-    }
-
+//    private JwtTokenEntity(String userId, Integer userIdx, String refreshToken) {
+//        this.userId = userId;
+//        this.userIdx = userIdx;
+//        this.refreshToken = refreshToken;
+//    }
+//
+//    public static JwtTokenEntity createToken(String userId, Integer userIdx, String refreshToken) {
+//        return new JwtTokenEntity(userId, userIdx, refreshToken);
+//    }
+//
+//    public void changeToken(String token) {
+//        this.refreshToken = refreshToken;
+//    }
 
 }

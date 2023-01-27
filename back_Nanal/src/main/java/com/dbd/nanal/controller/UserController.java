@@ -100,7 +100,6 @@ public class UserController {
             // 로그인 성공
             JwtTokenDTO jwtTokenDTO = jwtTokenProvider.createJwtTokens(user);
 
-            String userIdx = Integer.toString(user.getUserIdx());
             HashMap<String, String> Token = new HashMap<>();
             Token.put("accessToken", jwtTokenDTO.getAccessToken());
             Token.put("refreshToken", jwtTokenDTO.getRefreshToken());
