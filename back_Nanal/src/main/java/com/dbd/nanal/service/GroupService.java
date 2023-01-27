@@ -89,4 +89,14 @@ public class GroupService {
 
         return new GroupUserRelationResponseDTO(groupUserRelationEntity);
     }
+
+
+    public GroupDetailResponseDTO updateGroupDetail(GroupDetailRequestDTO groupDetailRequestDTO) {
+
+        GroupDetailEntity groupDetailEntity = groupRepository.getReferenceById(groupDetailRequestDTO.getGroupIdx());
+
+//        groupRepository.updateGroupDetail(groupDetailEntity);
+
+        return null;
+    }
 }

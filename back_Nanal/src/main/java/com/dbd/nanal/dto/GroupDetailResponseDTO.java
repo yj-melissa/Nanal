@@ -12,11 +12,11 @@ import java.util.List;
 @Setter
 public class GroupDetailResponseDTO {
 
-    private final int groupIdx;
-    private final String groupName;
-    private final boolean isPrivate;
-    private final String groupImg;
-    private final Date creationTime;
+    private int groupIdx;
+    private String groupName;
+    private boolean isPrivate;
+    private String groupImg;
+    private Date creationTime;
     private List<String> tags;
 
     public GroupDetailResponseDTO(GroupDetailEntity groupEntity) {
@@ -25,6 +25,7 @@ public class GroupDetailResponseDTO {
         this.isPrivate = groupEntity.getIsPrivate();
         this.groupImg = groupEntity.getGroupImg();
         this.creationTime = groupEntity.getCreationDate();
+
 
         // tag insert할 때 사용
         if (groupEntity.getGroupTags() != null) {
