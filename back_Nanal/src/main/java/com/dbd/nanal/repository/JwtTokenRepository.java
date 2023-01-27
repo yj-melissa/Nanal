@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
 public interface JwtTokenRepository extends JpaRepository<JwtTokenEntity, String> {
 
     Optional<JwtTokenEntity> findByRefreshToken(String refreshToken);
-    boolean existsByUserId(String userId);
-    void deleteByuserId(String userId);
+    JwtTokenEntity findByUserIdx(int userIdx);
+    boolean existsByUserIdx(int userIdx);
 }

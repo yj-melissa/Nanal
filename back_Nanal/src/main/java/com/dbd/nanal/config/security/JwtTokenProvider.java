@@ -6,13 +6,17 @@ import com.dbd.nanal.model.JwtTokenEntity;
 import com.dbd.nanal.model.UserEntity;
 import com.dbd.nanal.repository.JwtTokenRepository;
 import com.dbd.nanal.service.CustomUserDetailService;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
+import javax.crypto.SecretKey;
 import javax.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,11 +30,13 @@ import java.util.Date;
 @Service
 public class JwtTokenProvider {
 
-    private JwtTokenRepository jwtTokenRepository;
+    @Autowired private JwtTokenRepository jwtTokenRepository;
 
     CustomUserDetailService customUserDetailService;
 
-    private final String secretKey = "dbdNanalSecretKeySpaceTheFinalFrontierTheseAreTheVoyeagesOfTheStarshipEnterpriseItsContinuingMissionToExploreStrangeNewWorlds";
+    SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+
+
 
     // Access Token 기한 = 1일
     private final Date accessTokenExpiryDate = Date.from(
@@ -41,9 +47,6 @@ public class JwtTokenProvider {
     private final Date refreshTokenExpiryDate = Date.from(
         Instant.now().plus(14, ChronoUnit.DAYS)
     );
-
-//    public JwtTokenProvider() {
-//    }
 
     // 토큰 생성
     public JwtTokenDTO createJwtTokens(UserEntity user) {
@@ -62,20 +65,16 @@ public class JwtTokenProvider {
             .userIdx(user.getUserIdx())
             .build();
 
-        log.info("accessToken :", accessToken);
-        log.info("refreshToken :", refreshToken);
-        log.info("userId : ", userId);
-        log.info("userIdx : ", userIdx);
-
         JwtTokenEntity jwtToken = JwtTokenEntity.builder()
             .userId(userId)
             .userIdx(userIdx)
             .refreshToken(jwtTokenDTO.getRefreshToken())
             .build();
 
-        if(jwtTokenRepository.existsByUserId(userId)) {
+        if(jwtTokenRepository.existsByUserIdx(userIdx)) {
             // 기존 Refresh 토큰 삭제
-            jwtTokenRepository.deleteByuserId(userId);
+            JwtTokenEntity originalToken = jwtTokenRepository.findByUserIdx(userIdx);
+            jwtTokenRepository.delete(originalToken);
         }
         jwtTokenRepository.save(jwtToken);
 
@@ -100,15 +99,17 @@ public class JwtTokenProvider {
     // Token 발급
     public String createToken(UserEntity user, Date expiryDate){
 
-        Claims claims = Jwts.claims().setSubject(user.getUserId());
+        Claims claims = Jwts.claims()
+            .setSubject(user.getUserId())
+            .setIssuer("nanal")
+            .setIssuedAt(new Date())
+            .setExpiration(expiryDate);
+
         claims.put("userIdx", user.getUserIdx());
 
         String token = Jwts.builder()
-            .signWith(SignatureAlgorithm.HS512, secretKey)
+            .signWith(secretKey, SignatureAlgorithm.HS512)
             .setClaims(claims)
-            .setIssuer("nanal")
-            .setIssuedAt(new Date())
-            .setExpiration(expiryDate)
             .compact();
 
         log.info("token : ", token);
