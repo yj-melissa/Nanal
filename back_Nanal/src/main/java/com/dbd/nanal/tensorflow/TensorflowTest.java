@@ -18,7 +18,7 @@ public class TensorflowTest {
 //        SavedModelBundle model = SavedModelBundle.loader("resources/model").load();
 //        SavedModelBundle model = SavedModelBundle.loader("C:\\ssafy\\S08P12D110\\back_Nanal\\src\\main\\resources\\model").load();
 //        SavedModelBundle model = SavedModelBundle.loader("model").load();
-        SavedModelBundle model = SavedModelBundle.loader("back_Nanal/src/main/resources/model").load();
+        SavedModelBundle model = SavedModelBundle.loader("/temp").load();
         System.out.println("SavedModelBundle: " + model.metaGraphDef());
 
 //        Session sess =
