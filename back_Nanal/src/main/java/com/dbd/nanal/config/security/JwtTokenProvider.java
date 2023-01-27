@@ -12,8 +12,6 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
-import javax.crypto.SecretKey;
 import javax.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +32,7 @@ public class JwtTokenProvider {
 
     CustomUserDetailService customUserDetailService;
 
-    SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS512);
-
+    String secretKey = "daybydayNanalInhighseasorinlowseasImgonnabeyourfriendImgonnabeyourfriendInhighseasorinlowseasIllbebyyoursideIllbebyyourside";
 
 
     // Access Token 기한 = 1일
@@ -50,9 +47,6 @@ public class JwtTokenProvider {
 
     // 토큰 생성
     public JwtTokenDTO createJwtTokens(UserEntity user) {
-        log.info("createJwtTokens 실행");
-        log.info("createJwtTokens user : ", user.getUserId());
-
         String accessToken = createToken(user, accessTokenExpiryDate);
         String refreshToken = createToken(user, refreshTokenExpiryDate);
         String userId = user.getUserId();
@@ -108,7 +102,7 @@ public class JwtTokenProvider {
         claims.put("userIdx", user.getUserIdx());
 
         String token = Jwts.builder()
-            .signWith(secretKey, SignatureAlgorithm.HS512)
+            .signWith(SignatureAlgorithm.HS512, secretKey)
             .setClaims(claims)
             .compact();
 

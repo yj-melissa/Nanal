@@ -33,10 +33,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (token != null && !token.equalsIgnoreCase("null")) {
                 // userId 가져오기. 위조된 경우 예외처리됨
                 String userId = jwtTokenProvider.getUserId(token);
+//                int userIdx = jwtTokenProvider.getUserIdx(token);
                 // 인증 완료 : SecurityContextHolder에 등록해야 인증된 사용자라고 생각함
                 AbstractAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                     userId,                         // 인증된 사용자의 정보
-                    null,
+//                    userIdx,
                     AuthorityUtils.NO_AUTHORITIES);
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContext securityContext = SecurityContextHolder.createEmptyContext();

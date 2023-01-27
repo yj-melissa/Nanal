@@ -28,7 +28,7 @@ public class SecurityConfig{
         http.httpBasic().disable()
             .csrf().disable()
             .authorizeHttpRequests()
-                .antMatchers("/diary").hasRole("USER")
+                .antMatchers("/user/test").hasRole("USER")
                 .antMatchers("/**").permitAll();
         http.addFilterAfter(
                 jwtAuthenticationFilter,
