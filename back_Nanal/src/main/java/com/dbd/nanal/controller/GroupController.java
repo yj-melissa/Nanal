@@ -185,4 +185,56 @@ public class GroupController {
     }
 
 
+    @ApiOperation(value = "그룹 정보 수정", notes =
+            "groupIdx 그룹의 정보를 수정합니다.\n" +
+                    "[Front] \n" +
+                    "JSON\n" +
+                    "{userIdx(int)} \n\n" +
+                    "[Back] \n" +
+                    "JSON\n" +
+                    "{GroupDetailResponse}")
+    @PutMapping
+    public ResponseEntity<?> updateGroupDetail(@ApiParam(value = "groupIdx, groupName, tags, image", required = true) @RequestBody GroupDetailRequestDTO groupDetailRequestDTO) {
+        HashMap<String, Object> responseDTO = new HashMap<>();
+
+        try {
+
+            GroupDetailResponseDTO groupDetailResponseDTO =
+                    groupService.findGroupById(groupDetailRequestDTO.getGroupIdx());
+
+        groupService.updateGroupDetail(groupDetailRequestDTO);
+
+
+            if (groupDetailResponseDTO != null) {
+                if (groupDetailRequestDTO.getGroupName() != null) {
+                    groupDetailResponseDTO.setGroupName(groupDetailRequestDTO.getGroupName());
+                }
+
+                if (groupDetailRequestDTO.getGroupImg() != null) {
+                    groupDetailResponseDTO.setGroupImg(groupDetailRequestDTO.getGroupImg());
+                }
+
+                if (groupDetailRequestDTO.getTags() != null) {
+                    groupDetailResponseDTO.setTags(groupDetailRequestDTO.getTags());
+                }
+
+                responseDTO.put("groupDetail", groupDetailResponseDTO);
+                responseDTO.put("responseMessage", ResponseMessage.GROUP_UPDATE_SUCCESS);
+                return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+            } else {
+                responseDTO.put("responseMessage", ResponseMessage.GROUP_UPDATE_FAIL);
+                return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
+            }
+
+//
+
+        } catch (Exception e) {
+            responseDTO.put("responseMessage", ResponseMessage.EXCEPTION);
+            return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
+        }
+
+
+    }
+
+
 }
