@@ -1,5 +1,5 @@
 function GroupUpdate() {
-    return <div></div>
+  return <div></div>;
 }
 
-export default GroupUpdate
+export default GroupUpdate;
