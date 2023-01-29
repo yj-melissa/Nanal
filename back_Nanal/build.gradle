@@ -20,7 +20,7 @@ repositories {
 
 dependencies {
 //	implementation files('libs/libtensorflow-1.14.0.jar')
-//	implementation group: 'org.tensorflow', name: 'tensorflow-core-platform', version: '0.4.2'
+	implementation group: 'org.tensorflow', name: 'tensorflow-core-platform', version: '0.4.2'
 //	implementation group: 'org.tensorflow', name: 'tensorflow-core', version: '0.4.2'
 //	implementation group: 'org.tensorflow', name: 'tensorflow-core-platform-gpu', version: '0.4.2'
 //	implementation group: 'org.tensorflow', name: 'tensorflow-framework', version: '0.4.2'
