@@ -5,7 +5,7 @@ import com.dbd.nanal.dto.JwtTokenDTO;
 import com.dbd.nanal.model.JwtTokenEntity;
 import com.dbd.nanal.model.UserEntity;
 import com.dbd.nanal.repository.JwtTokenRepository;
-import com.dbd.nanal.service.CustomUserDetailService;
+import com.dbd.nanal.repository.UserRepository;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -15,10 +15,9 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -30,9 +29,9 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class JwtTokenProvider {
 
-    @Autowired private JwtTokenRepository jwtTokenRepository;
-
-    CustomUserDetailService customUserDetailService;
+//    @Autowired
+    private final JwtTokenRepository jwtTokenRepository;
+    private final UserRepository userRepository;
 
     String secretKey = "daybydayNanalInhighseasorinlowseasImgonnabeyourfriendImgonnabeyourfriendInhighseasorinlowseasIllbebyyoursideIllbebyyourside";
 
@@ -94,42 +93,50 @@ public class JwtTokenProvider {
 
     // Token 발급
     public String createToken(UserEntity user, Date expiryDate){
-
+        log.debug("[createToken] 토큰 생성 시작");
         Claims claims = Jwts.claims()
-            .setSubject(user.getUserId())
-            .setIssuer("nanal")
-            .setIssuedAt(new Date())
-            .setExpiration(expiryDate);
+            .setSubject(user.getUserId());
 
         claims.put("userIdx", user.getUserIdx());
+        claims.put("roles", user.getRoles());
 
         String token = Jwts.builder()
             .signWith(SignatureAlgorithm.HS512, secretKey)
             .setClaims(claims)
+            .setIssuer("nanal")
+            .setIssuedAt(new Date())
+            .setExpiration(expiryDate)
             .compact();
 
-        log.info("token : ", token);
-
+        log.debug("[createToken] 토큰 생성 완료");
         return token;
     }
 
     // JWT 토큰에서 인증 정보 조회
     public Authentication getAuthentication(String token) {
+        log.debug("getAuthentication - 토큰 인증 정보 조회 시작");
 
-        UserDetails userDetails = customUserDetailService.loadUserByUsername(this.getUserId(token));
+        UserEntity userInfo = userRepository.findByUserId(this.getUserId(token));
 
-        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+        log.debug("getAuthentication - 토큰 인증 정보 조회 완료, userInfo userName : {}", userInfo.getUsername());
+
+        return new UsernamePasswordAuthenticationToken(userInfo, "", userInfo.getAuthorities());
     }
 
     // 회원 정보 추출
     public String getUserId(String token) {
-        Claims claims = Jwts.parserBuilder()
+        log.debug("getUserId - 토큰 기반 회원 구별 정보 추출");
+
+        String info = Jwts.parserBuilder()
             .setSigningKey(secretKey)
             .build()
             .parseClaimsJws(token)
-            .getBody();
+            .getBody()
+            .getSubject();
 
-        return claims.getSubject();
+        log.debug("getUserId - 토큰 기반 회원 구별 정보 추출 완료, info : {}", info);
+
+        return info;
     }
 
     // Request의 Header에서 token 값을 가져옴. "Authorization" : "token값"
@@ -139,13 +146,16 @@ public class JwtTokenProvider {
 
     // 토큰의 유효성 + 만료일자 확인
     public boolean isValidateToken (String token) {
+        log.debug("isValidateToken - 토큰 유효 체크 시작");
         try {
             Jws<Claims> claims = Jwts
                 .parserBuilder()
                 .setSigningKey(secretKey)
-                .build().parseClaimsJws(token);
+                .build()
+                .parseClaimsJws(token);
             return !claims.getBody().getExpiration().before(new Date());
         } catch (Exception e) {
+            log.debug("isValidateToken - 토큰 유효체크 예외 발생");
             return false;
         }
     }
