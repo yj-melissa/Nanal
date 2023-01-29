@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation  } from "react-router-dom";
 import bell from "../src_assets/img/bell.png";
 import logo from "../src_assets/img/home.png";
 import profile from "../src_assets/img/profile.png";
@@ -11,6 +11,9 @@ import uparrow from "../src_assets/img/up-arrow.png";
 function Nav({ changeCalendaar }) {
   // useNavigate == 뒤로가기나 앞으로가기를 위한 react 내장 객체
   const navigate = useNavigate();
+  // Home 의 정보를 알려줄 로케이션 변수 정의.
+  // location.pathname === '/' 이 경우 현재 위치가 홈이다.
+  const location = useLocation();
   // Home 옆의 화살표 토글
   const [isToggle, setToggle] = useState(true);
   const toggleMenu = () => {
@@ -41,7 +44,7 @@ function Nav({ changeCalendaar }) {
         >
           <img src={logo} />
         </Link>
-        {isToggle ? (
+        {location.pathname === '/' ? <div>{isToggle ? (
           <div className="w-3 h-3 pt-1">
             <img src={downarrow} onClick={() => toggleMenu()} />
           </div>
@@ -71,7 +74,8 @@ function Nav({ changeCalendaar }) {
               </button>
             </div>
           </div>
-        )}
+        )}</div> : null }
+        
       </div>
       <div className="flex items-center ">
         <img src={bell} className="w-6 h-6" />

@@ -1,4 +1,5 @@
-import emptyProfile from "../../src_assets/img/emptyProfile.png"
+import emptyProfile from "../../../src_assets/img/emptyProfile.png"
+import InputBox from "./InputBox"
 
 function Profile() {
   return <div>
@@ -8,7 +9,7 @@ function Profile() {
     </div>
     <div className="my-3">
       <p>유저가 설정하는 메시지1</p>
-      <p>유저가 설정하는 메시지2</p>
+      <InputBox />
       <p className="font-semibold">일기 시작한지 N일째 입니다.</p>
     </div>
     <div className="flex justify-around box-border h-24 w-80 p-4 bg-slate-300/50">
