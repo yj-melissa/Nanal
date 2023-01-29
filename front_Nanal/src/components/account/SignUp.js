@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios_api from "../config/Axios";
+import axios_api from "../../config/Axios";
 
 function SignUp() {
   // 기본 형식 설명
