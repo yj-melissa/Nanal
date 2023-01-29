@@ -11,8 +11,8 @@ public class DiaryResponseDTO {
     private int userIdx;
     private Date creationDate;
     private String content;
-    private String picture;
-    private int music;
+//    private String picture;
+//    private int music;
 //    private boolean isDeleted;
 //    private Date deleteDate;
 //    private Date expireDate;
@@ -21,7 +21,7 @@ public class DiaryResponseDTO {
 
     public DiaryResponseDTO(DiaryEntity diary) {
         this.diaryIdx = diary.getDiaryIdx();
-        this.userIdx = diary.getUser().getUserIdx();
+        this.userIdx=diary.getUser().getUserIdx();
         this.creationDate = diary.getCreationDate();
         this.content = diary.getContent();
 //        this.picture = diary.getPainting().getPicturePath();

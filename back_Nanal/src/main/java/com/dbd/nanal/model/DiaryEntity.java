@@ -75,7 +75,7 @@ public class DiaryEntity {
         this.emo=emo;
     }
 
-    public void deleteDiary(Boolean isDeleted, Date deleteDate, Date expireDate){
+    public void flagDiary(Boolean isDeleted, Date deleteDate, Date expireDate){
         this.isDeleted=isDeleted;
         this.deleteDate=deleteDate;
         this.expireDate=expireDate;
