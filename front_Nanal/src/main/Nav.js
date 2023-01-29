@@ -21,6 +21,9 @@ function Nav({ changeCalendaar }) {
   const toggle2Menu = () => {
     setToggle2((isToggle2) => !isToggle2);
   };
+  const changeCalendar = (e) => {
+    changeCalendaar(e)
+  }
   return (
     <nav className="flex w-80 justify-between space-x-4 m-auto">
       <div className="flex items-center">
@@ -52,7 +55,7 @@ function Nav({ changeCalendaar }) {
                 className="bg-slate-500 text-white p-1"
                 onClick={() => {
                   toggleMenu();
-                  changeCalendaar(true);
+                  changeCalendar(true);
                 }}
               >
                 캘린더
@@ -61,7 +64,7 @@ function Nav({ changeCalendaar }) {
                 className="bg-sky-700 text-white p-1"
                 onClick={() => {
                   toggleMenu();
-                  changeCalendaar(false);
+                  changeCalendar(false);
                 }}
               >
                 책장
