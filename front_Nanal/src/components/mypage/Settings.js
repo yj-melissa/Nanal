@@ -1,6 +1,6 @@
-import bookmarksRed from "../src_assets/img/bookmarksRed.png"
-import groupYellow from "../src_assets/img/groupYellow.png"
-import personGreen from "../src_assets/img/personGreen.png"
+import bookmarksRed from "../../src_assets/img/bookmarksRed.png"
+import groupYellow from "../../src_assets/img/groupYellow.png"
+import personGreen from "../../src_assets/img/personGreen.png"
 
 
 function Settings() {

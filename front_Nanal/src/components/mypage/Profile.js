@@ -1,4 +1,4 @@
-import emptyProfile from "../src_assets/img/emptyProfile.png"
+import emptyProfile from "../../src_assets/img/emptyProfile.png"
 
 function Profile() {
   return <div>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import axios_api from '../config/Axios';
+import axios_api from '../../config/Axios';
 
 function SignIn() {
   const [userId, setUserId] = useState('');

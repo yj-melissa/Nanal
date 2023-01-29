@@ -1,9 +1,8 @@
 import React, { useState, useContext, useEffect } from "react";
 import Calendar from "react-calendar";
-import { DiaryStateContext } from "../App";
 import "../Calendar.css";
 import { Link, useNavigate } from "react-router-dom";
-import DiaryList from "../diary/DiaryList";
+import DiaryList from "../components/diary/DiaryList";
 
 function Calendaar() {
   const navigate = useNavigate();
@@ -14,25 +13,7 @@ function Calendaar() {
   // const curDate = [year, month, date].join("-");
   // console.log(curDate);
 
-  const diaryList = useContext(DiaryStateContext);
   const [data, setData] = useState([]);
-
-  useEffect(() => {
-    if (diaryList.length >= 1) {
-      const first = new Date(
-        value.getFullYear(),
-        value.getMonth(),
-        1
-      ).getTime();
-      const last = new Date(
-        value.getFullYear(),
-        value.getMonth() + 1,
-        0
-      ).getTime();
-
-      setData(diaryList.filter((it) => first <= it.date && it.date <= last));
-    }
-  }, [diaryList, value]);
 
   return (
     <div>

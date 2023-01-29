@@ -1,5 +1,4 @@
 import React, { useState, useRef } from "react";
-import DiaryEditor from "../components/DiaryEditor";
 import DiaryList from "./DiaryList";
 
 function DiaryCreate() {
@@ -40,7 +39,6 @@ function DiaryCreate() {
   return (
     <div>
       <h2>오늘의 일기</h2>
-      <DiaryEditor onCreate={onCreate} />
       <DiaryList diaryList={data} onRemove={onRemove} onEdit={onEdit} />
     </div>
   );
