@@ -8,16 +8,19 @@ import com.dbd.nanal.repository.GroupRepository;
 import com.dbd.nanal.repository.GroupTagRepository;
 import com.dbd.nanal.repository.GroupUserRelationRepository;
 import com.dbd.nanal.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 @Service
 public class GroupService {
+    private final Logger logger = (Logger) LoggerFactory.getLogger(this.getClass());
 
     //    @Autowired
     private GroupRepository groupRepository;
@@ -32,6 +35,7 @@ public class GroupService {
         this.groupUserRelationRepository = groupUserRelationRepository;
     }
 
+
     // save Group
     public GroupDetailResponseDTO saveGroup(GroupDetailRequestDTO groupDetailRequestDTO) {
         return new GroupDetailResponseDTO(groupRepository.save(groupDetailRequestDTO.toEntity()));
@@ -39,28 +43,38 @@ public class GroupService {
 
     // save Group Tags
     @Transactional
-    public GroupTagResponseDTO saveGroupTags(GroupDetailRequestDTO groupDetailRequestDTO) {
+    public List<GroupTagResponseDTO> saveGroupTags(GroupDetailRequestDTO groupDetailRequestDTO) {
+//    public GroupTagResponseDTO saveGroupTags(GroupDetailRequestDTO groupDetailRequestDTO) {
         List<String> groupTagRequestDTOs = groupDetailRequestDTO.getTags();
-
-        List<GroupTagEntity> groupTagEntities = new ArrayList<>();
+        List<GroupTagResponseDTO> groupTagResponseDTOS = new ArrayList<>();
 
         for (String tag : groupTagRequestDTOs) {
+            // 저장할 태그 DTO
             GroupTagRequestDTO groupTagRequestDTO = new GroupTagRequestDTO();
+
+            // 태그 정보 세팅
             groupTagRequestDTO.setTag(tag);
             groupTagRequestDTO.setGroupDetail(groupDetailRequestDTO.toEntity());
 
-            groupTagEntities.add(groupTagRepository.save(groupTagRequestDTO.toEntity()));
+            // 리스트에 추가
+            groupTagResponseDTOS.add(new GroupTagResponseDTO(groupTagRepository.save(groupTagRequestDTO.toEntity())));
         }
-//        return null;
-        return new GroupTagResponseDTO(groupTagEntities);
+        return groupTagResponseDTOS;
     }
 
     // get Group
-    public GroupDetailResponseDTO findGroupById(int groupIdx) {
+    public HashMap<String, Object> findGroupById(int groupIdx) {
 
         GroupDetailEntity groupEntity = groupRepository.getReferenceById(groupIdx);
+        HashMap<String, Object> responseDTO = new HashMap<>();
 
-        return new GroupDetailResponseDTO(groupEntity);
+        List<GroupTagResponseDTO> tags = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            tags.add(new GroupTagResponseDTO(groupEntity.getGroupTags().get(i)));
+        }
+        responseDTO.put("tags", tags);
+        responseDTO.put("groupDetail", new GroupDetailResponseDTO(groupEntity));
+        return responseDTO;
     }
 
     // get Group List
@@ -70,7 +84,6 @@ public class GroupService {
         System.out.println("size : " + groupUserRelationEntities.size());
 
         return groupUserRelationEntities.stream().map(GroupDetailResponseDTO::new).collect(Collectors.toList());
-
     }
 
     // save group - user relation (그룹 생성 시 유저 초대 -> 수락 시 발생)
@@ -90,13 +103,34 @@ public class GroupService {
         return new GroupUserRelationResponseDTO(groupUserRelationEntity);
     }
 
+    // update group detail
+    @Transactional
+    public  HashMap<String, Object>  updateGroupDetail(GroupDetailRequestDTO groupDetailRequestDTO) {
 
-    public GroupDetailResponseDTO updateGroupDetail(GroupDetailRequestDTO groupDetailRequestDTO) {
-
+        // 수정 대상 엔티티 가져오기
         GroupDetailEntity groupDetailEntity = groupRepository.getReferenceById(groupDetailRequestDTO.getGroupIdx());
 
-//        groupRepository.updateGroupDetail(groupDetailEntity);
+        // group detail - 이름, 이미지 수정
+        groupDetailEntity.setGroupName(groupDetailRequestDTO.getGroupName());
+        groupDetailEntity.setGroupImg(groupDetailRequestDTO.getGroupImg());
 
-        return null;
+        // group tag 수정
+        List<GroupTagEntity> groupTagEntities = groupDetailEntity.getGroupTags();
+        
+        // 리턴
+        List<GroupTagResponseDTO> tags = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            // DB 반영
+            groupTagEntities.get(i).setTag(groupDetailRequestDTO.getTags().get(i));
+            // 리턴
+            tags.add(new GroupTagResponseDTO(groupTagEntities.get(i)));
+        }
+
+        HashMap<String, Object> responseDTO = new HashMap<>();
+
+        responseDTO.put("tags", tags);
+        responseDTO.put("groupDetail", new GroupDetailResponseDTO(groupDetailEntity));
+
+        return responseDTO;
     }
 }
