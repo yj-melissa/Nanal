@@ -15,4 +15,7 @@ public interface GroupUserRelationRepository extends JpaRepository<GroupUserRela
 
     @Query("select d from GroupDetailEntity d join fetch GroupUserRelationEntity r on d.groupIdx=r.groupDetail.groupIdx where r.user.userIdx=:userIdx")
     List<GroupDetailEntity> findGroupList(@Param("userIdx") int userIdx);
+
+    @Query("select r from GroupUserRelationEntity r where r.user.userIdx = :userIdx and r.groupDetail.groupIdx = :groupIdx")
+    GroupUserRelationEntity findByUserIdGroupID(@Param("userIdx") int userIdx, @Param("groupIdx") int groupIdx);
 }

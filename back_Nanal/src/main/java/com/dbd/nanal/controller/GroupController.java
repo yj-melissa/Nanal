@@ -159,10 +159,10 @@ public class GroupController {
     public ResponseEntity<?> getGroupList(@ApiParam(value = "유저 idx", required = true) @PathVariable int userIdx) {
         HashMap<String, Object> responseDTO = new HashMap<>();
 
-        try {
 
+        try {
             // group_user_relation 테이블에서 userIdx가 포함된 group찾기
-            List<GroupDetailResponseDTO> groupDetailResponseDTOS =
+            List<HashMap<String, Object>> groupDetailResponseDTOS =
                     groupService.getGroupList(userIdx);
 
             if (groupDetailResponseDTOS != null) {
@@ -178,6 +178,7 @@ public class GroupController {
             responseDTO.put("responseMessage", ResponseMessage.EXCEPTION);
             return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
         }
+
 
 
     }
