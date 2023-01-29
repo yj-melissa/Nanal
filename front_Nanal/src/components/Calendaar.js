@@ -1,6 +1,6 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState } from "react";
 import Calendar from "react-calendar";
-import "../Calendar.css";
+import "../src_assets/css/Calendar.css";
 import { Link, useNavigate } from "react-router-dom";
 import DiaryList from "../components/diary/DiaryList";
 

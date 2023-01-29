@@ -37,20 +37,20 @@ function Nav({ changeCalendaar }) {
         ))} */}
         <Link
           to="/"
-          className="rounded-lg pr-3 py-2 text-slate-700 font-medium hover:bg-slate-100 hover:text-slate-900"
+          className="rounded-lg pr-1 py-2 text-slate-700 font-medium hover:bg-slate-100 hover:text-slate-900"
         >
           <img src={logo} />
         </Link>
         {isToggle ? (
-          <div className="w-4 h-4">
+          <div className="w-3 h-3 pt-1">
             <img src={downarrow} onClick={() => toggleMenu()} />
           </div>
         ) : (
           <div>
-            <div className="w-4 h-4">
+            <div className="w-3 h-3 pt-1">
               <img src={uparrow} onClick={() => toggleMenu()} />
             </div>
-            <div className="grid grid-cols-1 content-center absolute">
+            <div className="grid grid-cols-1 h-20 w-24 content-center absolute">
               <button
                 className="bg-slate-500 text-white p-1"
                 onClick={() => {
