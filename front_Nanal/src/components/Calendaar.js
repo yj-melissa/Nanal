@@ -13,8 +13,6 @@ function Calendaar() {
   // const curDate = [year, month, date].join("-");
   // console.log(curDate);
 
-  const [data, setData] = useState([]);
-
   return (
     <div>
       캘린더 페이지 입니다. ||
@@ -33,10 +31,12 @@ function Calendaar() {
       <br />
       <hr className="border-black" />
       <br />
-      <DiaryList diaryList={data} />
-      <div className="flex justify-center m-3">
+      {/* 일기쓰러가기 버튼 */}
+      <div className="flex justify-center">
         <button onClick={() => navigate("/New")}> 일기 쓰러 가기~! 🖊 </button>
       </div>
+      {/* 일기 리스트 */}
+      <DiaryList />
     </div>
   );
 }
