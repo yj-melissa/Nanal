@@ -1,4 +1,4 @@
-import Profile from "./Profile.js"
+import Profile from "./profile/Profile.js"
 import Settings from "./Settings.js"
 
 function MyPage() {
