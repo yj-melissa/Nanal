@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 function GroupProfile(params) {
   const [groupName, setGroupName] = useState('');
-  const [groupTag, setGroupTag] = useState(['짜장면', '짬뽕', '울면']);
+  const [groupTag, setGroupTag] = useState([]);
   const [tagNum, setTagNum] = useState(0);
   let [tagNew, setTagNew] = useState('');
 
