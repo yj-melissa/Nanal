@@ -2,10 +2,7 @@ package com.dbd.nanal.controller;
 
 import com.dbd.nanal.config.common.DefaultRes;
 import com.dbd.nanal.config.common.ResponseMessage;
-import com.dbd.nanal.dto.GroupDetailRequestDTO;
-import com.dbd.nanal.dto.GroupDetailResponseDTO;
-import com.dbd.nanal.dto.GroupUserRelationRequestDTO;
-import com.dbd.nanal.dto.GroupUserRelationResponseDTO;
+import com.dbd.nanal.dto.*;
 import com.dbd.nanal.service.GroupService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -52,12 +49,12 @@ public class GroupController {
                 groupDetailRequestDTO.setGroupIdx(groupDetailResponseDTO.getGroupIdx());
 
                 // 2. group_tag table save, 결과 responseDTO에 저장
-                groupDetailResponseDTO.setTags(groupService.saveGroupTags(groupDetailRequestDTO).getTags());
-
+                List<GroupTagResponseDTO> groupTagResponseDTOS = groupService.saveGroupTags(groupDetailRequestDTO);
                 // 저장 성공
-                if (groupDetailResponseDTO.getTags() != null) {
+                if (groupTagResponseDTOS != null) {
                     // FRONT - responseDTO(그룹 상세 정보) 전달
                     responseDTO.put("responseMessage", ResponseMessage.GROUP_SAVE_SUCCESS);
+                    responseDTO.put("tags", groupTagResponseDTOS);
                     responseDTO.put("groupDetail", groupDetailResponseDTO);
                     return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
                 }
@@ -94,15 +91,16 @@ public class GroupController {
     public ResponseEntity<?> getGroupDTO(@ApiParam(value = "그룹 id", required = true) @PathVariable int groupIdx) {
         HashMap<String, Object> responseDTO = new HashMap<>();
         try {
-            GroupDetailResponseDTO groupDetailResponseDTO = groupService.findGroupById(groupIdx);
+            HashMap<String, Object> groupDTO = groupService.findGroupById(groupIdx);
             // groupIdx 이용해서 group_detail table에서 정보 찾기
 
             // 반환 성공
-            if (groupDetailResponseDTO != null) {
+            if (groupDTO != null) {
                 // FRONT로 responseDTO(그룹 상세 정보) 전달
                 // 결과 넣기!!
-                responseDTO.put("groupDetail", groupDetailResponseDTO);
                 responseDTO.put("responseMessage", ResponseMessage.GROUP_FIND_SUCCESS);
+                responseDTO.put("groupDetail", groupDTO.get("groupDetail"));
+                responseDTO.put("tags", groupDTO.get("tags"));
                 return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
             } else {
                 responseDTO.put("responseMessage", ResponseMessage.GROUP_FIND_FAIL);
@@ -161,10 +159,10 @@ public class GroupController {
     public ResponseEntity<?> getGroupList(@ApiParam(value = "유저 idx", required = true) @PathVariable int userIdx) {
         HashMap<String, Object> responseDTO = new HashMap<>();
 
-        try {
 
+        try {
             // group_user_relation 테이블에서 userIdx가 포함된 group찾기
-            List<GroupDetailResponseDTO> groupDetailResponseDTOS =
+            List<HashMap<String, Object>> groupDetailResponseDTOS =
                     groupService.getGroupList(userIdx);
 
             if (groupDetailResponseDTOS != null) {
@@ -182,6 +180,41 @@ public class GroupController {
         }
 
 
+
+    }
+
+
+    @ApiOperation(value = "그룹 정보 수정", notes =
+            "groupIdx 그룹의 정보를 수정합니다.\n" +
+                    "[Front] \n" +
+                    "JSON\n" +
+                    "{groupIdx(int)) groupName(String), tags(tagIdx(int), String(content)), image(?)} \n\n" +
+                    "[Back] \n" +
+                    "JSON\n" +
+                    "{GroupDetailResponse}")
+    @PutMapping
+    public ResponseEntity<?> updateGroupDetail(@ApiParam(value = "groupIdx, groupName, tags, image", required = true) @RequestBody GroupDetailRequestDTO groupDetailRequestDTO) {
+        HashMap<String, Object> responseDTO = new HashMap<>();
+
+        try {
+            HashMap<String, Object> groupDTO = groupService.updateGroupDetail(groupDetailRequestDTO);
+
+
+            if (groupDTO != null) {
+                responseDTO.put("groupDetail", groupDTO.get("groupDetail"));
+                responseDTO.put("tags", groupDTO.get("tags"));
+                responseDTO.put("responseMessage", ResponseMessage.GROUP_UPDATE_SUCCESS);
+                return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+            } else {
+                responseDTO.put("responseMessage", ResponseMessage.GROUP_UPDATE_FAIL);
+                return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
+            }
+
+//
+        } catch (Exception e) {
+            responseDTO.put("responseMessage", ResponseMessage.EXCEPTION);
+            return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
+        }
     }
 
 
