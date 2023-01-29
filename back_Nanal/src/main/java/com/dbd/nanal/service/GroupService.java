@@ -8,8 +8,6 @@ import com.dbd.nanal.repository.GroupRepository;
 import com.dbd.nanal.repository.GroupTagRepository;
 import com.dbd.nanal.repository.GroupUserRelationRepository;
 import com.dbd.nanal.repository.UserRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,9 +16,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 @Service
 public class GroupService {
-    private final Logger logger = (Logger) LoggerFactory.getLogger(this.getClass());
 
     //    @Autowired
     private GroupRepository groupRepository;
@@ -34,7 +32,6 @@ public class GroupService {
         this.userRepository = userRepository;
         this.groupUserRelationRepository = groupUserRelationRepository;
     }
-
 
     // save Group
     public GroupDetailResponseDTO saveGroup(GroupDetailRequestDTO groupDetailRequestDTO) {
@@ -78,12 +75,27 @@ public class GroupService {
     }
 
     // get Group List
-    public List<GroupDetailResponseDTO> getGroupList(int userIdx) {
+    public List<HashMap<String, Object>> getGroupList(int userIdx) {
 
-        List<GroupDetailEntity> groupUserRelationEntities = groupUserRelationRepository.findGroupList(userIdx);
-        System.out.println("size : " + groupUserRelationEntities.size());
+        List<HashMap<String, Object>> result = new ArrayList<>();
 
-        return groupUserRelationEntities.stream().map(GroupDetailResponseDTO::new).collect(Collectors.toList());
+        List<GroupDetailEntity> groupDetailEntities = groupUserRelationRepository.findGroupList(userIdx);
+
+        for(GroupDetailEntity groupDetailEntity : groupDetailEntities){
+            HashMap<String, Object> responseDTO = new HashMap<>();
+            responseDTO.put("groupDetail", new GroupDetailResponseDTO(groupDetailEntity));
+
+            List<GroupTagResponseDTO> tags = new ArrayList<>();
+            for (int i = 0; i < 5; i++) {
+                tags.add(new GroupTagResponseDTO(groupDetailEntity.getGroupTags().get(i)));
+            }
+            responseDTO.put("tags", tags);
+            result.add(responseDTO);
+        }
+//        System.out.println("size : " + groupUserRelationEntities.size());
+
+        return result;
+//        return groupUserRelationEntities.stream().map(GroupDetailResponseDTO::new).collect(Collectors.toList());
     }
 
     // save group - user relation (그룹 생성 시 유저 초대 -> 수락 시 발생)
@@ -116,7 +128,7 @@ public class GroupService {
 
         // group tag 수정
         List<GroupTagEntity> groupTagEntities = groupDetailEntity.getGroupTags();
-        
+
         // 리턴
         List<GroupTagResponseDTO> tags = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
@@ -132,5 +144,14 @@ public class GroupService {
         responseDTO.put("groupDetail", new GroupDetailResponseDTO(groupDetailEntity));
 
         return responseDTO;
+    }
+
+    public boolean deleteGroupUser(int userIdx, int groupIdx) {
+
+        GroupUserRelationEntity groupUserRelationEntity = groupUserRelationRepository.findByUserIdGroupID(userIdx, groupIdx);
+        System.out.println(groupUserRelationEntity.getGroupUserIdx());
+        groupUserRelationRepository.delete(groupUserRelationEntity);
+
+        return false;
     }
 }

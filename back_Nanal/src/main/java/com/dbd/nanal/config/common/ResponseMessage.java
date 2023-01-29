@@ -42,4 +42,5 @@ public class ResponseMessage {
     public static final String EMPTY = "EMPTY";
     public static final String RUNTIME = "RUNTIME";
 
+    public static final String GROUP_USER_DELETE_SUCCESS = "그룹 탈퇴 성공";
 }
