@@ -14,17 +14,16 @@ public class ScrapEntity {
     @Column(name="scrap_idx")
     private int scrapIdx;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="diary_idx")
     private DiaryEntity diary;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_idx")
     private UserEntity user;
 
     @Builder
-    public ScrapEntity(int scrapIdx, DiaryEntity diary, UserEntity user) {
-        this.scrapIdx=scrapIdx;
+    public ScrapEntity(DiaryEntity diary, UserEntity user) {
         this.diary=diary;
         this.user=user;
     }

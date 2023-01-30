@@ -84,7 +84,7 @@ public class UserEntity implements UserDetails {
     @OneToMany(mappedBy = "user")
     private List<NoticeEntity> notices = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<ScrapEntity> scraps = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")

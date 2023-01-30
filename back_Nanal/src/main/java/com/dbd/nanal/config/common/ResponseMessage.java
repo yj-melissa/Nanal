@@ -35,6 +35,9 @@ public class ResponseMessage {
     public static final String DIARY_COMMENT_DELETE_FAIL = "일기 댓글 삭제 실패";
     public static final String NOT_VALID_TOKEN="유효하지 않은 토큰";
     public static final String NOT_VALID_METHOD = "입력 조건과 일치하지 않습니다";
+    public static final String DIARY_BOOKMARK_SAVE_SUCCESS="일기 북마크 저장 성공";
+    public static final String DIARY_BOOKMARK_LIST_SUCCESS="일기 북마크 리스트 조회 성공";
+    public static final String DIARY_BOOKMARK_DELETE_SUCCESS="일기 북마크 삭제 성공";
 
 
     // NULL
