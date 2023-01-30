@@ -14,7 +14,7 @@ public class KeywordEntity {
     @Column(name="keyword_idx")
     private int keywordIdx;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="diary_idx", referencedColumnName = "diary_idx")
     private DiaryEntity diary;
 
@@ -24,6 +24,10 @@ public class KeywordEntity {
     public KeywordEntity(int keywordIdx, DiaryEntity diary, String keyword) {
         this.keywordIdx=keywordIdx;
         this.diary=diary;
+        this.keyword=keyword;
+    }
+
+    public void updateKeyword(String keyword){
         this.keyword=keyword;
     }
 }

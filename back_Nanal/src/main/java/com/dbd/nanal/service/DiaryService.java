@@ -19,6 +19,7 @@ public class DiaryService {
     private final GroupDiaryRelationRepository groupDiaryRelationRepository;
     private final DiaryCommentRepository diaryCommentRepository;
     private final BookmarkRepository bookmarkRepository;
+    private final KeywordRepository keywordRepository;
 
     // write diary
     public DiaryResponseDTO save(DiaryRequestDTO diary){
@@ -148,5 +149,23 @@ public class DiaryService {
     // delete bookmark
     public void deleteBookmark(int bookmarkIdx){
         bookmarkRepository.deleteById(bookmarkIdx);
+    }
+
+    // save keyword
+    public void saveKeyword(int diaryIdx, List<String> keywords){
+        List<KeywordEntity> keywordEntityList=keywordRepository.findByDiary(DiaryEntity.builder().diaryIdx(diaryIdx).build());
+        // update keyword
+        if(keywordEntityList.size()!=0){
+            for(int i=0; i<keywordEntityList.size(); i++){
+                keywordEntityList.get(i).updateKeyword(keywords.get(i));
+                keywordRepository.save(keywordEntityList.get(i));
+            }
+            return;
+        }
+        for(String keyword: keywords){
+            KeywordEntity keywordEntity=KeywordEntity.builder().diary(DiaryEntity.builder().diaryIdx(diaryIdx).build())
+                    .keyword(keyword).build();
+            keywordRepository.save(keywordEntity);
+        }
     }
 }
