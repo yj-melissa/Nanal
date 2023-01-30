@@ -43,4 +43,10 @@ public class ResponseMessage {
     public static final String RUNTIME = "RUNTIME";
 
     public static final String GROUP_USER_DELETE_SUCCESS = "그룹 탈퇴 성공";
+    public static final String FRIEND_SAVE_SUCCESS = "친구 등록 성공";
+    public static final String FRIEND_SAVE_FAIL = "친구 등록 실패";
+    public static final String FRIEND_LIST_FIND_SUCCESS = "친구 리스트 조회 성공";
+    public static final String FRIEND_LIST_FIND_FAIL = "친구 리스트 조회 실패";
+    public static final String FRIEND_FIND_SUCCESS = "친구 조회 성공";
+    public static final String FRIEND_FIND_FAIL = "친구 조회 실패";
 }
