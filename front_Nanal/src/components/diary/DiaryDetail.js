@@ -9,7 +9,7 @@ function DiaryDetail() {
   const strDate = new Date(diaryDetail.creationDate).toLocaleString();
   // 삭제 버튼 클릭 시 URL 이동
   const navigate = useNavigate();
-
+  // 일기 상세 페이지 불러오기
   useEffect(() => {
     axios_api
       .get(`diary/${location.state.diaryIdx}`)
