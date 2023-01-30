@@ -33,6 +33,9 @@ public class ResponseMessage {
     public static final String DIARY_COMMEMT_LIST_FIND_SUCCESS = "일기 그룹에 해당하는 댓글 리스트 조회 성공";
     public static final String DIARY_COMMENT_DELETE_SUCCESS = "일기 댓글 삭제 성공";
     public static final String DIARY_COMMENT_DELETE_FAIL = "일기 댓글 삭제 실패";
+    public static final String NOT_VALID_TOKEN="유효하지 않은 토큰";
+    public static final String NOT_VALID_METHOD = "입력 조건과 일치하지 않습니다";
+
 
     // NULL
     public static final String INTERNAL_SERVER_ERROR = "서버 내부 에러";
@@ -49,4 +52,5 @@ public class ResponseMessage {
     public static final String FRIEND_LIST_FIND_FAIL = "친구 리스트 조회 실패";
     public static final String FRIEND_FIND_SUCCESS = "친구 조회 성공";
     public static final String FRIEND_FIND_FAIL = "친구 조회 실패";
+    public static final String DUPLICATED_KEY = "DUPLICATED KEY";
 }
