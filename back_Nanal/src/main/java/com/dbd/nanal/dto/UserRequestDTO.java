@@ -3,12 +3,12 @@ package com.dbd.nanal.dto;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
-//import lombok.Builder;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-//@Builder
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserRequestDTO {
