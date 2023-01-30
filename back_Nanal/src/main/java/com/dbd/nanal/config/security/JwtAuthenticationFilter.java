@@ -1,17 +1,15 @@
 package com.dbd.nanal.config.security;
 
 import java.io.IOException;
+
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AbstractAuthenticationToken;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.context.SecurityContext;
+
+import org.jetbrains.annotations.NotNull;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -19,30 +17,31 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    @Autowired private JwtTokenProvider jwtTokenProvider;
+    private final JwtTokenProvider jwtTokenProvider;
+
+    public JwtAuthenticationFilter(JwtTokenProvider jwtTokenProvider) {
+        this.jwtTokenProvider = jwtTokenProvider;
+    }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-        FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response,
+        @NotNull FilterChain filterChain) throws ServletException, IOException {
         try {
             // 요청에서 토큰 가져오기
             String token = parseBearerToken(request);
-            // 토큰 검사 : JWT이므로 인가 서버에 요청하지 않고 검증 가능하다
-            if (token != null && !token.equalsIgnoreCase("null")) {
+            logger.info("doFilterInternal - 토큰 값 추출. token : " + token);
+
+            // 토큰 검사
+            if (token != null && jwtTokenProvider.isValidateToken(token)) {
                 // userId 가져오기. 위조된 경우 예외처리됨
-                String userId = jwtTokenProvider.validateAndGetUserId(token);
-                // 인증 완료 : SecurityContextHolder에 등록해야 인증된 사용자라고 생각함
-                AbstractAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                    userId,                         // 인증된 사용자의 정보. 문자열이 아니라도 아무거나 넣을 수 있고 보통 UserDetails라는 오브젝트 넣음.
-                    null,
-                    AuthorityUtils.NO_AUTHORITIES);
-                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
-                securityContext.setAuthentication(authenticationToken);
-                SecurityContextHolder.setContext(securityContext);
+                Authentication authentication = jwtTokenProvider.getAuthentication(token);
+
+                // SecurityContextHolder에 등록
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                logger.info("doFilterInternal - 토큰 값 유효성 체크 완료");
             }
         } catch (Exception e) {
-            System.out.println("user authentication 세팅 실패" + e);
+            logger.debug("user authentication 세팅 실패" + e);
         }
 
         filterChain.doFilter(request, response);

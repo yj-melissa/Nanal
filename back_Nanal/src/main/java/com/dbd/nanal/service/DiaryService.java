@@ -16,15 +16,16 @@ import java.util.stream.Collectors;
 public class DiaryService {
 
     private final DiaryRepository diaryRepository;
-    private final GroupRepository groupRepository;
     private final GroupDiaryRelationRepository groupDiaryRelationRepository;
-    private final UserRepository userRepository;
     private final DiaryCommentRepository diaryCommentRepository;
 
     // write diary
     public DiaryResponseDTO save(DiaryRequestDTO diary){
-        UserEntity user=userRepository.getReferenceById(diary.getUserIdx());
-        return new DiaryResponseDTO(diaryRepository.save(diary.toEntity(user)));
+        DiaryEntity diaryEntity=DiaryEntity.builder().creationDate(diary.getCreationDate())
+                .user(UserEntity.builder().userIdx(diary.getUserIdx()).build())
+                .content(diary.getContent())
+                .emo(diary.getEmo()).build();
+        return new DiaryResponseDTO(diaryRepository.save(diaryEntity));
     }
 
     // get diary
@@ -59,20 +60,34 @@ public class DiaryService {
         return diaryEntityList.stream().map(x-> new DiaryResponseDTO(x)).collect(Collectors.toList());
     }
 
+    // get date diary list
+    public List<DiaryResponseDTO> getDateDiaryList(Date findDate){
+        List<DiaryEntity> diaryEntityList=diaryRepository.findDateDiaryList(findDate);
+        return diaryEntityList.stream().map(x->new DiaryResponseDTO(x)).collect(Collectors.toList());
+    }
+
+    // get Month diary list
+    public List<DiaryResponseDTO> getMonthDiaryList(String findDate){
+        List<DiaryEntity> diaryEntityList=diaryRepository.findMonthDiaryList(Integer.parseInt(findDate.substring(0,4)), Integer.parseInt(findDate.substring(5,7)));
+        return diaryEntityList.stream().map(x->new DiaryResponseDTO(x)).collect(Collectors.toList());
+    }
+
     // save diary-group
     public void saveDiaryGroup(GroupDiaryRelationDTO groupDiaryRelationDTO){
-        DiaryEntity diaryEntity=diaryRepository.getReferenceById(groupDiaryRelationDTO.getDiaryIdx());
-        GroupDetailEntity groupDetailEntity=groupRepository.getReferenceById(groupDiaryRelationDTO.getGroupIdx());
-        GroupDiaryRelationEntity groupDiaryRelationEntity=new GroupDiaryRelationEntity(diaryEntity, groupDetailEntity);
+        GroupDiaryRelationEntity groupDiaryRelationEntity=GroupDiaryRelationEntity.builder()
+                .diary(DiaryEntity.builder().diaryIdx(groupDiaryRelationDTO.getDiaryIdx()).build())
+                .groupDetail(GroupDetailEntity.builder().groupIdx(groupDiaryRelationDTO.getGroupIdx()).build())
+                .build();
         groupDiaryRelationRepository.save(groupDiaryRelationEntity);
     }
 
     // save diary comment
     public DiaryCommentResponseDTO saveComment(DiaryCommentRequestDTO diaryCommentRequestDTO){
-        UserEntity user=userRepository.getReferenceById(diaryCommentRequestDTO.getUserIdx());
-        DiaryEntity diary=diaryRepository.getReferenceById(diaryCommentRequestDTO.getDiaryIdx());
-        GroupDetailEntity group=groupRepository.getReferenceById(diaryCommentRequestDTO.getGroupIdx());
-        DiaryCommentEntity diaryCommentEntity=DiaryCommentEntity.builder().content(diaryCommentRequestDTO.getContent()).user(user).diary(diary).groupDetail(group).build();
+        DiaryCommentEntity diaryCommentEntity=DiaryCommentEntity.builder().content(diaryCommentRequestDTO.getContent())
+                .user(UserEntity.builder().userIdx(diaryCommentRequestDTO.getUserIdx()).build())
+                .diary(DiaryEntity.builder().diaryIdx(diaryCommentRequestDTO.getDiaryIdx()).build())
+                .groupDetail(GroupDetailEntity.builder().groupIdx(diaryCommentRequestDTO.getGroupIdx()).build())
+                .build();
         return new DiaryCommentResponseDTO(diaryCommentRepository.save(diaryCommentEntity));
     }
 
