@@ -35,9 +35,7 @@ public class DiaryController {
         HashMap<String, Object> responseDTO = new HashMap<>();
         try{
             //diary keyword analyze
-            List<String> keywordList=new ArrayList<>(
-                    Arrays.asList("키워드", "분석", "결과")
-            );
+            List<String> keywordList=new ArrayList<>();
             //picture
             //music
 
@@ -99,9 +97,7 @@ public class DiaryController {
         HashMap<String, Object> responseDTO = new HashMap<>();
         try{
             //diary keyword analyze
-            List<String> keywordList=new ArrayList<>(
-                    Arrays.asList("키워드수정", "분석수정", "결과수정")
-            );
+            List<String> keywordList=new ArrayList<>();
 
             //picture
             //music
