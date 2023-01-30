@@ -19,7 +19,9 @@ const AppMain = ({ isCalendaar }) => {
     <Routes>
       {isCalendaar ? (
         <Route path="/" element={<Calendar />}></Route>
+        <Route path="/" element={<Calendar />}></Route>
       ) : (
+        <Route path="/" element={<BookCase />}></Route>
         <Route path="/" element={<BookCase />}></Route>
       )}
       <Route path="/SignUp" element={<SignUp />}></Route>

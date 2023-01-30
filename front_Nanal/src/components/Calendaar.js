@@ -40,7 +40,7 @@ function Calendaar() {
         />
       </div>
       <br />
-      <hr className="border-black" />
+      <hr className="border-slate-500/75" />
       <br />
       {/* 일기쓰러가기 버튼 */}
       <div className="flex justify-center">
