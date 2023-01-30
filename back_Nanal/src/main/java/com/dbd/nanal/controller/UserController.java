@@ -87,15 +87,11 @@ public class UserController {
             log.debug("createdUser : "+createdUser);
 
 //          JWT 토큰 발행
-            JwtTokenDTO jwtTokenDTO = jwtTokenProvider.createJwtTokens(createdUser);
-
-            HashMap<String, String> Token = new HashMap<>();
-            Token.put("accessToken", jwtTokenDTO.getAccessToken());
-            Token.put("refreshToken", jwtTokenDTO.getRefreshToken());
+            HashMap<String, String> token = createTokens(user);
 
             HashMap<String, Object> responseDTO = new HashMap<>();
             responseDTO.put("ResponseMessage", ResponseMessage.CREATED_USER);
-            responseDTO.put("Token", Token);
+            responseDTO.put("Token", token);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }
 
@@ -115,15 +111,11 @@ public class UserController {
 
         if(user != null) {
             // 로그인 성공
-            JwtTokenDTO jwtTokenDTO = jwtTokenProvider.createJwtTokens(user);
-
-            HashMap<String, String> Token = new HashMap<>();
-            Token.put("accessToken", jwtTokenDTO.getAccessToken());
-            Token.put("refreshToken", jwtTokenDTO.getRefreshToken());
+            HashMap<String, String> token = createTokens(user);
 
             HashMap<String, Object> responseDTO = new HashMap<>();
             responseDTO.put("ResponseMessage", ResponseMessage.LOGIN_SUCCESS);
-            responseDTO.put("Token", Token);
+            responseDTO.put("Token", token);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
 
         } else {
@@ -143,13 +135,75 @@ public class UserController {
         }
     }
 
+    @ApiOperation(value = "내 프로필 조회", notes =
+        "[Front] \n" +
+            "{userIdx(int)} \n\n" +
+        "[Back] \n" +
+            "JSON\n" +
+            "{img(String), nickname(String), introduction(String)} \n\n")
+    @GetMapping("/profile")
+    public ResponseEntity<?> getMyProfile(@AuthenticationPrincipal UserEntity userInfo) {
+        HashMap<String, String> profile = userService.getByUserIdx(userInfo.getUserIdx());
+        HashMap<String, Object> responseDTO = new HashMap<>();
+        responseDTO.put("ResponseMessage", ResponseMessage.SUCCESS);
+        responseDTO.put("Profile", profile);
+        return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "회원 정보 수정", notes =
+        "[Front] \n" +
+            "{img(String), nickname(String), introduction(String)} \n\n" +
+        "[Back] \n" +
+            "OK(200) \n\n")
+    @PutMapping("/profile")
+    public ResponseEntity<?> updateProfile(@ApiParam(value = "userIdx") @AuthenticationPrincipal UserEntity userInfo, @RequestBody @Valid UserRequestDTO userRequest) {
+
+        if (userRequest == null) {
+            throw new NullPointerException(ResponseMessage.EMPTY);
+        }
+
+        userService.updateProfile(userInfo.getUserIdx(), userRequest);
+        HashMap<String, Object> responseDTO = new HashMap<>();
+        responseDTO.put("ResponseMessage", ResponseMessage.SUCCESS);
+
+        return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "회원 탈퇴", notes =
+        "[Front] \n" +
+            "{userIdx(int)} \n\n" +
+            "[Back] \n" +
+            "OK(200) \n\n")
+    @DeleteMapping("/profile")
+    public ResponseEntity<?> deleteUser(@AuthenticationPrincipal UserEntity userInfo) {
+        userService.deleteByUserIdx(userInfo.getUserIdx());
+        HashMap<String, Object> responseDTO = new HashMap<>();
+        responseDTO.put("ResponseMessage", ResponseMessage.SUCCESS);
+        return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "다른 회원 프로필 조회", notes =
+        "[Front] \n" +
+            "{userIdx(int)} \n\n" +
+            "[Back] \n" +
+            "JSON\n" +
+            "{img(String), nickname(String), introduction(String)} \n\n")
+    @GetMapping("/profile/{userIdx}")
+    public ResponseEntity<?> getUserProfile(@PathVariable int userIdx) {
+        HashMap<String, String> profile = userService.getByUserIdx(userIdx);
+        HashMap<String, Object> responseDTO = new HashMap<>();
+        responseDTO.put("ResponseMessage", ResponseMessage.SUCCESS);
+        responseDTO.put("Profile", profile);
+        return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+    }
+
     @ApiOperation(value = "비밀번호 확인", notes =
         "[Front] \n" +
             "JSON\n" +
             "{password(String)} \n\n" +
-        "[Back] \n" +
+            "[Back] \n" +
             "OK(200), RUNTIME(500)  \n\n")
-    @PostMapping("/password/check")
+    @PostMapping("/password")
     public ResponseEntity<?> checkPassword(@AuthenticationPrincipal UserEntity userInfo, @RequestBody @Valid UserRequestDTO userRequestDTO) {
         String password = userRequestDTO.getPassword();
 
@@ -170,47 +224,13 @@ public class UserController {
         }
     }
 
-    @ApiOperation(value = "회원 정보 조회", notes =
-        "[Front] \n" +
-            "{userIdx(int)} \n\n" +
-        "[Back] \n" +
-            "JSON\n" +
-            "{img(String), nickname(String), introduction(String)} \n\n")
-    @GetMapping("/profile/{userIdx}")
-    public ResponseEntity<?> updateProfile(@PathVariable int userIdx) {
-        HashMap<String, String> profile = userService.getByUserIdx(userIdx);
-        HashMap<String, Object> responseDTO = new HashMap<>();
-        responseDTO.put("ResponseMessage", ResponseMessage.SUCCESS);
-        responseDTO.put("Profile", profile);
-        return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-    }
-
-    @ApiOperation(value = "회원 정보 수정", notes =
-        "[Front] \n" +
-            "{img(String), nickname(String), introduction(String)} \n\n" +
-        "[Back] \n" +
-            "OK(200) \n\n")
-    @PutMapping("/profile/update")
-    public ResponseEntity<?> updateProfile(@ApiParam(value = "userIdx") @AuthenticationPrincipal UserEntity userInfo, @RequestBody @Valid UserRequestDTO userRequest) {
-
-        if (userRequest == null) {
-            throw new NullPointerException(ResponseMessage.EMPTY);
-        }
-
-        userService.updateProfile(userInfo.getUserIdx(), userRequest);
-        HashMap<String, Object> responseDTO = new HashMap<>();
-        responseDTO.put("ResponseMessage", ResponseMessage.SUCCESS);
-
-        return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-    }
-
     @ApiOperation(value = "비밀번호 수정", notes =
         "[Front] \n" +
             "JSON\n" +
             "{password(String)} \n\n" +
         "[Back] \n" +
             "OK(200) \n\n")
-    @PutMapping("/password/update/{userIdx}")
+    @PutMapping("/password")
     public ResponseEntity<?> updatePassword(@ApiParam(value = "userIdx") @AuthenticationPrincipal UserEntity userInfo, @RequestBody UserRequestDTO userRequestDTO) {
 
         if (userRequestDTO.getPassword() == null) {
@@ -227,18 +247,6 @@ public class UserController {
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "회원 탈퇴", notes =
-        "[Front] \n" +
-            "{userIdx(int)} \n\n" +
-        "[Back] \n" +
-            "OK(200) \n\n")
-    @DeleteMapping("/delete")
-    public ResponseEntity<?> deleteUser(@AuthenticationPrincipal UserEntity userInfo) {
-        userService.deleteByUserIdx(userInfo.getUserIdx());
-        HashMap<String, Object> responseDTO = new HashMap<>();
-        responseDTO.put("ResponseMessage", ResponseMessage.SUCCESS);
-        return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-    }
     
     // 중복확인
 
@@ -281,4 +289,13 @@ public class UserController {
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
 
+    public HashMap<String, String> createTokens(UserEntity user) {
+        JwtTokenDTO jwtTokenDTO = jwtTokenProvider.createJwtTokens(user);
+
+        HashMap<String, String> Token = new HashMap<>();
+        Token.put("accessToken", jwtTokenDTO.getAccessToken());
+        Token.put("refreshToken", jwtTokenDTO.getRefreshToken());
+
+        return Token;
+    }
 }
