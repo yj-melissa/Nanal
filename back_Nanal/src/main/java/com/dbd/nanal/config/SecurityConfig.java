@@ -37,7 +37,8 @@ public class SecurityConfig{
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)    // 세션 미사용 설정
             .and()
             .authorizeHttpRequests()
-                .antMatchers(HttpMethod.PUT, "/user/profile/{userIdx}").hasRole("USER")
+                .antMatchers(HttpMethod.PUT, "/user/profile", "/user/password").hasRole("USER")
+                .antMatchers(HttpMethod.DELETE, "/user/profile").hasRole("USER")
                 .antMatchers("/**").permitAll()
             .and()
             .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
