@@ -17,9 +17,9 @@ public interface DiaryRepository extends JpaRepository<DiaryEntity, Integer> {
     @Query("select a from DiaryEntity a where a.user.userIdx=:userIdx and a.isDeleted=true")
     List<DiaryEntity> findByUserIdx(@Param("userIdx") int userIdx);
 
-    @Query("select a from DiaryEntity a where DATE(a.creationDate)=:date")
+    @Query("select a from DiaryEntity a where function('DATE',a.creationDate)=:date")
     List<DiaryEntity> findDateDiaryList(@Param("date")Date date);
 
-    @Query("select a from DiaryEntity a where YEAR(a.creationDate)=:year and MONTH(a.creationDate)=:month")
+    @Query("select a from DiaryEntity a where function('YEAR', a.creationDate)=:year and function('MONTH',a.creationDate)=:month")
     List<DiaryEntity> findMonthDiaryList(@Param("year")int year, @Param("month")int month);
 }
