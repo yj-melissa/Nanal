@@ -4,12 +4,14 @@ package com.dbd.nanal.model;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "group_tag")
 @Getter
+@Setter
 @NoArgsConstructor
 public class GroupTagEntity {
 
@@ -30,6 +32,10 @@ public class GroupTagEntity {
     public GroupTagEntity(int tagIdx, GroupDetailEntity groupDetail, String tag) {
         this.tagIdx = tagIdx;
         this.groupDetail = groupDetail;
+        this.tag = tag;
+    }
+
+    public void tagUpdate(String tag){
         this.tag = tag;
     }
 
