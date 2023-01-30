@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import axios_api from '../../config/Axios';
 
-function GroupProfile(params) {
+function GroupProfile() {
   const [groupName, setGroupName] = useState('');
   const [groupTag, setGroupTag] = useState([]);
   const [tagNum, setTagNum] = useState(0);
@@ -10,7 +11,8 @@ function GroupProfile(params) {
     setGroupName(e.target.value);
   };
 
-  function addTag() {
+  function addTag(e) {
+    e.preventDefault();
     if (groupTag.length === 5) {
       alert('태그는 5개까지만 가능합니다.');
       setTagNew('');
@@ -34,42 +36,70 @@ function GroupProfile(params) {
     setGroupTag(tagList);
   };
 
+  const GroupCreate = (e) => {
+    e.preventDefault();
+    axios_api
+      .post('/group', {
+        groupName: groupName,
+        tags: groupTag,
+      })
+      .then(({ data }) => {
+        console.log(data.statusCode);
+        if (data.statusCode === 200) {
+          if (data.data.ResponseMessage === '그룹 생성 성공') {
+            console.log(data.data.groupDetail);
+            console.log(data.data.tags);
+            // window.location.replace("/");
+          }
+        } else {
+          console.log(data.statusCode);
+          console.log(data.data.ResponseMessage);
+        }
+      })
+      .catch(({ error }) => {
+        console.log('그룹 생성 성공: ' + error);
+      });
+  };
+
   return (
     <div>
-      <label htmlFor='group-name'>그룹 이름 : </label>
-      <input
-        type='text'
-        id='group-name'
-        className='font-bold m-0.5'
-        onChange={onChageName}
-      ></input>
-      <br />
-      <div>
-        <label htmlFor='group-tag'>그룹 태그 : (5개까지 가능)</label>
-        <input
-          type='text'
-          id='group-tag'
-          onChange={onChageTagNew}
-          onKeyPress={addTag}
-          value={tagNew}
-        />
-        &nbsp;
-        <button onClick={addTag}>추가</button>
-        <br />
-        {groupTag.map((tagging, idx) => {
-          return (
-            <button
-              onClick={() => {
-                setTagNum(idx);
-                onChageTagRemove(idx);
-              }}
-              key={idx}
-            >
-              #{tagging}&nbsp;
-            </button>
-          );
-        })}
-      </div>
+      <form onSubmit={GroupCreate}>
+        <div id='group-name-div'>
+          <label htmlFor='group-name'>그룹 이름 : </label>
+          <input
+            type='text'
+            id='group-name'
+            className='font-bold m-0.5'
+            onChange={onChageName}
+          ></input>
+        </div>
+        <div id='group-tag-div'>
+          <label htmlFor='group-tag'>그룹 태그 : (5개까지 가능)</label>
+          <input
+            type='text'
+            id='group-tag'
+            onChange={onChageTagNew}
+            value={tagNew}
+          />
+          &nbsp;
+          <button onClick={addTag}>추가</button>
+          <br />
+          {groupTag.map((tagging, idx) => {
+            return (
+              <button
+                onClick={() => {
+                  setTagNum(idx);
+                  onChageTagRemove(idx);
+                }}
+                key={idx}
+              >
+                #{tagging}&nbsp;
+              </button>
+            );
+          })}
+        </div>
+        <button type='submit'>생성</button>
+      </form>
     </div>
   );
 }
