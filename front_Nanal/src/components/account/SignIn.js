@@ -47,7 +47,7 @@ function SignIn() {
       .then(({ data }) => {
         console.log(data.statusCode);
         if (data.statusCode === 200) {
-          if (data.data.ResponseMessage === '로그인 성공') {
+          if (data.data.responseMessage === '로그인 성공') {
             console.log(data.data.User);
             // window.location.replace("/");
 
@@ -55,7 +55,7 @@ function SignIn() {
           }
         } else {
           console.log(data.statusCode);
-          console.log(data.data.ResponseMessage);
+          console.log(data.data.responseMessage);
         }
       })
       .catch(({ error }) => {
