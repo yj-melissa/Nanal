@@ -57,8 +57,7 @@ public class UserController {
                     "JSON\n" +
                     "{accessToken(String), refreshToken(String)} ")
     @PostMapping("/signup")
-    public ResponseEntity<?> signUp(
-            @RequestBody @Valid UserFormDTO userformDTO) {
+    public ResponseEntity<?> signUp(@RequestBody @Valid UserFormDTO userformDTO) {
         // 정보가 들어오지 않았을 때
         if (userformDTO
                 == null || userformDTO.getPassword() == null || userformDTO.getUserId() == null | userformDTO.getEmail() == null) {
@@ -90,8 +89,8 @@ public class UserController {
         HashMap<String, String> token = createTokens(user);
 
         HashMap<String, Object> responseDTO = new HashMap<>();
-        responseDTO.put("ResponseMessage", ResponseMessage.CREATED_USER);
-        responseDTO.put("Token", token);
+        responseDTO.put("responseMessage", ResponseMessage.CREATED_USER);
+        responseDTO.put("token", token);
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
 
@@ -114,8 +113,8 @@ public class UserController {
             HashMap<String, String> token = createTokens(user);
 
             HashMap<String, Object> responseDTO = new HashMap<>();
-            responseDTO.put("ResponseMessage", ResponseMessage.LOGIN_SUCCESS);
-            responseDTO.put("Token", token);
+            responseDTO.put("responseMessage", ResponseMessage.LOGIN_SUCCESS);
+            responseDTO.put("token", token);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
 
         } else {
@@ -125,10 +124,10 @@ public class UserController {
 
             if (isUserExist) {
                 // 비밀번호 미일치
-                responseDTO.put("ResponseMessage", ResponseMessage.LOGIN_FAIL);
+                responseDTO.put("responseMessage", ResponseMessage.LOGIN_FAIL);
             } else {
                 // 해당 아이디 없음
-                responseDTO.put("ResponseMessage", ResponseMessage.NOT_FOUND_USER);
+                responseDTO.put("responseMessage", ResponseMessage.NOT_FOUND_USER);
 
             }
             return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
@@ -145,8 +144,8 @@ public class UserController {
     public ResponseEntity<?> getMyProfile(@AuthenticationPrincipal UserEntity userInfo) {
         HashMap<String, String> profile = userService.getByUserIdx(userInfo.getUserIdx());
         HashMap<String, Object> responseDTO = new HashMap<>();
-        responseDTO.put("ResponseMessage", ResponseMessage.SUCCESS);
-        responseDTO.put("Profile", profile);
+        responseDTO.put("responseMessage", ResponseMessage.SUCCESS);
+        responseDTO.put("profile", profile);
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
 
@@ -164,7 +163,7 @@ public class UserController {
 
         userService.updateProfile(userInfo.getUserIdx(), userRequest);
         HashMap<String, Object> responseDTO = new HashMap<>();
-        responseDTO.put("ResponseMessage", ResponseMessage.SUCCESS);
+        responseDTO.put("responseMessage", ResponseMessage.SUCCESS);
 
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
@@ -178,7 +177,7 @@ public class UserController {
     public ResponseEntity<?> deleteUser(@AuthenticationPrincipal UserEntity userInfo) {
         userService.deleteByUserIdx(userInfo.getUserIdx());
         HashMap<String, Object> responseDTO = new HashMap<>();
-        responseDTO.put("ResponseMessage", ResponseMessage.SUCCESS);
+        responseDTO.put("responseMessage", ResponseMessage.SUCCESS);
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
 
@@ -192,8 +191,8 @@ public class UserController {
     public ResponseEntity<?> getUserProfile(@PathVariable int userIdx) {
         HashMap<String, String> profile = userService.getByUserIdx(userIdx);
         HashMap<String, Object> responseDTO = new HashMap<>();
-        responseDTO.put("ResponseMessage", ResponseMessage.SUCCESS);
-        responseDTO.put("Profile", profile);
+        responseDTO.put("responseMessage", ResponseMessage.SUCCESS);
+        responseDTO.put("profile", profile);
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
 
@@ -215,11 +214,11 @@ public class UserController {
         HashMap<String, Object> responseDTO = new HashMap<>();
 
         if(isCorrect) {
-            responseDTO.put("ResponseMessage", ResponseMessage.LOGIN_SUCCESS);
+            responseDTO.put("responseMessage", ResponseMessage.LOGIN_SUCCESS);
 
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         } else {
-            responseDTO.put("ResponseMessage", ResponseMessage.LOGIN_FAIL);
+            responseDTO.put("responseMessage", ResponseMessage.LOGIN_FAIL);
             return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
         }
     }
@@ -242,7 +241,7 @@ public class UserController {
         userService.updatePassword(userInfo.getUserIdx(), newPassword);
 
         HashMap<String, Object> responseDTO = new HashMap<>();
-        responseDTO.put("ResponseMessage", ResponseMessage.SUCCESS);
+        responseDTO.put("responseMessage", ResponseMessage.SUCCESS);
 
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
@@ -259,7 +258,7 @@ public class UserController {
     public ResponseEntity<?> checkUserId(@PathVariable String userId) {
         userService.checkUserId(userId);
         HashMap<String, Object> responseDTO = new HashMap<>();
-        responseDTO.put("ResponseMessage", ResponseMessage.SUCCESS);
+        responseDTO.put("responseMessage", ResponseMessage.SUCCESS);
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
 
@@ -272,7 +271,7 @@ public class UserController {
     public ResponseEntity<?> checkNickname(@PathVariable String nickname) {
         userService.checkNickname(nickname);
         HashMap<String, Object> responseDTO = new HashMap<>();
-        responseDTO.put("ResponseMessage", ResponseMessage.SUCCESS);
+        responseDTO.put("responseMessage", ResponseMessage.SUCCESS);
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
 
@@ -285,7 +284,7 @@ public class UserController {
     public ResponseEntity<?> checkEmail(@PathVariable String email) {
         userService.checkEmail(email);
         HashMap<String, Object> responseDTO = new HashMap<>();
-        responseDTO.put("ResponseMessage", ResponseMessage.SUCCESS);
+        responseDTO.put("responseMessage", ResponseMessage.SUCCESS);
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
 
