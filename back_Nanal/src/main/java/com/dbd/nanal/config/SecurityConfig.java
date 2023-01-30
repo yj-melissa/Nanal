@@ -5,7 +5,6 @@ import com.dbd.nanal.config.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -37,9 +36,8 @@ public class SecurityConfig{
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)    // 세션 미사용 설정
             .and()
             .authorizeHttpRequests()
-                .antMatchers(HttpMethod.PUT, "/user/profile", "/user/password").hasRole("USER")
-                .antMatchers(HttpMethod.DELETE, "/user/profile").hasRole("USER")
-                .antMatchers("/**").permitAll()
+                .antMatchers("/user/signup", "/user/login").permitAll()
+                .antMatchers("/**").hasRole("USER")
             .and()
             .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
 
