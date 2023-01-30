@@ -13,10 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @Api(tags = {"Diary 관련 API"})
 @CrossOrigin
@@ -38,18 +35,23 @@ public class DiaryController {
         HashMap<String, Object> responseDTO = new HashMap<>();
         try{
             //diary keyword analyze
+            List<String> keywordList=new ArrayList<>();
             //picture
             //music
 
             //save diary
             DiaryResponseDTO diaryResponseDTO=diaryService.save(diary);
             int diaryIdx=diaryResponseDTO.getDiaryIdx();
-            System.out.println(diary.getContent());
+
             //save diary-group
             for(int i=0; i<diary.getGroupIdxList().size(); i++){
                 GroupDiaryRelationDTO groupDiaryRelationDTO=new GroupDiaryRelationDTO(diaryIdx, diary.getGroupIdxList().get(i));
                 diaryService.saveDiaryGroup(groupDiaryRelationDTO);
             }
+
+            //save keyword
+            diaryService.saveKeyword(diaryResponseDTO.getDiaryIdx(), keywordList);
+
             responseDTO.put("responseMessage", ResponseMessage.DIARY_SAVE_SUCCESS);
             responseDTO.put("diary", diaryResponseDTO);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
@@ -94,11 +96,16 @@ public class DiaryController {
     public ResponseEntity<?> updateDiary(@ApiParam(value = "일기 수정 정보")@RequestBody DiaryRequestDTO diary) {
         HashMap<String, Object> responseDTO = new HashMap<>();
         try{
-            System.out.println("update: "+diary.getDiaryIdx());
             //diary keyword analyze
+            List<String> keywordList=new ArrayList<>();
+
             //picture
             //music
             DiaryResponseDTO diaryResponseDTO=diaryService.updateDiary(diary.toEntity());
+
+            //save keyword
+            diaryService.saveKeyword(diaryResponseDTO.getDiaryIdx(), keywordList);
+
             responseDTO.put("responseMessage", ResponseMessage.DIARY_UPDATE_SUCCESS);
             responseDTO.put("diary", diaryResponseDTO);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
