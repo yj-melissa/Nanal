@@ -12,20 +12,24 @@ import FriendList from "../components/friend/FriendList";
 import MyPage from "../components/mypage/MyPage.js";
 import RecycleBin from "../components/another/recycleBin";
 import NotFound from "../components/another/NotFound.js";
+import DiaryDetail from "../components/diary/DiaryDetail.js";
 
 const AppMain = ({ isCalendaar }) => {
   return (
     <Routes>
       {isCalendaar ? (
         <Route path="/" element={<Calendar />}></Route>
+        <Route path="/" element={<Calendar />}></Route>
       ) : (
+        <Route path="/" element={<BookCase />}></Route>
         <Route path="/" element={<BookCase />}></Route>
       )}
       <Route path="/SignUp" element={<SignUp />}></Route>
       <Route path="/SignIn" element={<SignIn />}></Route>
       <Route path="/Diary/Create" element={<DiaryCreate />}></Route>
-      <Route path="/Diary/Edit/:id" element={<DiaryUpdate />}></Route>
+      <Route path="/Diary/Edit/:diaryIdx" element={<DiaryUpdate />}></Route>
       <Route path="/Diary/List" element={<DiaryList />}></Route>
+      <Route path="/Diary/:diaryIdx" element={<DiaryDetail />}></Route>
       <Route path="/Group/Create" element={<GroupCreate />}></Route>
       <Route path="/Group/List" element={<GroupList />}></Route>
       <Route path="/Friend/List" element={<FriendList />}></Route>
