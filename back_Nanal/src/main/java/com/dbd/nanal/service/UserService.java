@@ -63,15 +63,29 @@ public class UserService {
     }
 
     // 프로필 조회
+//    public HashMap<String, String> getByUserIdx(final int userIdx) {
+//        final UserEntity user = userRepository.findByUserIdx(userIdx);
+//        final UserProfileEntity userProfile = userProfileRepository.findByProfileId(userIdx);
+//
+//        if (user != null) {
+//            HashMap<String, String> profile = new HashMap<>();
+//            profile.put("name", user.getName());
+//            profile.put("email", user.getEmail());
+//            profile.put("userId", user.getUserId());
+//            profile.put("img", userProfile.getImg());
+//            profile.put("nickname", userProfile.getNickname());
+//            profile.put("introduction", userProfile.getIntroduction());
+//
+//            return profile;
+//        }
+//        throw new NullPointerException();
+//    }
+
     public HashMap<String, String> getByUserIdx(final int userIdx) {
-        final UserEntity user = userRepository.findByUserIdx(userIdx);
         final UserProfileEntity userProfile = userProfileRepository.findByProfileId(userIdx);
 
-        if (user != null) {
+        if (userProfile != null) {
             HashMap<String, String> profile = new HashMap<>();
-            profile.put("name", user.getName());
-            profile.put("email", user.getEmail());
-            profile.put("userId", user.getUserId());
             profile.put("img", userProfile.getImg());
             profile.put("nickname", userProfile.getNickname());
             profile.put("introduction", userProfile.getIntroduction());
