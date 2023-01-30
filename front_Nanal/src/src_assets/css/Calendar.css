@@ -4,6 +4,10 @@
   line-height: 1.125em;
 }
 
+.react-calendar__month-view__weekdays__weekday abbr {
+  text-decoration: none;
+}
+
 .react-calendar,
 .react-calendar *,
 .react-calendar *:before,
@@ -23,7 +27,7 @@
 .react-calendar__navigation {
   display: flex;
   height: 44px;
-  margin-bottom: 1em;
+  margin: 0 0.5rem;
 }
 .react-calendar__navigation button {
   min-width: 44px;
@@ -40,7 +44,6 @@
   text-align: center;
   text-transform: uppercase;
   font-weight: bold;
-  font-size: 0.75em;
 }
 .react-calendar__month-view__weekdays__weekday {
   padding: 0.5em;
