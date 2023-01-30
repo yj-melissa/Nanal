@@ -38,18 +38,6 @@ public class DiaryRequestDTO {
 //        this.emo = emo;
 //    }
 
-    public DiaryEntity toEntity(UserEntity user){
-        return DiaryEntity.builder()
-                .creationDate(creationDate)
-                .diaryIdx(diaryIdx)
-                .user(user)
-                .content(content)
-//                .painting(picture)
-//                .music(music)
-                .emo(emo)
-                .build();
-    }
-
     public DiaryEntity toEntity(){
         return DiaryEntity.builder()
                 .creationDate(creationDate)

@@ -12,6 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -135,6 +138,36 @@ public class DiaryController {
         HashMap<String, Object> responseDTO = new HashMap<>();
         try{
             List<DiaryResponseDTO> diaryResponseDTOList=diaryService.diaryList(groupIdx);
+            responseDTO.put("responseMessage", ResponseMessage.DIARY_LIST_FIND_SUCCESS);
+            responseDTO.put("diary", diaryResponseDTOList);
+            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+        }catch (Exception e){
+            responseDTO.put("responseMessage", ResponseMessage.DIARY_LIST_FIND_FAIL);
+            return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
+        }
+    }
+
+    @ApiOperation(value = "날짜로 일기 리스트 리턴", notes =
+            "날짜로 일기 리스트를 리턴합니다.\n" +
+                    "[Front] \n" +
+                    "{date(yyyy-mm-dd)} \n\n" +
+                    "[Back] \n" +
+                    "[{diaryIdx(int), userIdx(int), creationDate(Date), content(String), picture(String), music(int), emo(String)}]")
+    @GetMapping("/list/date/{date}")
+    public ResponseEntity<?> DiaryList(@PathVariable("date") String date){
+        HashMap<String, Object> responseDTO = new HashMap<>();
+        try{
+            List<DiaryResponseDTO> diaryResponseDTOList=new ArrayList<>();
+            // yyyy-mm-00
+            if((date.split("-")[2]).equals("00")) {
+                String findDate=date.substring(0,7);
+                diaryResponseDTOList = diaryService.getMonthDiaryList(findDate);
+            }// yyyy-mm-dd
+            else {
+                SimpleDateFormat formatter=new SimpleDateFormat("yyyy-mm-dd");
+                Date findDate=formatter.parse(date);
+                diaryResponseDTOList = diaryService.getDateDiaryList(findDate);
+            }
             responseDTO.put("responseMessage", ResponseMessage.DIARY_LIST_FIND_SUCCESS);
             responseDTO.put("diary", diaryResponseDTOList);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
