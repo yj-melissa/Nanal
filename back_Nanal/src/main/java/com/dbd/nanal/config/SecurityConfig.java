@@ -1,42 +1,49 @@
 package com.dbd.nanal.config;
 
 import com.dbd.nanal.config.security.JwtAuthenticationFilter;
+import com.dbd.nanal.config.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.filter.CorsFilter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig{
 
+    private final JwtTokenProvider jwtTokenProvider;
+
     @Autowired
-    JwtAuthenticationFilter jwtAuthenticationFilter;
+    public SecurityConfig(JwtTokenProvider jwtTokenProvider) {
+        this.jwtTokenProvider = jwtTokenProvider;
+    }
 
     @Bean
-    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.httpBasic().disable()
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+            .httpBasic().disable()
             .csrf().disable()
-            // 인증 안 해도 되는 경로 : 현재 기본 경로와 /user/** 경로
+            .sessionManagement()
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)    // 세션 미사용 설정
+            .and()
             .authorizeHttpRequests()
-                .antMatchers("/").permitAll();
-            // 인증 해야 하는 경로
-//            .anyRequest()
-//                .authenticated();
+                .antMatchers(HttpMethod.PUT, "/user/profile", "/user/password").hasRole("USER")
+                .antMatchers(HttpMethod.DELETE, "/user/profile").hasRole("USER")
+                .antMatchers("/**").permitAll()
+            .and()
+            .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
 
-        http.addFilterAfter(
-            jwtAuthenticationFilter,
-            CorsFilter.class
-        );
-        return http.build();
+    return http.build();
     }
 
     @Bean
@@ -49,6 +56,5 @@ public class SecurityConfig{
     AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
-
 
 }
