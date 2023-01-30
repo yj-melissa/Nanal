@@ -62,7 +62,7 @@ function BookCase() {
         <img src={joy} className="w-12 h-12 absolute "/>
         <button className="text-[12px] box-border rounded-full bg-slate-100/50 h-16 w-16 absolute"> 감정 정령들 보기 </button>
       </div>
-    </div>
+    </div> 
   );
 }
 
