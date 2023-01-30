@@ -92,7 +92,6 @@ public class GroupController {
         HashMap<String, Object> responseDTO = new HashMap<>();
         try {
             HashMap<String, Object> groupDTO = groupService.findGroupById(groupIdx);
-            // groupIdx 이용해서 group_detail table에서 정보 찾기
 
             // 반환 성공
             if (groupDTO != null) {
@@ -129,6 +128,7 @@ public class GroupController {
 
         HashMap<String, Object> responseDTO = new HashMap<>();
         try {
+
             GroupUserRelationRequestDTO groupUserRelationRequestDTO = new GroupUserRelationRequestDTO(requestDTO.get("userIdx"), requestDTO.get("groupIdx"));
             GroupUserRelationResponseDTO groupUserRelationResponseDTO = groupService.saveGroupUserRelation(groupUserRelationRequestDTO);
 
@@ -159,7 +159,6 @@ public class GroupController {
     public ResponseEntity<?> getGroupList(@ApiParam(value = "유저 idx", required = true) @PathVariable int userIdx) {
         HashMap<String, Object> responseDTO = new HashMap<>();
 
-
         try {
             // group_user_relation 테이블에서 userIdx가 포함된 group찾기
             List<HashMap<String, Object>> groupDetailResponseDTOS =
@@ -179,10 +178,7 @@ public class GroupController {
             return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
         }
 
-
-
     }
-
 
     @ApiOperation(value = "그룹 정보 수정", notes =
             "groupIdx 그룹의 정보를 수정합니다.\n" +
@@ -199,7 +195,6 @@ public class GroupController {
         try {
             HashMap<String, Object> groupDTO = groupService.updateGroupDetail(groupDetailRequestDTO);
 
-
             if (groupDTO != null) {
                 responseDTO.put("groupDetail", groupDTO.get("groupDetail"));
                 responseDTO.put("tags", groupDTO.get("tags"));
@@ -210,12 +205,27 @@ public class GroupController {
                 return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
             }
 
-//
         } catch (Exception e) {
             responseDTO.put("responseMessage", ResponseMessage.EXCEPTION);
             return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
         }
     }
 
+    @ApiOperation(value = "그룹 탈퇴", notes =
+            "userIdx 사용자가 groupIdx 그룹을 탈퇴합니다.\n" +
+                    "[Front]\n" +
+                    "JSON\n" +
+                    "{userIdx(int), groupIdx(int)}\n" +
+                    "\n" +
+                    "[Back]\n" +
+                    "JSON\n" +
+                    "{}")
+    @DeleteMapping("/{userIdx}/{groupIdx}")
+    public ResponseEntity<?> withdrawGroup(@ApiParam(value = "사용자 idx") @PathVariable("userIdx") int userIdx, @ApiParam(value = "그룹 idx") @PathVariable("groupIdx") int groupIdx) {
+        HashMap<String, Object> responseDTO = new HashMap<>();
 
+        groupService.deleteGroupUser(userIdx, groupIdx);
+        responseDTO.put("responseMessage", ResponseMessage.GROUP_USER_DELETE_SUCCESS);
+        return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+    }
 }

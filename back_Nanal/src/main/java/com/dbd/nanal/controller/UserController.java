@@ -50,22 +50,22 @@ public class UserController {
 
 
     @ApiOperation(value = "회원가입", notes =
-        "[Front] \n" +
-            "JSON\n" +
-            "{userId(String), password(String), email(String), nickname(String)} \n\n" +
-        "[Back] \n" +
-            "JSON\n" +
-            "{accessToken(String), refreshToken(String)} ")
+            "[Front] \n" +
+                    "JSON\n" +
+                    "{userId(String), password(String), email(String), nickname(String)} \n\n" +
+                    "[Back] \n" +
+                    "JSON\n" +
+                    "{accessToken(String), refreshToken(String)} ")
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(
-        @RequestBody @Valid UserFormDTO userformDTO) {
-            // 정보가 들어오지 않았을 때
-            if (userformDTO
+            @RequestBody @Valid UserFormDTO userformDTO) {
+        // 정보가 들어오지 않았을 때
+        if (userformDTO
                 == null || userformDTO.getPassword() == null || userformDTO.getUserId() == null | userformDTO.getEmail() == null) {
-                throw new NullPointerException(ResponseMessage.EMPTY);
-            }
+            throw new NullPointerException(ResponseMessage.EMPTY);
+        }
 
-            UserEntity user = UserEntity.builder()
+        UserEntity user = UserEntity.builder()
                 .userId(userformDTO.getUserId())
                 .name(userformDTO.getName())
                 .email(userformDTO.getEmail())
@@ -75,7 +75,7 @@ public class UserController {
                 .lastAccessDate(LocalDateTime.now())
                 .build();
 
-            UserProfileEntity userProfile = UserProfileEntity.builder()
+        UserProfileEntity userProfile = UserProfileEntity.builder()
                 .user(user)
                 .nickname(userformDTO.getNickname())
                 .img(userformDTO.getImg())
@@ -83,31 +83,31 @@ public class UserController {
                 .isPrivate(userformDTO.getIsPrivate())
                 .build();
 
-            UserEntity createdUser = userService.join(user, userProfile);
-            log.debug("createdUser : "+createdUser);
+        UserEntity createdUser = userService.join(user, userProfile);
+        log.debug("createdUser : "+createdUser);
 
 //          JWT 토큰 발행
-            HashMap<String, String> token = createTokens(user);
+        HashMap<String, String> token = createTokens(user);
 
-            HashMap<String, Object> responseDTO = new HashMap<>();
-            responseDTO.put("ResponseMessage", ResponseMessage.CREATED_USER);
-            responseDTO.put("Token", token);
-            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-        }
+        HashMap<String, Object> responseDTO = new HashMap<>();
+        responseDTO.put("ResponseMessage", ResponseMessage.CREATED_USER);
+        responseDTO.put("Token", token);
+        return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+    }
 
     @ApiOperation(value = "로그인", notes =
-        "[Front] \n" +
-            "JSON\n" +
-            "{userId(String), password(String)} \n\n" +
-        "[Back] \n" +
-            "JSON\n" +
-            "{accessToken(String), refreshToken(String)} ")
+            "[Front] \n" +
+                    "JSON\n" +
+                    "{userId(String), password(String)} \n\n" +
+                    "[Back] \n" +
+                    "JSON\n" +
+                    "{accessToken(String), refreshToken(String)} ")
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid UserRequestDTO userRequestDTO) {
         UserEntity user = userService.getByCredentials(
-            userRequestDTO.getUserId(),
-            userRequestDTO.getPassword(),
-            passwordEncoder);
+                userRequestDTO.getUserId(),
+                userRequestDTO.getPassword(),
+                passwordEncoder);
 
         if(user != null) {
             // 로그인 성공
@@ -136,11 +136,11 @@ public class UserController {
     }
 
     @ApiOperation(value = "내 프로필 조회", notes =
-        "[Front] \n" +
-            "{userIdx(int)} \n\n" +
-        "[Back] \n" +
-            "JSON\n" +
-            "{img(String), nickname(String), introduction(String)} \n\n")
+            "[Front] \n" +
+                    "{userIdx(int)} \n\n" +
+                    "[Back] \n" +
+                    "JSON\n" +
+                    "{img(String), nickname(String), introduction(String)} \n\n")
     @GetMapping("/profile")
     public ResponseEntity<?> getMyProfile(@AuthenticationPrincipal UserEntity userInfo) {
         HashMap<String, String> profile = userService.getByUserIdx(userInfo.getUserIdx());
@@ -151,10 +151,10 @@ public class UserController {
     }
 
     @ApiOperation(value = "회원 정보 수정", notes =
-        "[Front] \n" +
-            "{img(String), nickname(String), introduction(String)} \n\n" +
-        "[Back] \n" +
-            "OK(200) \n\n")
+            "[Front] \n" +
+                    "{img(String), nickname(String), introduction(String)} \n\n" +
+                    "[Back] \n" +
+                    "OK(200) \n\n")
     @PutMapping("/profile")
     public ResponseEntity<?> updateProfile(@ApiParam(value = "userIdx") @AuthenticationPrincipal UserEntity userInfo, @RequestBody @Valid UserRequestDTO userRequest) {
 
@@ -170,10 +170,10 @@ public class UserController {
     }
 
     @ApiOperation(value = "회원 탈퇴", notes =
-        "[Front] \n" +
-            "{userIdx(int)} \n\n" +
-            "[Back] \n" +
-            "OK(200) \n\n")
+            "[Front] \n" +
+                    "{userIdx(int)} \n\n" +
+                    "[Back] \n" +
+                    "OK(200) \n\n")
     @DeleteMapping("/profile")
     public ResponseEntity<?> deleteUser(@AuthenticationPrincipal UserEntity userInfo) {
         userService.deleteByUserIdx(userInfo.getUserIdx());
@@ -183,11 +183,11 @@ public class UserController {
     }
 
     @ApiOperation(value = "다른 회원 프로필 조회", notes =
-        "[Front] \n" +
-            "{userIdx(int)} \n\n" +
-            "[Back] \n" +
-            "JSON\n" +
-            "{img(String), nickname(String), introduction(String)} \n\n")
+            "[Front] \n" +
+                    "{userIdx(int)} \n\n" +
+                    "[Back] \n" +
+                    "JSON\n" +
+                    "{img(String), nickname(String), introduction(String)} \n\n")
     @GetMapping("/profile/{userIdx}")
     public ResponseEntity<?> getUserProfile(@PathVariable int userIdx) {
         HashMap<String, String> profile = userService.getByUserIdx(userIdx);
@@ -198,19 +198,19 @@ public class UserController {
     }
 
     @ApiOperation(value = "비밀번호 확인", notes =
-        "[Front] \n" +
-            "JSON\n" +
-            "{password(String)} \n\n" +
-            "[Back] \n" +
-            "OK(200), RUNTIME(500)  \n\n")
+            "[Front] \n" +
+                    "JSON\n" +
+                    "{password(String)} \n\n" +
+                    "[Back] \n" +
+                    "OK(200), RUNTIME(500)  \n\n")
     @PostMapping("/password")
     public ResponseEntity<?> checkPassword(@AuthenticationPrincipal UserEntity userInfo, @RequestBody @Valid UserRequestDTO userRequestDTO) {
         String password = userRequestDTO.getPassword();
 
         Boolean isCorrect = userService.getByUserIdxAndPassword(
-            userInfo.getUserIdx(),
-            password,
-            passwordEncoder);
+                userInfo.getUserIdx(),
+                password,
+                passwordEncoder);
 
         HashMap<String, Object> responseDTO = new HashMap<>();
 
@@ -225,11 +225,11 @@ public class UserController {
     }
 
     @ApiOperation(value = "비밀번호 수정", notes =
-        "[Front] \n" +
-            "JSON\n" +
-            "{password(String)} \n\n" +
-        "[Back] \n" +
-            "OK(200) \n\n")
+            "[Front] \n" +
+                    "JSON\n" +
+                    "{password(String)} \n\n" +
+                    "[Back] \n" +
+                    "OK(200) \n\n")
     @PutMapping("/password")
     public ResponseEntity<?> updatePassword(@ApiParam(value = "userIdx") @AuthenticationPrincipal UserEntity userInfo, @RequestBody UserRequestDTO userRequestDTO) {
 
@@ -247,14 +247,14 @@ public class UserController {
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
 
-    
+
     // 중복확인
 
     @ApiOperation(value = "아이디 중복 확인", notes =
-        "[Front] \n" +
-            "{userId(String)} \n\n" +
-        "[Back] \n" +
-            "OK(200), DUPLICATE KEY(500)")
+            "[Front] \n" +
+                    "{userId(String)} \n\n" +
+                    "[Back] \n" +
+                    "OK(200), DUPLICATE KEY(500)")
     @GetMapping("/checkId/{userId}")
     public ResponseEntity<?> checkUserId(@PathVariable String userId) {
         userService.checkUserId(userId);
@@ -264,10 +264,10 @@ public class UserController {
     }
 
     @ApiOperation(value = "닉네임 중복 확인", notes =
-        "[Front] \n" +
-            "{nickname(String)} \n\n" +
-        "[Back] \n" +
-            "OK(200), DUPLICATE KEY(500)")
+            "[Front] \n" +
+                    "{nickname(String)} \n\n" +
+                    "[Back] \n" +
+                    "OK(200), DUPLICATE KEY(500)")
     @GetMapping("/checkNickname/{nickname}")
     public ResponseEntity<?> checkNickname(@PathVariable String nickname) {
         userService.checkNickname(nickname);
@@ -277,10 +277,10 @@ public class UserController {
     }
 
     @ApiOperation(value = "이메일 중복 확인", notes =
-        "[Front] \n" +
-            "{email(String)} \n\n" +
-        "[Back] \n" +
-            "OK(200), DUPLICATE KEY(500)")
+            "[Front] \n" +
+                    "{email(String)} \n\n" +
+                    "[Back] \n" +
+                    "OK(200), DUPLICATE KEY(500)")
     @GetMapping("/checkEmail/{email}")
     public ResponseEntity<?> checkEmail(@PathVariable String email) {
         userService.checkEmail(email);
