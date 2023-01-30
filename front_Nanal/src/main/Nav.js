@@ -4,7 +4,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import bell from '../src_assets/img/bell.png';
 import logo from '../src_assets/img/home.png';
 import profile from '../src_assets/img/profile.png';
-import close from '../src_assets/img/close.png';
+// import close from '../src_assets/img/close.png';
 import downarrow from '../src_assets/img/down-arrow.png';
 import uparrow from '../src_assets/img/up-arrow.png';
 
@@ -28,69 +28,68 @@ function Nav({ changeCalendaar }) {
     changeCalendaar(e);
   };
   return (
-    <nav className='flex w-80 justify-between space-x-4 m-auto'>
-      <div className='flex items-center'>
-        <Link
-          to='/'
-          className='rounded-lg pr-1 py-2 text-slate-700 font-medium hover:bg-slate-100 hover:text-slate-900'
-        >
-          <img src={logo} />
-        </Link>
-        {location.pathname === '/' ? (
-          <div>
-            {isToggle ? (
-              <div className='w-3 h-3 pt-1'>
-                <img src={downarrow} onClick={() => toggleMenu()} />
-              </div>
-            ) : (
-              <div>
-                <div className='w-3 h-3 pt-1'>
-                  <img src={uparrow} onClick={() => toggleMenu()} />
-                </div>
-                <div className='grid grid-cols-1 h-20 w-24 content-center absolute'>
-                  <button
-                    className='bg-slate-500 text-white p-1'
-                    onClick={() => {
-                      toggleMenu();
-                      changeCalendar(true);
-                    }}
-                  >
-                    캘린더
-                  </button>
-                  <button
-                    className='bg-sky-700 text-white p-1'
-                    onClick={() => {
-                      toggleMenu();
-                      changeCalendar(false);
-                    }}
-                  >
-                    책장
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-        ) : null}
-      </div>
-      <div className='flex items-center '>
-        <img src={bell} className='w-6 h-6' />
-        {location.pathname === '/' ? (
-          <Link to='/MyPage' className='w-6 h-6 m-3'>
-            <img src={profile} onClick={() => toggle2Menu()} />
+    <div>
+      <nav className='flex w-80 justify-between space-x-4 m-auto'>
+        <div className='flex items-center'>
+          <Link
+            to='/'
+            className='rounded-lg pr-1 py-2 my-1 text-slate-700 font-medium hover:bg-slate-100 hover:text-slate-900'
+          >
+            <img src={logo} />
           </Link>
-        ) : (
-          <div className='w-6 h-6 m-3'>
-            <img
-              src={close}
-              onClick={() => {
-                navigate(-1);
-                toggle2Menu();
-              }}
-            />
-          </div>
-        )}
-      </div>
-    </nav>
+          {location.pathname === '/' ? (
+            <div>
+              {isToggle ? (
+                <div className='w-3 h-3 pt-1'>
+                  <img src={downarrow} onClick={() => toggleMenu()} />
+                </div>
+              ) : (
+                <div>
+                  <div className='w-3 h-3 pt-1'>
+                    <img src={uparrow} onClick={() => toggleMenu()} />
+                  </div>
+                  <div className='grid grid-cols-1 h-20 w-24 content-center absolute'>
+                    <button
+                      className='bg-slate-500 text-white p-1'
+                      onClick={() => {
+                        toggleMenu();
+                        changeCalendar(true);
+                      }}
+                    >
+                      캘린더
+                    </button>
+                    <button
+                      className='bg-sky-700 text-white p-1'
+                      onClick={() => {
+                        toggleMenu();
+                        changeCalendar(false);
+                      }}
+                    >
+                      책장
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          ) : null}
+        </div>
+        <div className='flex items-center m-auto'>
+          {location.pathname !== '/MyPage' ? (
+            <Link to='/MyPage' className='w-6 h-6 m-3'>
+              <img
+                src={profile}
+                onClick={() => toggle2Menu()}
+                className='w-12 h-7'
+              />
+            </Link>
+          ) : null}
+          <button>
+            <img src={bell} className='w-6 h-6 my-3 ml-3' />
+          </button>
+        </div>
+      </nav>
+      <hr className='mb-3 border-slate-500/75' />
+    </div>
   );
 }
 

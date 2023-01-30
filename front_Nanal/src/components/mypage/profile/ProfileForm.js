@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import axios_api from '../../../config/Axios';
+import emptyProfile from '../../../src_assets/img/emptyProfile.png';
 
 function ProfileForm() {
   const accessToken =
@@ -17,7 +18,7 @@ function ProfileForm() {
     })
     .catch((err) => console.log(err));
   // 이미지 업로드를 위한 곳.
-  const [Image, setImage] = useState('/img/emptyProfile.png');
+  const [Image, setImage] = useState(emptyProfile);
   const fileInput = useRef(null);
   return (
     <div>
