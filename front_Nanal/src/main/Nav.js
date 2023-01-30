@@ -19,11 +19,6 @@ function Nav({ changeCalendaar }) {
   const toggleMenu = () => {
     setToggle((isToggle) => !isToggle);
   };
-  // 마이페이지와 X표시 토글
-  const [isToggle2, setToggle2] = useState(true);
-  const toggle2Menu = () => {
-    setToggle2((isToggle2) => !isToggle2);
-  };
   const changeCalendar = (e) => {
     changeCalendaar(e);
   };
@@ -75,10 +70,9 @@ function Nav({ changeCalendaar }) {
         </div>
         <div className='flex items-center m-auto'>
           {location.pathname !== '/MyPage' ? (
-            <Link to='/MyPage' className='w-6 h-6 m-3'>
+            <Link to='/MyPage' className='w-6 h-7 m-3'>
               <img
                 src={profile}
-                onClick={() => toggle2Menu()}
                 className='w-12 h-7'
               />
             </Link>
