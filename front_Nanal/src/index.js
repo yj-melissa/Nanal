@@ -8,7 +8,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import axios_api from './config/Axios';
 
-axios_api.defaults.withCredentials = true;
+//axios_api.defaults.withCredentials = true;
 
 const rootElement = document.getElementById('root');
 const root = createRoot(rootElement);
