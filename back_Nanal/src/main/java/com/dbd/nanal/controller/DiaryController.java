@@ -76,11 +76,11 @@ public class DiaryController {
                 return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
             }else{
                 responseDTO.put("responseMessage", ResponseMessage.DIARY_GET_FAIL);
-                return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
+                return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
             }
         }catch (Exception e){
             responseDTO.put("responseMessage", ResponseMessage.DIARY_GET_FAIL);
-            return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
+            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }
     }
 
@@ -157,7 +157,7 @@ public class DiaryController {
     public ResponseEntity<?> DiaryList(@PathVariable("date") String date){
         HashMap<String, Object> responseDTO = new HashMap<>();
         try{
-            List<DiaryResponseDTO> diaryResponseDTOList=new ArrayList<>();
+            List<DiaryResponseDTO> diaryResponseDTOList;
             // yyyy-mm-00
             if((date.split("-")[2]).equals("00")) {
                 String findDate=date.substring(0,7);
@@ -296,4 +296,47 @@ public class DiaryController {
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK); // temp
     }
 
+    //bookmark
+    @ApiOperation(value = "일기 북마크 저장", notes =
+            "일기 북마크 저장합니다.\n" +
+                    "[Front] \n" +
+                    "{diaryIdx(int), userIdx(int)} \n\n" +
+                    "[Back] \n" +
+                    "ok(200)")
+    @PostMapping("/bookmark")
+    public ResponseEntity<?> saveBookmark(@ApiParam(value = "북마크 정보") @RequestBody BookmarkRequestDTO bookMarkRequestDTO) {
+        HashMap<String, Object> responseDTO = new HashMap<>();
+        diaryService.saveBookmark(bookMarkRequestDTO);
+        responseDTO.put("responseMessage", ResponseMessage.DIARY_BOOKMARK_SAVE_SUCCESS);
+        return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK); // temp
+    }
+
+    @ApiOperation(value = "일기 북마크 리스트 불러오기", notes =
+            "일기 북마크 리스트를 반환합니다.\n" +
+                    "[Front] \n" +
+                    "{userIdx(int)} \n\n" +
+                    "[Back] \n" +
+                    "[{bookmarkIdx(int), diaryIdx(int), userIdx(int), creationDate(Date), content(String), picture(String), music(int), emo(String)}]")
+    @GetMapping("/bookmark/{userIdx}")
+    public ResponseEntity<?> getBookmarkList(@ApiParam(value = "유저 정보")@PathVariable("userIdx") int userIdx) {
+        HashMap<String, Object> responseDTO = new HashMap<>();
+        List<BookmarkResponseDTO> bookmarkList= diaryService.getBookmarkList(userIdx);
+        responseDTO.put("responseMessage", ResponseMessage.DIARY_BOOKMARK_LIST_SUCCESS);
+        responseDTO.put("BookmarkList", bookmarkList);
+        return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK); // temp
+    }
+
+    @ApiOperation(value = "일기 북마크 삭제", notes =
+            "일기 북마크를 삭제합니다.\n" +
+                    "[Front] \n" +
+                    "{bookmarkIdx(int)} \n\n" +
+                    "[Back] \n" +
+                    "ok(200)")
+    @DeleteMapping("/bookmark/{bookmarkIdx}")
+    public ResponseEntity<?> deleteBookmark(@ApiParam(value="일기 스크랩 id")@PathVariable("bookmarkIdx") int bookmarkIdx){
+        HashMap<String, Object> responseDTO = new HashMap<>();
+        diaryService.deleteBookmark(bookmarkIdx);
+        responseDTO.put("responseMessage", ResponseMessage.DIARY_BOOKMARK_DELETE_SUCCESS);
+        return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+    }
 }
