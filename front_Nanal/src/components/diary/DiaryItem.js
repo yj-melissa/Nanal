@@ -1,22 +1,22 @@
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-function DiaryItem({ id, date, content, group }) {
-  const strDate = new Date(parseInt(date)).toLocaleString();
-  const navigate = useNavigate();
-  const goDetail = () => {
-    navigate(`/diary/${id}`);
-  };
+function DiaryItem({ userIdx, diaryIdx, creationDate, content }) {
+  const strDate = new Date(creationDate).toLocaleString();
 
   return (
-    <div className="DiaryItem">
-      <div onClick={goDetail} className="picture">
-        그림 넣기
+    <Link
+      to={`/Diary/${diaryIdx}`}
+      state={{
+        diaryIdx: diaryIdx,
+      }}
+    >
+      <div className="DiaryItem">
+        <div>일기 번호 : {diaryIdx}</div>
+        <span>그림 들어갈 자리</span>
+        <div>작성 시간 : {strDate}</div>
+        <div>{content}</div>
       </div>
-      <div onClick={goDetail} className="info-wrapper">
-        <div className="diary-date">{strDate}</div>
-        <div className="diary-content-preview">{content.slice(0, 25)}</div>
-      </div>
-    </div>
+    </Link>
   );
 }
 

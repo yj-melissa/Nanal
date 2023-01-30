@@ -13,21 +13,28 @@ function DiaryCreate() {
   const handleSubmit = (e) => {
     e.preventDefault();
     // 유효성 검사 후 포커싱
-    if (content.length < 5) {
+    if (content.length < 2) {
       contentRef.current.focus();
       return;
     }
     axios_api
       .post("diary", {
+        userIdx: 1,
+        // 선택한 그룹은 배열 형태로 전달해야 함
+        groupIdxList: [1],
         content: content,
       })
-      .then((res) => {
-        console.log(res);
+      .then((response) => {
+        console.log(response);
+        alert("저장 성공");
+        // 일기 생성 후 홈으로 보내기
+        navigate("/", { replace: true });
       })
       .catch((err) => {
         console.log(err);
       });
-    alert("저장 성공");
+
+    // 저장 후 일기 데이터 초기화
     setContent("");
     setGroup("private");
   };
@@ -61,7 +68,7 @@ function DiaryCreate() {
           }}
         >
           <option value="private">개인</option>
-          {/* 그룹 선택 시, 그룹 목록을 보여줘야 함 */}
+          {/* 추후에 그룹 선택 시, 그룹 목록을 보여줘야 함 */}
           <option value="group">그룹</option>
         </select>
       </div>
