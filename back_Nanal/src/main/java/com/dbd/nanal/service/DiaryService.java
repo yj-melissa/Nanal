@@ -18,6 +18,7 @@ public class DiaryService {
     private final DiaryRepository diaryRepository;
     private final GroupDiaryRelationRepository groupDiaryRelationRepository;
     private final DiaryCommentRepository diaryCommentRepository;
+    private final BookmarkRepository bookmarkRepository;
 
     // write diary
     public DiaryResponseDTO save(DiaryRequestDTO diary){
@@ -127,5 +128,25 @@ public class DiaryService {
         DiaryEntity diaryEntity=diaryRepository.getReferenceById(diaryIdx);
         diaryEntity.flagDiary(false, null, null );
         return new DiaryResponseDTO(diaryRepository.save(diaryEntity));
+    }
+
+    // save bookmark
+    public void saveBookmark(BookmarkRequestDTO bookmarkRequestDTO){
+        ScrapEntity scrapEntity=ScrapEntity.builder()
+                .user(UserEntity.builder().userIdx(bookmarkRequestDTO.getUserIdx()).build())
+                .diary(DiaryEntity.builder().diaryIdx(bookmarkRequestDTO.getDiaryIdx()).build())
+                .build();
+        bookmarkRepository.save(scrapEntity);
+    }
+
+    // get bookmark list
+    public List<BookmarkResponseDTO> getBookmarkList(int userIdx){
+        List<ScrapEntity> scrapEntityList=bookmarkRepository.findByUser(UserEntity.builder().userIdx(userIdx).build());
+        return scrapEntityList.stream().map(x-> new BookmarkResponseDTO(x)).collect(Collectors.toList());
+    }
+
+    // delete bookmark
+    public void deleteBookmark(int bookmarkIdx){
+        bookmarkRepository.deleteById(bookmarkIdx);
     }
 }
