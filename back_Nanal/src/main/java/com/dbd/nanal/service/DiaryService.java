@@ -83,6 +83,12 @@ public class DiaryService {
         return diaryEntityList.stream().map(x->new DiaryResponseDTO(x)).collect(Collectors.toList());
     }
 
+    // get user diary list
+    public List<DiaryResponseDTO> userDiaryList(int userIdx){
+        List<DiaryEntity> diaryEntityList=diaryRepository.findByUser(UserEntity.builder().userIdx(userIdx).build());
+        return diaryEntityList.stream().map(x->new DiaryResponseDTO(x)).collect(Collectors.toList());
+    }
+
     // save diary-group
     public void saveDiaryGroup(GroupDiaryRelationDTO groupDiaryRelationDTO){
         GroupDiaryRelationEntity groupDiaryRelationEntity=GroupDiaryRelationEntity.builder()

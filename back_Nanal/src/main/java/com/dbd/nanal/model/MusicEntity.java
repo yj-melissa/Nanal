@@ -15,7 +15,7 @@ import java.time.LocalDate;
 public class MusicEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="music_idx")
+    @Column(name="music_idx", columnDefinition = "INT UNSIGNED")
     private int musicIdx;
 
     private String title;

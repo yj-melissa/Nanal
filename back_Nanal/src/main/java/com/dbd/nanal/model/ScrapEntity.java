@@ -11,7 +11,7 @@ import javax.persistence.*;
 public class ScrapEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="scrap_idx")
+    @Column(name="scrap_idx", columnDefinition = "INT UNSIGNED")
     private int scrapIdx;
 
     @ManyToOne(fetch = FetchType.LAZY)

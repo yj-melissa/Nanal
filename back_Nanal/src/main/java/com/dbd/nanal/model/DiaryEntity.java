@@ -16,7 +16,7 @@ import java.util.List;
 public class DiaryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="diary_idx")
+    @Column(name="diary_idx", columnDefinition = "INT UNSIGNED")
     private int diaryIdx;
 
     @ManyToOne(fetch = FetchType.LAZY)
