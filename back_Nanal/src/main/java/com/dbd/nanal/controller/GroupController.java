@@ -3,6 +3,7 @@ package com.dbd.nanal.controller;
 import com.dbd.nanal.config.common.DefaultRes;
 import com.dbd.nanal.config.common.ResponseMessage;
 import com.dbd.nanal.dto.*;
+import com.dbd.nanal.model.UserEntity;
 import com.dbd.nanal.service.GroupService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -10,6 +11,7 @@ import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -155,14 +157,14 @@ public class GroupController {
                     "[Back] \n" +
                     "JSON\n" +
                     "{List<GroupDetailResponse>}")
-    @GetMapping("/list/{userIdx}")
-    public ResponseEntity<?> getGroupList(@ApiParam(value = "유저 idx", required = true) @PathVariable int userIdx) {
+    @GetMapping("/list")
+    public ResponseEntity<?> getGroupList(@ApiParam(value = "유저 idx", required = true) @AuthenticationPrincipal UserEntity userInfo) {
         HashMap<String, Object> responseDTO = new HashMap<>();
 
         try {
             // group_user_relation 테이블에서 userIdx가 포함된 group찾기
             List<HashMap<String, Object>> groupDetailResponseDTOS =
-                    groupService.getGroupList(userIdx);
+                    groupService.getGroupList(userInfo.getUserIdx());
 
             if (groupDetailResponseDTOS != null) {
                 responseDTO.put("groupList", groupDetailResponseDTOS);
