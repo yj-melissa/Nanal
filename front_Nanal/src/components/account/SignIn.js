@@ -16,8 +16,8 @@ function SignIn() {
 
   const JWT_EXPIRY_TIME = 24 * 3600 * 1000; // 만료 시간 (24시간 밀리 초로 표현)
 
-  const onLoginSuccess = (response) => {
-    const { accessToken } = response.data;
+  const onLoginSuccess = (data) => {
+    const { accessToken } = data;
 
     // accessToken 설정
     axios_api.defaults.headers.common[
@@ -48,10 +48,10 @@ function SignIn() {
         console.log(data.statusCode);
         if (data.statusCode === 200) {
           if (data.data.responseMessage === '로그인 성공') {
-            console.log(data.data);
+            console.log(data.data.token);
             // window.location.replace("/");
 
-            onLoginSuccess(data);
+            onLoginSuccess(data.data.token);
           }
         } else {
           console.log(data.statusCode);

@@ -16,7 +16,7 @@ function GroupList() {
           }
         } else {
           console.log(data.statusCode);
-          console.log(data.data.ResponseMessage);
+          console.log(data.data.responseMessage);
         }
       })
       .catch(({ error }) => {

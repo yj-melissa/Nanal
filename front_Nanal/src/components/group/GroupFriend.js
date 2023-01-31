@@ -26,7 +26,7 @@ function GroupFriend() {
       });
   }, []);
 
-  function addFriend(idx) {
+  const addFriend = (idx) => {
     let addfriendList = [...includeFriend];
     console.log(friendList[idx]);
     addfriendList.push(friendList[idx]);
@@ -34,13 +34,28 @@ function GroupFriend() {
     console.log(includeFriend);
     setIncludeFriend(addfriendList);
     console.log(includeFriend);
-  }
+  };
 
   return (
     <div>
       {/* {friendList.map((friendItem) => (
         <FriendItem key={friendItem.userIdx} item={friendItem} />
       ))} */}
+
+      {friendList.map((friendItem, idx) => {
+        return (
+          <button
+            key={idx}
+            onClick={() => {
+              addFriend(idx);
+            }}
+          >
+            {friendItem.nickname}
+          </button>
+        );
+      })}
+
+      <hr className='border-solid border-1 border-slate-800 w-80 my-5' />
 
       {friendList.map((friendItem, idx) => {
         return (
