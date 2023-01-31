@@ -1,6 +1,7 @@
 package com.dbd.nanal.config;
 
 
+import com.dbd.nanal.model.UserEntity;
 import java.util.Arrays;
 import java.util.List;
 import org.springframework.context.annotation.Bean;
@@ -28,6 +29,7 @@ public class SwaggerConfiguration {
                 .apiInfo(swaggerInfo()) // Api Docu 및 작성자 정보 매핑
                 .securityContexts(Arrays.asList(securityContext()))  // swagger JWT 테스트 목적
                 .securitySchemes(Arrays.asList(apiKey()))   // swagger JWT 테스트 목적
+                .ignoredParameterTypes(UserEntity.class)
 
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.dbd.nanal.controller"))

@@ -17,6 +17,7 @@ import io.swagger.annotations.ApiParam;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashMap;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -134,6 +135,28 @@ public class UserController {
         }
     }
 
+    @ApiOperation(value = "로그아웃")
+    @DeleteMapping("/logout")
+    public ResponseEntity<?> logout(@AuthenticationPrincipal UserEntity userInfo) {
+
+        jwtTokenProvider.deleteRefreshToken(userInfo.getUserIdx());
+
+        HashMap<String, Object> responseDTO = new HashMap<>();
+        responseDTO.put("responseMessage", ResponseMessage.SUCCESS);
+        return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+    }
+
+//    @ApiOperation(value = "Access Token 재발급")
+//    @PostMapping("/refresh")
+//    public ResponseEntity<?> reissueAccessToken(HttpServletResponse response) {
+//        String newToken = jwtTokenProvider.reissueAccessToken();
+//
+//        HashMap<String, Object> responseDTO = new HashMap<>();
+//        responseDTO.put("responseMessage", ResponseMessage.SUCCESS);
+//        responseDTO.put("accessToken", newToken);
+//        return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+//    }
+
     @ApiOperation(value = "내 프로필 조회", notes =
             "[Front] \n" +
                     "{userIdx(int)} \n\n" +
@@ -148,6 +171,19 @@ public class UserController {
         responseDTO.put("profile", profile);
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
+
+
+    // 테스트용 api
+    @GetMapping("/test")
+    public ResponseEntity<?> test(@ApiParam(value = "userIdx") @AuthenticationPrincipal UserEntity userInfo) {
+
+        HashMap<String, Object> responseDTO = new HashMap<>();
+        responseDTO.put("responseMessage", ResponseMessage.SUCCESS);
+        responseDTO.put("user", userInfo.getUserId());
+
+        return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+    }
+
 
     @ApiOperation(value = "회원 정보 수정", notes =
             "[Front] \n" +

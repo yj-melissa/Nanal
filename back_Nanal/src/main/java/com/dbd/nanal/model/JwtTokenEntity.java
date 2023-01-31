@@ -24,7 +24,7 @@ public class JwtTokenEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "refresh_token_id")
+    @Column(name = "refresh_token_id", columnDefinition = "INT UNSIGNED")
     private int refreshTokenId;
 
     @Column(name = "user_idx")
@@ -36,18 +36,5 @@ public class JwtTokenEntity {
     @Column(name = "refresh_token")
     private String refreshToken;
 
-//    private JwtTokenEntity(String userId, Integer userIdx, String refreshToken) {
-//        this.userId = userId;
-//        this.userIdx = userIdx;
-//        this.refreshToken = refreshToken;
-//    }
-//
-//    public static JwtTokenEntity createToken(String userId, Integer userIdx, String refreshToken) {
-//        return new JwtTokenEntity(userId, userIdx, refreshToken);
-//    }
-//
-//    public void changeToken(String token) {
-//        this.refreshToken = refreshToken;
-//    }
 
 }
