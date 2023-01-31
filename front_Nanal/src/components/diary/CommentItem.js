@@ -2,16 +2,16 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios_api from "../../config/Axios";
 
-function CommentItem({ commentIdx, content, diaryIdx, groupIdx, userIdx }) {
+function CommentItem({ commentIdx, input, diaryIdx, groupIdx, userIdx }) {
   // 댓글 수정
   const [isEdit, setIsEdit] = useState(false);
   const toggleIsEdit = () => setIsEdit(!isEdit);
 
-  const [localContent, setLocalContent] = useState(content);
+  const [localContent, setLocalContent] = useState(input);
   // 수정 취소 시 초기화 함수
   const handleQuitEdit = () => {
     setIsEdit(false);
-    setLocalContent(content);
+    setLocalContent(input);
   };
 
   const navigate = useNavigate();
@@ -23,7 +23,18 @@ function CommentItem({ commentIdx, content, diaryIdx, groupIdx, userIdx }) {
         {isEdit ? (
           <>
             <button onClick={handleQuitEdit}>수정 취소</button>
-            <button>수정 완료</button>
+            <button
+              onClick={() => {
+                axios_api.put(`diary/comment`, {
+                  userIdx: 1,
+                  diaryIdx: diaryIdx,
+                  groupIdx: 1,
+                  content: input,
+                });
+              }}
+            >
+              수정 완료
+            </button>
           </>
         ) : (
           <>
@@ -69,7 +80,7 @@ function CommentItem({ commentIdx, content, diaryIdx, groupIdx, userIdx }) {
             </form>
           </>
         ) : (
-          <>{content}</>
+          <>{input}</>
         )}
       </div>
     </div>
