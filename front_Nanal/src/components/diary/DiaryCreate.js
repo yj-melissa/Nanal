@@ -25,7 +25,6 @@ function DiaryCreate() {
         content: content,
       })
       .then((response) => {
-        console.log(response);
         alert("저장 성공");
         // 일기 생성 후 홈으로 보내기
         navigate("/", { replace: true });
