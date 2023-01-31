@@ -6,7 +6,9 @@ import com.dbd.nanal.model.UserProfileEntity;
 import com.dbd.nanal.repository.UserProfileRepository;
 import com.dbd.nanal.repository.UserRepository;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -51,6 +53,7 @@ public class UserService {
 
         final UserEntity user = userRepository.findByUserId(userId);
         if(user != null && passwordEncoder.matches(userPassword, user.getPassword())) {
+            user.setLastAccessDate(LocalDateTime.now());
             return user;
         }
         return null;
@@ -80,6 +83,11 @@ public class UserService {
 //        }
 //        throw new NullPointerException();
 //    }
+
+    public List<UserEntity> getUserList() {
+        return userRepository.findAll();
+    }
+
 
     public HashMap<String, String> getByUserIdx(final int userIdx) {
         final UserProfileEntity userProfile = userProfileRepository.findByProfileId(userIdx);
