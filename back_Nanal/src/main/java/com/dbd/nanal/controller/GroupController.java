@@ -127,12 +127,13 @@ public class GroupController {
                     "{success(boolean)}")
 
     @PostMapping("/join")
-    public ResponseEntity<?> groupJoin(@ApiParam(value = "groupIdx, userIdx", required = true) @RequestBody Map<String, Integer> requestDTO) {
+//    public ResponseEntity<?> groupJoin(@ApiParam(value = "groupIdx, userIdx", required = true) @RequestBody Map<String, Integer> requestDTO) {
+    public ResponseEntity<?> groupJoin(@ApiParam(value = "유저 idx", required = true) @AuthenticationPrincipal UserEntity userInfo, @RequestBody Map<String, Integer> requestDTO) {
 
         HashMap<String, Object> responseDTO = new HashMap<>();
         try {
 
-            GroupUserRelationRequestDTO groupUserRelationRequestDTO = new GroupUserRelationRequestDTO(requestDTO.get("userIdx"), requestDTO.get("groupIdx"));
+            GroupUserRelationRequestDTO groupUserRelationRequestDTO = new GroupUserRelationRequestDTO(userInfo.getUserIdx(), requestDTO.get("groupIdx"));
             GroupUserRelationResponseDTO groupUserRelationResponseDTO = groupService.saveGroupUserRelation(groupUserRelationRequestDTO);
 
             if (groupUserRelationResponseDTO != null) {
@@ -158,13 +159,18 @@ public class GroupController {
                     "[Back] \n" +
                     "JSON\n" +
                     "{List<GroupDetailResponse>}")
+//    @GetMapping("/list/{userIdx}")
     @GetMapping("/list")
+//    public ResponseEntity<?> getGroupList(@ApiParam(value = "유저 idx", required = true) @PathVariable int userIdx) {
     public ResponseEntity<?> getGroupList(@ApiParam(value = "유저 idx", required = true) @AuthenticationPrincipal UserEntity userInfo) {
         HashMap<String, Object> responseDTO = new HashMap<>();
 
         try {
+            // group_user_relation 테이블에서 userIdx가 포함된 group찾기
             List<HashMap<String, Object>> groupDetailResponseDTOS =
                     groupService.getGroupList(userInfo.getUserIdx());
+//            List<HashMap<String, Object>> groupDetailResponseDTOS =
+//                    groupService.getGroupList(userInfo.getUserIdx());
 
             System.out.println("list : " + groupDetailResponseDTOS.size());
 
@@ -224,11 +230,13 @@ public class GroupController {
                     "[Back]\n" +
                     "JSON\n" +
                     "{}")
-    @DeleteMapping("/{userIdx}/{groupIdx}")
-    public ResponseEntity<?> withdrawGroup(@ApiParam(value = "사용자 idx") @PathVariable("userIdx") int userIdx, @ApiParam(value = "그룹 idx") @PathVariable("groupIdx") int groupIdx) {
+//    @DeleteMapping("/{userIdx}/{groupIdx}")
+    @DeleteMapping("/{groupIdx}")
+//    public ResponseEntity<?> withdrawGroup(@ApiParam(value = "사용자 idx") @PathVariable("userIdx") int userIdx, @ApiParam(value = "그룹 idx") @PathVariable("groupIdx") int groupIdx) {
+    public ResponseEntity<?> withdrawGroup(@ApiParam(value = "유저 idx", required = true) @AuthenticationPrincipal UserEntity userInfo, @ApiParam(value = "그룹 idx") @PathVariable("groupIdx") int groupIdx) {
         HashMap<String, Object> responseDTO = new HashMap<>();
 
-        groupService.deleteGroupUser(userIdx, groupIdx);
+        groupService.deleteGroupUser(userInfo.getUserIdx(), groupIdx);
         responseDTO.put("responseMessage", ResponseMessage.GROUP_USER_DELETE_SUCCESS);
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
