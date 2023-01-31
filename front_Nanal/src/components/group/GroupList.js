@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import axios_api from '../../config/Axios';
 import GroupItem from './GroupItem';
+import { onLogin } from '../../config/Login';
+import { useRecoilState } from 'recoil';
+import { checkingLogin } from '../../store/Atoms';
 
 function GroupList() {
   const [groupList, setGroupList] = useState([]);
+  const [check, setCheck] = useRecoilState(checkingLogin);
 
   useEffect(() => {
+    onLogin(check);
     axios_api
-      .get('group/list/1')
+      .get('group/list/7')
       .then(({ data }) => {
         if (data.statusCode === 200) {
           setGroupList(null);
@@ -28,7 +33,7 @@ function GroupList() {
     <div>
       <h1>그룹 리스트</h1>
       {groupList.map((groupItem) => (
-        <GroupItem key={groupItem.groupDetail} item={groupItem} />
+        <GroupItem key={groupItem.groupDetail.groupIdx} item={groupItem} />
       ))}
     </div>
   );
