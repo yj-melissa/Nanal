@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import axios_api from '../../config/Axios';
 
-function GroupProfile() {
+function GroupProfile({ changeData, toggle }) {
   const [groupName, setGroupName] = useState('');
   const [groupTag, setGroupTag] = useState([]);
   const [tagNum, setTagNum] = useState(0);
   let [tagNew, setTagNew] = useState('');
 
-  const onChageName = (e) => {
+  const onChangeName = (e) => {
     setGroupName(e.target.value);
   };
 
@@ -24,11 +24,11 @@ function GroupProfile() {
     }
   }
 
-  const onChageTagNew = (e) => {
+  const onChangeTagNew = (e) => {
     setTagNew(e.target.value);
   };
 
-  const onChageTagRemove = (id) => {
+  const onChangeTagRemove = (id) => {
     // tag.id 가 파라미터로 일치하지 않는 원소만 추출해서 새로운 배열을 만듬
     // = tag.id 가 id 인 것을 제거함
     let tagList = [...groupTag];
@@ -38,27 +38,31 @@ function GroupProfile() {
 
   const GroupCreate = (e) => {
     e.preventDefault();
-    axios_api
-      .post('/group', {
-        groupName: groupName,
-        tags: groupTag,
-      })
-      .then(({ data }) => {
-        console.log(data.statusCode);
-        if (data.statusCode === 200) {
-          if (data.data.ResponseMessage === '그룹 생성 성공') {
-            console.log(data.data.groupDetail);
-            console.log(data.data.tags);
-            // window.location.replace("/");
-          }
-        } else {
-          console.log(data.statusCode);
-          console.log(data.data.ResponseMessage);
-        }
-      })
-      .catch(({ error }) => {
-        console.log('그룹 생성 성공: ' + error);
-      });
+    changeData({
+      groupName: groupName,
+      tags: groupTag,
+    });
+    // axios_api
+    //   .post('/group', {
+    //     groupName: groupName,
+    //     tags: groupTag,
+    //   })
+    //   .then(({ data }) => {
+    //     console.log(data.statusCode);
+    //     if (data.statusCode === 200) {
+    //       if (data.data.ResponseMessage === '그룹 생성 성공') {
+    //         console.log(data.data.groupDetail);
+    //         console.log(data.data.tags);
+    //         // window.location.replace("/");
+    //       }
+    //     } else {
+    //       console.log(data.statusCode);
+    //       console.log(data.data.ResponseMessage);
+    //     }
+    //   })
+    //   .catch(({ error }) => {
+    //     console.log('그룹 생성 성공: ' + error);
+    //   });
   };
 
   return (
@@ -70,7 +74,7 @@ function GroupProfile() {
             type='text'
             id='group-name'
             className='font-bold m-0.5'
-            onChange={onChageName}
+            onChange={onChangeName}
           ></input>
         </div>
         <div id='group-tag-div'>
@@ -78,7 +82,7 @@ function GroupProfile() {
           <input
             type='text'
             id='group-tag'
-            onChange={onChageTagNew}
+            onChange={onChangeTagNew}
             value={tagNew}
           />
           &nbsp;
@@ -89,7 +93,7 @@ function GroupProfile() {
               <button
                 onClick={() => {
                   setTagNum(idx);
-                  onChageTagRemove(idx);
+                  onChangeTagRemove(idx);
                 }}
                 key={idx}
               >
@@ -98,7 +102,9 @@ function GroupProfile() {
             );
           })}
         </div>
-        <button type='submit'>생성</button>
+        <button type='submit' className='my-2'>
+          {toggle ? '생성' : ''}
+        </button>
       </form>
     </div>
   );

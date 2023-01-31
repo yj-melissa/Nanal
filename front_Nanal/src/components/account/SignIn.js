@@ -2,14 +2,10 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios_api from '../../config/Axios';
 import { setCookie } from '../../config/Cookie';
-import { useRecoilState } from 'recoil';
-import { checkingLogin } from '../../store/Atoms';
 
 function SignIn() {
   const [userId, setUserId] = useState('');
   const [userPw, setPw] = useState('');
-
-  const [check, setCheck] = useRecoilState(checkingLogin);
 
   const onChangeId = (e) => {
     setUserId(e.target.value);
@@ -20,8 +16,6 @@ function SignIn() {
   };
 
   function onLoginSuccess(data) {
-    setCheck(true);
-
     const { accessToken } = data;
 
     setCookie('accessToken', accessToken, {

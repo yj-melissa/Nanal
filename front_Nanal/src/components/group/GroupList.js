@@ -2,15 +2,12 @@ import React, { useState, useEffect } from 'react';
 import axios_api from '../../config/Axios';
 import GroupItem from './GroupItem';
 import { onLogin } from '../../config/Login';
-import { useRecoilState } from 'recoil';
-import { checkingLogin } from '../../store/Atoms';
 
 function GroupList() {
   const [groupList, setGroupList] = useState([]);
-  const [check, setCheck] = useRecoilState(checkingLogin);
 
   useEffect(() => {
-    onLogin(check);
+    onLogin();
     axios_api
       .get('group/list')
       .then(({ data }) => {

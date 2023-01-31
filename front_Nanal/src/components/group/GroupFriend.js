@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import axios_api from '../../config/Axios';
+import { onLogin } from '../../config/Login';
 
-function GroupFriend() {
+function GroupFriend({ changeData, toggle }) {
   const [friendList, setFriendList] = useState([]);
   const [includeFriend, setIncludeFriend] = useState([]);
-  const userIdx = 1;
 
   useEffect(() => {
+    onLogin();
     axios_api
-      .get(`friend/list/${userIdx}`)
+      .get(`friend/list/`)
       .then(({ data }) => {
         if (data.statusCode === 200) {
           setFriendList(null);
@@ -28,12 +29,19 @@ function GroupFriend() {
 
   const addFriend = (idx) => {
     let addfriendList = [...includeFriend];
-    console.log(friendList[idx]);
     addfriendList.push(friendList[idx]);
-    console.log(addfriendList);
-    console.log(includeFriend);
     setIncludeFriend(addfriendList);
-    console.log(includeFriend);
+  };
+
+  const onChangeFRemove = (idx) => {
+    let addfriendList = [...includeFriend];
+    addfriendList.splice(idx, 1);
+    setIncludeFriend(addfriendList);
+  };
+
+  const onChangeToggle = () => {
+    toggle(true);
+    changeData(includeFriend);
   };
 
   return (
@@ -42,12 +50,16 @@ function GroupFriend() {
         <FriendItem key={friendItem.userIdx} item={friendItem} />
       ))} */}
 
-      {friendList.map((friendItem, idx) => {
+      <p className='mb-0.5'>✨ 추가 된 사용자 ✨</p>
+      <button onClick={onChangeToggle}>사용자 추가 완료</button>
+      <br />
+
+      {includeFriend.map((friendItem, idx) => {
         return (
           <button
             key={idx}
             onClick={() => {
-              addFriend(idx);
+              onChangeFRemove(idx);
             }}
           >
             {friendItem.nickname}
@@ -56,6 +68,8 @@ function GroupFriend() {
       })}
 
       <hr className='border-solid border-1 border-slate-800 w-80 my-5' />
+
+      <p className='mb-0.5'>내 친구 목록 -----------------------</p>
 
       {friendList.map((friendItem, idx) => {
         return (
