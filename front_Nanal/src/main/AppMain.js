@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import Calendar from '../components/Calendaar.js';
 import BookCase from '../components/BookCase.js';
+import Alarm from '../components/another/Alarm.js';
 import SignIn from '../components/account/SignIn.js';
 import SignUp from '../components/account/SignUp.js';
 import DiaryCreate from '../components/diary/DiaryCreate';
@@ -21,6 +22,7 @@ const AppMain = ({ isCalendaar }) => {
       ) : (
         <Route path='/' element={<BookCase />}></Route>
       )}
+      <Route path='/Alarm' element={<Alarm />}></Route>
       <Route path='/SignUp' element={<SignUp />}></Route>
       <Route path='/SignIn' element={<SignIn />}></Route>
       <Route path='/Diary/Create' element={<DiaryCreate />}></Route>
