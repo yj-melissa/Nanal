@@ -1,10 +1,10 @@
-import { useState, useRef } from 'react';
-import axios_api from '../../config/Axios';
-import CommentItem from './CommentItem';
+import { useState, useRef } from "react";
+import axios_api from "../../config/Axios";
+import CommentItem from "./CommentItem";
 
 function Comment({ diaryIdx, groupIdx }) {
   // 댓글 데이터
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
   const onChange = (e) => setInput(e.target.value);
   // 포커싱 기능
   const commentRef = useRef();
@@ -17,32 +17,32 @@ function Comment({ diaryIdx, groupIdx }) {
       return;
     }
     axios_api
-      .post('diary/comment', {
+      .post("diary/comment", {
         userIdx: 1,
         diaryIdx: diaryIdx,
         groupIdx: 1,
         content: input,
       })
       .then((response) => {
-        console.log(response);
+        setInput(response.data.data.diaryComment);
       })
       .catch((err) => {
         console.log(err);
       });
     // 저장 후 댓글 데이터 초기화
-    setInput('');
+    setInput("");
   };
 
   return (
-    <div className='comment-container'>
+    <div className="comment-container">
       <div>
-        <CommentItem response={response} />
+        <CommentItem input={input} />
       </div>
-      <form className='comment-wrap' onClick={handleSubmit}>
+      <form className="comment-wrap" onClick={handleSubmit}>
         <input
-          type='text'
+          type="text"
           ref={commentRef}
-          placeholder='댓글을 입력하세요'
+          placeholder="댓글을 입력하세요"
           value={input}
           onChange={onChange}
         />
