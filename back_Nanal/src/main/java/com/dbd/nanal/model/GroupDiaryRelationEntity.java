@@ -15,8 +15,8 @@ public class GroupDiaryRelationEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)// auto_increment
-    @Column(name = "group_diary_idx", columnDefinition = "INT UNSIGNED")
-    private int group_diary_idx;
+    @Column(columnDefinition = "INT UNSIGNED")
+    private int groupDiaryIdx;
 
 
     @ManyToOne(fetch = FetchType.LAZY)
