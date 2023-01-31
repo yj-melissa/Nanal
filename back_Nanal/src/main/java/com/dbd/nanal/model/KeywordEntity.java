@@ -5,6 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @Entity
 @Table(name="keyword")
@@ -27,7 +28,4 @@ public class KeywordEntity {
         this.keyword=keyword;
     }
 
-    public void updateKeyword(String keyword){
-        this.keyword=keyword;
-    }
 }
