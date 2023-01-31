@@ -14,7 +14,7 @@ import javax.persistence.*;
 public class GroupUserRelationEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)// auto_increment
-    @Column(name = "group_user_idx")
+    @Column(columnDefinition = "INT UNSIGNED")
     private int groupUserIdx;
 
     @Column(name = "is_notice")
