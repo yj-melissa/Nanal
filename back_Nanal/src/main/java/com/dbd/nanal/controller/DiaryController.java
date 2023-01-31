@@ -89,7 +89,7 @@ public class DiaryController {
     @ApiOperation(value = "일기 내용 수정", notes =
             "일기 내용을 수정합니다.\n" +
                     "[Front] \n" +
-                    "{diaryIdx(int), content(String), creationDate(Date), picture(String), music(int), emo(String)}\n\n" +
+                    "{diaryIdx(int), content(String), creationDate(Date), userIdx(int)}\n\n" +
                     "[Back] \n" +
                     "ok(200)")
     @PutMapping("")
@@ -102,6 +102,17 @@ public class DiaryController {
             //picture
             //music
             DiaryResponseDTO diaryResponseDTO=diaryService.updateDiary(diary.toEntity());
+
+            int diaryIdx=diary.getDiaryIdx();
+
+            //delete diary-group
+            diaryService.deleteDiaryGroup(diaryIdx);
+
+            //save diary-group
+            for(int i=0; i<diary.getGroupIdxList().size(); i++){
+                GroupDiaryRelationDTO groupDiaryRelationDTO=new GroupDiaryRelationDTO(diaryIdx, diary.getGroupIdxList().get(i));
+                diaryService.saveDiaryGroup(groupDiaryRelationDTO);
+            }
 
             //save keyword
             diaryService.saveKeyword(diaryResponseDTO.getDiaryIdx(), keywordList);
