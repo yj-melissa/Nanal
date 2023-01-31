@@ -44,8 +44,8 @@ public class SecurityConfig{
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)    // 세션 미사용 설정
             .and()
             .authorizeHttpRequests()
-                .antMatchers(HttpMethod.GET, "/user/profile/**").hasRole("USER")
-                .antMatchers("/**").permitAll()
+            .antMatchers(HttpMethod.GET, "/user/profile/**").hasRole("USER")
+            .antMatchers("/**").permitAll()
 //            .antMatchers(
 //                "/user/signup",
 //                "/user/login",
@@ -72,7 +72,7 @@ public class SecurityConfig{
             "http://localhost:3000"));
         configuration.setAllowedMethods(Arrays.asList("*"));
 //        configuration.addAllowedOriginPattern("*");
-        configuration.setAllowedHeaders(Arrays.asList("Accept", "Accept-Language", "Content-Language", "Content-Type"));
+        configuration.setAllowedHeaders(Arrays.asList("Accept", "Accept-Language", "Authorization", "Content-Language", "Content-Type"));
         configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
@@ -91,3 +91,4 @@ public class SecurityConfig{
     }
 
 }
+
