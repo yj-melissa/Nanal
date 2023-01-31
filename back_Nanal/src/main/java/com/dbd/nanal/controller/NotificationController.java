@@ -4,6 +4,7 @@ import com.dbd.nanal.config.common.DefaultRes;
 import com.dbd.nanal.config.common.ResponseMessage;
 import com.dbd.nanal.dto.NotificationRequestDTO;
 import com.dbd.nanal.dto.NotificationResponseDTO;
+import com.dbd.nanal.model.UserEntity;
 import com.dbd.nanal.service.NoticeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -11,6 +12,7 @@ import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -50,11 +52,13 @@ public class NotificationController {
                     "{userIdx(int)} \n\n" +
                     "[Back] \n" +
                     "[{requestUserIdx(보낸사람), requestGroupIdx(그룹 번호), requestDiaryIdx(일기 번호), noticeType(알림종류), content(알림 내용, isChecked(읽음여부)}] ")
-    @GetMapping("/{userIdx}")
-    public ResponseEntity<?> getNotice(@ApiParam(value = "유저 id")@PathVariable("userIdx") int userIdx){
+//    @GetMapping("/{userIdx}")
+    @GetMapping("")
+//    public ResponseEntity<?> getNotice(@ApiParam(value = "유저 id")@PathVariable("userIdx") int userIdx){
+    public ResponseEntity<?> getNotice(@ApiParam(value = "유저 id") @AuthenticationPrincipal UserEntity userInfo){
         HashMap<String, Object> responseDTO = new HashMap<>();
         try{
-            List<NotificationResponseDTO> notificationResponseDTOList =noticeService.getNotice(userIdx);
+            List<NotificationResponseDTO> notificationResponseDTOList =noticeService.getNotice(userInfo.getUserIdx());
             responseDTO.put("responseMessage", ResponseMessage.NOTICE_GET_SUCCESS);
             responseDTO.put("diary", notificationResponseDTOList);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
