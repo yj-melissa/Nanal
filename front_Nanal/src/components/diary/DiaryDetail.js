@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios_api from "../../config/Axios";
+import Comment from "./Comment";
+import CommentList from "./CommentList";
 
 function DiaryDetail() {
   const location = useLocation();
@@ -12,7 +14,7 @@ function DiaryDetail() {
   // 일기 수정
   const [isEdit, setIsEdit] = useState(false);
   const toggleIsEdit = () => setIsEdit(!isEdit);
-
+  // 수정된 데이터
   const [localContent, setLocalContent] = useState(diaryDetail.content);
 
   const handleQuitEdit = () => {
@@ -26,7 +28,6 @@ function DiaryDetail() {
       .get(`diary/${location.state.diaryIdx}`)
       .then(({ data }) => {
         if (data.statusCode === 200) {
-          setDiaryDetail(null);
           if (data.data.responseMessage === "일기 조회 성공") {
             setDiaryDetail(data.data.diary); // 데이터는 response.data.data 안에 들어있음
           }
@@ -38,8 +39,8 @@ function DiaryDetail() {
       .catch(({ err }) => {
         console.log("일기 상세 페이지 불러오기 오류: ", err);
       });
-  }, [location.state.diaryIdx]);
-
+  }, []);
+  console.log(diaryDetail.diaryIdx);
   return (
     <div>
       <span>그림 들어갈 자리</span>
@@ -53,31 +54,19 @@ function DiaryDetail() {
             <button onClick={handleQuitEdit}>수정 취소</button>
             <button
               onClick={() => {
-                if (
-                  window.confirm(
-                    `${diaryDetail.diaryIdx}번째 일기를 수정하시겠습니까?`
-                  )
-                ) {
-                  axios_api
-                    .put(`diary`, {
-                      content: localContent,
-                      creationDate: diaryDetail.creationDate,
-                      diaryIdx: diaryDetail.diaryIdx,
-                      emo: "string",
-                      groupIdx: [1],
-                    })
-                    .then(({ data }) => {
-                      if (data.statusCode === 200) {
-                        if (data.data.responseMessage === "일기 수정 성공") {
-                          setDiaryDetail(data.data.diary);
-                          navigate("/", { replace: true });
-                        }
-                      } else {
-                        console.log(data.statusCode);
-                        console.log(data.data.responseMessage);
-                      }
-                    });
-                }
+                axios_api
+                  .put("diary", {
+                    userIdx: 1,
+                    groupIdxList: [1],
+                    diaryIdx: diaryDetail.diaryIdx,
+                    content: localContent,
+                  })
+                  .then((response) => {
+                    setDiaryDetail(response.data.data.diary);
+                    console.log(response.data.data.diary);
+                    setIsEdit(false);
+                  })
+                  .catch((err) => console.log(err));
               }}
             >
               수정 완료
@@ -126,7 +115,16 @@ function DiaryDetail() {
           <>{diaryDetail.content}</>
         )}
       </div>
-      <div>댓글</div>
+      {/* 댓글이 있으면 보여줘야 함 */}
+      <CommentList
+        diaryIdx={diaryDetail.diaryIdx}
+        groupIdx={diaryDetail.groupIdx}
+      />
+      {/* 유저 정보도 나중에 넘겨줘야 함 */}
+      <Comment
+        diaryIdx={diaryDetail.diaryIdx}
+        groupIdx={diaryDetail.groupIdx}
+      />
     </div>
   );
 }

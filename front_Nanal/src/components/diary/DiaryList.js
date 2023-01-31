@@ -3,7 +3,7 @@ import DiaryItem from "./DiaryItem";
 import axios_api from "../../config/Axios";
 
 function DiaryList({ curDate }) {
-  // 데이터 받기
+  // 일기 데이터 받기
   const [diaryList, setDiaryList] = useState([]);
 
   useEffect(() => {
@@ -21,8 +21,8 @@ function DiaryList({ curDate }) {
           console.log(data.data.responseMessage);
         }
       })
-      .catch(({ e }) => {
-        console.log("일기 리스트 불러오기 오류: ", e);
+      .catch(({ err }) => {
+        console.log("일기 리스트 불러오기 오류: ", err);
       });
   }, [curDate]);
 
