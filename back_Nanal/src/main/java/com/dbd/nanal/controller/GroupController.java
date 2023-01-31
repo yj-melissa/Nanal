@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 @Api(tags = {"Group관련 API"})
+@CrossOrigin
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("group")
@@ -157,14 +158,20 @@ public class GroupController {
                     "[Back] \n" +
                     "JSON\n" +
                     "{List<GroupDetailResponse>}")
-    @GetMapping("/list")
-    public ResponseEntity<?> getGroupList(@ApiParam(value = "유저 idx", required = true) @AuthenticationPrincipal UserEntity userInfo) {
+    @GetMapping("/list/{userIdx}")
+//    @GetMapping("/list")
+    public ResponseEntity<?> getGroupList(@ApiParam(value = "유저 idx", required = true) @PathVariable int userIdx) {
+//    public ResponseEntity<?> getGroupList(@ApiParam(value = "유저 idx", required = true) @AuthenticationPrincipal UserEntity userInfo) {
         HashMap<String, Object> responseDTO = new HashMap<>();
 
         try {
             // group_user_relation 테이블에서 userIdx가 포함된 group찾기
             List<HashMap<String, Object>> groupDetailResponseDTOS =
-                    groupService.getGroupList(userInfo.getUserIdx());
+                    groupService.getGroupList(userIdx);
+//            List<HashMap<String, Object>> groupDetailResponseDTOS =
+//                    groupService.getGroupList(userInfo.getUserIdx());
+
+            System.out.println("list : " + groupDetailResponseDTOS.size());
 
             if (groupDetailResponseDTOS != null) {
                 responseDTO.put("groupList", groupDetailResponseDTOS);

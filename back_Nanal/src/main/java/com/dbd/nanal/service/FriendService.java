@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class FriendService {
@@ -45,20 +44,23 @@ public class FriendService {
         return true;
     }
 
-
     // 친구 리스트
     public List<FriendDetailResponseDTO> findFriendList(int userIdx) {
 
         List<FriendEntity> friends = friendRepository.findAllFriends(userIdx);
+
         List<FriendDetailResponseDTO> friendDetailResponseDTOS = new ArrayList<>();
-        for(FriendEntity friend : friends){
+        for (FriendEntity friend : friends) {
 
             DiaryEntity diary = diaryRepository.findLatestDiary(friend.getUser_idx2().getUserIdx());
-//            DiaryEntity diary = diaryRepository.findLatestDiary(friend.getUser_idx2().getUserIdx(), (Pageable) PageRequest.of(0,1));
-            System.out.println("content : "+diary.getContent());
-            friendDetailResponseDTOS.add(new FriendDetailResponseDTO(friend.getUser_idx2().getUserProfile(), friend.getUser_idx2().getUserIdx(), diary.getContent()));
+            // 일기 하나도 없을 때
+            if (diary == null) {
+                friendDetailResponseDTOS.add(new FriendDetailResponseDTO(friend.getUser_idx2().getUserProfile(), friend.getUser_idx2().getUserIdx(), ""));
+            }
+            else {
+                friendDetailResponseDTOS.add(new FriendDetailResponseDTO(friend.getUser_idx2().getUserProfile(), friend.getUser_idx2().getUserIdx(), diary.getContent()));
+            }
         }
-
         return friendDetailResponseDTOS;
     }
 
@@ -67,7 +69,7 @@ public class FriendService {
     public FriendDetailResponseDTO findFriend(int userIdx) {
 
         UserProfileEntity userProfile = userProfileRepository.findFriend(userIdx);
-        return  new FriendDetailResponseDTO(userProfile, userIdx);
+        return new FriendDetailResponseDTO(userProfile, userIdx);
 
 
     }
