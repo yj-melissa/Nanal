@@ -48,7 +48,7 @@ function SignIn() {
         console.log(data.statusCode);
         if (data.statusCode === 200) {
           if (data.data.responseMessage === '로그인 성공') {
-            console.log(data.data.User);
+            console.log(data.data);
             // window.location.replace("/");
 
             onLoginSuccess(data);
