@@ -13,12 +13,18 @@ import java.sql.Timestamp;
 public class NoticeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="notice_idx")
+    @Column(name="notice_idx", columnDefinition = "INT UNSIGNED")
     private int noticeIdx;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch =FetchType.LAZY)
+    @ManyToOne(fetch =FetchType.LAZY)
     @JoinColumn(name="user_idx")
     private UserEntity user;
+
+    @Column(name="request_user_idx")
+    private int requestUserIdx;
+
+    @Column(name="request_group_idx")
+    private int requestGroupIdx;
 
     @Column(name="notice_type")
     private int noticeType;
@@ -36,8 +42,10 @@ public class NoticeEntity {
     private Timestamp expireDate;
 
     @Builder
-    public NoticeEntity(int noticeIdx, UserEntity user, int noticeType, String content, Boolean isChecked, Timestamp creationDate, Timestamp expireDate) {
+    public NoticeEntity(int noticeIdx, int requestUserIdx, int requestGroupIdx, UserEntity user, int noticeType, String content, Boolean isChecked, Timestamp creationDate, Timestamp expireDate) {
         this.noticeIdx=noticeIdx;
+        this.requestGroupIdx=requestGroupIdx;
+        this.requestUserIdx=requestUserIdx;
         this.user=user;
         this.noticeType=noticeType;
         this.content=content;

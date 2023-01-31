@@ -14,7 +14,7 @@ import java.sql.Timestamp;
 public class DiaryCommentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="comment_idx")
+    @Column(name="comment_idx", columnDefinition = "INT UNSIGNED")
     private int commentIdx;
 
     @ManyToOne(fetch = FetchType.LAZY)

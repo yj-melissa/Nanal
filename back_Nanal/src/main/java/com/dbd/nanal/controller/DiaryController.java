@@ -184,6 +184,26 @@ public class DiaryController {
         }
     }
 
+    @ApiOperation(value = "userIdx로 전체 일기 리스트 리턴", notes =
+            "일기를 삭제합니다.\n" +
+                    "[Front] \n" +
+                    "{userIdx(int)} \n\n" +
+                    "[Back] \n" +
+                    "[{diaryIdx(int), userIdx(int), creationDate(Date), content(String), picture(String), music(int), emo(String)}]")
+    @GetMapping("/list/user/{userIdx}")
+    public ResponseEntity<?> userDiaryList(@PathVariable("userIdx") int userIdx){
+        HashMap<String, Object> responseDTO = new HashMap<>();
+        try{
+            List<DiaryResponseDTO> diaryResponseDTOList=diaryService.userDiaryList(userIdx);
+            responseDTO.put("responseMessage", ResponseMessage.DIARY_LIST_FIND_SUCCESS);
+            responseDTO.put("diary", diaryResponseDTOList);
+            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+        }catch (Exception e){
+            responseDTO.put("responseMessage", ResponseMessage.DIARY_LIST_FIND_FAIL);
+            return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
+        }
+    }
+
     @ApiOperation(value = "일기 댓글 작성", notes =
             "일기 댓글을 작성합니다.\n" +
                     "[Front] \n" +

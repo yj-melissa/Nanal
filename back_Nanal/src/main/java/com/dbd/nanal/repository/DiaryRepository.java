@@ -1,6 +1,7 @@
 package com.dbd.nanal.repository;
 
 import com.dbd.nanal.model.DiaryEntity;
+import com.dbd.nanal.model.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -28,4 +29,6 @@ public interface DiaryRepository extends JpaRepository<DiaryEntity, Integer> {
 
     @Query("select a from DiaryEntity a where function('YEAR', a.creationDate)=:year and function('MONTH',a.creationDate)=:month and a.isDeleted=false")
     List<DiaryEntity> findMonthDiaryList(@Param("year")int year, @Param("month")int month);
+
+    List<DiaryEntity> findByUser(UserEntity user);
 }
