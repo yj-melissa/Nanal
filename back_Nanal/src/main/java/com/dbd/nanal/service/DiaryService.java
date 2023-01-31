@@ -98,6 +98,12 @@ public class DiaryService {
         groupDiaryRelationRepository.save(groupDiaryRelationEntity);
     }
 
+    // delete diary-group
+    public void deleteDiaryGroup(int diaryIdx){
+        List<GroupDiaryRelationEntity> groupDiaryRelationEntityList=groupDiaryRelationRepository.findByDiary(DiaryEntity.builder().diaryIdx(diaryIdx).build());
+        groupDiaryRelationRepository.deleteAll(groupDiaryRelationEntityList);
+    }
+
     // save diary comment
     public DiaryCommentResponseDTO saveComment(DiaryCommentRequestDTO diaryCommentRequestDTO){
         DiaryCommentEntity diaryCommentEntity=DiaryCommentEntity.builder().content(diaryCommentRequestDTO.getContent())
