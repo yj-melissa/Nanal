@@ -18,6 +18,8 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +30,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -92,7 +95,7 @@ public class UserController {
 
         HashMap<String, Object> responseDTO = new HashMap<>();
         responseDTO.put("responseMessage", ResponseMessage.CREATED_USER);
-        responseDTO.put("token", token);
+        responseDTO.put("accessToken", token);
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
 
@@ -104,19 +107,35 @@ public class UserController {
                     "JSON\n" +
                     "{accessToken(String), refreshToken(String)} ")
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody @Valid UserRequestDTO userRequestDTO) {
+    public ResponseEntity<?> login(@RequestBody @Valid UserRequestDTO userRequestDTO, HttpServletRequest request, HttpServletResponse response) {
         UserEntity user = userService.getByCredentials(
                 userRequestDTO.getUserId(),
                 userRequestDTO.getPassword(),
                 passwordEncoder);
 
         if(user != null) {
-            // 로그인 성공
+            // 로그인 성공 -> JWT 발급
             HashMap<String, String> token = createTokens(user);
 
             HashMap<String, Object> responseDTO = new HashMap<>();
             responseDTO.put("responseMessage", ResponseMessage.LOGIN_SUCCESS);
             responseDTO.put("token", token);
+
+            int expTime = 10;
+
+            // 쿠키생성
+//            Cookie accessTokenCookie = new Cookie("accessToken", token.get("accessToken"));
+//            accessTokenCookie.setMaxAge(expTime * 60);    // 초 단위
+//            accessTokenCookie.setPath("/");     // 모든 경로에서 접근 가능
+
+//            response.addCookie(accessTokenCookie);
+
+            Cookie refreshTokenCookie = new Cookie("refreshToken", token.get("refreshToken"));
+            refreshTokenCookie.setMaxAge(expTime * 60);    // 초 단위
+            refreshTokenCookie.setPath("/");     // 모든 경로에서 접근 가능
+
+            response.addCookie(refreshTokenCookie);
+
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
 
         } else {
@@ -174,7 +193,7 @@ public class UserController {
     }
 
 
-    // 테스트용 api
+    // 테스트용 api (Access Token 헤더로 받은 경우)
     @GetMapping("/test")
     public ResponseEntity<?> test(@ApiParam(value = "userIdx") @AuthenticationPrincipal UserEntity userInfo) {
 
@@ -184,6 +203,18 @@ public class UserController {
 
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
+
+    // 테스트용 api (Access Token 쿠키로 받은 경우)
+//    @GetMapping("/test")
+//    public ResponseEntity<?> test(@ApiParam(value = "userIdx") @CookieValue(name = "accessToken", required = false) String accessToken) {
+//
+//        HashMap<String, Object> responseDTO = new HashMap<>();
+//        String userId = jwtTokenProvider.getUserId(accessToken);
+//        responseDTO.put("userId", userId);
+//        responseDTO.put("responseMessage", ResponseMessage.SUCCESS);
+//
+//        return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+//    }
 
 
     @ApiOperation(value = "회원 정보 수정", notes =
@@ -293,9 +324,7 @@ public class UserController {
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
 
-
     // 중복확인
-
     @ApiOperation(value = "아이디 중복 확인", notes =
             "[Front] \n" +
                     "{userId(String)} \n\n" +

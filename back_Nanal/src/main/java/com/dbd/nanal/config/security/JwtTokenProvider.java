@@ -13,6 +13,7 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import java.util.Optional;
+import javax.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -65,6 +66,16 @@ public class JwtTokenProvider {
             .userIdx(userIdx)
             .refreshToken(jwtTokenDTO.getRefreshToken())
             .build();
+
+        // JWT 쿠키 생성
+//        Cookie accessTokenCookie = new Cookie("accessToken", accessToken);
+//        accessTokenCookie.setMaxAge(1 * 24 * 60 * 60);    // 1일 - 초단위
+//        accessTokenCookie.setPath("/");     // 모든 경로에서 접근 가능
+
+        Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
+        refreshTokenCookie.setMaxAge(14 * 24 * 60 * 60);    // 14일
+        refreshTokenCookie.setPath("/");
+
 
         if(jwtTokenRepository.existsByUserIdx(userIdx)) {
             // 기존 Refresh 토큰 삭제

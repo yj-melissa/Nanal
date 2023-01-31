@@ -44,20 +44,23 @@ public class SecurityConfig{
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)    // 세션 미사용 설정
             .and()
             .authorizeHttpRequests()
-            .antMatchers(HttpMethod.GET, "/user/profile/**").hasRole("USER")
-            .antMatchers("/**").permitAll()
-//            .antMatchers(
-//                "/user/signup",
-//                "/user/login",
-//                // Swagger 관련 URL
-//                "/v2/api-docs/**",
-//                "/swagger-resources/**",
-//                "/swagger-ui/**",
-//                "/webjars/**",
-//                "/swagger/**",
-//                "/sign-api/exception/**"
-//            ).permitAll()
-//            .antMatchers("/**").hasRole("USER")
+//                .antMatchers(HttpMethod.GET,
+//                    "/user/profile/**",
+//                    "/user/test",
+//                    "/group/**").hasRole("USER")
+//                .antMatchers("/**").permitAll()
+                .antMatchers(
+                    "/user/signup",
+                    "/user/login",
+                    // Swagger 관련 URL
+                    "/v2/api-docs/**",
+                    "/swagger-resources/**",
+                    "/swagger-ui/**",
+                    "/webjars/**",
+                    "/swagger/**",
+                    "/sign-api/exception/**"
+                ).permitAll()
+                .antMatchers("/**").hasRole("USER")
             .and()
             .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
 
