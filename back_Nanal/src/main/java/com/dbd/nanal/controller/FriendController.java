@@ -5,6 +5,7 @@ import com.dbd.nanal.config.common.DefaultRes;
 import com.dbd.nanal.config.common.ResponseMessage;
 import com.dbd.nanal.dto.FriendDetailResponseDTO;
 import com.dbd.nanal.dto.UserResponseDTO;
+import com.dbd.nanal.model.UserEntity;
 import com.dbd.nanal.service.FriendService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -12,6 +13,7 @@ import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -35,9 +37,10 @@ public class FriendController {
                     "JSON\n" +
                     "{} ")
     @PostMapping
-    public ResponseEntity<?> saveFriend(@ApiParam(value = "사용자 id", required = true) @RequestBody HashMap<String, Integer> map) {
+    public ResponseEntity<?> saveFriend(@ApiParam(value = "사용자 id", required = true) @RequestBody HashMap<String, Integer> map, @ApiParam(value = "유저 idx", required = true) @AuthenticationPrincipal UserEntity userInfo) {
 
         HashMap<String, Object> responseDTO = new HashMap<>();
+        map.put("userIdx", userInfo.getUserIdx());
 
         try {
             if (friendService.save(map)) {
@@ -62,12 +65,13 @@ public class FriendController {
                     "[Back] \n" +
                     "JSON\n" +
                     "friendList : [{userIdx(int), nickname(String), img(String), introduction(String)}, {..}] ")
-    @GetMapping("/{userIdx}")
-    public ResponseEntity<?> getFriend(@ApiParam(value = "사용자 idx", required = true) @PathVariable int userIdx) {
+    @GetMapping
+//    @GetMapping("/{userIdx}")
+    public ResponseEntity<?> getFriend(@ApiParam(value = "유저 idx", required = true) @AuthenticationPrincipal UserEntity userInfo) {
 
         HashMap<String, Object> responseDTO = new HashMap<>();
         try {
-            FriendDetailResponseDTO friend = friendService.findFriend(userIdx);
+            FriendDetailResponseDTO friend = friendService.findFriend(userInfo.getUserIdx());
 
             // 반환 성공
             if (friend != null) {
@@ -94,12 +98,14 @@ public class FriendController {
                     "[Back] \n" +
                     "JSON\n" +
                     "friendList : [{userIdx(int), nickname(String), img(String), introduction(String)}, {..}] ")
-    @GetMapping("list/{userIdx}")
-    public ResponseEntity<?> getFriendList(@ApiParam(value = "사용자 idx", required = true) @PathVariable int userIdx) {
+//    @GetMapping("list/{userIdx}")
+    @GetMapping("list")
+//    public ResponseEntity<?> getFriendList(@ApiParam(value = "사용자 idx", required = true) @PathVariable int userIdx) {
+    public ResponseEntity<?> getFriendList(@ApiParam(value = "유저 idx", required = true) @AuthenticationPrincipal UserEntity userInfo) {
 
         HashMap<String, Object> responseDTO = new HashMap<>();
         try {
-            List<FriendDetailResponseDTO> friendList = friendService.findFriendList(userIdx);
+            List<FriendDetailResponseDTO> friendList = friendService.findFriendList(userInfo.getUserIdx());
             // 반환 성공
             if (friendList.size() != 0) {
                 responseDTO.put("responseMessage", ResponseMessage.FRIEND_LIST_FIND_SUCCESS);
