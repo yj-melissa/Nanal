@@ -1,10 +1,15 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios_api from '../../config/Axios';
+import { setCookie } from '../../config/Cookie';
+import { useRecoilState } from 'recoil';
+import { checkingLogin } from '../../store/Atoms';
 
 function SignIn() {
   const [userId, setUserId] = useState('');
   const [userPw, setPw] = useState('');
+
+  const [check, setCheck] = useRecoilState(checkingLogin);
 
   const onChangeId = (e) => {
     setUserId(e.target.value);
@@ -14,28 +19,18 @@ function SignIn() {
     setPw(e.target.value);
   };
 
-  const JWT_EXPIRY_TIME = 24 * 3600 * 1000; // 만료 시간 (24시간 밀리 초로 표현)
+  function onLoginSuccess(data) {
+    setCheck(true);
 
-  const onLoginSuccess = (response) => {
-    const { accessToken } = response.data;
+    const { accessToken } = data;
 
-    // accessToken 설정
-    axios_api.defaults.headers.common[
-      'Authorization'
-    ] = `Bearer ${accessToken}`;
-
-    // accessToken 만료하기 1분 전에 로그인 연장
-    setTimeout(onSilentRefresh, JWT_EXPIRY_TIME - 60000);
-  };
-
-  const onSilentRefresh = () => {
-    axios_api
-      .post('/silent-refresh')
-      .then(onLoginSuccess)
-      .catch((error) => {
-        // ... 로그인 실패 처리
-      });
-  };
+    setCookie('accessToken', accessToken, {
+      path: '/',
+      secure: true,
+      // httpOnly: true,
+      sameSite: 'none',
+    });
+  }
 
   const SignIn = (e) => {
     e.preventDefault();
@@ -45,13 +40,11 @@ function SignIn() {
         password: userPw,
       })
       .then(({ data }) => {
-        console.log(data.statusCode);
         if (data.statusCode === 200) {
           if (data.data.responseMessage === '로그인 성공') {
-            console.log(data.data);
-            // window.location.replace("/");
-
-            onLoginSuccess(data);
+            // console.log(data.data.token);
+            onLoginSuccess(data.data.token);
+            window.location.replace('/');
           }
         } else {
           console.log(data.statusCode);
