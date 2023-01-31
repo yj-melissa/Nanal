@@ -12,7 +12,7 @@ import javax.persistence.*;
 public class KeywordEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="keyword_idx")
+    @Column(name="keyword_idx", columnDefinition = "INT UNSIGNED")
     private int keywordIdx;
 
     @ManyToOne(fetch = FetchType.LAZY)
