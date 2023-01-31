@@ -3,6 +3,7 @@ package com.dbd.nanal.controller;
 import com.dbd.nanal.config.common.DefaultRes;
 import com.dbd.nanal.config.common.ResponseMessage;
 import com.dbd.nanal.dto.*;
+import com.dbd.nanal.model.UserEntity;
 import com.dbd.nanal.service.DiaryService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -10,6 +11,7 @@ import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
@@ -201,11 +203,13 @@ public class DiaryController {
                     "{userIdx(int)} \n\n" +
                     "[Back] \n" +
                     "[{diaryIdx(int), userIdx(int), creationDate(Date), content(String), picture(String), music(int), emo(String)}]")
-    @GetMapping("/list/user/{userIdx}")
-    public ResponseEntity<?> userDiaryList(@PathVariable("userIdx") int userIdx){
+//    @GetMapping("/list/user/{userIdx}")
+    @GetMapping("/list/user")
+//    public ResponseEntity<?> userDiaryList(@PathVariable("userIdx") int userIdx){
+    public ResponseEntity<?> userDiaryList(@ApiParam("유저 idx") @AuthenticationPrincipal UserEntity userInfo){
         HashMap<String, Object> responseDTO = new HashMap<>();
         try{
-            List<DiaryResponseDTO> diaryResponseDTOList=diaryService.userDiaryList(userIdx);
+            List<DiaryResponseDTO> diaryResponseDTOList=diaryService.userDiaryList(userInfo.getUserIdx());
             responseDTO.put("responseMessage", ResponseMessage.DIARY_LIST_FIND_SUCCESS);
             responseDTO.put("diary", diaryResponseDTOList);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
@@ -286,11 +290,13 @@ public class DiaryController {
                     "{userIdx(int)} \n\n" +
                     "[Back] \n" +
                     "[{diaryIdx(int), userIdx(int), creationDate(Date), content(String), picture(String), music(int), emo(String)}]")
-    @GetMapping("/trashbin/{userIdx}")
-    public ResponseEntity<?> getTrashBinDiaryList(@PathVariable("userIdx") int userIdx){
+//    @GetMapping("/trashbin/{userIdx}")
+    @GetMapping("/trashbin")
+//    public ResponseEntity<?> getTrashBinDiaryList(@PathVariable("userIdx") int userIdx){
+    public ResponseEntity<?> getTrashBinDiaryList(@AuthenticationPrincipal UserEntity userInfo){
         HashMap<String, Object> responseDTO = new HashMap<>();
         try{
-            List<DiaryResponseDTO> diaryResponseDTOList=diaryService.getTrashDiary(userIdx);
+            List<DiaryResponseDTO> diaryResponseDTOList=diaryService.getTrashDiary(userInfo.getUserIdx());
             responseDTO.put("responseMessage", ResponseMessage.DIARY_LIST_FIND_SUCCESS);
             responseDTO.put("diary", diaryResponseDTOList);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
@@ -306,11 +312,13 @@ public class DiaryController {
                     "{userIdx(int)} \n\n" +
                     "[Back] \n" +
                     "ok(200)")
-    @DeleteMapping("/trashbin/{userIdx}")
-    public ResponseEntity<?> deleteTrashBin(@ApiParam(value="user id") @PathVariable("userIdx") int userIdx){
+//    @DeleteMapping("/trashbin/{userIdx}")
+    @DeleteMapping("/trashbin")
+//    public ResponseEntity<?> deleteTrashBin(@ApiParam(value="user id") @PathVariable("userIdx") int userIdx){
+    public ResponseEntity<?> deleteTrashBin(@ApiParam(value="user id") @AuthenticationPrincipal UserEntity userInfo){
         HashMap<String, Object> responseDTO = new HashMap<>();
         try{
-            diaryService.deleteTrashBin(userIdx);
+            diaryService.deleteTrashBin(userInfo.getUserIdx());
             responseDTO.put("responseMessage", ResponseMessage.DIARY_DELETE_SUCCESS);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }catch (Exception e){
@@ -355,10 +363,12 @@ public class DiaryController {
                     "{userIdx(int)} \n\n" +
                     "[Back] \n" +
                     "[{bookmarkIdx(int), diaryIdx(int), userIdx(int), creationDate(Date), content(String), picture(String), music(int), emo(String)}]")
-    @GetMapping("/bookmark/{userIdx}")
-    public ResponseEntity<?> getBookmarkList(@ApiParam(value = "유저 정보")@PathVariable("userIdx") int userIdx) {
+//    @GetMapping("/bookmark/{userIdx}")
+    @GetMapping("/bookmark")
+//    public ResponseEntity<?> getBookmarkList(@ApiParam(value = "유저 정보")@PathVariable("userIdx") int userIdx) {
+    public ResponseEntity<?> getBookmarkList(@ApiParam(value = "유저 정보") @AuthenticationPrincipal UserEntity userInfo) {
         HashMap<String, Object> responseDTO = new HashMap<>();
-        List<BookmarkResponseDTO> bookmarkList= diaryService.getBookmarkList(userIdx);
+        List<BookmarkResponseDTO> bookmarkList= diaryService.getBookmarkList(userInfo.getUserIdx());
         responseDTO.put("responseMessage", ResponseMessage.DIARY_BOOKMARK_LIST_SUCCESS);
         responseDTO.put("BookmarkList", bookmarkList);
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK); // temp
