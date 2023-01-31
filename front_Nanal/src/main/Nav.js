@@ -9,8 +9,8 @@ import downarrow from '../src_assets/img/down-arrow.png';
 import uparrow from '../src_assets/img/up-arrow.png';
 
 function Nav({ changeCalendaar }) {
-  // useNavigate == 뒤로가기나 앞으로가기를 위한 react 내장 객체
-  const navigate = useNavigate();
+  // // useNavigate == 뒤로가기나 앞으로가기를 위한 react 내장 객체
+  // const navigate = useNavigate();
   // Home 의 정보를 알려줄 로케이션 변수 정의.
   // location.pathname === '/' 이 경우 현재 위치가 홈이다.
   const location = useLocation();
@@ -71,15 +71,12 @@ function Nav({ changeCalendaar }) {
         <div className='flex items-center m-auto'>
           {location.pathname !== '/MyPage' ? (
             <Link to='/MyPage' className='w-6 h-7 m-3'>
-              <img
-                src={profile}
-                className='w-12 h-7'
-              />
+              <img src={profile} className='w-12 h-7' />
             </Link>
           ) : null}
-          <button>
+          <Link to='/Alarm'>
             <img src={bell} className='w-6 h-6 my-3 ml-3' />
-          </button>
+          </Link>
         </div>
       </nav>
       <hr className='mb-3 border-slate-500/75' />
