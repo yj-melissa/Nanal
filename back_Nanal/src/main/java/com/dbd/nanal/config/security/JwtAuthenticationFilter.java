@@ -27,6 +27,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response,
         @NotNull FilterChain filterChain) throws ServletException, IOException {
         try {
+            logger.info("request" + request);
             // 요청에서 토큰 가져오기
             String token = parseBearerToken(request);
             logger.info("doFilterInternal - 토큰 값 추출. token : " + token);
