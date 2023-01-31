@@ -16,7 +16,7 @@ public class FriendEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "friend_idx")
+    @Column(columnDefinition = "INT UNSIGNED")
     private int friend_idx;
 
     @ManyToOne
