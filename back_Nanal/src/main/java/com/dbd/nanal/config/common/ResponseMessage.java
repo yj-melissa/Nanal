@@ -39,7 +39,11 @@ public class ResponseMessage {
     public static final String DIARY_BOOKMARK_SAVE_SUCCESS="일기 북마크 저장 성공";
     public static final String DIARY_BOOKMARK_LIST_SUCCESS="일기 북마크 리스트 조회 성공";
     public static final String DIARY_BOOKMARK_DELETE_SUCCESS="일기 북마크 삭제 성공";
-
+    public static final String NOTICE_SAVE_SUCCESS="알림 저장 성공";
+    public static final String NOTICE_GET_SUCCESS="알림 조회 성공";
+    public static final String NOTICE_GET_FAIL="알림 조회 실패";
+    public static final String NOTICE_DELETE_SUCCESS="알림 삭제 성공";
+    public static final String NOTICE_DELETE_FAIL="알림 삭제 실패";
 
     // NULL
     public static final String INTERNAL_SERVER_ERROR = "서버 내부 에러";

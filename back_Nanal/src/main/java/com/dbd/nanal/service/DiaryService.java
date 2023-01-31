@@ -56,7 +56,7 @@ public class DiaryService {
     public DiaryResponseDTO updateDiary(DiaryEntity diary){
         DiaryEntity diaryEntity=diaryRepository.getReferenceById(diary.getDiaryIdx());
 
-        diaryEntity.setCreationDate(diary.getCreationDate());
+        diaryEntity.setCreationDate(diaryEntity.getCreationDate());
         diaryEntity.setContent(diary.getContent());
         diaryEntity.setPainting(diary.getPainting());
         diaryEntity.setMusic(diary.getMusic());
