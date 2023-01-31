@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Api(tags = {"Friend관련 API"})
+@CrossOrigin
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("friend")
@@ -29,7 +30,7 @@ public class FriendController {
             "userIdx의 친구로 등록합니다.\n" +
                     "[Front] \n" +
                     "JSON\n" +
-                    "{userIdx(int), userIdx(int)} \n\n" +
+                    "{userIdx(int), friendIdx(int)} \n\n" +
                     "[Back] \n" +
                     "JSON\n" +
                     "{} ")
@@ -89,7 +90,7 @@ public class FriendController {
             "userIdx의 친구 리스트를 조회합니다.\n" +
                     "[Front] \n" +
                     "JSON\n" +
-                    "{userIdx(int), friendIdx(int} \n\n" +
+                    "{userIdx(int)} \n\n" +
                     "[Back] \n" +
                     "JSON\n" +
                     "friendList : [{userIdx(int), nickname(String), img(String), introduction(String)}, {..}] ")
@@ -99,9 +100,8 @@ public class FriendController {
         HashMap<String, Object> responseDTO = new HashMap<>();
         try {
             List<FriendDetailResponseDTO> friendList = friendService.findFriendList(userIdx);
-
             // 반환 성공
-            if (friendList != null) {
+            if (friendList.size() != 0) {
                 responseDTO.put("responseMessage", ResponseMessage.FRIEND_LIST_FIND_SUCCESS);
                 responseDTO.put("friendList", friendList);
                 return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);

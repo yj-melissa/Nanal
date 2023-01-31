@@ -20,6 +20,7 @@ public class GroupDetailEntity {
 
     @Id // Primary key
     @GeneratedValue(strategy = GenerationType.IDENTITY)// auto_increment
+    @Column(columnDefinition = "INT UNSIGNED")
     private int groupIdx;
 
     @Column(name = "group_name", length = 30)
