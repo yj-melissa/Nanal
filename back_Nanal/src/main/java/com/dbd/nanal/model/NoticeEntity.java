@@ -26,6 +26,9 @@ public class NoticeEntity {
     @Column(name="request_group_idx")
     private int requestGroupIdx;
 
+    @Column(name="request_diary_idx")
+    private int requestDiaryIdx;
+
     @Column(name="notice_type")
     private int noticeType;
 
@@ -42,15 +45,15 @@ public class NoticeEntity {
     private Timestamp expireDate;
 
     @Builder
-    public NoticeEntity(int noticeIdx, int requestUserIdx, int requestGroupIdx, UserEntity user, int noticeType, String content, Boolean isChecked, Timestamp creationDate, Timestamp expireDate) {
+    public NoticeEntity(int noticeIdx, int requestUserIdx, int requestGroupIdx, int requestDiaryIdx, UserEntity user, int noticeType, String content, Boolean isChecked, Timestamp expireDate) {
         this.noticeIdx=noticeIdx;
         this.requestGroupIdx=requestGroupIdx;
         this.requestUserIdx=requestUserIdx;
+        this.requestDiaryIdx=requestDiaryIdx;
         this.user=user;
         this.noticeType=noticeType;
         this.content=content;
         this.isChecked=isChecked;
-        this.creationDate=creationDate;
         this.expireDate=expireDate;
     }
 }
