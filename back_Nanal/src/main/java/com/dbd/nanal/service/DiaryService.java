@@ -45,14 +45,23 @@ public class DiaryService {
         cal.add(Calendar.DATE, 30);
         Date date=cal.getTime();
 
-        diaryEntity.flagDiary(true, new Date(),date );
+        diaryEntity.setDeleted(true);
+        diaryEntity.setDeleteDate(new Date());
+        diaryEntity.setExpireDate(date);
+
         diaryRepository.save(diaryEntity);
     }
 
     // update diary
     public DiaryResponseDTO updateDiary(DiaryEntity diary){
         DiaryEntity diaryEntity=diaryRepository.getReferenceById(diary.getDiaryIdx());
-        diaryEntity.updateDiary(diary.getCreationDate(), diary.getContent(), diary.getPainting(), diary.getMusic(), diary.getEmo());
+
+        diaryEntity.setCreationDate(diary.getCreationDate());
+        diaryEntity.setContent(diary.getContent());
+        diaryEntity.setPainting(diary.getPainting());
+        diaryEntity.setMusic(diary.getMusic());
+        diaryEntity.setEmo(diary.getEmo());
+
         return new DiaryResponseDTO(diaryRepository.save(diaryEntity));
     }
 
@@ -96,7 +105,7 @@ public class DiaryService {
     // update diary comment
     public DiaryCommentResponseDTO updateComment(DiaryCommentRequestDTO diaryCommentRequestDTO){
         DiaryCommentEntity diaryCommentEntity=diaryCommentRepository.getReferenceById(diaryCommentRequestDTO.getCommentIdx());
-        diaryCommentEntity.updateComment(diaryCommentRequestDTO.getContent());
+        diaryCommentEntity.setContent(diaryCommentRequestDTO.getContent());
         return new DiaryCommentResponseDTO(diaryCommentRepository.save(diaryCommentEntity));
     }
 
@@ -127,7 +136,11 @@ public class DiaryService {
     // get back diary
     public DiaryResponseDTO reDiary(int diaryIdx){
         DiaryEntity diaryEntity=diaryRepository.getReferenceById(diaryIdx);
-        diaryEntity.flagDiary(false, null, null );
+
+        diaryEntity.setDeleted(false);
+        diaryEntity.setDeleteDate(null);
+        diaryEntity.setExpireDate(null);
+
         return new DiaryResponseDTO(diaryRepository.save(diaryEntity));
     }
 
@@ -157,7 +170,7 @@ public class DiaryService {
         // update keyword
         if(keywordEntityList.size()!=0){
             for(int i=0; i<keywordEntityList.size(); i++){
-                keywordEntityList.get(i).updateKeyword(keywords.get(i));
+                keywordEntityList.get(i).setKeyword(keywords.get(i));
                 keywordRepository.save(keywordEntityList.get(i));
             }
             return;

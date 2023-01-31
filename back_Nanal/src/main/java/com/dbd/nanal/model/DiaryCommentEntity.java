@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @Entity
 @Table(name="diary_comment")
@@ -49,7 +50,4 @@ public class DiaryCommentEntity {
         this.groupDetail=groupDetail;
     }
 
-    public void updateComment(String content){
-        this.content=content;
-    }
 }
