@@ -40,7 +40,7 @@ public class UserEntity implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_idx")
+    @Column(name = "user_idx", columnDefinition = "INT UNSIGNED")
     private int userIdx;
 
     @Column(name = "name")

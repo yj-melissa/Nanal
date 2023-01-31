@@ -12,7 +12,7 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -48,10 +48,10 @@ public class JwtTokenProvider {
 
     // 토큰 생성
     public JwtTokenDTO createJwtTokens(UserEntity user) {
-        String accessToken = createToken(user, accessTokenExpiryDate);
-        String refreshToken = createToken(user, refreshTokenExpiryDate);
         String userId = user.getUserId();
         int userIdx = user.getUserIdx();
+        String accessToken = createToken(userIdx, accessTokenExpiryDate);
+        String refreshToken = createToken(userIdx, refreshTokenExpiryDate);
 
         JwtTokenDTO jwtTokenDTO= JwtTokenDTO.builder()
             .accessToken(accessToken)
@@ -76,28 +76,27 @@ public class JwtTokenProvider {
         return jwtTokenDTO;
     }
 
-    // Refresh Token 검증
-    public String validateRefreshToken(JwtTokenEntity refreshToken, UserEntity user){
-
-        String token = refreshToken.getRefreshToken();
-        boolean isValidate = isValidateToken(token);
-
-        //refresh 토큰 만료 전이라면 새로운 access 토큰을 생성
-        if (isValidate) {
-            return createToken(user, accessTokenExpiryDate);
-        } else {
-            // 토큰 만료된 경우 재 로그인 필요
-            throw new JwtException(ResponseMessage.NOT_VALID_TOKEN);
-        }
-    }
+//    // Access Token 재발급
+//    public String reissueAccessToken(int userIdx, String token){
+//
+//        boolean isValidate = isValidateToken(token);
+//        Optional<JwtTokenEntity> refreshToken = jwtTokenRepository.findByRefreshToken(token);
+//
+//        //refresh 토큰 만료 전이고, 저장된 토큰과 일치하면 새 새로운 access 토큰을 생성
+//        if (isValidate && refreshToken.isPresent()) {
+//            return createToken(userIdx, accessTokenExpiryDate);
+//        } else {
+//            // 토큰 유효하지 않은 경우 재 로그인 필요
+//            throw new JwtException(ResponseMessage.NOT_VALID_TOKEN);
+//        }
+//    }
 
     // Token 발급
-    public String createToken(UserEntity user, Date expiryDate){
+    public String createToken(int userIdx, Date expiryDate){
         log.debug("[createToken] 토큰 생성 시작");
+        UserEntity user = userRepository.findByUserIdx(userIdx);
         Claims claims = Jwts.claims()
             .setSubject(user.getUserId());
-
-        claims.put("userIdx", user.getUserIdx());
         claims.put("roles", user.getRoles());
 
         String token = Jwts.builder()
@@ -112,7 +111,7 @@ public class JwtTokenProvider {
         return token;
     }
 
-    // JWT 토큰에서 인증 정보 조회
+    // JWT에서 인증 정보 조회
     public Authentication getAuthentication(String token) {
         log.debug("getAuthentication - 토큰 인증 정보 조회 시작");
 
@@ -139,10 +138,10 @@ public class JwtTokenProvider {
         return info;
     }
 
-    // Request의 Header에서 token 값을 가져옴. "Authorization" : "token값"
-    public String resolveToken(HttpServletRequest request) {
-        return request.getHeader("Authorization");
-    }
+//    // Request의 Header에서 token 값을 가져옴. "Authorization" : "token값"
+//    public String resolveToken(HttpServletRequest request) {
+//        return request.getHeader("Authorization");
+//    }
 
     // 토큰의 유효성 + 만료일자 확인
     public boolean isValidateToken (String token) {
@@ -160,4 +159,8 @@ public class JwtTokenProvider {
         }
     }
 
+
+    public void deleteRefreshToken(int userIdx) {
+        jwtTokenRepository.delete(jwtTokenRepository.findByUserIdx(userIdx));
+    }
 }
