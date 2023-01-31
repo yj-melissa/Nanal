@@ -71,7 +71,7 @@ public class UserEntity implements UserDetails {
 
     // 연결관계
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private UserProfileEntity userProfile;
 
     @OneToOne

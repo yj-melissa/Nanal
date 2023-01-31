@@ -17,6 +17,7 @@ import io.swagger.annotations.ApiParam;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -279,6 +280,16 @@ public class UserController {
         HashMap<String, Object> responseDTO = new HashMap<>();
         responseDTO.put("responseMessage", ResponseMessage.SUCCESS);
 
+        return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "유저 목록 반환")
+    @GetMapping("/userlist")
+    public ResponseEntity<?> getUserList() {
+        List<UserEntity> userList = userService.getUserList();
+        HashMap<String, Object> responseDTO = new HashMap<>();
+        responseDTO.put("responseMessage", ResponseMessage.SUCCESS);
+        responseDTO.put("userList", userList);
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
 
