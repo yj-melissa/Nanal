@@ -1,6 +1,7 @@
 package com.dbd.nanal.service;
 
 import com.dbd.nanal.dto.NotificationRequestDTO;
+import com.dbd.nanal.dto.NotificationResponseDTO;
 import com.dbd.nanal.model.NoticeEntity;
 import com.dbd.nanal.model.UserEntity;
 import com.dbd.nanal.repository.DiaryRepository;
@@ -10,6 +11,9 @@ import com.dbd.nanal.repository.UserProfileRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class NoticeService {
@@ -18,6 +22,8 @@ public class NoticeService {
     private final GroupRepository groupRepository;
     private final DiaryRepository diaryRepository;
 
+
+    //save notice
     public void saveNotice(NotificationRequestDTO notice){
         String str;
         String nickname=userProfileRepository.getReferenceById(notice.getRequest_user_idx()).getNickname();
@@ -42,5 +48,16 @@ public class NoticeService {
                 .content(str)
                 .build();
         noticeRepository.save(noticeEntity);
+    }
+
+    //get notice
+    public List<NotificationResponseDTO> getNotice(int userIdx){
+        List<NoticeEntity> noticeEntityList=noticeRepository.findByUser(UserEntity.builder().userIdx(userIdx).build());
+        return noticeEntityList.stream().map(x->new NotificationResponseDTO(x)).collect(Collectors.toList());
+    }
+
+    //delete notice
+    public void deleteNotice( int noticeIdx){
+        noticeRepository.deleteById(noticeIdx);
     }
 }

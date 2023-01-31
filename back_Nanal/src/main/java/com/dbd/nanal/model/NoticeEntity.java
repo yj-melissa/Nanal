@@ -45,7 +45,7 @@ public class NoticeEntity {
     private Timestamp expireDate;
 
     @Builder
-    public NoticeEntity(int noticeIdx, int requestUserIdx, int requestGroupIdx, int requestDiaryIdx, UserEntity user, int noticeType, String content, Boolean isChecked, Timestamp expireDate) {
+    public NoticeEntity(int noticeIdx, int requestUserIdx, int requestGroupIdx, int requestDiaryIdx, UserEntity user, int noticeType, String content, boolean isChecked, Timestamp expireDate) {
         this.noticeIdx=noticeIdx;
         this.requestGroupIdx=requestGroupIdx;
         this.requestUserIdx=requestUserIdx;
