@@ -81,16 +81,16 @@ public class UserEntity implements UserDetails {
     @OneToMany(mappedBy = "user")
     private List<GroupUserRelationEntity> groupUserRelations = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<NoticeEntity> notices = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<ScrapEntity> scraps = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<DiaryCommentEntity> diaryComments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<DiaryEntity> diaries = new ArrayList<>();
 
     // 스프링 시큐리티 UserDetails

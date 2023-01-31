@@ -11,7 +11,7 @@ import javax.persistence.*;
 public class EmotionEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="emotion_idx")
+    @Column(name="emotion_idx", columnDefinition = "INT UNSIGNED")
     private int emotionIdx;
 
     private String joy; // 기쁨

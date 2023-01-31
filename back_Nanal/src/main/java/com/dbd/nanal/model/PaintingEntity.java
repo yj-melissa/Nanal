@@ -17,7 +17,7 @@ import java.util.List;
 public class PaintingEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="picture_idx")
+    @Column(name="picture_idx", columnDefinition = "INT UNSIGNED")
     private int pictureIdx;
 
     @Column(name="picture_path")
