@@ -17,7 +17,7 @@ public class GroupTagEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)// auto_increment
-    @Column(name = "tag_idx")
+    @Column(columnDefinition = "INT UNSIGNED")
     private int tagIdx;
 
 
