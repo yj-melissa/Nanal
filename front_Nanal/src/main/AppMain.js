@@ -4,7 +4,6 @@ import BookCase from "../components/BookCase.js";
 import SignIn from "../components/account/SignIn.js";
 import SignUp from "../components/account/SignUp.js";
 import DiaryCreate from "../components/diary/DiaryCreate";
-import DiaryUpdate from "../components/diary/DiaryUpdate";
 import DiaryList from "../components/diary/DiaryList";
 import GroupCreate from "../components/group/GroupCreate";
 import GroupList from "../components/group/GroupList";
@@ -25,7 +24,6 @@ const AppMain = ({ isCalendaar }) => {
       <Route path="/SignUp" element={<SignUp />}></Route>
       <Route path="/SignIn" element={<SignIn />}></Route>
       <Route path="/Diary/Create" element={<DiaryCreate />}></Route>
-      <Route path="/Diary/Edit/:diaryIdx" element={<DiaryUpdate />}></Route>
       <Route path="/Diary/List" element={<DiaryList />}></Route>
       <Route path="/Diary/:diaryIdx" element={<DiaryDetail />}></Route>
       <Route path="/Group/Create" element={<GroupCreate />}></Route>
