@@ -40,8 +40,22 @@ function SignUp() {
       setIdMessage('4-12사이 대소문자 또는 숫자만 입력해 주세요!');
       setIsId(false);
     } else {
-      setIdMessage('사용가능한 아이디 입니다.');
-      setIsId(true);
+      axios_api
+        .get(`user/checkId/${currentId}`)
+        .then(({ data }) => {
+          if (data.statusCode === 200) {
+            if (data.data.responseMessage === '성공') {
+              setIdMessage('사용가능한 아이디 입니다.');
+              setIsId(true);
+            }
+          } else {
+            setIdMessage('중복된 아이디 입니다.');
+            setIsId(false);
+          }
+        })
+        .catch((error) => {
+          console.log('회원 가입 오류: ' + error);
+        });
     }
   };
 
@@ -93,8 +107,22 @@ function SignUp() {
       setNickNameMessage('닉네임은 2글자 이상 8글자 이하로 입력해주세요!');
       setIsNickName(false);
     } else {
-      setNickNameMessage('사용가능한 닉네임 입니다.');
-      setIsNickName(true);
+      axios_api
+        .get(`user/checkNickname/${currentName}`)
+        .then(({ data }) => {
+          if (data.statusCode === 200) {
+            if (data.data.responseMessage === '성공') {
+              setNickNameMessage('사용가능한 닉네임 입니다.');
+              setIsNickName(true);
+            }
+          } else {
+            setNickNameMessage('중복된 닉네임 입니다.');
+            setIsNickName(false);
+          }
+        })
+        .catch((error) => {
+          console.log('회원 가입 오류: ' + error);
+        });
     }
   };
 
