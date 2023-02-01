@@ -1,5 +1,6 @@
 package com.dbd.nanal.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
