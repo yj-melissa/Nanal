@@ -17,6 +17,6 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response,
         AccessDeniedException accessDeniedException) throws IOException, ServletException {
         log.info("CustomAccessDeniedHandler");
-        response.sendRedirect("/nanal/user/refresh");
+//        response.sendRedirect("http://localhost:8080/nanal/user/refresh");
     }
 }

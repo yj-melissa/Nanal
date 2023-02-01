@@ -21,6 +21,6 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
 //        body.put("responseMessage", ResponseMessage.UNAUTHROIZED_USER);
 //        body.put("status", HttpStatus.OK);
         log.info("CustomAuthenticationEntryPoint");
-        response.sendRedirect("/nanal/user/refresh");
+//        response.sendRedirect("/nanal/user/refresh");
     }
 }
