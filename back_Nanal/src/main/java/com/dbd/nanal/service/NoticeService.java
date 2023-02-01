@@ -2,12 +2,8 @@ package com.dbd.nanal.service;
 
 import com.dbd.nanal.dto.NotificationRequestDTO;
 import com.dbd.nanal.dto.NotificationResponseDTO;
-import com.dbd.nanal.model.NoticeEntity;
-import com.dbd.nanal.model.UserEntity;
-import com.dbd.nanal.repository.DiaryRepository;
-import com.dbd.nanal.repository.GroupRepository;
-import com.dbd.nanal.repository.NoticeRepository;
-import com.dbd.nanal.repository.UserProfileRepository;
+import com.dbd.nanal.model.*;
+import com.dbd.nanal.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,33 +17,64 @@ public class NoticeService {
     private final UserProfileRepository userProfileRepository;
     private final GroupRepository groupRepository;
     private final DiaryRepository diaryRepository;
+    private final GroupUserRelationRepository groupUserRelationRepository;
 
 
-    //save notice
-    public void saveNotice(NotificationRequestDTO notice){
-        String str;
+    //save group notice
+    public void saveGroupNotice(NotificationRequestDTO notice){
         String nickname=userProfileRepository.getReferenceById(notice.getRequest_user_idx()).getNickname();
         String groupName=groupRepository.getReferenceById(notice.getRequest_group_idx()).getGroupName();
-        String diaryDate="";
-        if(notice.getRequest_diary_idx()!=0){
-            diaryDate=diaryRepository.getReferenceById(notice.getRequest_diary_idx()).getCreationDate().toString();
+
+        String str=nickname+"님이 "+groupName+" 그룹 일기에 초대했습니다.";
+
+        for(int userIdx: notice.getUserIdx()){
+            NoticeEntity noticeEntity=NoticeEntity.builder()
+                    .user(UserEntity.builder().userIdx(userIdx).build())
+                    .requestUserIdx(notice.getRequest_user_idx())
+                    .requestGroupIdx(notice.getRequest_group_idx())
+                    .requestDiaryIdx(notice.getRequest_diary_idx())
+                    .content(str)
+                    .build();
+            noticeRepository.save(noticeEntity);
         }
-        // group 초대
-        if(notice.getNotice_type()==0){
-            str=nickname+"님이 "+groupName+" 그룹 일기에 초대했습니다.";
-        }
-        // 그룹 새 댓글
-        else{
-            str=nickname+"님이 "+groupName+"의 "+diaryDate+"일기에 새로운 댓글을 남겼습니다.";
-        }
+    }
+
+    //save comment notice
+    public void saveCommentNotice(NotificationRequestDTO notice){
+        String nickname=userProfileRepository.getReferenceById(notice.getRequest_user_idx()).getNickname();
+        String groupName=groupRepository.getReferenceById(notice.getRequest_group_idx()).getGroupName();
+        DiaryEntity diaryEntity=diaryRepository.getReferenceById(notice.getRequest_diary_idx());
+        String diaryDate=diaryEntity.getCreationDate().toString();
+
+        String str=nickname+"님이 "+groupName+"의 "+diaryDate+"일기에 새로운 댓글을 남겼습니다.";
+
         NoticeEntity noticeEntity=NoticeEntity.builder()
-                .user(UserEntity.builder().userIdx(notice.getUserIdx()).build())
+                .user(UserEntity.builder().userIdx(diaryEntity.getUser().getUserIdx()).build())
                 .requestUserIdx(notice.getRequest_user_idx())
                 .requestGroupIdx(notice.getRequest_group_idx())
                 .requestDiaryIdx(notice.getRequest_diary_idx())
                 .content(str)
                 .build();
         noticeRepository.save(noticeEntity);
+    }
+
+    // save diary notice
+    public void saveDiaryNotice(NotificationRequestDTO notice){
+        String nickname=userProfileRepository.getReferenceById(notice.getRequest_user_idx()).getNickname();
+        String groupName=groupRepository.getReferenceById(notice.getRequest_group_idx()).getGroupName();
+        List<GroupUserRelationEntity> groupUserRelationEntityList=groupUserRelationRepository.findByGroupDetail(GroupDetailEntity.builder().groupIdx(notice.getRequest_group_idx()).build());
+
+        String str=nickname+"님이 "+groupName+" 그룹에 "+" 새 글을 등록하였습니다.";
+        for(GroupUserRelationEntity groupUser: groupUserRelationEntityList){
+            NoticeEntity noticeEntity=NoticeEntity.builder()
+                    .user(UserEntity.builder().userIdx(groupUser.getUser().getUserIdx()).build())
+                    .requestUserIdx(notice.getRequest_user_idx())
+                    .requestGroupIdx(notice.getRequest_group_idx())
+                    .requestDiaryIdx(notice.getRequest_diary_idx())
+                    .content(str)
+                    .build();
+            noticeRepository.save(noticeEntity);
+        }
     }
 
     //get notice

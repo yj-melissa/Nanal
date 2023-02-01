@@ -27,18 +27,59 @@ public class NotificationController {
 
     private final NoticeService noticeService;
 
-    @ApiOperation(value = "알림 생성", notes =
-            "알림을 생성합니다.\n" +
+    @ApiOperation(value = "그룹 초대 알림 생성", notes =
+            "그룹 초대 알림을 생성합니다.\n" +
                     "[Front] \n" +
-                    "{userIdx(int), requestUserIdx(int), requestGroupIdx(int), noticeType(int)} \n\n" +
+                    "{userIdx(list), requestGroupIdx(int)} \n\n" +
                     "[Back] \n" +
                     "ok(200) ")
-    @PostMapping("")
-    public ResponseEntity<?> saveNotice(@ApiParam(value = "알림 정보")@RequestBody NotificationRequestDTO notice) {
+    @PostMapping("/group")
+    public ResponseEntity<?> saveGroupNotice(@ApiParam(value = "알림 정보")@RequestBody NotificationRequestDTO notice, @AuthenticationPrincipal UserEntity userInfo) {
         HashMap<String, Object> responseDTO = new HashMap<>();
         try{
-            noticeService.saveNotice(notice);
+            notice.setRequest_user_idx(userInfo.getUserIdx());
+            notice.setNotice_type(0);
+            noticeService.saveGroupNotice(notice);
+            responseDTO.put("responseMessage", ResponseMessage.NOTICE_SAVE_SUCCESS);
+            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>("서버오류", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
+    @ApiOperation(value = "댓글 알림 생성", notes =
+            "댓글 알림을 생성합니다.\n" +
+                    "[Front] \n" +
+                    "{userIdx([]), requestDiaryIdx(int) ,requestGroupIdx(int)} \n\n" +
+                    "[Back] \n" +
+                    "ok(200) ")
+    @PostMapping("/comment")
+    public ResponseEntity<?> saveCommentNotice(@ApiParam(value = "알림 정보")@RequestBody NotificationRequestDTO notice, @AuthenticationPrincipal UserEntity userInfo) {
+        HashMap<String, Object> responseDTO = new HashMap<>();
+        try{
+            notice.setRequest_user_idx(userInfo.getUserIdx());
+            notice.setNotice_type(1);
+            noticeService.saveCommentNotice(notice);
+            responseDTO.put("responseMessage", ResponseMessage.NOTICE_SAVE_SUCCESS);
+            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>("서버오류", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @ApiOperation(value = "새로운 일기 알림 생성", notes =
+            "새로운 일기 알림을 생성합니다.\n" +
+                    "[Front] \n" +
+                    "{userIdx([]), requestDiaryIdx(int) ,requestGroupIdx(int)} \n\n" +
+                    "[Back] \n" +
+                    "ok(200) ")
+    @PostMapping("/diary")
+    public ResponseEntity<?> saveDiaryNotice(@ApiParam(value = "알림 정보")@RequestBody NotificationRequestDTO notice, @AuthenticationPrincipal UserEntity userInfo) {
+        HashMap<String, Object> responseDTO = new HashMap<>();
+        try{
+            notice.setRequest_user_idx(userInfo.getUserIdx());
+            notice.setNotice_type(2);
+            noticeService.saveDiaryNotice(notice);
             responseDTO.put("responseMessage", ResponseMessage.NOTICE_SAVE_SUCCESS);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }catch (Exception e){
