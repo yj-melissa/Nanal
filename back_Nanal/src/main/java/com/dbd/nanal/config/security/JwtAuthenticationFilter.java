@@ -27,6 +27,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response,
         @NotNull FilterChain filterChain) throws ServletException, IOException {
         try {
+            logger.info("request" + request);
             // 요청에서 토큰 가져오기
             String token = parseBearerToken(request);
             logger.info("doFilterInternal - 토큰 값 추출. token : " + token);
@@ -56,4 +57,51 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
         return null;
     }
+
+
+//    // 토크 인증 테스트용 코드
+//    @Override
+//    protected void doFilterInternal(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response,
+//        @NotNull FilterChain filterChain) throws ServletException, IOException {
+//        try {
+//            logger.info("request" + request);
+//            // 요청에서 토큰 가져오기
+//            String token = parseBearerToken(request);
+//            logger.info("doFilterInternal - 토큰 값 추출. token : " + token);
+//
+//            // 토큰 검사
+//            if (token != null && jwtTokenProvider.isValidateToken(token)) {
+//                // userId 가져오기. 위조된 경우 예외처리됨
+//                Authentication authentication = jwtTokenProvider.getAuthentication(token);
+//
+//                // SecurityContextHolder에 등록
+//                SecurityContextHolder.getContext().setAuthentication(authentication);
+//                logger.info("doFilterInternal - 토큰 값 유효성 체크 완료");
+//            }
+//        } catch (Exception e) {
+//            logger.debug("user authentication 세팅 실패" + e);
+//        }
+//
+//        filterChain.doFilter(request, response);
+//    }
+//
+//    private String parseBearerToken(HttpServletRequest request) {
+//
+//        logger.info("request" + request);
+//        String bearerToken = null;
+//        // 요청에서 토큰 가져오기
+//        Cookie[] cookies = request.getCookies();
+//        for(Cookie cookie:cookies) {
+//            if(cookie.getName().equals("accessToken")) {
+//                bearerToken = cookie.getValue();
+//                logger.info("bearerToken :"+bearerToken);
+//            }
+//        }
+//
+//
+//        if (StringUtils.hasText(bearerToken)) {
+//            return bearerToken;
+//        }
+//        return null;
+//    }
 }

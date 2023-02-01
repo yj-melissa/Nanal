@@ -1,6 +1,5 @@
 package com.dbd.nanal.config.security;
 
-import com.dbd.nanal.config.common.ResponseMessage;
 import com.dbd.nanal.dto.JwtTokenDTO;
 import com.dbd.nanal.model.JwtTokenEntity;
 import com.dbd.nanal.model.UserEntity;
@@ -9,10 +8,10 @@ import com.dbd.nanal.repository.UserRepository;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import java.util.Optional;
+import javax.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -36,9 +35,13 @@ public class JwtTokenProvider {
     String secretKey = "daybydayNanalInhighseasorinlowseasImgonnabeyourfriendImgonnabeyourfriendInhighseasorinlowseasIllbebyyoursideIllbebyyourside";
 
 
-    // Access Token 기한 = 1일
+    // Access Token 기한 = 10분
+//    private final Date accessTokenExpiryDate = Date.from(
+//        Instant.now().plus(10, ChronoUnit.MINUTES)
+//    );
+
     private final Date accessTokenExpiryDate = Date.from(
-        Instant.now().plus(1, ChronoUnit.DAYS)
+        Instant.now().plus(30, ChronoUnit.SECONDS)
     );
 
     // Refresh Token 기한 = 2주
@@ -66,6 +69,16 @@ public class JwtTokenProvider {
             .refreshToken(jwtTokenDTO.getRefreshToken())
             .build();
 
+        // JWT 쿠키 생성
+//        Cookie accessTokenCookie = new Cookie("accessToken", accessToken);
+//        accessTokenCookie.setMaxAge(1 * 24 * 60 * 60);    // 1일 - 초단위
+//        accessTokenCookie.setPath("/");     // 모든 경로에서 접근 가능
+
+        Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
+        refreshTokenCookie.setMaxAge(14 * 24 * 60 * 60);    // 14일
+        refreshTokenCookie.setPath("/");
+
+
         if(jwtTokenRepository.existsByUserIdx(userIdx)) {
             // 기존 Refresh 토큰 삭제
             JwtTokenEntity originalToken = jwtTokenRepository.findByUserIdx(userIdx);
@@ -77,19 +90,19 @@ public class JwtTokenProvider {
     }
 
 //    // Access Token 재발급
-//    public String reissueAccessToken(int userIdx, String token){
-//
-//        boolean isValidate = isValidateToken(token);
-//        Optional<JwtTokenEntity> refreshToken = jwtTokenRepository.findByRefreshToken(token);
-//
-//        //refresh 토큰 만료 전이고, 저장된 토큰과 일치하면 새 새로운 access 토큰을 생성
-//        if (isValidate && refreshToken.isPresent()) {
-//            return createToken(userIdx, accessTokenExpiryDate);
-//        } else {
-//            // 토큰 유효하지 않은 경우 재 로그인 필요
-//            throw new JwtException(ResponseMessage.NOT_VALID_TOKEN);
-//        }
-//    }
+    public String updateAccessToken(String token){
+
+        boolean isValidate = isValidateToken(token);
+        Optional<JwtTokenEntity> refreshToken = jwtTokenRepository.findByRefreshToken(token);
+
+        //refresh 토큰 만료 전이고, 저장된 토큰과 일치하면 새 새로운 access 토큰을 생성
+        if (isValidate && refreshToken.isPresent()) {
+            return createToken(refreshToken.get().getUserIdx(), accessTokenExpiryDate);
+        } else {
+            // 토큰 유효하지 않은 경우 재로그인 필요
+            return null;
+        }
+    }
 
     // Token 발급
     public String createToken(int userIdx, Date expiryDate){
@@ -138,11 +151,6 @@ public class JwtTokenProvider {
         return info;
     }
 
-//    // Request의 Header에서 token 값을 가져옴. "Authorization" : "token값"
-//    public String resolveToken(HttpServletRequest request) {
-//        return request.getHeader("Authorization");
-//    }
-
     // 토큰의 유효성 + 만료일자 확인
     public boolean isValidateToken (String token) {
         log.debug("isValidateToken - 토큰 유효 체크 시작");
@@ -158,7 +166,6 @@ public class JwtTokenProvider {
             return false;
         }
     }
-
 
     public void deleteRefreshToken(int userIdx) {
         jwtTokenRepository.delete(jwtTokenRepository.findByUserIdx(userIdx));

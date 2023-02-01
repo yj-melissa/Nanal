@@ -65,6 +65,10 @@ public class UserService {
         return user != null && passwordEncoder.matches(password, user.getPassword());
     }
 
+    public List<UserEntity> getUserList() {
+        return userRepository.findAll();
+    }
+
     // 프로필 조회
 //    public HashMap<String, String> getByUserIdx(final int userIdx) {
 //        final UserEntity user = userRepository.findByUserIdx(userIdx);
@@ -83,12 +87,8 @@ public class UserService {
 //        }
 //        throw new NullPointerException();
 //    }
-
-    public List<UserEntity> getUserList() {
-        return userRepository.findAll();
-    }
-
-
+    
+    // 유저 프로필 조회
     public HashMap<String, String> getByUserIdx(final int userIdx) {
         final UserProfileEntity userProfile = userProfileRepository.findByProfileId(userIdx);
 
@@ -119,6 +119,7 @@ public class UserService {
         userProfileRepository.save(profile);
     }
 
+    // 비밀번호 수정
     public void updatePassword(int userIdx, String newPassword) {
         if (newPassword == null) {
             throw new NullPointerException("");
@@ -141,13 +142,13 @@ public class UserService {
         }
     }
 
+    // 비밀번호 확인용
     public Boolean isUserExist(String userId) {
         return userRepository.existsByUserId(userId);
     }
 
 
     // 중복 체크
-
     public void checkUserId(String userId) {
         Boolean result = userRepository.existsByUserId(userId);
         if (result) {
