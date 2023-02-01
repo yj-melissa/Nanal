@@ -22,6 +22,9 @@ function DiaryDetail() {
     setLocalContent(diaryDetail.content);
   };
 
+  // 북마크 여부 데이터
+  const [isBook, setIsBook] = useState(false);
+
   // 일기 상세 페이지 불러오기
   useEffect(() => {
     console.log(location.state.diaryIdx);
@@ -40,7 +43,32 @@ function DiaryDetail() {
   return (
     <div>
       <span>그림 들어갈 자리</span>
-      <span> | 북마크 기호</span>
+      <span
+        onClick={() => {
+          axios_api
+            .post('diary/bookmark', {
+              userIdx: 3,
+              diaryIdx: location.state.diaryIdx,
+            })
+            .then((response) => {
+              // 상태 변화 주기
+              setIsBook(!isBook);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }}
+      >
+        {isBook ? (
+          <>
+            <button>칠한 북마크</button>
+          </>
+        ) : (
+          <>
+            <button>빈 북마크</button>
+          </>
+        )}
+      </span>
       <div>작성자 프로필 사진 | </div>
       <span>user nickname | </span>
       <div>작성 시간 : {strDate}</div>
@@ -52,7 +80,7 @@ function DiaryDetail() {
               onClick={() => {
                 axios_api
                   .put('diary', {
-                    userIdx: 1,
+                    // userIdx: 1,
                     groupIdxList: [1],
                     diaryIdx: diaryDetail.diaryIdx,
                     content: localContent,
