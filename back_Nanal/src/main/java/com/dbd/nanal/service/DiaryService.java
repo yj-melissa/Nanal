@@ -106,6 +106,11 @@ public class DiaryService {
         groupDiaryRelationRepository.deleteAll(groupDiaryRelationEntityList);
     }
 
+    // return diary count
+    public Long getDiaryCount(int userIdx){
+        return diaryRepository.countByUser(UserEntity.builder().userIdx(userIdx).build());
+    }
+
     // save diary comment
     public DiaryCommentResponseDTO saveComment(DiaryCommentRequestDTO diaryCommentRequestDTO){
         DiaryCommentEntity diaryCommentEntity=DiaryCommentEntity.builder().content(diaryCommentRequestDTO.getContent())
@@ -176,6 +181,11 @@ public class DiaryService {
     // delete bookmark
     public void deleteBookmark(int bookmarkIdx){
         bookmarkRepository.deleteById(bookmarkIdx);
+    }
+
+    // return bookmark count
+    public Long getBookCount(int userIdx){
+        return bookmarkRepository.countByUser(UserEntity.builder().userIdx(userIdx).build());
     }
 
     // save keyword
