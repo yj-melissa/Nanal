@@ -1,12 +1,12 @@
-import { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import axios_api from "../../config/Axios";
-import Comment from "./Comment";
-import CommentList from "./CommentList";
+import { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import axios_api from '../../config/Axios';
+import Comment from './Comment';
 
 function DiaryDetail() {
   const location = useLocation();
   const [diaryDetail, setDiaryDetail] = useState({});
+
   // 작성 일자 표현법
   const strDate = new Date(diaryDetail.creationDate).toLocaleString();
   // 삭제 버튼 클릭 시 URL 이동
@@ -22,29 +22,53 @@ function DiaryDetail() {
     setLocalContent(diaryDetail.content);
   };
 
+  // 북마크 여부 데이터
+  const [isBook, setIsBook] = useState(false);
+
   // 일기 상세 페이지 불러오기
   useEffect(() => {
-    axios_api
-      .get(`diary/${location.state.diaryIdx}`)
-      .then(({ data }) => {
-        if (data.statusCode === 200) {
-          if (data.data.responseMessage === "일기 조회 성공") {
-            setDiaryDetail(data.data.diary); // 데이터는 response.data.data 안에 들어있음
-          }
-        } else {
-          console.log(data.statusCode);
-          console.log(data.data.responseMessage);
+    console.log(location.state.diaryIdx);
+    axios_api.get(`diary/${location.state.diaryIdx}`).then(({ data }) => {
+      if (data.statusCode === 200) {
+        if (data.data.responseMessage === '일기 조회 성공') {
+          setDiaryDetail(data.data.diary); // 데이터는 response.data.data 안에 들어있음
         }
-      })
-      .catch(({ err }) => {
-        console.log("일기 상세 페이지 불러오기 오류: ", err);
-      });
-  }, []);
-  console.log(diaryDetail.diaryIdx);
+      } else {
+        console.log(data.statusCode);
+        console.log(data.data.responseMessage);
+      }
+    });
+  }, [location.state.diaryIdx]);
+
   return (
     <div>
       <span>그림 들어갈 자리</span>
-      <span> | 북마크 기호</span>
+      <span
+        onClick={() => {
+          axios_api
+            .post('diary/bookmark', {
+              userIdx: 3,
+              diaryIdx: location.state.diaryIdx,
+            })
+            .then((response) => {
+              // 상태 변화 주기
+              setIsBook(!isBook);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }}
+      >
+        {isBook ? (
+          <>
+            <button>칠한 북마크</button>
+          </>
+        ) : (
+          <>
+            <button>빈 북마크</button>
+          </>
+        )}
+      </span>
       <div>작성자 프로필 사진 | </div>
       <span>user nickname | </span>
       <div>작성 시간 : {strDate}</div>
@@ -55,8 +79,8 @@ function DiaryDetail() {
             <button
               onClick={() => {
                 axios_api
-                  .put("diary", {
-                    userIdx: 1,
+                  .put('diary', {
+                    // userIdx: 1,
                     groupIdxList: [1],
                     diaryIdx: diaryDetail.diaryIdx,
                     content: localContent,
@@ -86,9 +110,9 @@ function DiaryDetail() {
                     .delete(`diary/${location.state.diaryIdx}`)
                     .then(({ data }) => {
                       if (data.statusCode === 200) {
-                        if (data.data.responseMessage === "일기 삭제 성공") {
+                        if (data.data.responseMessage === '일기 삭제 성공') {
                           setDiaryDetail(data.data.diary); // 데이터는 response.data.data 안에 들어있음
-                          navigate("/", { replace: true });
+                          navigate('/', { replace: true });
                         }
                       } else {
                         console.log(data.statusCode);
@@ -115,16 +139,12 @@ function DiaryDetail() {
           <>{diaryDetail.content}</>
         )}
       </div>
-      {/* 댓글이 있으면 보여줘야 함 */}
-      <CommentList
-        diaryIdx={diaryDetail.diaryIdx}
-        groupIdx={diaryDetail.groupIdx}
-      />
-      {/* 유저 정보도 나중에 넘겨줘야 함 */}
-      <Comment
-        diaryIdx={diaryDetail.diaryIdx}
-        groupIdx={diaryDetail.groupIdx}
-      />
+      <div>
+        <Comment
+          diaryIdx={diaryDetail.diaryIdx}
+          groupIdx={diaryDetail.groupIdx}
+        />
+      </div>
     </div>
   );
 }

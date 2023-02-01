@@ -8,11 +8,14 @@ import DiaryCreate from '../components/diary/DiaryCreate';
 import DiaryList from '../components/diary/DiaryList';
 import GroupCreate from '../components/group/GroupCreate';
 import GroupList from '../components/group/GroupList';
+import GroupDetail from '../components/group/GroupDetail';
 import FriendList from '../components/friend/FriendList';
 import MyPage from '../components/mypage/MyPage.js';
-import RecycleBin from '../components/another/recycleBin';
+import RecycleBin from '../components/another/RecycleBin';
 import NotFound from '../components/another/NotFound.js';
 import DiaryDetail from '../components/diary/DiaryDetail.js';
+import DiaryTotalList from '../components/diary/DiaryTotalList.js';
+import FavoriteList from '../components/diary/FavoriteList.js';
 
 const AppMain = ({ isCalendaar }) => {
   return (
@@ -27,9 +30,12 @@ const AppMain = ({ isCalendaar }) => {
       <Route path='/SignIn' element={<SignIn />}></Route>
       <Route path='/Diary/Create' element={<DiaryCreate />}></Route>
       <Route path='/Diary/List' element={<DiaryList />}></Route>
+      <Route path='/Diary/Total/List' element={<DiaryTotalList />}></Route>
+      <Route path='/Diary/Favorite/List' element={<FavoriteList />}></Route>
       <Route path='/Diary/:diaryIdx' element={<DiaryDetail />}></Route>
       <Route path='/Group/Create' element={<GroupCreate />}></Route>
       <Route path='/Group/List' element={<GroupList />}></Route>
+      <Route path='/Group/:groupIdx' element={<GroupDetail />}></Route>
       <Route path='/Friend/List' element={<FriendList />}></Route>
       <Route path='/MyPage' element={<MyPage />}></Route>
       <Route path='/RecycleBin' element={<RecycleBin />}></Route>
