@@ -21,7 +21,7 @@ function DiaryCreate() {
     onLogin();
     axios_api
       .post('diary', {
-        userIdx: 0,
+        // userIdx: 0,
         // 선택한 그룹은 배열 형태로 전달해야 함
         groupIdxList: [1],
         content: content,

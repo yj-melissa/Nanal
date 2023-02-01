@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import axios_api from '../../config/Axios';
 import Comment from './Comment';
 
@@ -24,6 +24,7 @@ function DiaryDetail() {
 
   // 일기 상세 페이지 불러오기
   useEffect(() => {
+    console.log(location.state.diaryIdx);
     axios_api.get(`diary/${location.state.diaryIdx}`).then(({ data }) => {
       if (data.statusCode === 200) {
         if (data.data.responseMessage === '일기 조회 성공') {
@@ -34,8 +35,8 @@ function DiaryDetail() {
         console.log(data.data.responseMessage);
       }
     });
-  }, []);
-  console.log(diaryDetail.diaryIdx);
+  }, [location.state.diaryIdx]);
+
   return (
     <div>
       <span>그림 들어갈 자리</span>
