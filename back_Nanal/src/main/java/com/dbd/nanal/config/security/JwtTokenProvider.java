@@ -36,13 +36,13 @@ public class JwtTokenProvider {
 
 
     // Access Token 기한 = 10분
-//    private final Date accessTokenExpiryDate = Date.from(
-//        Instant.now().plus(10, ChronoUnit.MINUTES)
-//    );
-
     private final Date accessTokenExpiryDate = Date.from(
-        Instant.now().plus(30, ChronoUnit.SECONDS)
+        Instant.now().plus(10, ChronoUnit.MINUTES)
     );
+
+//    private final Date accessTokenExpiryDate = Date.from(
+//        Instant.now().plus(30, ChronoUnit.SECONDS)
+//    );
 
     // Refresh Token 기한 = 2주
     private final Date refreshTokenExpiryDate = Date.from(
