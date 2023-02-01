@@ -2,10 +2,12 @@ package com.dbd.nanal.dto;
 
 import com.dbd.nanal.model.DiaryEntity;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Date;
 
 @Getter
+@Setter
 public class DiaryResponseDTO {
     private int diaryIdx;
     private int userIdx;
@@ -17,6 +19,7 @@ public class DiaryResponseDTO {
 //    private Date deleteDate;
 //    private Date expireDate;
     private String emo;
+    private boolean isBookmark;
 
 
     public DiaryResponseDTO(DiaryEntity diary) {
