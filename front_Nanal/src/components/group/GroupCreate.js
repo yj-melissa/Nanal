@@ -10,16 +10,46 @@ function GroupCreate() {
   const [friendList, setFriendList] = useState([]);
   const [includeFriend, setIncludeFriend] = useState([]);
 
+  // 그룹명
+  const [currentGMessage, setCurrentGMessage] = useState('');
+  const [isCurrentGName, setIsCurrentGName] = useState(false);
   const onChangeName = (e) => {
+    const currentName = e.target.value;
     setGroupName(e.target.value);
+
+    if (currentName.length >= 15) {
+      setCurrentGMessage('그룹명은 15글자 이하로 입력해주세요!');
+      setIsCurrentGName(false);
+    } else {
+      setCurrentGMessage('');
+      setIsCurrentGName(true);
+    }
   };
 
+  // 태그명 작성 부분
+  const [currentGTMessage, setCurrentGTMessage] = useState('');
+  const [isCurrentGTName, setIsCurrentGTName] = useState(false);
+  const onChangeTagNew = (e) => {
+    const currentName = e.target.value;
+    setTagNew(e.target.value);
+
+    if (currentName.length >= 10) {
+      setCurrentGTMessage('태그명은 10글자 이하로 입력해주세요!');
+      setIsCurrentGTName(false);
+    } else {
+      setCurrentGTMessage('');
+      setIsCurrentGTName(true);
+    }
+  };
+
+  // 그룹 태그 추가
   function addTag(e) {
     e.preventDefault();
+
     if (groupTag.length === 5) {
       alert('태그는 5개까지만 가능합니다.');
       setTagNew('');
-    } else if (tagNew !== '') {
+    } else if (tagNew !== '' && isCurrentGTName === true) {
       let tagList = [...groupTag];
       tagList.push(tagNew);
       setGroupTag(tagList);
@@ -27,10 +57,7 @@ function GroupCreate() {
     }
   }
 
-  const onChangeTagNew = (e) => {
-    setTagNew(e.target.value);
-  };
-
+  // 초대할 사용자 제거
   const onChangeTagRemove = (id) => {
     // tag.id 가 파라미터로 일치하지 않는 원소만 추출해서 새로운 배열을 만듬
     // = tag.id 가 id 인 것을 제거함
@@ -39,6 +66,7 @@ function GroupCreate() {
     setGroupTag(tagList);
   };
 
+  // 그룹 생성 요청 함수
   const GroupCreate = (e) => {
     e.preventDefault();
 
@@ -49,27 +77,54 @@ function GroupCreate() {
       }
     }
 
-    axios_api
-      .post('/group', {
-        groupName: groupName,
-        tags: groupTag,
-      })
-      .then(({ data }) => {
-        if (data.statusCode === 200) {
-          if (data.data.responseMessage === '그룹 생성 성공') {
-            // console.log(data.data.groupDetail);
-            // console.log(data.data.tags);
-            alert('그룹을 생성하였습니다!');
-            window.location.replace('/Group/List');
+    if (isCurrentGName === true) {
+      axios_api
+        .post('/group', {
+          groupName: groupName,
+          tags: groupTag,
+        })
+        .then(({ data }) => {
+          if (data.statusCode === 200) {
+            if (data.data.responseMessage === '그룹 생성 성공') {
+              // console.log(data.data.groupDetail);
+              // console.log(data.data.tags);
+
+              const groupidx = data.data.groupDetail.groupidx;
+
+              if (includeFriend.size !== 0) {
+                // 그룹에 추가할 친구가 있는 경우
+                axios_api
+                  .post('notification/group', {
+                    request_group_idx: groupidx,
+                    userIdx: includeFriend,
+                  })
+                  .then(({ data }) => {
+                    if (data.statusCode === 200) {
+                      if (data.data.responseMessage === '알림 저장 성공') {
+                        alert('그룹을 생성하였습니다!');
+                        window.location.replace('/Group/List');
+                      }
+                    } else {
+                      console.log('알림 저장 오류: ');
+                      console.log(data.statusCode);
+                      console.log(data.data.responseMessage);
+                    }
+                  })
+                  .catch(({ error }) => {
+                    console.log('알림 저장 성공: ' + error);
+                  });
+              }
+            }
+          } else {
+            console.log('그룹 생성 오류: ');
+            console.log(data.statusCode);
+            console.log(data.data.responseMessage);
           }
-        } else {
-          console.log(data.statusCode);
-          console.log(data.data.responseMessage);
-        }
-      })
-      .catch(({ error }) => {
-        console.log('그룹 생성 성공: ' + error);
-      });
+        })
+        .catch(({ error }) => {
+          console.log('그룹 생성 성공: ' + error);
+        });
+    }
   };
 
   useEffect(() => {
@@ -84,6 +139,7 @@ function GroupCreate() {
             setFriendList(data.data.friendList);
           }
         } else {
+          console.log('친구 리스트 조회 오류: ');
           console.log(data.statusCode);
           console.log(data.data.responseMessage);
         }
@@ -120,6 +176,7 @@ function GroupCreate() {
               className='font-bold m-0.5'
               onChange={onChangeName}
             ></input>
+            <p className='message'>{currentGMessage}</p>
           </div>
           <div id='group-tag-div'>
             <label htmlFor='group-tag'>그룹 태그 : (5개까지 가능)</label>
@@ -131,7 +188,7 @@ function GroupCreate() {
             />
             &nbsp;
             <button onClick={addTag}>추가</button>
-            <br />
+            <p className='message'>{currentGTMessage}</p>
             {groupTag.map((tagging, idx) => {
               return (
                 <button
@@ -171,10 +228,6 @@ function GroupCreate() {
       </div>
 
       <div id='group-Friend'>
-        {/* {friendList.map((friendItem) => (
-        <FriendItem key={friendItem.userIdx} item={friendItem} />
-      ))} */}
-
         <hr className='border-solid border-1 border-slate-800 w-80 my-5' />
 
         <p className='mb-0.5'>내 친구 목록 -----------------------</p>
@@ -197,3 +250,19 @@ function GroupCreate() {
 }
 
 export default GroupCreate;
+
+function getByteLength(strValue) {
+  let byte = 0;
+  for (var i = 0; i < strValue.length; i++) {
+    const code = strValue.charCodeAt(0);
+
+    if (code > 127) {
+      byte += 2;
+    } else if (code > 64 && code < 91) {
+      byte += 2;
+    } else {
+      byte += 1;
+    }
+  }
+  return byte;
+}
