@@ -1,6 +1,8 @@
 import { useRef, useState } from 'react';
+import { useNavigate } from 'react-router';
 import axios_api from '../../../config/Axios';
 import emptyProfile from '../../../src_assets/img/emptyProfile.png';
+import DiaryTotalList from '../../diary/DiaryTotalList';
 // create 시 or mount 시에 총 일기 개수, like 일기 개수 받아와야함.
 // username, userMassage, profile 받아와야함
 // 수정 시 파일 전송까지 ㅇㅇ
@@ -22,6 +24,9 @@ function ProfileForm() {
   // 이미지 업로드를 위한 곳.
   const [Image, setImage] = useState(emptyProfile);
   const fileInput = useRef(null);
+
+  const navigate = useNavigate();
+
   const onChange = (e) => {
     if (e.target.files[0]) {
       setImage(e.target.files[0]);
@@ -73,7 +78,10 @@ function ProfileForm() {
         <button>수정하기</button>
       </div>
       <div className='flex justify-around box-border h-24 w-80 p-4 bg-slate-300/50'>
-        <div className='grid content-evenly'>
+        <div
+          className='grid content-evenly'
+          onClick={() => navigate('/Diary/Total/List')}
+        >
           <p className='text-center'>총 작성한 일기</p>
           <p className='text-center font-bold'>777</p>
         </div>
