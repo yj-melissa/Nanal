@@ -90,6 +90,7 @@ public class UserService {
     
     // 유저 프로필 조회
     public HashMap<String, String> getByUserIdx(final int userIdx) {
+        log.info("userService getByUserIdx", userIdx);
         final UserProfileEntity userProfile = userProfileRepository.findByProfileId(userIdx);
 
         if (userProfile != null) {

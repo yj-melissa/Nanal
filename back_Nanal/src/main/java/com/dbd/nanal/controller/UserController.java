@@ -202,6 +202,8 @@ public class UserController {
                     "{img(String), nickname(String), introduction(String)} \n\n")
     @GetMapping("/profile")
     public ResponseEntity<?> getMyProfile(@AuthenticationPrincipal UserEntity userInfo) {
+        log.info("getMyProfile");
+        log.info("userInfo");
         HashMap<String, String> profile = userService.getByUserIdx(userInfo.getUserIdx());
         HashMap<String, Object> responseDTO = new HashMap<>();
         responseDTO.put("responseMessage", ResponseMessage.SUCCESS);

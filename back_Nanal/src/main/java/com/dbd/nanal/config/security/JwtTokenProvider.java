@@ -130,7 +130,7 @@ public class JwtTokenProvider {
 
         UserEntity userInfo = userRepository.findByUserId(this.getUserId(token));
 
-        log.debug("getAuthentication - 토큰 인증 정보 조회 완료, userInfo userName : {}", userInfo.getUsername());
+        log.debug("getAuthentication - 토큰 인증 정보 조회 완료, userInfo userId : {}", userInfo.getUserId());
 
         return new UsernamePasswordAuthenticationToken(userInfo, "", userInfo.getAuthorities());
     }
