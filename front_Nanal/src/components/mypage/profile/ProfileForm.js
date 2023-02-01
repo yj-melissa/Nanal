@@ -7,22 +7,49 @@ import DiaryTotalList from '../../diary/DiaryTotalList';
 // username, userMassage, profile 받아와야함
 // 수정 시 파일 전송까지 ㅇㅇ
 function ProfileForm() {
-  // const accessToken =
-  //   'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MiIsInVzZXJJZHgiOjIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpc3MiOiJuYW5hbCIsImlhdCI6MTY3NTA0ODIyOSwiZXhwIjoxNjc1MTM0NTU3fQ.2F4EjtoLvUugP4T06taB1QHh8izGwPS5UP2dk8-KjyogVwMb4nj-ELFn81edUAO9VEjoUtSzhn24iOWWHzh7IA';
-  // axios_api.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+  // user profile
+  const [userProfile, setUserProfile] = useState({
+    img: null,
+    introduction: null,
+    nickname: '',
+  });
 
-  // axios_api
-  //   .get('user/profile')
-  //   .then(({ data }) => {
-  //     if (data.statusCode === 200) {
-  //       if (data.data.ResponseMessage === '성공') {
-  //         console.log(data.data.Profile);
+  // diary information for user profile
+  const [difup, setDifup] = useState({
+    fromTheStartDay: null,
+    allDiary: null,
+    likeDiary: null,
+  });
+  // const accessToken =
+  //   'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MTIzIiwicm9sZXMiOlsiUk9MRV9VU0VSIl0sImlzcyI6Im5hbmFsIiwiaWF0IjoxNjc1MjI5NDk2LCJleHAiOjE2NzUzMTQ3NjN9.sRmpr3WLBnD2KGaSEX8pYcxaNj_e8sKeWH5d8V0O_YI4RdqTkn-NsE3VqOCRYb_ldDFRq4QRUGnhKy93q_D7sg';
+  // axios_api.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+  // // Mount 됐을 때 user
+  // useEffect(() => {
+  //   axios_api
+  //     .get('user/profile')
+  //     .then(({ data }) => {
+  //       console.log('profile====');
+  //       if (data.statusCode === 200) {
+  //         if (data.data.responseMessage === '성공') {
+  //           // console.log(data.data.profile);
+  //           setUserProfile(data.data.profile);
+  //         }
   //       }
-  //     }
-  //   })
-  //   .catch((err) => console.log(err));
-  // 이미지 업로드를 위한 곳.
-  const [Image, setImage] = useState(emptyProfile);
+  //     })
+  //     .catch((err) => console.log(err));
+
+  //   axios_api
+  //     .get('diary/list/user')
+  //     .then(({ data }) => {
+  //       console.log('user====');
+  //       console.log(data.data);
+  //     })
+  //     .catch((err) => console.log(err));
+  // }, []);
+
+  const [Image, setImage] = useState(
+    userProfile.img === null ? emptyProfile : Image
+  );
   const fileInput = useRef(null);
 
   const navigate = useNavigate();
@@ -44,6 +71,10 @@ function ProfileForm() {
     };
     reader.readAsDataURL(e.target.files[0]);
   };
+  // nickname
+
+  // message
+
   return (
     <div>
       <div className='flex justify-evenly mt-5'>
@@ -74,7 +105,7 @@ function ProfileForm() {
         <button>메시지 수정</button>
       </div>
       <div className='flex justify-betweendd'>
-        <p className='my-3 font-semibold'>일기 시작한지 N일째 입니다.</p>
+        <p className='my-3 font-semibold'>나날과 함께한 N일째 나날입니다.</p>
         <button>수정하기</button>
       </div>
       <div className='flex justify-around box-border h-24 w-80 p-4 bg-slate-300/50'>
