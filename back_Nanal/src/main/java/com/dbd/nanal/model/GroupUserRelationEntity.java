@@ -22,12 +22,12 @@ public class GroupUserRelationEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "group_idx")
-//    @JsonIgnore
+    @JsonIgnore
     private GroupDetailEntity groupDetail;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_idx")
-//    @JsonIgnore
+    @JsonIgnore
     private UserEntity user;
 
     @Builder

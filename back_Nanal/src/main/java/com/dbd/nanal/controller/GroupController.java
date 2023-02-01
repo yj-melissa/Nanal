@@ -39,7 +39,7 @@ public class GroupController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<?> save(@ApiParam(value = "그룹 생성 정보") @RequestBody GroupDetailRequestDTO groupDetailRequestDTO,  @AuthenticationPrincipal UserEntity userInfo) {
+    public ResponseEntity<?> save(@ApiParam(value = "그룹 생성 정보") @RequestBody GroupDetailRequestDTO groupDetailRequestDTO, @AuthenticationPrincipal UserEntity userInfo) {
         HashMap<String, Object> responseDTO = new HashMap<>();
 
         try {
@@ -169,7 +169,7 @@ public class GroupController {
     public ResponseEntity<?> getGroupList(@ApiParam(value = "유저 idx", required = true) @AuthenticationPrincipal UserEntity userInfo) {
         HashMap<String, Object> responseDTO = new HashMap<>();
 
-        System.out.println("userIdx : "+userInfo.getUserIdx()+"userName : "+userInfo.getUsername());
+        System.out.println("userIdx : " + userInfo.getUserIdx() + "userName : " + userInfo.getUsername());
 
         try {
             // group_user_relation 테이블에서 userIdx가 포함된 group찾기
@@ -263,7 +263,7 @@ public class GroupController {
 //
 //        HashMap<String, Object> responseDTO = new HashMap<>();
 //        try {
-//            List<FriendDetailResponseDTO> friendList = friendService.findFriendList(userInfo.getUserIdx());
+////            List<FriendDetailResponseDTO> friendList = groupService.findFriendList(userInfo.getUserIdx());
 //            // 반환 성공
 //            if (friendList.size() != 0) {
 //                responseDTO.put("responseMessage", ResponseMessage.FRIEND_LIST_FIND_SUCCESS);
