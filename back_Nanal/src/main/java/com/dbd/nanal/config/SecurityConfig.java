@@ -8,17 +8,17 @@ import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
+
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -44,20 +44,25 @@ public class SecurityConfig{
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)    // 세션 미사용 설정
             .and()
             .authorizeHttpRequests()
-            .antMatchers(HttpMethod.GET, "/user/profile/**").hasRole("USER")
-            .antMatchers("/**").permitAll()
-//            .antMatchers(
-//                "/user/signup",
-//                "/user/login",
-//                // Swagger 관련 URL
-//                "/v2/api-docs/**",
-//                "/swagger-resources/**",
-//                "/swagger-ui/**",
-//                "/webjars/**",
-//                "/swagger/**",
-//                "/sign-api/exception/**"
-//            ).permitAll()
-//            .antMatchers("/**").hasRole("USER")
+//                .antMatchers(HttpMethod.GET,
+//                    "/user/profile/**",
+//                    "/user/test",
+//                    "/group/**").hasRole("USER")
+//                .antMatchers("/**").permitAll()
+                .antMatchers(
+                    "/user/signup",
+                    "/user/login",
+                    "/user/refresh",    // accessToken 재발급
+                    "/user/redirectTest",
+                    // Swagger 관련 URL
+                    "/v2/api-docs/**",
+                    "/swagger-resources/**",
+                    "/swagger-ui/**",
+                    "/webjars/**",
+                    "/swagger/**",
+                    "/sign-api/exception/**"
+                ).permitAll()
+                .antMatchers("/**").hasRole("USER")
             .and()
             .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
 

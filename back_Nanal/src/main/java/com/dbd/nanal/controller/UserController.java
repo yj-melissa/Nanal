@@ -14,10 +14,12 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +30,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -59,7 +63,7 @@ public class UserController {
                     "JSON\n" +
                     "{accessToken(String), refreshToken(String)} ")
     @PostMapping("/signup")
-    public ResponseEntity<?> signUp(@RequestBody @Valid UserFormDTO userformDTO) {
+    public ResponseEntity<?> signUp(@RequestBody @Valid UserFormDTO userformDTO, HttpServletResponse response) {
         // 정보가 들어오지 않았을 때
         if (userformDTO
                 == null || userformDTO.getPassword() == null || userformDTO.getUserId() == null | userformDTO.getEmail() == null) {
@@ -92,7 +96,16 @@ public class UserController {
 
         HashMap<String, Object> responseDTO = new HashMap<>();
         responseDTO.put("responseMessage", ResponseMessage.CREATED_USER);
-        responseDTO.put("token", token);
+        responseDTO.put("accessToken", token.get("accessToken"));
+
+        int expTime = 10;
+
+        Cookie refreshTokenCookie = new Cookie("refreshToken", token.get("refreshToken"));
+        refreshTokenCookie.setMaxAge(expTime * 60);    // 초 단위
+        refreshTokenCookie.setPath("/");     // 모든 경로에서 접근 가능
+
+        response.addCookie(refreshTokenCookie);
+
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
 
@@ -104,19 +117,35 @@ public class UserController {
                     "JSON\n" +
                     "{accessToken(String), refreshToken(String)} ")
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody @Valid UserRequestDTO userRequestDTO) {
+    public ResponseEntity<?> login(@RequestBody @Valid UserRequestDTO userRequestDTO, HttpServletResponse response) {
         UserEntity user = userService.getByCredentials(
                 userRequestDTO.getUserId(),
                 userRequestDTO.getPassword(),
                 passwordEncoder);
 
         if(user != null) {
-            // 로그인 성공
+            // 로그인 성공 -> JWT 발급
             HashMap<String, String> token = createTokens(user);
 
             HashMap<String, Object> responseDTO = new HashMap<>();
             responseDTO.put("responseMessage", ResponseMessage.LOGIN_SUCCESS);
             responseDTO.put("token", token);
+
+            int expTime = 10;
+
+            // 쿠키생성
+//            Cookie accessTokenCookie = new Cookie("accessToken", token.get("accessToken"));
+//            accessTokenCookie.setMaxAge(expTime * 60);    // 초 단위
+//            accessTokenCookie.setPath("/");     // 모든 경로에서 접근 가능
+
+//            response.addCookie(accessTokenCookie);
+
+            Cookie refreshTokenCookie = new Cookie("refreshToken", token.get("refreshToken"));
+            refreshTokenCookie.setMaxAge(expTime * 60);    // 초 단위
+            refreshTokenCookie.setPath("/");     // 모든 경로에서 접근 가능
+
+            response.addCookie(refreshTokenCookie);
+
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
 
         } else {
@@ -130,7 +159,6 @@ public class UserController {
             } else {
                 // 해당 아이디 없음
                 responseDTO.put("responseMessage", ResponseMessage.NOT_FOUND_USER);
-
             }
             return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
         }
@@ -147,16 +175,24 @@ public class UserController {
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
 
-//    @ApiOperation(value = "Access Token 재발급")
-//    @PostMapping("/refresh")
-//    public ResponseEntity<?> reissueAccessToken(HttpServletResponse response) {
-//        String newToken = jwtTokenProvider.reissueAccessToken();
-//
-//        HashMap<String, Object> responseDTO = new HashMap<>();
-//        responseDTO.put("responseMessage", ResponseMessage.SUCCESS);
-//        responseDTO.put("accessToken", newToken);
-//        return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-//    }
+
+    @ApiOperation(value = "Access Token 재발급")
+    @GetMapping("/refresh")
+    public ResponseEntity<?> updateAccessToken(HttpServletResponse response, @CookieValue(name = "refreshToken", required = false) String refreshToken) throws IOException {
+        String newToken = jwtTokenProvider.updateAccessToken(refreshToken);
+
+        HashMap<String, Object> responseDTO = new HashMap<>();
+
+        if (newToken == null) {
+            response.sendRedirect("/nanal/user/login");
+            responseDTO.put("responseMessage", ResponseMessage.NOT_VALID_TOKEN);
+            return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+        }
+
+        responseDTO.put("responseMessage", ResponseMessage.SUCCESS);
+        responseDTO.put("accessToken", newToken);
+        return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+    }
 
     @ApiOperation(value = "내 프로필 조회", notes =
             "[Front] \n" +
@@ -173,8 +209,7 @@ public class UserController {
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
 
-
-    // 테스트용 api
+    // 테스트용 api (Access Token 헤더로 받은 경우)
     @GetMapping("/test")
     public ResponseEntity<?> test(@ApiParam(value = "userIdx") @AuthenticationPrincipal UserEntity userInfo) {
 
@@ -185,6 +220,17 @@ public class UserController {
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
 
+    // 테스트용 api (Access Token 쿠키로 받은 경우)
+//    @GetMapping("/test")
+//    public ResponseEntity<?> test(@ApiParam(value = "userIdx") @CookieValue(name = "accessToken", required = false) String accessToken) {
+//
+//        HashMap<String, Object> responseDTO = new HashMap<>();
+//        String userId = jwtTokenProvider.getUserId(accessToken);
+//        responseDTO.put("userId", userId);
+//        responseDTO.put("responseMessage", ResponseMessage.SUCCESS);
+//
+//        return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+//    }
 
     @ApiOperation(value = "회원 정보 수정", notes =
             "[Front] \n" +
@@ -199,6 +245,8 @@ public class UserController {
         }
 
         userService.updateProfile(userInfo.getUserIdx(), userRequest);
+        jwtTokenProvider.deleteRefreshToken(userInfo.getUserIdx());
+
         HashMap<String, Object> responseDTO = new HashMap<>();
         responseDTO.put("responseMessage", ResponseMessage.SUCCESS);
 
@@ -293,9 +341,7 @@ public class UserController {
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
 
-
     // 중복확인
-
     @ApiOperation(value = "아이디 중복 확인", notes =
             "[Front] \n" +
                     "{userId(String)} \n\n" +
