@@ -8,6 +8,7 @@ import DiaryCreate from '../components/diary/DiaryCreate';
 import DiaryList from '../components/diary/DiaryList';
 import GroupCreate from '../components/group/GroupCreate';
 import GroupList from '../components/group/GroupList';
+import GroupDetail from '../components/group/GroupDetail';
 import FriendList from '../components/friend/FriendList';
 import MyPage from '../components/mypage/MyPage.js';
 import RecycleBin from '../components/another/recycleBin';
@@ -30,6 +31,7 @@ const AppMain = ({ isCalendaar }) => {
       <Route path='/Diary/:diaryIdx' element={<DiaryDetail />}></Route>
       <Route path='/Group/Create' element={<GroupCreate />}></Route>
       <Route path='/Group/List' element={<GroupList />}></Route>
+      <Route path='/Group/:groupIdx' element={<GroupDetail />}></Route>
       <Route path='/Friend/List' element={<FriendList />}></Route>
       <Route path='/MyPage' element={<MyPage />}></Route>
       <Route path='/RecycleBin' element={<RecycleBin />}></Route>
