@@ -1,5 +1,6 @@
 package com.dbd.nanal.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -21,6 +22,7 @@ public class DiaryEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_idx")
+    @JsonIgnore
     private UserEntity user;
 
     @Column(name="creation_date")
@@ -48,15 +50,19 @@ public class DiaryEntity {
 
     private String emo;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "diary", cascade = CascadeType.REMOVE)
     private List<KeywordEntity> keywords=new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "diary", cascade = CascadeType.REMOVE)
     private List<DiaryCommentEntity> diariesComments=new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "diary", cascade = CascadeType.REMOVE)
     private List<ScrapEntity> scraps=new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "diary", cascade = CascadeType.REMOVE)
     private List<GroupDiaryRelationEntity> groupDiaryRelations=new ArrayList<>();
 

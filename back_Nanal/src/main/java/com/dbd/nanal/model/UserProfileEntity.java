@@ -27,7 +27,6 @@ import lombok.Setter;
 public class UserProfileEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(columnDefinition = "INT UNSIGNED")
     private int profileId;
 
     @MapsId
