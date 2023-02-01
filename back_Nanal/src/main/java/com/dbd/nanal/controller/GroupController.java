@@ -39,7 +39,7 @@ public class GroupController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<?> save(@ApiParam(value = "그룹 생성 정보") @RequestBody GroupDetailRequestDTO groupDetailRequestDTO) {
+    public ResponseEntity<?> save(@ApiParam(value = "그룹 생성 정보") @RequestBody GroupDetailRequestDTO groupDetailRequestDTO,  @AuthenticationPrincipal UserEntity userInfo) {
         HashMap<String, Object> responseDTO = new HashMap<>();
 
         try {
@@ -50,6 +50,10 @@ public class GroupController {
             if (groupDetailResponseDTO != null) {
                 // 반환값에서 idx(auto_increment) 가져와서 request의 idx 채우기
                 groupDetailRequestDTO.setGroupIdx(groupDetailResponseDTO.getGroupIdx());
+
+                // 사용자부터 그룹에 가입!
+                GroupUserRelationRequestDTO groupUserRelationRequestDTO = new GroupUserRelationRequestDTO(userInfo.getUserIdx(), groupDetailRequestDTO.getGroupIdx());
+                groupService.saveGroupUserRelation(groupUserRelationRequestDTO);
 
                 // 2. group_tag table save, 결과 responseDTO에 저장
                 List<GroupTagResponseDTO> groupTagResponseDTOS = groupService.saveGroupTags(groupDetailRequestDTO);
@@ -121,14 +125,14 @@ public class GroupController {
             "(초대 수락) userIdx 사용자가 groupIdx 그룹에 가입합니다.\n" +
                     "[Front] \n" +
                     "JSON\n" +
-                    "{groupIdx(int), userIdx(int)} \n\n" +
+                    "{groupIdx(int)} \n\n" +
                     "[Back] \n" +
                     "JSON\n" +
                     "{success(boolean)}")
 
     @PostMapping("/join")
 //    public ResponseEntity<?> groupJoin(@ApiParam(value = "groupIdx, userIdx", required = true) @RequestBody Map<String, Integer> requestDTO) {
-    public ResponseEntity<?> groupJoin(@ApiParam(value = "유저 idx", required = true) @AuthenticationPrincipal UserEntity userInfo, @RequestBody Map<String, Integer> requestDTO) {
+    public ResponseEntity<?> groupJoin(@ApiParam(value = "유저 idx", required = true) @AuthenticationPrincipal UserEntity userInfo, @ApiParam(value = "그룹 idx", required = true) @RequestBody Map<String, Integer> requestDTO) {
 
         HashMap<String, Object> responseDTO = new HashMap<>();
         try {
@@ -155,7 +159,7 @@ public class GroupController {
             "userIdx 사용자가 소속된 그룹 리스트를 조회합니다.\n" +
                     "[Front] \n" +
                     "JSON\n" +
-                    "{userIdx(int)} \n\n" +
+                    "{} \n\n" +
                     "[Back] \n" +
                     "JSON\n" +
                     "{List<GroupDetailResponse>}")
@@ -164,6 +168,8 @@ public class GroupController {
 //    public ResponseEntity<?> getGroupList(@ApiParam(value = "유저 idx", required = true) @PathVariable int userIdx) {
     public ResponseEntity<?> getGroupList(@ApiParam(value = "유저 idx", required = true) @AuthenticationPrincipal UserEntity userInfo) {
         HashMap<String, Object> responseDTO = new HashMap<>();
+
+        System.out.println("userIdx : "+userInfo.getUserIdx()+"userName : "+userInfo.getUsername());
 
         try {
             // group_user_relation 테이블에서 userIdx가 포함된 group찾기
@@ -225,7 +231,7 @@ public class GroupController {
             "userIdx 사용자가 groupIdx 그룹을 탈퇴합니다.\n" +
                     "[Front]\n" +
                     "JSON\n" +
-                    "{userIdx(int), groupIdx(int)}\n" +
+                    "{groupIdx(int)}\n" +
                     "\n" +
                     "[Back]\n" +
                     "JSON\n" +
@@ -240,4 +246,40 @@ public class GroupController {
         responseDTO.put("responseMessage", ResponseMessage.GROUP_USER_DELETE_SUCCESS);
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
+
+
+//    @ApiOperation(value = "그룹 유저 리스트 조회", notes =
+//            "userIdx의 친구 리스트를 조회합니다.\n" +
+//                    "[Front] \n" +
+//                    "JSON\n" +
+//                    "{groupIdx(int)} \n\n" +
+//                    "[Back] \n" +
+//                    "JSON\n" +
+//                    "groupUserList : [{userIdx(int), nickname(String), img(String), introduction(String)}, {..}] ")
+////    @GetMapping("list/{userIdx}")
+//    @GetMapping("list/{groupIdx}")
+////    public ResponseEntity<?> getFriendList(@ApiParam(value = "사용자 idx", required = true) @PathVariable int userIdx) {
+//    public ResponseEntity<?> getFriendList(@ApiParam(value = "유저 idx", required = true) @AuthenticationPrincipal UserEntity userInfo, @ApiParam(value = "그룹 idx", required = true) @PathVariable int groupIdx) {
+//
+//        HashMap<String, Object> responseDTO = new HashMap<>();
+//        try {
+//            List<FriendDetailResponseDTO> friendList = friendService.findFriendList(userInfo.getUserIdx());
+//            // 반환 성공
+//            if (friendList.size() != 0) {
+//                responseDTO.put("responseMessage", ResponseMessage.FRIEND_LIST_FIND_SUCCESS);
+//                responseDTO.put("friendList", friendList);
+//                return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+//            } else {
+//                responseDTO.put("responseMessage", ResponseMessage.FRIEND_LIST_FIND_FAIL);
+//                return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
+//            }
+//        }
+//        // Exception 발생
+//        catch (Exception e) {
+//            responseDTO.put("responseMessage", ResponseMessage.EXCEPTION);
+//            return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
+//        }
+//
+//    }
+
 }

@@ -61,7 +61,7 @@ public class FriendController {
             "userIdx의 프로필을 조회합니다.\n" +
                     "[Front] \n" +
                     "JSON\n" +
-                    "{userIdx(int)} \n\n" +
+                    "{} \n\n" +
                     "[Back] \n" +
                     "JSON\n" +
                     "friendList : [{userIdx(int), nickname(String), img(String), introduction(String)}, {..}] ")
@@ -123,6 +123,7 @@ public class FriendController {
         }
 
     }
+
 
 
 
