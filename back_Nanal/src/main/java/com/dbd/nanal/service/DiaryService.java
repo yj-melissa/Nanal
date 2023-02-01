@@ -72,14 +72,16 @@ public class DiaryService {
     }
 
     // get date diary list
-    public List<DiaryResponseDTO> getDateDiaryList(Date findDate){
-        List<DiaryEntity> diaryEntityList=diaryRepository.findDateDiaryList(findDate);
+    public List<DiaryResponseDTO> getDateDiaryList(String findDate, int userIdx){
+//    public List<DiaryResponseDTO> getDateDiaryList(Date findDate){
+//        List<DiaryEntity> diaryEntityList=diaryRepository.findDateDiaryList(findDate);
+        List<DiaryEntity> diaryEntityList=diaryRepository.findDateDiaryList(Integer.parseInt(findDate.substring(0,4)), Integer.parseInt(findDate.substring(5,7)), Integer.parseInt(findDate.substring(8,10)), userIdx);
         return diaryEntityList.stream().map(x->new DiaryResponseDTO(x)).collect(Collectors.toList());
     }
 
     // get Month diary list
-    public List<DiaryResponseDTO> getMonthDiaryList(String findDate){
-        List<DiaryEntity> diaryEntityList=diaryRepository.findMonthDiaryList(Integer.parseInt(findDate.substring(0,4)), Integer.parseInt(findDate.substring(5,7)));
+    public List<DiaryResponseDTO> getMonthDiaryList(String findDate, int userIdx){
+        List<DiaryEntity> diaryEntityList=diaryRepository.findMonthDiaryList(Integer.parseInt(findDate.substring(0,4)), Integer.parseInt(findDate.substring(5,7)), userIdx);
         return diaryEntityList.stream().map(x->new DiaryResponseDTO(x)).collect(Collectors.toList());
     }
 

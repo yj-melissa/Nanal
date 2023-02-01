@@ -29,18 +29,19 @@ public class DiaryController {
     @ApiOperation(value = "일기 생성", notes =
             "일기를 생성합니다.\n" +
                     "[Front] \n" +
-                    "{userIdx(int), creationDate(Date), groupIdx(List<Integer>)} \n\n" +
+                    "{content(String), groupIdx(List<Integer>)} \n\n" +
                     "[Back] \n" +
                     "{diaryIdx(int), userIdx(int), creationDate(Date), content(String), picture(String), music(int), emo(String)} ")
     @PostMapping("")
-    public ResponseEntity<?> writeDiary(@ApiParam(value = "일기 정보")@RequestBody DiaryRequestDTO diary) {
+    public ResponseEntity<?> writeDiary(@ApiParam(value = "일기 정보")@RequestBody DiaryRequestDTO diary, @AuthenticationPrincipal UserEntity userInfo) {
         HashMap<String, Object> responseDTO = new HashMap<>();
         try{
             //diary keyword analyze
             List<String> keywordList=new ArrayList<>();
             //picture
             //music
-
+//            System.out.println("controller: "+diary.toString()+" "+userInfo.toString());
+            diary.setUserIdx(userInfo.getUserIdx());
             //save diary
             DiaryResponseDTO diaryResponseDTO=diaryService.save(diary);
             int diaryIdx=diaryResponseDTO.getDiaryIdx();
@@ -174,19 +175,20 @@ public class DiaryController {
                     "[Back] \n" +
                     "[{diaryIdx(int), userIdx(int), creationDate(Date), content(String), picture(String), music(int), emo(String)}]")
     @GetMapping("/list/date/{date}")
-    public ResponseEntity<?> DiaryList(@PathVariable("date") String date){
+    public ResponseEntity<?> DiaryList(@PathVariable("date") String date, @AuthenticationPrincipal UserEntity userInfo){
         HashMap<String, Object> responseDTO = new HashMap<>();
         try{
             List<DiaryResponseDTO> diaryResponseDTOList;
             // yyyy-mm-00
             if((date.split("-")[2]).equals("00")) {
                 String findDate=date.substring(0,7);
-                diaryResponseDTOList = diaryService.getMonthDiaryList(findDate);
+                diaryResponseDTOList = diaryService.getMonthDiaryList(findDate, userInfo.getUserIdx());
             }// yyyy-mm-dd
             else {
-                SimpleDateFormat formatter=new SimpleDateFormat("yyyy-mm-dd");
-                Date findDate=formatter.parse(date);
-                diaryResponseDTOList = diaryService.getDateDiaryList(findDate);
+//                SimpleDateFormat formatter=new SimpleDateFormat("yyyy-mm-dd");
+//                Date findDate=formatter.parse(date);
+//                diaryResponseDTOList = diaryService.getDateDiaryList(findDate);
+                diaryResponseDTOList = diaryService.getDateDiaryList(date, userInfo.getUserIdx());
             }
             responseDTO.put("responseMessage", ResponseMessage.DIARY_LIST_FIND_SUCCESS);
             responseDTO.put("diary", diaryResponseDTOList);
@@ -222,12 +224,13 @@ public class DiaryController {
     @ApiOperation(value = "일기 댓글 작성", notes =
             "일기 댓글을 작성합니다.\n" +
                     "[Front] \n" +
-                    "{diaryIdx(int), userIdx(int), groupIdx(int), content(String)} \n\n" +
+                    "{userIdx(0), diaryIdx(int), groupIdx(int), content(String)} \n\n" +
                     "[Back] \n" +
                     "ok(200)")
     @PostMapping("/comment")
-    public ResponseEntity<?> writeComment(@ApiParam(value = "댓글 정보") @RequestBody DiaryCommentRequestDTO diaryCommentRequestDTO) {
+    public ResponseEntity<?> writeComment(@ApiParam(value = "댓글 정보") @RequestBody DiaryCommentRequestDTO diaryCommentRequestDTO, @AuthenticationPrincipal UserEntity userInfo) {
         HashMap<String, Object> responseDTO = new HashMap<>();
+        diaryCommentRequestDTO.setUserIdx(userInfo.getUserIdx());
         DiaryCommentResponseDTO diaryCommentResponseDTO=diaryService.saveComment(diaryCommentRequestDTO);
         responseDTO.put("responseMessage", ResponseMessage.DIARY_COMMENT_SAVE_SUCCESS);
         responseDTO.put("diaryComment", diaryCommentResponseDTO);
