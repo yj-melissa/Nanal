@@ -74,10 +74,11 @@ public class DiaryController {
     public ResponseEntity<?> getDiary(@ApiParam(value = "일기 id")@PathVariable("diaryIdx") int diaryIdx, @AuthenticationPrincipal UserEntity userInfo){
         HashMap<String, Object> responseDTO = new HashMap<>();
         try{
-            DiaryResponseDTO diaryResponseDTO=diaryService.getDiary(diaryIdx, userInfo.getUserIdx());
+            DiaryResponseDTO diaryResponseDTO=diaryService.getDiary(diaryIdx);
             if(diaryResponseDTO!=null) {
                 responseDTO.put("responseMessage", ResponseMessage.DIARY_GET_SUCCESS);
                 responseDTO.put("diary", diaryResponseDTO);
+                responseDTO.put("isBookmark", diaryService.isBookmark(diaryIdx, userInfo.getUserIdx()));
                 return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
             }else{
                 responseDTO.put("responseMessage", ResponseMessage.DIARY_GET_FAIL);
