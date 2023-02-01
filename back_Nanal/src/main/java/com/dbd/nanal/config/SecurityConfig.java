@@ -44,8 +44,8 @@ public class SecurityConfig{
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)    // 세션 미사용 설정
             .and()
             .authorizeHttpRequests()
-//                .antMatchers(HttpMethod.GET,
-//                    "/user/profile/**",
+//                .antMatchers(
+//                    "/user/profile",
 //                    "/user/test",
 //                    "/group/**").hasRole("USER")
 //                .antMatchers("/**").permitAll()
@@ -64,7 +64,8 @@ public class SecurityConfig{
                 ).permitAll()
                 .antMatchers("/**").hasRole("USER")
             .and()
-            .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
+            .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
+                UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -75,6 +76,7 @@ public class SecurityConfig{
         configuration.setAllowedOrigins(Arrays.asList(
             "http://192.168.100.94:3000",
             "http://192.168.100.204:3000",
+            "http://192.168.100.206:3000:",
             "http://localhost:3000"));
         configuration.setAllowedMethods(Arrays.asList("*"));
 //        configuration.addAllowedOriginPattern("*");
