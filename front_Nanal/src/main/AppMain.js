@@ -10,7 +10,7 @@ import GroupCreate from '../components/group/GroupCreate';
 import GroupList from '../components/group/GroupList';
 import FriendList from '../components/friend/FriendList';
 import MyPage from '../components/mypage/MyPage.js';
-import RecycleBin from '../components/another/recycleBin';
+import RecycleBin from '../components/another/RecycleBin';
 import NotFound from '../components/another/NotFound.js';
 import DiaryDetail from '../components/diary/DiaryDetail.js';
 
