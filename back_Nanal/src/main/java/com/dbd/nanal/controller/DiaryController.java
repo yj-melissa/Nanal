@@ -71,13 +71,14 @@ public class DiaryController {
                     "{diaryIdx(int), userIdx(int), creationDate(Date), content(String), picture(String), music(int), emo(String)} ")
     @GetMapping("/{diaryIdx}")
     // 일기 리턴
-    public ResponseEntity<?> getDiary(@ApiParam(value = "일기 id")@PathVariable("diaryIdx") int diaryIdx){
+    public ResponseEntity<?> getDiary(@ApiParam(value = "일기 id")@PathVariable("diaryIdx") int diaryIdx, @AuthenticationPrincipal UserEntity userInfo){
         HashMap<String, Object> responseDTO = new HashMap<>();
         try{
             DiaryResponseDTO diaryResponseDTO=diaryService.getDiary(diaryIdx);
             if(diaryResponseDTO!=null) {
                 responseDTO.put("responseMessage", ResponseMessage.DIARY_GET_SUCCESS);
                 responseDTO.put("diary", diaryResponseDTO);
+                responseDTO.put("isBookmark", diaryService.isBookmark(diaryIdx, userInfo.getUserIdx()));
                 return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
             }else{
                 responseDTO.put("responseMessage", ResponseMessage.DIARY_GET_FAIL);
@@ -85,7 +86,7 @@ public class DiaryController {
             }
         }catch (Exception e){
             responseDTO.put("responseMessage", ResponseMessage.DIARY_GET_FAIL);
-            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+            return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
         }
     }
 
@@ -217,6 +218,26 @@ public class DiaryController {
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }catch (Exception e){
             responseDTO.put("responseMessage", ResponseMessage.DIARY_LIST_FIND_FAIL);
+            return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
+        }
+    }
+
+    @ApiOperation(value = "user 일기 개수 반환", notes =
+            "user 일기 개수 반환.\n" +
+                    "[Front] \n" +
+                    "{} \n\n" +
+                    "[Back] \n" +
+                    "{diaryCount(int)} ")
+    @GetMapping("")
+    // 일기 리턴
+    public ResponseEntity<?> getDiaryCount(@ApiParam(value = "user 정보") @AuthenticationPrincipal UserEntity userInfo){
+        HashMap<String, Object> responseDTO = new HashMap<>();
+        try{
+            responseDTO.put("responseMessage", ResponseMessage.DIARY_COUNT_SUCCESS);
+            responseDTO.put("diaryCount", diaryService.getDiaryCount(userInfo.getUserIdx()));
+            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+        }catch (Exception e){
+            responseDTO.put("responseMessage", ResponseMessage.DIARY_COUNT_FAIL);
             return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
         }
     }
@@ -367,7 +388,7 @@ public class DiaryController {
                     "[Back] \n" +
                     "[{bookmarkIdx(int), diaryIdx(int), userIdx(int), creationDate(Date), content(String), picture(String), music(int), emo(String)}]")
 //    @GetMapping("/bookmark/{userIdx}")
-    @GetMapping("/bookmark")
+    @GetMapping("/bookmark/list")
 //    public ResponseEntity<?> getBookmarkList(@ApiParam(value = "유저 정보")@PathVariable("userIdx") int userIdx) {
     public ResponseEntity<?> getBookmarkList(@ApiParam(value = "유저 정보") @AuthenticationPrincipal UserEntity userInfo) {
         HashMap<String, Object> responseDTO = new HashMap<>();
@@ -389,5 +410,25 @@ public class DiaryController {
         diaryService.deleteBookmark(bookmarkIdx);
         responseDTO.put("responseMessage", ResponseMessage.DIARY_BOOKMARK_DELETE_SUCCESS);
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "북마크 일기 개수 반환", notes =
+            "북마크 일기 개수 반환.\n" +
+                    "[Front] \n" +
+                    "{} \n\n" +
+                    "[Back] \n" +
+                    "{bookmarkCount(int)} ")
+    @GetMapping("/bookmark")
+    // 일기 리턴
+    public ResponseEntity<?> getBookCount(@ApiParam(value = "user 정보") @AuthenticationPrincipal UserEntity userInfo){
+        HashMap<String, Object> responseDTO = new HashMap<>();
+        try{
+            responseDTO.put("responseMessage", ResponseMessage.DIARY_BOOKMARK_COUNT_SUCCESS);
+            responseDTO.put("bookCount", diaryService.getBookCount(userInfo.getUserIdx()));
+            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+        }catch (Exception e){
+            responseDTO.put("responseMessage", ResponseMessage.DIARY_BOOKMARK_COUNT_FAIL);
+            return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
+        }
     }
 }

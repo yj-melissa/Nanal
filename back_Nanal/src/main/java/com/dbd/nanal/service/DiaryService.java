@@ -36,6 +36,10 @@ public class DiaryService {
         return new DiaryResponseDTO(diaryEntity);
     }
 
+    public boolean isBookmark(int diaryIdx, int userIdx){
+        return bookmarkRepository.existsByDiaryAndUser(DiaryEntity.builder().diaryIdx(diaryIdx).build(), UserEntity.builder().userIdx(userIdx).build());
+    }
+
     // delete diary
     public void deleteDiary(int diaryIdx){
         DiaryEntity diaryEntity=diaryRepository.getReferenceById(diaryIdx);
@@ -104,6 +108,11 @@ public class DiaryService {
     public void deleteDiaryGroup(int diaryIdx){
         List<GroupDiaryRelationEntity> groupDiaryRelationEntityList=groupDiaryRelationRepository.findByDiary(DiaryEntity.builder().diaryIdx(diaryIdx).build());
         groupDiaryRelationRepository.deleteAll(groupDiaryRelationEntityList);
+    }
+
+    // return diary count
+    public Long getDiaryCount(int userIdx){
+        return diaryRepository.countByUser(UserEntity.builder().userIdx(userIdx).build());
     }
 
     // save diary comment
@@ -176,6 +185,11 @@ public class DiaryService {
     // delete bookmark
     public void deleteBookmark(int bookmarkIdx){
         bookmarkRepository.deleteById(bookmarkIdx);
+    }
+
+    // return bookmark count
+    public Long getBookCount(int userIdx){
+        return bookmarkRepository.countByUser(UserEntity.builder().userIdx(userIdx).build());
     }
 
     // save keyword

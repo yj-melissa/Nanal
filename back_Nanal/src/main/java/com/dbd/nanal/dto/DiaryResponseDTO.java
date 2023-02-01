@@ -18,7 +18,6 @@ public class DiaryResponseDTO {
 //    private Date expireDate;
     private String emo;
 
-
     public DiaryResponseDTO(DiaryEntity diary) {
         this.diaryIdx = diary.getDiaryIdx();
         this.userIdx=diary.getUser().getUserIdx();

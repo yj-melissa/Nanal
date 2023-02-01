@@ -33,4 +33,6 @@ public interface DiaryRepository extends JpaRepository<DiaryEntity, Integer> {
     List<DiaryEntity> findMonthDiaryList(@Param("year")int year, @Param("month")int month, @Param("userIdx") int userIdx);
 
     List<DiaryEntity> findByUser(UserEntity user);
+
+    Long countByUser(UserEntity user);
 }
