@@ -31,9 +31,11 @@ public class DiaryService {
     }
 
     // get diary
-    public DiaryResponseDTO getDiary(int diaryIdx){
+    public DiaryResponseDTO getDiary(int diaryIdx, int userIdx){
         DiaryEntity diaryEntity=diaryRepository.getReferenceById(diaryIdx);
-        return new DiaryResponseDTO(diaryEntity);
+        DiaryResponseDTO diaryResponseDTO=new DiaryResponseDTO(diaryEntity);
+        diaryResponseDTO.setBookmark(bookmarkRepository.existsByDiaryAndUser(DiaryEntity.builder().diaryIdx(diaryIdx).build(), UserEntity.builder().userIdx(userIdx).build()));
+        return diaryResponseDTO;
     }
 
     // delete diary
