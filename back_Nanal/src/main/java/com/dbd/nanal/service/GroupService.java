@@ -76,13 +76,18 @@ public class GroupService {
     // get Group List
     public List<HashMap<String, Object>> getGroupList(int userIdx) {
 
+        System.out.println("service userIdx : " + userIdx);
+
         List<HashMap<String, Object>> result = new ArrayList<>();
 
         List<GroupDetailEntity> groupDetailEntities = groupUserRelationRepository.findGroupList(userIdx);
 
-        for(GroupDetailEntity groupDetailEntity : groupDetailEntities){
+        System.out.println("개수 : " + groupDetailEntities.size());
+
+        for (GroupDetailEntity groupDetailEntity : groupDetailEntities) {
             HashMap<String, Object> responseDTO = new HashMap<>();
             responseDTO.put("groupDetail", new GroupDetailResponseDTO(groupDetailEntity));
+            System.out.println("groupIdx : "+groupDetailEntity.getGroupIdx()+" 개수 : " + groupDetailEntity.getGroupTags().size());
 
             List<GroupTagResponseDTO> tags = new ArrayList<>();
             for (int i = 0; i < 5; i++) {
@@ -96,7 +101,6 @@ public class GroupService {
         return result;
 //        return groupUserRelationEntities.stream().map(GroupDetailResponseDTO::new).collect(Collectors.toList());
     }
-
 
 
     // save group - user relation (그룹 생성 시 유저 초대 -> 수락 시 발생)
@@ -119,7 +123,7 @@ public class GroupService {
     // update group detail
     @Transactional
 
-    public  HashMap<String, Object>  updateGroupDetail(GroupDetailRequestDTO groupDetailRequestDTO) {
+    public HashMap<String, Object> updateGroupDetail(GroupDetailRequestDTO groupDetailRequestDTO) {
 
         // 수정 대상 엔티티 가져오기
         GroupDetailEntity groupDetailEntity = groupRepository.getReferenceById(groupDetailRequestDTO.getGroupIdx());
