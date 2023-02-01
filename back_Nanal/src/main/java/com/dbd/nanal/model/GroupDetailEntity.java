@@ -1,5 +1,6 @@
 package com.dbd.nanal.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -40,6 +41,7 @@ public class GroupDetailEntity {
 
     // 태그 검색할 때 사용
     @OneToMany(mappedBy = "groupDetail") // 읽기만 가능
+    @JsonIgnore
     private List<GroupTagEntity> groupTags = new ArrayList<>();
 
     @OneToMany(mappedBy = "groupDetail") // 읽기만 가능
