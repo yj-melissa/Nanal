@@ -11,4 +11,6 @@ import java.util.List;
 public interface BookmarkRepository extends JpaRepository<ScrapEntity, Integer> {
 
     List<ScrapEntity> findByUser(UserEntity user);
+
+    Long countByUser(UserEntity user);
 }
