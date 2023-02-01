@@ -41,6 +41,7 @@ public class GroupDetailEntity {
 
     // 태그 검색할 때 사용
     @OneToMany(mappedBy = "groupDetail") // 읽기만 가능
+    @JsonIgnore
     private List<GroupTagEntity> groupTags = new ArrayList<>();
 
     @OneToMany(mappedBy = "groupDetail") // 읽기만 가능
