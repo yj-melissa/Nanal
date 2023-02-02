@@ -4,6 +4,7 @@ import com.dbd.nanal.dto.*;
 import com.dbd.nanal.model.GroupDetailEntity;
 import com.dbd.nanal.model.GroupTagEntity;
 import com.dbd.nanal.model.GroupUserRelationEntity;
+import com.dbd.nanal.model.UserEntity;
 import com.dbd.nanal.repository.GroupRepository;
 import com.dbd.nanal.repository.GroupTagRepository;
 import com.dbd.nanal.repository.GroupUserRelationRepository;
@@ -40,7 +41,6 @@ public class GroupService {
     // save Group Tags
     @Transactional
     public List<GroupTagResponseDTO> saveGroupTags(GroupDetailRequestDTO groupDetailRequestDTO) {
-//    public GroupTagResponseDTO saveGroupTags(GroupDetailRequestDTO groupDetailRequestDTO) {
         List<String> groupTagRequestDTOs = groupDetailRequestDTO.getTags();
         List<GroupTagResponseDTO> groupTagResponseDTOS = new ArrayList<>();
 
@@ -76,18 +76,12 @@ public class GroupService {
     // get Group List
     public List<HashMap<String, Object>> getGroupList(int userIdx) {
 
-        System.out.println("service userIdx : " + userIdx);
-
         List<HashMap<String, Object>> result = new ArrayList<>();
-
         List<GroupDetailEntity> groupDetailEntities = groupUserRelationRepository.findGroupList(userIdx);
-
-        System.out.println("개수 : " + groupDetailEntities.size());
 
         for (GroupDetailEntity groupDetailEntity : groupDetailEntities) {
             HashMap<String, Object> responseDTO = new HashMap<>();
             responseDTO.put("groupDetail", new GroupDetailResponseDTO(groupDetailEntity));
-            System.out.println("groupIdx : "+groupDetailEntity.getGroupIdx()+" 개수 : " + groupDetailEntity.getGroupTags().size());
 
             List<GroupTagResponseDTO> tags = new ArrayList<>();
             for (int i = 0; i < 5; i++) {
@@ -96,10 +90,8 @@ public class GroupService {
             responseDTO.put("tags", tags);
             result.add(responseDTO);
         }
-//        System.out.println("size : " + groupUserRelationEntities.size());
 
         return result;
-//        return groupUserRelationEntities.stream().map(GroupDetailResponseDTO::new).collect(Collectors.toList());
     }
 
 
@@ -122,7 +114,6 @@ public class GroupService {
 
     // update group detail
     @Transactional
-
     public HashMap<String, Object> updateGroupDetail(GroupDetailRequestDTO groupDetailRequestDTO) {
 
         // 수정 대상 엔티티 가져오기
@@ -156,5 +147,22 @@ public class GroupService {
 
         GroupUserRelationEntity groupUserRelationEntity = groupUserRelationRepository.findByUserIdGroupID(userIdx, groupIdx);
         groupUserRelationRepository.delete(groupUserRelationEntity);
+    }
+
+    public List<HashMap<String, Object>> findGroupUser(int userIdx, int groupIdx) {
+
+        List<UserEntity> groupUsers = groupUserRelationRepository.findGroupUser(userIdx, groupIdx);
+
+        List<HashMap<String, Object>> friendDetailResponseDTOS = new ArrayList<>();
+        for (UserEntity user : groupUsers) {
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("userIdx", user.getUserIdx());
+            map.put("nickName", user.getUserProfile().getNickname());
+            map.put("img", user.getUserProfile().getImg());
+            map.put("introduction", user.getUserProfile().getIntroduction());
+            friendDetailResponseDTOS.add(map);
+        }
+
+        return friendDetailResponseDTOS;
     }
 }

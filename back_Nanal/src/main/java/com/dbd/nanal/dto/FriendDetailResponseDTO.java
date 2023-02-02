@@ -1,6 +1,7 @@
 package com.dbd.nanal.dto;
 
 import com.dbd.nanal.model.UserProfileEntity;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
@@ -29,4 +30,5 @@ public class FriendDetailResponseDTO {
         this.img = profile.getImg();
         this.shortContent = null;
     }
+
 }
