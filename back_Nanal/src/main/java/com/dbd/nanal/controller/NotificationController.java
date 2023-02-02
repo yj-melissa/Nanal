@@ -134,7 +134,7 @@ public class NotificationController {
     @ApiOperation(value = "알림 삭제", notes =
             "알림을 삭제합니다.\n" +
                     "[Front] \n" +
-                    "{userIdx(int), noticeIdx(int)} \n\n" +
+                    "{noticeIdx(int)} \n\n" +
                     "[Back] \n" +
                     "ok(200)")
     @DeleteMapping("/{noticeIdx}")
@@ -147,6 +147,25 @@ public class NotificationController {
         }catch (Exception e){
             responseDTO.put("responseMessage", ResponseMessage.NOTICE_DELETE_FAIL);
             return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
+        }
+    }
+
+    @ApiOperation(value = "알림 읽음 처리", notes =
+            "알림 읽음 처리합니다.\n" +
+                    "[Front] \n" +
+                    "{noticeIdx(int)} \n\n" +
+                    "[Back] \n" +
+                    "ok(200)")
+    @GetMapping("/{noticeIdx}")
+    public ResponseEntity<?> saveNoticeCheck(@ApiParam(value = "알림 id")  @PathVariable("noticeIdx") int noticeIdx){
+        HashMap<String, Object> responseDTO = new HashMap<>();
+        try{
+            noticeService.saveNoticeCheck(noticeIdx);
+            responseDTO.put("responseMessage", ResponseMessage.NOTICE_GET_SUCCESS);
+            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+        }catch (Exception e){
+            responseDTO.put("responseMessage", ResponseMessage.NOTICE_GET_FAIL);
+            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }
     }
 }

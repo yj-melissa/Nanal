@@ -8,6 +8,7 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @Entity
 @Table(name="notice")
