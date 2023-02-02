@@ -9,6 +9,7 @@ function GroupCreate() {
   let [tagNew, setTagNew] = useState('');
   const [friendList, setFriendList] = useState([]);
   const [includeFriend, setIncludeFriend] = useState([]);
+  const [includeFriendIdx, setIncludeFriendIdx] = useState([]);
 
   // 그룹명
   const [currentGMessage, setCurrentGMessage] = useState('');
@@ -57,13 +58,37 @@ function GroupCreate() {
     }
   }
 
-  // 초대할 사용자 제거
+  // 그룹 태그 제거
   const onChangeTagRemove = (id) => {
     // tag.id 가 파라미터로 일치하지 않는 원소만 추출해서 새로운 배열을 만듬
     // = tag.id 가 id 인 것을 제거함
     let tagList = [...groupTag];
     tagList.splice(id, 1);
     setGroupTag(tagList);
+  };
+
+  // 초대할 사용자 추가
+  const addFriend = (idx) => {
+    if (!includeFriend.includes(friendList[idx])) {
+      let addfriendList = [...includeFriend];
+      addfriendList.push(friendList[idx]);
+      setIncludeFriend(addfriendList);
+
+      let addfriendListIdx = [...includeFriendIdx];
+      addfriendListIdx.push(friendList[idx].userIdx);
+      setIncludeFriendIdx(addfriendListIdx);
+    }
+  };
+
+  // 초대할 사용자 제거
+  const onChangeFRemove = (idx) => {
+    let addfriendList = [...includeFriend];
+    addfriendList.splice(idx, 1);
+    setIncludeFriend(addfriendList);
+
+    let addfriendListIdx = [...includeFriendIdx];
+    addfriendListIdx.splice(idx, 1);
+    setIncludeFriendIdx(addfriendListIdx);
   };
 
   // 그룹 생성 요청 함수
@@ -89,14 +114,14 @@ function GroupCreate() {
               // console.log(data.data.groupDetail);
               // console.log(data.data.tags);
 
-              const groupidx = data.data.groupDetail.groupidx;
+              const groupidx = data.data.groupDetail.groupIdx;
 
               if (includeFriend.size !== 0) {
                 // 그룹에 추가할 친구가 있는 경우
                 axios_api
                   .post('notification/group', {
                     request_group_idx: groupidx,
-                    userIdx: includeFriend,
+                    userIdx: includeFriendIdx,
                   })
                   .then(({ data }) => {
                     if (data.statusCode === 200) {
@@ -105,13 +130,13 @@ function GroupCreate() {
                         window.location.replace('/Group/List');
                       }
                     } else {
-                      console.log('알림 저장 오류: ');
+                      console.log('알림 저장 오류 : ');
                       console.log(data.statusCode);
                       console.log(data.data.responseMessage);
                     }
                   })
                   .catch(({ error }) => {
-                    console.log('알림 저장 성공: ' + error);
+                    console.log('알림 저장 오류 : ' + error);
                   });
               }
             }
@@ -130,13 +155,14 @@ function GroupCreate() {
   useEffect(() => {
     onLogin();
     axios_api
-      .get(`friend/list/`)
+      .get(`friend/list`)
       .then(({ data }) => {
         if (data.statusCode === 200) {
           setFriendList(null);
           if (data.data.responseMessage === '친구 리스트 조회 성공') {
-            // console.log(data.data.friendList);
             setFriendList(data.data.friendList);
+          } else if (data.data.responseMessage === '데이터 없음') {
+            setFriendList([]);
           }
         } else {
           console.log('친구 리스트 조회 오류: ');
@@ -148,20 +174,6 @@ function GroupCreate() {
         console.log('친구 리스트 조회 오류: ' + error);
       });
   }, []);
-
-  const addFriend = (idx) => {
-    if (!includeFriend.includes(friendList[idx])) {
-      let addfriendList = [...includeFriend];
-      addfriendList.push(friendList[idx]);
-      setIncludeFriend(addfriendList);
-    }
-  };
-
-  const onChangeFRemove = (idx) => {
-    let addfriendList = [...includeFriend];
-    addfriendList.splice(idx, 1);
-    setIncludeFriend(addfriendList);
-  };
 
   return (
     <div id='group-Profile'>
@@ -197,8 +209,9 @@ function GroupCreate() {
                     onChangeTagRemove(idx);
                   }}
                   key={idx}
+                  className='mr-2'
                 >
-                  #{tagging}&nbsp;
+                  #{tagging}
                 </button>
               );
             })}
@@ -214,6 +227,7 @@ function GroupCreate() {
                   onClick={() => {
                     onChangeFRemove(idx);
                   }}
+                  className='mr-2'
                 >
                   {friendItem.nickname}
                 </button>
@@ -239,6 +253,7 @@ function GroupCreate() {
               onClick={() => {
                 addFriend(idx);
               }}
+              className='mr-2'
             >
               {friendItem.nickname}
             </button>

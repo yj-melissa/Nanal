@@ -23,6 +23,26 @@ function GroupProfile() {
           if (data.data.responseMessage === '그룹 조회 성공') {
             setGroupName(data.data.groupDetail);
             setGroupTag(data.data.tags);
+
+            axios_api
+              .get(`friend/list`)
+              .then(({ data }) => {
+                if (data.statusCode === 200) {
+                  setFriendList(null);
+                  if (data.data.responseMessage === '친구 리스트 조회 성공') {
+                    setFriendList(data.data.friendList);
+                  } else if (data.data.responseMessage === '데이터 없음') {
+                    setFriendList(['아직은 친구가 없습니다.']);
+                  }
+                } else {
+                  console.log('친구 리스트 조회 오류: ');
+                  console.log(data.statusCode);
+                  console.log(data.data.responseMessage);
+                }
+              })
+              .catch(({ error }) => {
+                console.log('친구 리스트 조회 오류: ' + error);
+              });
           }
         } else {
           console.log(data.statusCode);
