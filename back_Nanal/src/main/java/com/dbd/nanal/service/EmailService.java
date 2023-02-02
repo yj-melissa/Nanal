@@ -46,7 +46,7 @@ public class EmailService {
 
     // 인증코드 생성
     private static String createKey() {
-        StringBuffer key = new StringBuffer();
+        StringBuilder key = new StringBuilder();
         Random random = new Random();
 
         for (int i = 0; i < 8; i++) {
