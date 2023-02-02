@@ -10,6 +10,7 @@ function App() {
   };
   return (
     <div className='App max-w-sm justify-center'>
+      {/*만약 주소가 sign in, sign up이라면 nav가 안 보이게*/}
       <Nav changeCalendaar={changeCalendaar} />
       <AppMain isCalendaar={isCalendaar} />
     </div>

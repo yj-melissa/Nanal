@@ -1,8 +1,7 @@
-const AlarmList = ({ idx }) => {
+const AlarmList = ({ content, creationDate }) => {
   return (
     <div>
-      <hr />
-      <p>안녕하세요 {idx}</p>
+      <p>안녕하세요</p>
     </div>
   );
 };
