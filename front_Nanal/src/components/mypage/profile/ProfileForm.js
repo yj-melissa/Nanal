@@ -118,7 +118,7 @@ function ProfileForm() {
         </div>
         <div
           className='grid content-evenly'
-          onClick={() => navigate('/Diary/Favorite/List')}
+          onClick={() => navigate('/Diary/Bookmark/List')}
         >
           <p className='text-center'>좋아하는 일기</p>
           <p className='text-center font-bold'>32</p>

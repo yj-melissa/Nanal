@@ -27,11 +27,13 @@ function DiaryDetail() {
 
   // 일기 상세 페이지 불러오기
   useEffect(() => {
-    console.log(location.state.diaryIdx);
     axios_api.get(`diary/${location.state.diaryIdx}`).then(({ data }) => {
       if (data.statusCode === 200) {
         if (data.data.responseMessage === '일기 조회 성공') {
           setDiaryDetail(data.data.diary); // 데이터는 response.data.data 안에 들어있음
+          if (data.data.isBookmark === true) {
+            setIsBook(true);
+          }
         }
       } else {
         console.log(data.statusCode);

@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
 function FavoriteItem({ diaryIdx }) {
   // 나중에 그림 들어와야 함
