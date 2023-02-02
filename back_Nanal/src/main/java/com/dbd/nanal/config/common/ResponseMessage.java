@@ -29,8 +29,6 @@ public class ResponseMessage {
     public static final String DIARY_DELETE_FAIL = "일기 삭제 성공";
     public static final String DIARY_LIST_FIND_SUCCESS = "일기 리스트 조회 성공";
     public static final String DIARY_LIST_FIND_FAIL = "일기 리스트 조회 실패";
-    public static final String DIARY_COUNT_SUCCESS="일기 개수 조회 성공";
-    public static final String DIARY_COUNT_FAIL="일기 개수 조회 실패";
     public static final String DIARY_COMMENT_SAVE_SUCCESS = "일기 댓글 저장 성공";
     public static final String DIARY_COMMENT_SAVE_FAIL = "일기 댓글 저장 실패";
     public static final String DIARY_COMMEMT_LIST_FIND_SUCCESS = "일기 그룹에 해당하는 댓글 리스트 조회 성공";
@@ -41,8 +39,6 @@ public class ResponseMessage {
     public static final String DIARY_BOOKMARK_SAVE_SUCCESS="일기 북마크 저장 성공";
     public static final String DIARY_BOOKMARK_LIST_SUCCESS="일기 북마크 리스트 조회 성공";
     public static final String DIARY_BOOKMARK_DELETE_SUCCESS="일기 북마크 삭제 성공";
-    public static final String DIARY_BOOKMARK_COUNT_SUCCESS="일기 북마크 개수 조회 성공";
-    public static final String DIARY_BOOKMARK_COUNT_FAIL="일기 북마크 개수 조회 실패";
     public static final String NOTICE_SAVE_SUCCESS="알림 저장 성공";
     public static final String NOTICE_GET_SUCCESS="알림 조회 성공";
     public static final String NOTICE_GET_FAIL="알림 조회 실패";
@@ -65,4 +61,7 @@ public class ResponseMessage {
     public static final String FRIEND_FIND_SUCCESS = "친구 조회 성공";
     public static final String FRIEND_FIND_FAIL = "친구 조회 실패";
     public static final String DUPLICATED_KEY = "DUPLICATED KEY";
+
+    public static final String NONE_DATA = "데이터가 없습니다.";
+    public static final String GROUP_USER_FIND_SUCCESS = "그룹 유저 조회 성공";
 }
