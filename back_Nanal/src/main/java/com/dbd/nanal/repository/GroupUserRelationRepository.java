@@ -1,7 +1,9 @@
 package com.dbd.nanal.repository;
 
+import com.dbd.nanal.model.FriendEntity;
 import com.dbd.nanal.model.GroupDetailEntity;
 import com.dbd.nanal.model.GroupUserRelationEntity;
+import com.dbd.nanal.model.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -20,4 +22,7 @@ public interface GroupUserRelationRepository extends JpaRepository<GroupUserRela
     GroupUserRelationEntity findByUserIdGroupID(@Param("userIdx") int userIdx, @Param("groupIdx") int groupIdx);
 
     List<GroupUserRelationEntity> findByGroupDetail(GroupDetailEntity groupDetailEntity);
+
+    @Query("select u from UserEntity u join fetch GroupUserRelationEntity r on u.userIdx = r.user.userIdx where r.user.userIdx != :userIdx and r.groupDetail.groupIdx = :groupIdx")
+    List<UserEntity> findGroupUser(@Param("userIdx") int userIdx, @Param("groupIdx") int groupIdx);
 }
