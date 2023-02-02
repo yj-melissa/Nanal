@@ -6,6 +6,7 @@ import com.dbd.nanal.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -168,10 +169,10 @@ public class DiaryService {
     }
 
     // save bookmark
-    public void saveBookmark(BookmarkRequestDTO bookmarkRequestDTO){
+    public void saveBookmark(int diaryIdx, int userIdx){
         ScrapEntity scrapEntity=ScrapEntity.builder()
-                .user(UserEntity.builder().userIdx(bookmarkRequestDTO.getUserIdx()).build())
-                .diary(DiaryEntity.builder().diaryIdx(bookmarkRequestDTO.getDiaryIdx()).build())
+                .user(UserEntity.builder().userIdx(userIdx).build())
+                .diary(DiaryEntity.builder().diaryIdx(diaryIdx).build())
                 .build();
         bookmarkRepository.save(scrapEntity);
     }
@@ -183,8 +184,9 @@ public class DiaryService {
     }
 
     // delete bookmark
-    public void deleteBookmark(int bookmarkIdx){
-        bookmarkRepository.deleteById(bookmarkIdx);
+    @Transactional
+    public void deleteBookmark(int diaryIdx, int userIdx){
+        bookmarkRepository.deleteByDiaryAndUser(DiaryEntity.builder().diaryIdx(diaryIdx).build(), UserEntity.builder().userIdx(userIdx).build());
     }
 
     // return bookmark count
