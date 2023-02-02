@@ -16,4 +16,6 @@ public interface BookmarkRepository extends JpaRepository<ScrapEntity, Integer> 
     Long countByUser(UserEntity user);
 
     boolean existsByDiaryAndUser(DiaryEntity diary, UserEntity user);
+
+    void deleteByDiaryAndUser(DiaryEntity diary, UserEntity user);
 }
