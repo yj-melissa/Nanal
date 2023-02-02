@@ -40,7 +40,7 @@ public class DiaryController {
             List<String> keywordList=new ArrayList<>();
             //picture
             //music
-//            System.out.println("controller: "+diary.toString()+" "+userInfo.toString());
+
             diary.setUserIdx(userInfo.getUserIdx());
             //save diary
             DiaryResponseDTO diaryResponseDTO=diaryService.save(diary);
@@ -370,13 +370,13 @@ public class DiaryController {
     @ApiOperation(value = "일기 북마크 저장", notes =
             "일기 북마크 저장합니다.\n" +
                     "[Front] \n" +
-                    "{diaryIdx(int), userIdx(int)} \n\n" +
+                    "{diaryIdx(int)} \n\n" +
                     "[Back] \n" +
                     "ok(200)")
-    @PostMapping("/bookmark")
-    public ResponseEntity<?> saveBookmark(@ApiParam(value = "북마크 정보") @RequestBody BookmarkRequestDTO bookMarkRequestDTO) {
+    @GetMapping("/bookmark/{diaryIdx}")
+    public ResponseEntity<?> saveBookmark(@ApiParam(value = "북마크 정보") @PathVariable("diaryIdx") int diaryIdx, @AuthenticationPrincipal UserEntity userInfo) {
         HashMap<String, Object> responseDTO = new HashMap<>();
-        diaryService.saveBookmark(bookMarkRequestDTO);
+        diaryService.saveBookmark(diaryIdx, userInfo.getUserIdx());
         responseDTO.put("responseMessage", ResponseMessage.DIARY_BOOKMARK_SAVE_SUCCESS);
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK); // temp
     }
@@ -401,13 +401,13 @@ public class DiaryController {
     @ApiOperation(value = "일기 북마크 삭제", notes =
             "일기 북마크를 삭제합니다.\n" +
                     "[Front] \n" +
-                    "{bookmarkIdx(int)} \n\n" +
+                    "{diaryIdx(int)} \n\n" +
                     "[Back] \n" +
                     "ok(200)")
-    @DeleteMapping("/bookmark/{bookmarkIdx}")
-    public ResponseEntity<?> deleteBookmark(@ApiParam(value="일기 스크랩 id")@PathVariable("bookmarkIdx") int bookmarkIdx){
+    @DeleteMapping("/bookmark/{diaryIdx}")
+    public ResponseEntity<?> deleteBookmark(@ApiParam(value="일기 스크랩 id")@PathVariable("diaryIdx") int diaryIdx, @AuthenticationPrincipal UserEntity userInfo){
         HashMap<String, Object> responseDTO = new HashMap<>();
-        diaryService.deleteBookmark(bookmarkIdx);
+        diaryService.deleteBookmark(diaryIdx, userInfo.getUserIdx());
         responseDTO.put("responseMessage", ResponseMessage.DIARY_BOOKMARK_DELETE_SUCCESS);
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
