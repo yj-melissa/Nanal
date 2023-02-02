@@ -44,7 +44,7 @@ function SignUp() {
         .get(`user/checkId/${currentId}`)
         .then(({ data }) => {
           if (data.statusCode === 200) {
-            if (data.data.responseMessage === '성공') {
+            if (data.data.responseMessage === '사용 가능') {
               setIdMessage('사용가능한 아이디 입니다.');
               setIsId(true);
             }
@@ -111,7 +111,7 @@ function SignUp() {
         .get(`user/checkNickname/${currentName}`)
         .then(({ data }) => {
           if (data.statusCode === 200) {
-            if (data.data.responseMessage === '성공') {
+            if (data.data.responseMessage === '사용 가능') {
               setNickNameMessage('사용가능한 닉네임 입니다.');
               setIsNickName(true);
             }
@@ -130,38 +130,46 @@ function SignUp() {
   const SignUp = (e) => {
     e.preventDefault();
 
-    axios_api
-      .post('user/signup', {
-        email: email,
-        userId: id,
-        password: password,
-        nickname: nickName,
-      })
-      .then(({ data }) => {
-        // console.log(data);
-        // console.log(data.data);
-        // console.log(data.statusCode);
-        // console.log(data.data.statusCode);
-        // console.log(data.ResponseMessage);
-        // console.log(data.data.ResponseMessage);
-        if (data.statusCode === 200) {
-          if (data.data.responseMessage === '회원 가입 성공') {
-            alert('회원 가입 성공!!!');
-            window.location.replace('/SignIn');
+    if (isId !== true) {
+      alert('아이디를 확인해주세요.');
+    } else if (isPassword !== true) {
+      alert('비밀번호를 확인해주세요.');
+    } else if (isPasswordConfirm !== true) {
+      alert('비밀번호를 맞게 입력했는지 확인해주세요.');
+    } else if (isNickName !== true) {
+      alert('닉네임을 확인해주세요.');
+    } else {
+      axios_api
+        .post('user/signup', {
+          email: email,
+          userId: id,
+          password: password,
+          nickname: nickName,
+        })
+        .then(({ data }) => {
+          // console.log(data);
+          // console.log(data.data);
+          // console.log(data.statusCode);
+          // console.log(data.data.ResponseMessage);
+          if (data.statusCode === 200) {
+            if (data.data.responseMessage === '회원 가입 성공') {
+              alert('회원 가입 성공!!!');
+              window.location.replace('/SignIn');
+            }
+          } else {
+            console.log(data.data.responseMessage);
+            alert('이미 가입된 이메일입니다!');
+            setEmail('');
+            setId('');
+            setPassword('');
+            setPasswordConfirm('');
+            setNickName('');
           }
-        } else {
-          console.log(data.data.responseMessage);
-          alert('이미 가입된 이메일입니다!');
-          setEmail('');
-          setId('');
-          setPassword('');
-          setPasswordConfirm('');
-          setNickName('');
-        }
-      })
-      .catch((error) => {
-        console.log('회원 가입 오류: ' + error);
-      });
+        })
+        .catch((error) => {
+          console.log('회원 가입 오류: ' + error);
+        });
+    }
   };
 
   return (
