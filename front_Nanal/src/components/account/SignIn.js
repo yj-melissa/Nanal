@@ -40,13 +40,24 @@ function SignIn() {
             onLoginSuccess(data.data.token);
             window.location.replace('/');
           }
+        } else if (data.statusCode === 500) {
+          if (data.data.responseMessage === '로그인 실패') {
+            alert('아이디랑 비밀번호를 다시 확인해주세요.');
+            setUserId('');
+            setPw('');
+          } else if (data.data.responseMessage === '회원을 찾을 수 없음') {
+            alert('회원이 아닙니다. 회원 가입을 해주세요.');
+            setUserId('');
+            setPw('');
+          }
         } else {
+          console.log('로그인 오류: ');
           console.log(data.statusCode);
           console.log(data.data.responseMessage);
         }
       })
       .catch(({ error }) => {
-        console.log('회원 가입 오류: ' + error);
+        console.log('로그인 오류: ' + error);
       });
   };
 

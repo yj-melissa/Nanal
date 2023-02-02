@@ -12,6 +12,10 @@ function SignUp() {
   const [email, setEmail] = useState('');
   const [emailMessage, setEmailMessage] = useState('');
   const [isEmail, setIsEmail] = useState(false);
+  const [emailToggle, setEmailToggle] = useState(false);
+  const [emailV1, setEmailV1] = useState('');
+  const [emailV2, setEmailV2] = useState('');
+
   const onChangeEmail = (e) => {
     const currentEmail = e.target.value;
     setEmail(currentEmail);
@@ -24,7 +28,39 @@ function SignUp() {
     //   setEmailMessage("이메일의 형식이 올바릅니다.");
     //   setIsEmail(true);
     // }
-    setIsEmail(true);
+    // setIsEmail(true);
+  };
+
+  const sendEmail = (emailstring) => {
+    axios_api
+      .get(`user/valicate/${emailstring}`)
+      .then(({ data }) => {
+        if (data.statusCode === 200) {
+          if (data.data.responseMessage === '이메일 발송 성공') {
+            setEmailV1();
+            setEmailToggle(true);
+          }
+        } else {
+          alert('이메일을 확인하고 다시 입력해주세요.');
+        }
+      })
+      .catch((error) => {
+        console.log('이메일 인증 과정 오류: ' + error);
+      });
+  };
+
+  const onChangeEmailValidation = (e) => {
+    setEmailV2(e.target.value);
+  };
+
+  const checkEmail = () => {
+    if (emailV2 !== '') {
+      if (emailV1 === emailV2) {
+        setIsEmail(true);
+      } else {
+        alert('이메일 인증 코드를 다시 확인해주세요!');
+      }
+    }
   };
 
   // 아이디 userId
@@ -41,7 +77,7 @@ function SignUp() {
       setIsId(false);
     } else {
       axios_api
-        .get(`user/checkId/${currentId}`)
+        .get(`user/check/id/${currentId}`)
         .then(({ data }) => {
           if (data.statusCode === 200) {
             if (data.data.responseMessage === '사용 가능') {
@@ -108,7 +144,7 @@ function SignUp() {
       setIsNickName(false);
     } else {
       axios_api
-        .get(`user/checkNickname/${currentName}`)
+        .get(`user/check/nickname/${currentName}`)
         .then(({ data }) => {
           if (data.statusCode === 200) {
             if (data.data.responseMessage === '사용 가능') {
@@ -130,7 +166,9 @@ function SignUp() {
   const SignUp = (e) => {
     e.preventDefault();
 
-    if (isId !== true) {
+    if (isEmail !== true) {
+      alert('이메일 인증을 확인해주세요.');
+    } else if (isId !== true) {
       alert('아이디를 확인해주세요.');
     } else if (isPassword !== true) {
       alert('비밀번호를 확인해주세요.');
@@ -185,12 +223,36 @@ function SignUp() {
               <input
                 type='email'
                 id='email'
+                className='mr-5 mb-2'
                 value={email}
                 onChange={onChangeEmail}
               />
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              {/* onClick={this.sendEmail} */}
-              <button>인증요청</button>
+              <button
+                onClick={() => {
+                  sendEmail(email);
+                }}
+              >
+                인증요청
+              </button>
+              {emailToggle === true ? (
+                <div>
+                  <input
+                    type='text'
+                    className='mr-5'
+                    onChange={onChangeEmailValidation}
+                  ></input>
+                  <button
+                    type='button'
+                    onClick={() => {
+                      checkEmail();
+                    }}
+                  >
+                    확인
+                  </button>
+                </div>
+              ) : (
+                <></>
+              )}
             </div>
             <p className='message'>{emailMessage}</p>
           </div>
