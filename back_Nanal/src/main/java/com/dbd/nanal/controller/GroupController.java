@@ -40,6 +40,8 @@ public class GroupController {
     @PostMapping
     @Transactional
     public ResponseEntity<?> save(@ApiParam(value = "그룹 생성 정보") @RequestBody GroupDetailRequestDTO groupDetailRequestDTO, @AuthenticationPrincipal UserEntity userInfo) {
+        System.out.println("[그룹 저장] 유저 : idx " + userInfo.getUserIdx() + " name " + userInfo.getUsername());
+
         HashMap<String, Object> responseDTO = new HashMap<>();
 
         try {
@@ -95,7 +97,9 @@ public class GroupController {
                     "JSON\n" +
                     "{groupIdx(int), groupImg(String), groupName(String), private(boolean), tags(List(String)), creationDate(String)} ")
     @GetMapping("/{groupIdx}")
-    public ResponseEntity<?> getGroupDTO(@ApiParam(value = "그룹 id", required = true) @PathVariable int groupIdx) {
+    public ResponseEntity<?> getGroupDTO(@ApiParam(value = "그룹 id", required = true) @PathVariable int groupIdx, @AuthenticationPrincipal UserEntity userInfo) {
+        System.out.println("[그룹 정보] 유저 : idx " + userInfo.getUserIdx() + " name " + userInfo.getUsername());
+
         HashMap<String, Object> responseDTO = new HashMap<>();
         try {
             HashMap<String, Object> groupDTO = groupService.findGroupById(groupIdx);
@@ -133,6 +137,7 @@ public class GroupController {
     @PostMapping("/join")
 //    public ResponseEntity<?> groupJoin(@ApiParam(value = "groupIdx, userIdx", required = true) @RequestBody Map<String, Integer> requestDTO) {
     public ResponseEntity<?> groupJoin(@ApiParam(value = "유저 idx", required = true) @AuthenticationPrincipal UserEntity userInfo, @ApiParam(value = "그룹 idx", required = true) @RequestBody Map<String, Integer> requestDTO) {
+        System.out.println("[그룹 가입] 유저 : idx " + userInfo.getUserIdx() + " name " + userInfo.getUsername());
 
         HashMap<String, Object> responseDTO = new HashMap<>();
         try {
@@ -169,7 +174,7 @@ public class GroupController {
     public ResponseEntity<?> getGroupList(@ApiParam(value = "유저 idx", required = true) @AuthenticationPrincipal UserEntity userInfo) {
         HashMap<String, Object> responseDTO = new HashMap<>();
 
-        System.out.println("userIdx : " + userInfo.getUserIdx() + "userName : " + userInfo.getUsername());
+        System.out.println("[그룹 리스트] 유저 : idx " + userInfo.getUserIdx() + " name " + userInfo.getUsername());
 
         try {
             // group_user_relation 테이블에서 userIdx가 포함된 group찾기
@@ -205,7 +210,9 @@ public class GroupController {
                     "JSON\n" +
                     "{GroupDetailResponse}")
     @PutMapping
-    public ResponseEntity<?> updateGroupDetail(@ApiParam(value = "groupIdx, groupName, tags, image", required = true) @RequestBody GroupDetailRequestDTO groupDetailRequestDTO) {
+    public ResponseEntity<?> updateGroupDetail(@ApiParam(value = "groupIdx, groupName, tags, image", required = true) @RequestBody GroupDetailRequestDTO groupDetailRequestDTO, @AuthenticationPrincipal UserEntity userInfo) {
+        System.out.println("[그룹 수정] 유저 : idx " + userInfo.getUserIdx() + " name " + userInfo.getUsername());
+
         HashMap<String, Object> responseDTO = new HashMap<>();
 
         try {
@@ -240,6 +247,8 @@ public class GroupController {
     @DeleteMapping("/{groupIdx}")
 //    public ResponseEntity<?> withdrawGroup(@ApiParam(value = "사용자 idx") @PathVariable("userIdx") int userIdx, @ApiParam(value = "그룹 idx") @PathVariable("groupIdx") int groupIdx) {
     public ResponseEntity<?> withdrawGroup(@ApiParam(value = "유저 idx", required = true) @AuthenticationPrincipal UserEntity userInfo, @ApiParam(value = "그룹 idx") @PathVariable("groupIdx") int groupIdx) {
+        System.out.println("[그룹 탈퇴] 유저 : idx " + userInfo.getUserIdx() + " name " + userInfo.getUsername());
+
         HashMap<String, Object> responseDTO = new HashMap<>();
 
         groupService.deleteGroupUser(userInfo.getUserIdx(), groupIdx);
@@ -248,38 +257,39 @@ public class GroupController {
     }
 
 
-//    @ApiOperation(value = "그룹 유저 리스트 조회", notes =
-//            "userIdx의 친구 리스트를 조회합니다.\n" +
-//                    "[Front] \n" +
-//                    "JSON\n" +
-//                    "{groupIdx(int)} \n\n" +
-//                    "[Back] \n" +
-//                    "JSON\n" +
-//                    "groupUserList : [{userIdx(int), nickname(String), img(String), introduction(String)}, {..}] ")
-////    @GetMapping("list/{userIdx}")
-//    @GetMapping("list/{groupIdx}")
-////    public ResponseEntity<?> getFriendList(@ApiParam(value = "사용자 idx", required = true) @PathVariable int userIdx) {
-//    public ResponseEntity<?> getFriendList(@ApiParam(value = "유저 idx", required = true) @AuthenticationPrincipal UserEntity userInfo, @ApiParam(value = "그룹 idx", required = true) @PathVariable int groupIdx) {
-//
-//        HashMap<String, Object> responseDTO = new HashMap<>();
-//        try {
-////            List<FriendDetailResponseDTO> friendList = groupService.findFriendList(userInfo.getUserIdx());
-//            // 반환 성공
-//            if (friendList.size() != 0) {
-//                responseDTO.put("responseMessage", ResponseMessage.FRIEND_LIST_FIND_SUCCESS);
-//                responseDTO.put("friendList", friendList);
-//                return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-//            } else {
-//                responseDTO.put("responseMessage", ResponseMessage.FRIEND_LIST_FIND_FAIL);
-//                return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
-//            }
-//        }
-//        // Exception 발생
-//        catch (Exception e) {
-//            responseDTO.put("responseMessage", ResponseMessage.EXCEPTION);
-//            return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
-//        }
-//
-//    }
+    @ApiOperation(value = "그룹 유저 리스트 조회", notes =
+            "그룹의 유저 리스트를 조회합니다.\n" +
+                    "[Front] \n" +
+                    "JSON\n" +
+                    "{groupIdx(int)} \n\n" +
+                    "[Back] \n" +
+                    "JSON\n" +
+                    "groupUserList : [{userIdx(int), nickName(String), img(String)] ")
+//    @GetMapping("list/{userIdx}")
+    @GetMapping("user/{groupIdx}")
+//    public ResponseEntity<?> getFriendList(@ApiParam(value = "사용자 idx", required = true) @PathVariable int userIdx) {
+    public ResponseEntity<?> getGroupUserList(@ApiParam(value = "유저 idx", required = true) @AuthenticationPrincipal UserEntity userInfo, @ApiParam(value = "그룹 idx", required = true) @PathVariable int groupIdx) {
+        System.out.println("[그룹 유저 리스트] 유저 : idx " + userInfo.getUserIdx() + " name " + userInfo.getUsername());
+        HashMap<String, Object> responseDTO = new HashMap<>();
+        try {
+            List<HashMap<String, Object>> groupUserList = groupService.findGroupUser(userInfo.getUserIdx(), groupIdx);
+            // 반환 성공
+            if (groupUserList.size() != 0) {
+                HashMap<String, Object> response = new HashMap<>();
+                responseDTO.put("responseMessage", ResponseMessage.GROUP_USER_FIND_SUCCESS);
+                responseDTO.put("groupUserList", groupUserList);
+                return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+            } else {
+                responseDTO.put("responseMessage", ResponseMessage.NONE_DATA);
+                return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+            }
+        }
+        // Exception 발생
+        catch (Exception e) {
+            responseDTO.put("responseMessage", ResponseMessage.EXCEPTION);
+            return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
+        }
+
+    }
 
 }
