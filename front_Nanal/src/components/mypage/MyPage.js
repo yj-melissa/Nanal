@@ -1,7 +1,13 @@
+import { useEffect } from 'react';
 import ProfileForm from './profile/ProfileForm';
-import Settings from './Settings.js';
+import Settings from './profile/Settings.js';
+import { onLogin } from '../../config/Login';
 
 function MyPage() {
+  useEffect(() => {
+    onLogin();
+  }, []);
+
   return (
     <div>
       <ProfileForm />
