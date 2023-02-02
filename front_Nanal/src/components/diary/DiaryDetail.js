@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import axios_api from '../../config/Axios';
-import Comment from './Comment';
+import { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import axios_api from "../../config/Axios";
+import Comment from "./Comment";
 
 function DiaryDetail() {
   const location = useLocation();
@@ -13,9 +13,12 @@ function DiaryDetail() {
   const navigate = useNavigate();
   // 일기 수정
   const [isEdit, setIsEdit] = useState(false);
-  const toggleIsEdit = () => setIsEdit(!isEdit);
+  const toggleIsEdit = () => {
+    setIsEdit(!isEdit);
+    setLocalContent(diaryDetail.content);
+  };
   // 수정된 데이터
-  const [localContent, setLocalContent] = useState(diaryDetail.content);
+  const [localContent, setLocalContent] = useState("");
 
   const handleQuitEdit = () => {
     setIsEdit(false);
@@ -28,7 +31,7 @@ function DiaryDetail() {
   useEffect(() => {
     axios_api.get(`diary/${location.state.diaryIdx}`).then(({ data }) => {
       if (data.statusCode === 200) {
-        if (data.data.responseMessage === '일기 조회 성공') {
+        if (data.data.responseMessage === "일기 조회 성공") {
           setDiaryDetail(data.data.diary); // 데이터는 response.data.data 안에 들어있음
           if (data.data.isBookmark === true) {
             setIsBook(!isBook);
@@ -52,7 +55,7 @@ function DiaryDetail() {
                 .delete(`diary/bookmark/${location.state.diaryIdx}`)
                 .then(({ data }) => {
                   if (data.statusCode === 200) {
-                    if (data.data.responseMessage === '일기 북마크 삭제 성공') {
+                    if (data.data.responseMessage === "일기 북마크 삭제 성공") {
                       setIsBook(!isBook);
                     }
                   } else {
@@ -73,7 +76,7 @@ function DiaryDetail() {
                 .get(`diary/bookmark/${location.state.diaryIdx}`)
                 .then(({ data }) => {
                   if (data.statusCode === 200) {
-                    if (data.data.responseMessage === '일기 북마크 저장 성공') {
+                    if (data.data.responseMessage === "일기 북마크 저장 성공") {
                       setIsBook(!isBook);
                     }
                   } else {
@@ -97,15 +100,14 @@ function DiaryDetail() {
             <button
               onClick={() => {
                 axios_api
-                  .put('diary', {
+                  .put("diary", {
                     // userIdx: 1,
                     groupIdxList: [1],
                     diaryIdx: diaryDetail.diaryIdx,
                     content: localContent,
                   })
-                  .then((response) => {
-                    setDiaryDetail(response.data.data.diary);
-                    console.log(response.data.data.diary);
+                  .then(({ data }) => {
+                    setDiaryDetail(data.data.diary);
                     setIsEdit(false);
                   })
                   .catch((err) => console.log(err));
@@ -128,9 +130,9 @@ function DiaryDetail() {
                     .delete(`diary/${location.state.diaryIdx}`)
                     .then(({ data }) => {
                       if (data.statusCode === 200) {
-                        if (data.data.responseMessage === '일기 삭제 성공') {
+                        if (data.data.responseMessage === "일기 삭제 성공") {
                           setDiaryDetail(data.data.diary); // 데이터는 response.data.data 안에 들어있음
-                          navigate('/', { replace: true });
+                          navigate("/", { replace: true });
                         }
                       } else {
                         console.log(data.statusCode);
