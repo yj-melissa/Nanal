@@ -1,5 +1,6 @@
 package com.dbd.nanal.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -19,6 +20,7 @@ public class DiaryCommentEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="diary_idx")
+    @JsonIgnore
     private DiaryEntity diary;
 
     private String content;
@@ -32,10 +34,12 @@ public class DiaryCommentEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_idx")
+    @JsonIgnore
     private UserEntity user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="group_idx")
+    @JsonIgnore
     private GroupDetailEntity groupDetail;
 
     @Builder

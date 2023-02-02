@@ -45,12 +45,15 @@ public class GroupDetailEntity {
     private List<GroupTagEntity> groupTags = new ArrayList<>();
 
     @OneToMany(mappedBy = "groupDetail") // 읽기만 가능
+    @JsonIgnore
     private List<GroupUserRelationEntity> groupUserRelations = new ArrayList<>();
 
     @OneToMany(mappedBy = "groupDetail") // 읽기만 가능
+    @JsonIgnore
     private List<GroupDiaryRelationEntity> groupDiaries = new ArrayList<>();
 
     @OneToMany(mappedBy = "groupDetail")
+    @JsonIgnore
     private List<DiaryCommentEntity> diaryComments = new ArrayList<>();
 
 //    @Builder
