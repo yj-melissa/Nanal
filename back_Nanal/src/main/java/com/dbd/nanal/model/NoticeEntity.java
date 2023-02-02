@@ -1,5 +1,6 @@
 package com.dbd.nanal.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -18,6 +19,7 @@ public class NoticeEntity {
 
     @ManyToOne(fetch =FetchType.LAZY)
     @JoinColumn(name="user_idx")
+    @JsonIgnore
     private UserEntity user;
 
     @Column(name="request_user_idx")

@@ -1,6 +1,7 @@
 package com.dbd.nanal.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,6 +24,7 @@ public class GroupTagEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "group_idx")
+    @JsonIgnore
     private GroupDetailEntity groupDetail;
 
     @Column

@@ -14,12 +14,19 @@ public class ResponseMessage {
     public static final String GROUP_UPDATE_FAIL = "그룹 수정 실패";
     public static final String LOGIN_SUCCESS = "로그인 성공";
     public static final String LOGIN_FAIL = "로그인 실패";
-    public static final String READ_USER = "회원 정보 조회 성공";
-    public static final String NOT_FOUND_USER = "회원을 찾을 수 없습니다.";
-    public static final String UNAUTHROIZED_USER = "접근 권한 없음";
-    public static final String CREATED_USER = "회원 가입 성공";
-    public static final String UPDATE_USER = "회원 정보 수정 성공";
-    public static final String DELETE_USER = "회원 탈퇴 성공";
+    public static final String LOGOUT_SUCCESS = "로그아웃 성공";
+    public static final String USER_FIND_SUCCESS = "회원 정보 조회 성공";
+    public static final String USER_FIND_FAIL = "회원을 찾을 수 없음";
+    public static final String USER_UNAUTHROIZED = "접근 권한 없음";
+    public static final String USER_CREATE_SUCCESS = "회원 가입 성공";
+    public static final String USER_UPDATE_SUCCESS = "회원 정보 수정 성공";
+    public static final String USER_DELETE_SUCCESS = "회원 탈퇴 성공";
+    public static final String NOT_VALID_KEY = "입력 조건 불일치";
+    public static final String DUPLICATED_KEY = "사용 불가";
+    public static final String USUABLE_KEY = "사용 가능";
+    public static final String USER_LIST_FIND_SUCCESS = "유저 목록 조회 성공";
+    public static final String PASSWORD_UPDATE_SUCEESS = "비밀번호 변경 성공";
+    
     public static final String DIARY_SAVE_SUCCESS = "일기 생성 성공";
     public static final String DIARY_GET_SUCCESS = "일기 조회 성공";
     public static final String DIARY_GET_FAIL = "일기 조회 실패";
@@ -37,8 +44,9 @@ public class ResponseMessage {
     public static final String DIARY_COMMENT_LIST_FIND_SUCCESS = "일기 그룹에 해당하는 댓글 리스트 조회 성공";
     public static final String DIARY_COMMENT_DELETE_SUCCESS = "일기 댓글 삭제 성공";
     public static final String DIARY_COMMENT_DELETE_FAIL = "일기 댓글 삭제 실패";
-    public static final String NOT_VALID_TOKEN="유효하지 않은 토큰";
-    public static final String NOT_VALID_METHOD = "입력 조건과 일치하지 않습니다";
+    public static final String TOKEN_NOT_VALID ="유효하지 않은 토큰";
+
+
     public static final String DIARY_BOOKMARK_SAVE_SUCCESS="일기 북마크 저장 성공";
     public static final String DIARY_BOOKMARK_LIST_SUCCESS="일기 북마크 리스트 조회 성공";
     public static final String DIARY_BOOKMARK_DELETE_SUCCESS="일기 북마크 삭제 성공";
@@ -65,7 +73,6 @@ public class ResponseMessage {
     public static final String FRIEND_LIST_FIND_FAIL = "친구 리스트 조회 실패";
     public static final String FRIEND_FIND_SUCCESS = "친구 조회 성공";
     public static final String FRIEND_FIND_FAIL = "친구 조회 실패";
-    public static final String DUPLICATED_KEY = "DUPLICATED KEY";
 
     public static final String NONE_DATA = "데이터가 없습니다.";
     public static final String GROUP_USER_FIND_SUCCESS = "그룹 유저 조회 성공";
