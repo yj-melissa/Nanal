@@ -76,4 +76,6 @@ public class ResponseMessage {
 
     public static final String NONE_DATA = "데이터가 없습니다.";
     public static final String GROUP_USER_FIND_SUCCESS = "그룹 유저 조회 성공";
+    public static final String EMAIL_SEND_SUCCESS = "이메일 발송 성공";
+    public static final String EMAIL_SEND_FAIL = "이메일 발송 실패";
 }
