@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import axios_api from '../../config/Axios';
 import CommentItem from './CommentItem';
 
@@ -10,7 +10,7 @@ function Comment({ diaryIdx, groupIdx }) {
   const onChange = (e) => setContent(e.target.value);
   // 포커싱 기능
   const commentRef = useRef();
-  console.log(diaryIdx, content);
+
   // 등록 버튼 누르면 실행되는 함수
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -20,9 +20,8 @@ function Comment({ diaryIdx, groupIdx }) {
     }
     axios_api
       .post('diary/comment', {
-        userIdx: 1,
         diaryIdx: diaryIdx,
-        groupIdx: 1,
+        groupIdx: groupIdx,
         content: content,
       })
       .then(({ data }) => {
@@ -39,11 +38,29 @@ function Comment({ diaryIdx, groupIdx }) {
     setContent('');
   };
   console.log(commentList);
+  // 디테일 페이지에서 댓글 있으면 보여줘야 함
+  useEffect(() => {
+    axios_api.get(`diary/comment//${diaryIdx}`).then(({ data }) => {
+      if (data.statusCode === 200) {
+        if (
+          data.data.responseMessage ===
+          '일기 그룹에 해당하는 댓글 리스트 조회 성공'
+        ) {
+          setCommentList(data.data.diaryComment);
+        }
+      } else {
+        console.log(data.statusCode);
+        console.log(data.data.responseMessage);
+      }
+    });
+  }, []);
 
   return (
     <div className='comment-container'>
-      <div>
-        <CommentItem content={content} />
+      <div className='comments-body'>
+        {commentList.map((comment, idx) => (
+          <CommentItem key={idx} {...comment} />
+        ))}
       </div>
       <form className='comment-wrap' onClick={handleSubmit}>
         <input
@@ -55,13 +72,6 @@ function Comment({ diaryIdx, groupIdx }) {
         />
         <button onClick={handleSubmit}>등록</button>
       </form>
-      <div className='comments-body'>
-        {commentList.map((comment, idx) => (
-          <div key={idx}>
-            <div>{comment.content}</div>
-          </div>
-        ))}
-      </div>
     </div>
   );
 }
