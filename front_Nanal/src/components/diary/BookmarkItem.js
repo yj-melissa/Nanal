@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-function FavoriteItem({ diaryIdx }) {
+function BookmarkItem({ diaryIdx }) {
   // 나중에 그림 들어와야 함
   return (
     <Link to={`/Diary/${diaryIdx}`} state={{ diaryIdx: diaryIdx }}>
@@ -11,4 +11,4 @@ function FavoriteItem({ diaryIdx }) {
   );
 }
 
-export default FavoriteItem;
+export default BookmarkItem;

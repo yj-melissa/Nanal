@@ -27,6 +27,7 @@ function DiaryList({ curDate }) {
         console.log('일기 리스트 불러오기 오류: ', err);
       });
   }, [curDate]);
+  console.log(diaryList);
 
   return (
     <div className='DiaryList'>
