@@ -21,7 +21,6 @@ function DiaryDetail() {
     setIsEdit(false);
     setLocalContent(diaryDetail.content);
   };
-
   // 북마크 여부 데이터
   const [isBook, setIsBook] = useState(false);
 
@@ -32,7 +31,7 @@ function DiaryDetail() {
         if (data.data.responseMessage === '일기 조회 성공') {
           setDiaryDetail(data.data.diary); // 데이터는 response.data.data 안에 들어있음
           if (data.data.isBookmark === true) {
-            setIsBook(true);
+            setIsBook(!isBook);
           }
         }
       } else {
@@ -40,37 +39,54 @@ function DiaryDetail() {
         console.log(data.data.responseMessage);
       }
     });
-  }, [location.state.diaryIdx]);
+  }, []);
 
   return (
     <div>
       <span>그림 들어갈 자리</span>
-      <span
-        onClick={() => {
-          axios_api
-            .post('diary/bookmark', {
-              userIdx: 3,
-              diaryIdx: location.state.diaryIdx,
-            })
-            .then((response) => {
-              // 상태 변화 주기
-              setIsBook(!isBook);
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-        }}
-      >
-        {isBook ? (
-          <>
-            <button>칠한 북마크</button>
-          </>
-        ) : (
-          <>
-            <button>빈 북마크</button>
-          </>
-        )}
-      </span>
+      {isBook ? (
+        <>
+          <button
+            onClick={() =>
+              axios_api
+                .delete(`diary/bookmark/${location.state.diaryIdx}`)
+                .then(({ data }) => {
+                  if (data.statusCode === 200) {
+                    if (data.data.responseMessage === '일기 북마크 삭제 성공') {
+                      setIsBook(!isBook);
+                    }
+                  } else {
+                    console.log(data.statusCode);
+                    console.log(data.data.responseMessage);
+                  }
+                })
+            }
+          >
+            칠한 북마크
+          </button>
+        </>
+      ) : (
+        <>
+          <button
+            onClick={() =>
+              axios_api
+                .get(`diary/bookmark/${location.state.diaryIdx}`)
+                .then(({ data }) => {
+                  if (data.statusCode === 200) {
+                    if (data.data.responseMessage === '일기 북마크 저장 성공') {
+                      setIsBook(!isBook);
+                    }
+                  } else {
+                    console.log(data.statusCode);
+                    console.log(data.data.responseMessage);
+                  }
+                })
+            }
+          >
+            빈 북마크
+          </button>
+        </>
+      )}
       <div>작성자 프로필 사진 | </div>
       <span>user nickname | </span>
       <div>작성 시간 : {strDate}</div>
