@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
 
-function GroupProfile() {
+function GroupDetail() {
   const { state } = useLocation();
 
   const [groupDetail, setGroupName] = useState('');
@@ -23,25 +23,26 @@ function GroupProfile() {
           if (data.data.responseMessage === '그룹 조회 성공') {
             setGroupName(data.data.groupDetail);
             setGroupTag(data.data.tags);
+            const groupidx = data.data.groupDetail.groupIdx;
 
             axios_api
-              .get(`friend/list`)
+              .get(`group/user/${groupidx}`)
               .then(({ data }) => {
                 if (data.statusCode === 200) {
                   setFriendList(null);
-                  if (data.data.responseMessage === '친구 리스트 조회 성공') {
-                    setFriendList(data.data.friendList);
+                  if (data.data.responseMessage === '그룹 유저 조회 성공') {
+                    setFriendList(data.data.groupUserList);
                   } else if (data.data.responseMessage === '데이터 없음') {
                     setFriendList(['아직은 친구가 없습니다.']);
                   }
                 } else {
-                  console.log('친구 리스트 조회 오류: ');
+                  console.log('그룹 유저 조회 오류: ');
                   console.log(data.statusCode);
                   console.log(data.data.responseMessage);
                 }
               })
               .catch(({ error }) => {
-                console.log('친구 리스트 조회 오류: ' + error);
+                console.log('그룹 유저 조회 오류: ' + error);
               });
           }
         } else {
@@ -60,12 +61,19 @@ function GroupProfile() {
 
       <div>
         <p>{groupDetail.groupName}</p>
-        <button>수정하기</button>
 
         {groupTag.map((tagging, idx) => {
           return <span key={idx}>#{tagging.tag}&nbsp;</span>;
         })}
       </div>
+      <Link
+        to={`/Group/Update/${groupDetail.groupIdx}`}
+        state={{ groupDetail: groupDetail.groupIdx }}
+      >
+        <button>수정하기</button>
+      </Link>
+
+      <hr className='border-solid border-1 border-slate-800 w-80 my-5' />
 
       {friendList.map((friendItem, idx) => {
         return (
@@ -77,7 +85,7 @@ function GroupProfile() {
             <div>
               {friendItem.img}
               <br />
-              {friendItem.nickname}
+              {friendItem.nickName}
               <br />
               {friendItem.introduction}
             </div>
@@ -88,4 +96,4 @@ function GroupProfile() {
   );
 }
 
-export default GroupProfile;
+export default GroupDetail;
