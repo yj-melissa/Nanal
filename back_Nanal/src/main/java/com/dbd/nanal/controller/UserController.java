@@ -8,6 +8,7 @@ import com.dbd.nanal.dto.UserFormDTO;
 import com.dbd.nanal.dto.UserRequestDTO;
 import com.dbd.nanal.model.UserEntity;
 import com.dbd.nanal.model.UserProfileEntity;
+import com.dbd.nanal.service.EmailService;
 import com.dbd.nanal.service.UserService;
 
 import io.swagger.annotations.Api;
@@ -51,6 +52,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     private final UserService userService;
+    private final EmailService emailService;
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -105,6 +107,25 @@ public class UserController {
         refreshTokenCookie.setPath("/");     // 모든 경로에서 접근 가능
 
         response.addCookie(refreshTokenCookie);
+
+        return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "이메일 인증")
+    @GetMapping("/validate/{email}")
+    public ResponseEntity<?> validateEmail(@PathVariable String email) throws Exception {
+        String code = emailService.sendSimpleMessage(email);
+
+        HashMap<String, Object> responseDTO = new HashMap<>();
+        if (code == null) {
+            responseDTO.put("responseMessage", ResponseMessage.EMAIL_SEND_FAIL);
+            responseDTO.put("code", code);
+
+            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+        }
+
+        responseDTO.put("responseMessage", ResponseMessage.EMAIL_SEND_SUCCESS);
+        responseDTO.put("code", code);
 
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
