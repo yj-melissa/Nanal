@@ -94,12 +94,19 @@ public class NoticeService {
 
     //get notice
     public List<NotificationResponseDTO> getNotice(int userIdx){
-        List<NoticeEntity> noticeEntityList=noticeRepository.findByUser(UserEntity.builder().userIdx(userIdx).build());
+        List<NoticeEntity> noticeEntityList=noticeRepository.findByUserAndIsChecked(UserEntity.builder().userIdx(userIdx).build(), false);
         return noticeEntityList.stream().map(x->new NotificationResponseDTO(x)).collect(Collectors.toList());
     }
 
     //delete notice
     public void deleteNotice( int noticeIdx){
         noticeRepository.deleteById(noticeIdx);
+    }
+
+    // save notice check
+    public void saveNoticeCheck(int noticeIdx){
+        NoticeEntity noticeEntity=noticeRepository.getReferenceById(noticeIdx);
+        noticeEntity.setIsChecked(true);
+        noticeRepository.save(noticeEntity);
     }
 }
