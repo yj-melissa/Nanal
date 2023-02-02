@@ -2,9 +2,11 @@ package com.dbd.nanal.config;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+//import com.dbd.nanal.config.oauth.CustomOAuth2UserService;
 import com.dbd.nanal.config.security.JwtAuthenticationFilter;
 import com.dbd.nanal.config.security.JwtTokenProvider;
 import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,6 +30,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfig{
 
     private final JwtTokenProvider jwtTokenProvider;
+//    private final CustomOAuth2UserService customOAuth2UserService;
 
     @Autowired
     public SecurityConfig(JwtTokenProvider jwtTokenProvider) {
@@ -43,30 +46,35 @@ public class SecurityConfig{
             .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)    // 세션 미사용 설정
             .and()
-            .authorizeHttpRequests()
-//                .antMatchers(
-//                    "/user/profile",
-//                    "/user/test",
-//                    "/group/**").hasRole("USER")
-//                .antMatchers("/**").permitAll()
-                .antMatchers(
-                    "/user/signup",
-                    "/user/login",
-                    "/user/refresh",    // accessToken 재발급
-                    "/user/redirectTest",
-                    "/user/validate",
-                    // Swagger 관련 URL
-                    "/v2/api-docs/**",
-                    "/swagger-resources/**",
-                    "/swagger-ui/**",
-                    "/webjars/**",
-                    "/swagger/**",
-                    "/sign-api/exception/**"
-                ).permitAll()
+                .authorizeHttpRequests()
+    //                .antMatchers(
+    //                    "/user/profile",
+    //                    "/user/test",
+    //                    "/group/**").hasRole("USER")
+    //                .antMatchers("/**").permitAll()
+                    .antMatchers(
+                        "/user/signup",
+                        "/user/login",
+                        "/user/refresh",    // accessToken 재발급
+                        "/user/redirectTest",
+                        "/user/check/**",
+                        "/user/validate",
+                        // Swagger 관련 URL
+                        "/v2/api-docs/**",
+                        "/swagger-resources/**",
+                        "/swagger-ui/**",
+                        "/webjars/**",
+                        "/swagger/**",
+                        "/sign-api/exception/**"
+                    ).permitAll()
                 .antMatchers("/**").hasRole("USER")
             .and()
-            .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
-                UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
+                    UsernamePasswordAuthenticationFilter.class);
+//            .oauth2Login()
+//                .userInfoEndpoint()
+//                    .userService(customOAuth2UserService);
+
 
         return http.build();
     }
@@ -77,7 +85,9 @@ public class SecurityConfig{
         configuration.setAllowedOrigins(Arrays.asList(
             "http://192.168.100.94:3000",
             "http://192.168.100.204:3000",
-            "http://192.168.100.206:3000:",
+            "http://192.168.100.206:3000",
+            "http://192.168.35.39:3000",
+            "http://172.30.1.43:3000",
             "http://localhost:3000"));
         configuration.setAllowedMethods(Arrays.asList("*"));
 //        configuration.addAllowedOriginPattern("*");
