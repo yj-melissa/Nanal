@@ -102,6 +102,7 @@ public class FriendController {
     @GetMapping("list")
 //    public ResponseEntity<?> getFriendList(@ApiParam(value = "사용자 idx", required = true) @PathVariable int userIdx) {
     public ResponseEntity<?> getFriendList(@ApiParam(value = "유저 idx", required = true) @AuthenticationPrincipal UserEntity userInfo) {
+        System.out.println("[친구 리스트] 유저 : idx " + userInfo.getUserIdx() + " name " + userInfo.getUsername());
 
         HashMap<String, Object> responseDTO = new HashMap<>();
         try {
@@ -112,8 +113,9 @@ public class FriendController {
                 responseDTO.put("friendList", friendList);
                 return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
             } else {
-                responseDTO.put("responseMessage", ResponseMessage.FRIEND_LIST_FIND_FAIL);
-                return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
+                responseDTO.put("friendList", friendList);
+                responseDTO.put("responseMessage", ResponseMessage.NONE_DATA);
+                return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
             }
         }
         // Exception 발생
