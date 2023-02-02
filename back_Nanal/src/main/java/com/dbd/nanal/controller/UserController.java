@@ -233,15 +233,15 @@ public class UserController {
     }
 
     // 테스트용 api (Access Token 헤더로 받은 경우)
-    @GetMapping("/test")
-    public ResponseEntity<?> test(@ApiParam(value = "userIdx") @AuthenticationPrincipal UserEntity userInfo) {
-
-        HashMap<String, Object> responseDTO = new HashMap<>();
-        responseDTO.put("responseMessage", ResponseMessage.SUCCESS);
-        responseDTO.put("user", userInfo.getUserId());
-
-        return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-    }
+//    @GetMapping("/test")
+//    public ResponseEntity<?> test(@ApiParam(value = "userIdx") @AuthenticationPrincipal UserEntity userInfo) {
+//
+//        HashMap<String, Object> responseDTO = new HashMap<>();
+//        responseDTO.put("responseMessage", ResponseMessage.SUCCESS);
+//        responseDTO.put("user", userInfo.getUserId());
+//
+//        return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+//    }
 
     // 테스트용 api (Access Token 쿠키로 받은 경우)
 //    @GetMapping("/test")
@@ -257,9 +257,9 @@ public class UserController {
 
     @ApiOperation(value = "회원 정보 수정", notes =
             "[Front] \n" +
-                    "{img(String), nickname(String), introduction(String)} \n\n" +
-                    "[Back] \n" +
-                    "OK(200) \n\n")
+                "{img(String), nickname(String), introduction(String)} \n\n" +
+            "[Back] \n" +
+                "OK(200) \n\n")
     @PutMapping("/profile")
     public ResponseEntity<?> updateProfile(@ApiParam(value = "userIdx") @AuthenticationPrincipal UserEntity userInfo, @RequestBody @Valid UserRequestDTO userRequest) {
 
@@ -278,9 +278,9 @@ public class UserController {
 
     @ApiOperation(value = "회원 탈퇴", notes =
             "[Front] \n" +
-                    "{userIdx(int)} \n\n" +
-                    "[Back] \n" +
-                    "OK(200) \n\n")
+                "{userIdx(int)} \n\n" +
+                "[Back] \n" +
+                "OK(200) \n\n")
     @DeleteMapping("/profile")
     public ResponseEntity<?> deleteUser(@AuthenticationPrincipal UserEntity userInfo) {
         userService.deleteByUserIdx(userInfo.getUserIdx());
@@ -306,10 +306,10 @@ public class UserController {
 
     @ApiOperation(value = "비밀번호 확인", notes =
             "[Front] \n" +
-                    "JSON\n" +
-                    "{password(String)} \n\n" +
-                    "[Back] \n" +
-                    "OK(200), RUNTIME(500)  \n\n")
+                "JSON\n" +
+                "{password(String)} \n\n" +
+            "[Back] \n" +
+                "OK(200), RUNTIME(500)  \n\n")
     @PostMapping("/password")
     public ResponseEntity<?> checkPassword(@AuthenticationPrincipal UserEntity userInfo, @RequestBody @Valid UserRequestDTO userRequestDTO) {
         String password = userRequestDTO.getPassword();
@@ -333,10 +333,10 @@ public class UserController {
 
     @ApiOperation(value = "비밀번호 수정", notes =
             "[Front] \n" +
-                    "JSON\n" +
-                    "{password(String)} \n\n" +
-                    "[Back] \n" +
-                    "OK(200) \n\n")
+                "JSON\n" +
+                "{password(String)} \n\n" +
+            "[Back] \n" +
+                "OK(200) \n\n")
     @PutMapping("/password")
     public ResponseEntity<?> updatePassword(@ApiParam(value = "userIdx") @AuthenticationPrincipal UserEntity userInfo, @RequestBody UserRequestDTO userRequestDTO) {
 
@@ -367,10 +367,10 @@ public class UserController {
     // 중복확인
     @ApiOperation(value = "아이디 중복 확인", notes =
             "[Front] \n" +
-                    "{userId(String)} \n\n" +
-                    "[Back] \n" +
-                    "OK(200), DUPLICATE KEY(500)")
-    @GetMapping("/checkId/{userId}")
+                "{userId(String)} \n\n" +
+            "[Back] \n" +
+                "OK(200), DUPLICATE KEY(500)")
+    @GetMapping("/check/id/{userId}")
     public ResponseEntity<?> checkUserId(@PathVariable String userId) {
         userService.checkUserId(userId);
         HashMap<String, Object> responseDTO = new HashMap<>();
@@ -380,10 +380,10 @@ public class UserController {
 
     @ApiOperation(value = "닉네임 중복 확인", notes =
             "[Front] \n" +
-                    "{nickname(String)} \n\n" +
-                    "[Back] \n" +
-                    "OK(200), DUPLICATE KEY(500)")
-    @GetMapping("/checkNickname/{nickname}")
+                "{nickname(String)} \n\n" +
+            "[Back] \n" +
+                "OK(200), DUPLICATE KEY(500)")
+    @GetMapping("/check/nickname/{nickname}")
     public ResponseEntity<?> checkNickname(@PathVariable String nickname) {
         userService.checkNickname(nickname);
         HashMap<String, Object> responseDTO = new HashMap<>();
@@ -393,10 +393,10 @@ public class UserController {
 
     @ApiOperation(value = "이메일 중복 확인", notes =
             "[Front] \n" +
-                    "{email(String)} \n\n" +
-                    "[Back] \n" +
-                    "OK(200), DUPLICATE KEY(500)")
-    @GetMapping("/checkEmail/{email}")
+                "{email(String)} \n\n" +
+            "[Back] \n" +
+                "OK(200), DUPLICATE KEY(500)")
+    @GetMapping("/check/Email/{email}")
     public ResponseEntity<?> checkEmail(@PathVariable String email) {
         userService.checkEmail(email);
         HashMap<String, Object> responseDTO = new HashMap<>();
