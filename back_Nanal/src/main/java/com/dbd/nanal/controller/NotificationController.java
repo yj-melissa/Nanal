@@ -27,6 +27,27 @@ public class NotificationController {
 
     private final NoticeService noticeService;
 
+    @ApiOperation(value = "친구 추가 알림 생성", notes =
+            "친구 추가 알림을 생성합니다.\n" +
+                    "[Front] \n" +
+                    "{userIdx(list)} \n\n" +
+                    "[Back] \n" +
+                    "ok(200) ")
+    @PostMapping("/friend")
+    public ResponseEntity<?> saveFriendNotice(@ApiParam(value = "알림 정보")@RequestBody NotificationRequestDTO notice, @AuthenticationPrincipal UserEntity userInfo) {
+        HashMap<String, Object> responseDTO = new HashMap<>();
+        System.out.println(notice.toString());
+        try{
+            notice.setRequest_user_idx(userInfo.getUserIdx());
+            notice.setNotice_type(0);
+            noticeService.saveFriendNotice(notice);
+            responseDTO.put("responseMessage", ResponseMessage.NOTICE_SAVE_SUCCESS);
+            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>("서버오류", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @ApiOperation(value = "그룹 초대 알림 생성", notes =
             "그룹 초대 알림을 생성합니다.\n" +
                     "[Front] \n" +
@@ -36,9 +57,10 @@ public class NotificationController {
     @PostMapping("/group")
     public ResponseEntity<?> saveGroupNotice(@ApiParam(value = "알림 정보")@RequestBody NotificationRequestDTO notice, @AuthenticationPrincipal UserEntity userInfo) {
         HashMap<String, Object> responseDTO = new HashMap<>();
+        System.out.println(notice.toString());
         try{
             notice.setRequest_user_idx(userInfo.getUserIdx());
-            notice.setNotice_type(0);
+            notice.setNotice_type(1);
             noticeService.saveGroupNotice(notice);
             responseDTO.put("responseMessage", ResponseMessage.NOTICE_SAVE_SUCCESS);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
@@ -58,7 +80,7 @@ public class NotificationController {
         HashMap<String, Object> responseDTO = new HashMap<>();
         try{
             notice.setRequest_user_idx(userInfo.getUserIdx());
-            notice.setNotice_type(1);
+            notice.setNotice_type(3);
             noticeService.saveCommentNotice(notice);
             responseDTO.put("responseMessage", ResponseMessage.NOTICE_SAVE_SUCCESS);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);

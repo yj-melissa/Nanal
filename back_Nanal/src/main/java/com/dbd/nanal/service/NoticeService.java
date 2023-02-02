@@ -20,6 +20,21 @@ public class NoticeService {
     private final GroupUserRelationRepository groupUserRelationRepository;
 
 
+    //save friend notice
+    public void saveFriendNotice(NotificationRequestDTO notice){
+        String nickname=userProfileRepository.getReferenceById(notice.getRequest_user_idx()).getNickname();
+        String str=nickname+"님이 친구 신청을 요청했습니다.";
+
+        for(int userIdx: notice.getUserIdx()) {
+            NoticeEntity noticeEntity = NoticeEntity.builder()
+                    .user(UserEntity.builder().userIdx(userIdx).build())
+                    .requestUserIdx(notice.getRequest_user_idx())
+                    .content(str)
+                    .build();
+            noticeRepository.save(noticeEntity);
+        }
+    }
+
     //save group notice
     public void saveGroupNotice(NotificationRequestDTO notice){
         String nickname=userProfileRepository.getReferenceById(notice.getRequest_user_idx()).getNickname();
