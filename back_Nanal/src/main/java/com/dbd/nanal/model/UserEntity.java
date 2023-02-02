@@ -60,6 +60,7 @@ public class UserEntity implements UserDetails {
     private String userId;
 
     @Column(name = "password")
+    @JsonIgnore
     private String password;
 
     @Column(name = "social_code")
@@ -77,26 +78,33 @@ public class UserEntity implements UserDetails {
 
     @OneToOne
     @JoinColumn(name = "emotion_idx")
+    @JsonIgnore
     private EmotionEntity emotion;
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private List<GroupUserRelationEntity> groupUserRelations = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @JsonIgnore
     private List<NoticeEntity> notices = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @JsonIgnore
     private List<ScrapEntity> scraps = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @JsonIgnore
     private List<DiaryCommentEntity> diaryComments = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @JsonIgnore
     private List<DiaryEntity> diaries = new ArrayList<>();
 
     // 스프링 시큐리티 UserDetails
 
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
         return this.roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
@@ -105,18 +113,21 @@ public class UserEntity implements UserDetails {
 
     // 스프링 시큐리티에서 사용하는 회원 구분 id
     @Override
+    @JsonIgnore
     public String getUsername() {
         return this.userId;
     }
 
     // 계정 만료되었는지 여부
     @Override
+    @JsonIgnore
     public boolean isAccountNonExpired() {
         return true;
     }
 
     // 계정 잠겼는지 확인
     @Override
+    @JsonIgnore
     public boolean isAccountNonLocked() {
         return true;
     }
@@ -124,12 +135,14 @@ public class UserEntity implements UserDetails {
     // 아래는 미사용 -> 전체 true 반환
     // 계정 비밀번호 만료되었는지 확인
     @Override
+    @JsonIgnore
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
     // 계정이 사용가능한 상태인지 확인
     @Override
+    @JsonIgnore
     public boolean isEnabled() {
         return true;
     }

@@ -1,5 +1,6 @@
 package com.dbd.nanal.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedDate;
@@ -30,6 +31,7 @@ public class PaintingEntity {
     private String picture;
 
     @OneToOne(mappedBy = "painting")
+    @JsonIgnore
     private DiaryEntity diary;
 
     @Builder

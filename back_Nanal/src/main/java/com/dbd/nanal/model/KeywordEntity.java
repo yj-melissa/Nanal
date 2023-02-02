@@ -1,5 +1,6 @@
 package com.dbd.nanal.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -17,6 +18,7 @@ public class KeywordEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="diary_idx", referencedColumnName = "diary_idx")
+    @JsonIgnore
     private DiaryEntity diary;
 
     private String keyword;
