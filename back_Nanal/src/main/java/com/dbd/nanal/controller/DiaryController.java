@@ -283,7 +283,7 @@ public class DiaryController {
     public ResponseEntity<?> getCommentList(@ApiParam(value="댓글 리스트 조회 정보")@PathVariable("diaryIdx") int diaryIdx,@PathVariable("groupIdx") int groupIdx){
         HashMap<String, Object> responseDTO = new HashMap<>();
         List<DiaryCommentResponseDTO> diaryCommentList=diaryService.getDiaryCommentList(groupIdx, diaryIdx);
-        responseDTO.put("responseMessage", ResponseMessage.DIARY_COMMEMT_LIST_FIND_SUCCESS);
+        responseDTO.put("responseMessage", ResponseMessage.DIARY_COMMENT_LIST_FIND_SUCCESS);
         responseDTO.put("diaryComment", diaryCommentList);
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
