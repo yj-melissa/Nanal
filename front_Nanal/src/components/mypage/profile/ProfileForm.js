@@ -1,5 +1,6 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
+import { getCookie } from '../../../config/Cookie';
 import axios_api from '../../../config/Axios';
 import emptyProfile from '../../../src_assets/img/emptyProfile.png';
 import DiaryTotalList from '../../diary/DiaryTotalList';
@@ -20,32 +21,31 @@ function ProfileForm() {
     allDiary: null,
     likeDiary: null,
   });
-  // const accessToken =
-  //   'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MTIzIiwicm9sZXMiOlsiUk9MRV9VU0VSIl0sImlzcyI6Im5hbmFsIiwiaWF0IjoxNjc1MjI5NDk2LCJleHAiOjE2NzUzMTQ3NjN9.sRmpr3WLBnD2KGaSEX8pYcxaNj_e8sKeWH5d8V0O_YI4RdqTkn-NsE3VqOCRYb_ldDFRq4QRUGnhKy93q_D7sg';
-  // axios_api.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
-  // // Mount 됐을 때 user
-  // useEffect(() => {
-  //   axios_api
-  //     .get('user/profile')
-  //     .then(({ data }) => {
-  //       console.log('profile====');
-  //       if (data.statusCode === 200) {
-  //         if (data.data.responseMessage === '성공') {
-  //           // console.log(data.data.profile);
-  //           setUserProfile(data.data.profile);
-  //         }
-  //       }
-  //     })
-  //     .catch((err) => console.log(err));
+  const accessToken = getCookie('accessToken');
+  axios_api.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+  // Mount 됐을 때 user
+  useEffect(() => {
+    axios_api
+      .get('user/profile')
+      .then(({ data }) => {
+        console.log('profile====');
+        if (data.statusCode === 200) {
+          if (data.data.responseMessage === '성공') {
+            // console.log(data.data.profile);
+            setUserProfile(data.data.profile);
+          }
+        }
+      })
+      .catch((err) => console.log(err));
 
-  //   axios_api
-  //     .get('diary/list/user')
-  //     .then(({ data }) => {
-  //       console.log('user====');
-  //       console.log(data.data);
-  //     })
-  //     .catch((err) => console.log(err));
-  // }, []);
+    axios_api
+      .get('diary/list/user')
+      .then(({ data }) => {
+        console.log('user====');
+        console.log(data.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   const [Image, setImage] = useState(
     userProfile.img === null ? emptyProfile : Image

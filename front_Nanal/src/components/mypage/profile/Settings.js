@@ -1,11 +1,24 @@
 import { Link } from 'react-router-dom';
-import bookmarksRed from '../../src_assets/img/bookmarksRed.png';
-import groupYellow from '../../src_assets/img/groupYellow.png';
-import recycleBinImg from '../../src_assets/img/recycleBin.png';
-import logOutImg from '../../src_assets/img/log-out.svg';
-import settingImg from '../../src_assets/img/cog.svg';
+import { removeCookie } from '../../../config/Cookie';
+// import axios_api from './Axios';
+import bookmarksRed from '../../../src_assets/img/bookmarksRed.png';
+import groupYellow from '../../../src_assets/img/groupYellow.png';
+import recycleBinImg from '../../../src_assets/img/recycleBin.png';
+import logOutImg from '../../../src_assets/img/log-out.svg';
+import settingImg from '../../../src_assets/img/cog.svg';
 
 function Settings() {
+  const onLogout = () => {
+    const denyToken = removeCookie('accessToken');
+    // token 값이 없어졌다면?
+    if (denyToken === undefined) {
+      alert('로그아웃 되셨습니다!');
+      window.location.replace('/SignIn');
+    } else {
+      console.log('로그아웃 실패====');
+    }
+  };
+
   return (
     <div>
       <div className='grid grid-cols-3 gap-6'>
@@ -25,10 +38,10 @@ function Settings() {
       <br />
       <br />
       <div className='grid grid-cols-2'>
-        <Link to='/Group/List' className='grid content-evenly pl-4'>
+        <div className='grid content-evenly pl-4' onClick={onLogout}>
           <img src={logOutImg} className='w-10 h-10 m-auto' />
           <p className='text-center my-1 ml-3'>로그아웃</p>
-        </Link>
+        </div>
         <Link to='/Friend/List' className='grid content-evenly pr-10'>
           <img src={settingImg} className='w-10 h-10 m-auto' />
           <p className='text-center my-1'>설정</p>
