@@ -40,7 +40,7 @@ public class GroupDetailEntity {
 
 
     // 태그 검색할 때 사용
-    @OneToMany(mappedBy = "groupDetail") // 읽기만 가능
+    @OneToMany(mappedBy = "groupDetail", cascade = CascadeType.REMOVE) // 읽기만 가능
     @JsonIgnore
     private List<GroupTagEntity> groupTags = new ArrayList<>();
 
