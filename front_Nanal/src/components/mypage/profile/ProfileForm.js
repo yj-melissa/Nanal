@@ -30,8 +30,9 @@ function ProfileForm() {
       .then(({ data }) => {
         console.log('profile====');
         if (data.statusCode === 200) {
-          if (data.data.responseMessage === '성공') {
-            // console.log(data.data.profile);
+          // console.log(data.data)
+          if (data.data.responseMessage === '회원 정보 조회 성공') {
+            console.log(data.data.profile);
             setUserProfile(data.data.profile);
           }
         }
