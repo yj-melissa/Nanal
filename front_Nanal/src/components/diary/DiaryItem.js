@@ -10,11 +10,13 @@ function DiaryItem({ userIdx, diaryIdx, creationDate, content }) {
         diaryIdx: diaryIdx,
       }}
     >
-      <div className="DiaryItem">
-        <div>일기 번호 : {diaryIdx}</div>
-        <span>그림 들어갈 자리</span>
-        <div>작성 시간 : {strDate}</div>
-        <div>{content}</div>
+      <div className="my-2 p-2">
+        {/* <div>Diary No. {diaryIdx}</div> */}
+        <span className="box-content h-256 w-256">그림</span>
+        <div>
+          <span className="text-sm">{strDate}</span>
+          <p className="truncate ...">{content}</p>
+        </div>
       </div>
     </Link>
   );

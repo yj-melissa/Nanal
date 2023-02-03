@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import axios_api from "../../config/Axios";
-import CommentList from "./CommentList";
+import CommentItem from "./CommentItem";
 
 function Comment({ diaryIdx, groupIdx }) {
   // 댓글 내용
@@ -8,6 +8,9 @@ function Comment({ diaryIdx, groupIdx }) {
   const onChange = (e) => setContent(e.target.value);
   // 포커싱 기능
   const commentRef = useRef();
+
+  // 댓글 리스트 데이터 받기
+  const [diaryComment, setDiaryComment] = useState([]);
 
   // 등록 버튼 누르면 실행되는 함수
   const handleSubmit = (e) => {
@@ -25,23 +28,64 @@ function Comment({ diaryIdx, groupIdx }) {
       .then(({ data }) => {
         if (data.statusCode === 200) {
           if (data.data.responseMessage === "일기 댓글 저장 성공") {
-            alert("댓글 작성 완료");
+            // 저장 후 댓글 데이터 초기화
+            setContent("");
+            axios_api
+              .get(`diary/comment/1/${diaryIdx}`)
+              .then(({ data }) => {
+                if (data.statusCode === 200) {
+                  if (
+                    data.data.responseMessage ===
+                    "일기 그룹에 해당하는 댓글 리스트 조회 성공"
+                  ) {
+                    setDiaryComment(data.data.diaryComment);
+                    // console.log(diaryComment);
+                  }
+                } else {
+                  console.log("일기 그룹에 해당하는 댓글 리스트 조회 실패 : ");
+                  console.log(data.statusCode);
+                  console.log(data.data.responseMessage);
+                }
+              })
+              .catch((err) => console.log(err));
           }
         } else {
           console.log(data.statusCode);
           console.log(data.data.responseMessage);
         }
-      });
-    // 저장 후 댓글 데이터 초기화
-    setContent("");
+      })
+      .catch((err) => console.log(err));
   };
+
+  // 디테일 페이지에서 댓글 있으면 보여줘야 함
+  useEffect(() => {
+    axios_api
+      .get(`diary/comment/1/${diaryIdx}`)
+      .then(({ data }) => {
+        if (data.statusCode === 200) {
+          if (
+            data.data.responseMessage ===
+            "일기 그룹에 해당하는 댓글 리스트 조회 성공"
+          ) {
+            setDiaryComment(data.data.diaryComment);
+          }
+        } else {
+          console.log("일기 그룹에 해당하는 댓글 리스트 조회 실패 : ");
+          console.log(data.statusCode);
+          console.log(data.data.responseMessage);
+        }
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   return (
     <div className="comment-container">
       <div className="comments-body">
-        <CommentList diaryIdx={diaryIdx} groupIdx={groupIdx} />
+        {diaryComment.map((comment) => (
+          <CommentItem key={comment.commentIdx} {...comment} />
+        ))}
       </div>
-      <form className="comment-wrap" onClick={handleSubmit}>
+      <form className="comment-wrap" onSubmit={handleSubmit}>
         <input
           type="text"
           ref={commentRef}
@@ -49,7 +93,7 @@ function Comment({ diaryIdx, groupIdx }) {
           value={content}
           onChange={onChange}
         />
-        <button onClick={handleSubmit}>등록</button>
+        <button type="submit">등록</button>
       </form>
     </div>
   );

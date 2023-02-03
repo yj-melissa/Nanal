@@ -1,16 +1,14 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { RecoilLoadable } from "recoil";
+import { useState } from "react";
 import axios_api from "../../config/Axios";
 
 function CommentItem({ diaryIdx, groupIdx, content, commentIdx }) {
   // 댓글 상세 데이터 받기
-  const [commentDetail, setCommentDetail] = useState(content);
+  const [commentDetail, setCommentDetail] = useState({});
   // 댓글 수정
   const [isEdit, setIsEdit] = useState(false);
   const toggleIsEdit = () => {
     setIsEdit(!isEdit);
-    setLocalContent(content);
+    setLocalContent(localContent);
   };
 
   const [localContent, setLocalContent] = useState(content);
@@ -33,9 +31,10 @@ function CommentItem({ diaryIdx, groupIdx, content, commentIdx }) {
                   content: localContent,
                 })
                 .then(({ data }) => {
-                  setCommentDetail(data.data.diaryComment.content);
+                  setCommentDetail(data.data.diaryComment);
                   setIsEdit(false);
-                });
+                })
+                .catch((err) => console.log(err));
             }}
           >
             수정 완료
@@ -59,6 +58,7 @@ function CommentItem({ diaryIdx, groupIdx, content, commentIdx }) {
                         return;
                       }
                     } else {
+                      console.log("일기 댓글 삭제 실패 : ");
                       console.log(data.statusCode);
                       console.log(data.data.responseMessage);
                     }
@@ -82,7 +82,7 @@ function CommentItem({ diaryIdx, groupIdx, content, commentIdx }) {
             </form>
           </>
         ) : (
-          <>{commentDetail}</>
+          <>{localContent}</>
         )}
       </div>
     </div>

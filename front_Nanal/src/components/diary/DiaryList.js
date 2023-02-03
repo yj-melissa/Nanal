@@ -16,7 +16,7 @@ function DiaryList({ curDate }) {
           // 초기화 필요!
           setDiaryList(null);
           if (data.data.responseMessage === "일기 리스트 조회 성공") {
-            setDiaryList(data.data.diary); // 데이터는 response.data.data 안에 들어있음
+            setDiaryList(data.data.diary);
           }
         } else {
           console.log(data.statusCode);
@@ -30,8 +30,9 @@ function DiaryList({ curDate }) {
 
   return (
     <div className="DiaryList">
-      <h4>
-        {curDate} | {diaryList.length}개의 일기가 있습니다.
+      <h4 className="text-center text-rose-500">
+        {/* {curDate} */}
+        {diaryList.length}개의 일기가 있습니다.
       </h4>
       <div>
         {diaryList.map((diary) => (
