@@ -30,5 +30,11 @@ public class FriendDetailResponseDTO {
         this.img = profile.getImg();
         this.shortContent = null;
     }
+//    public FriendDetailResponseDTO(int userIdx, String nickname, String img) {
+//        this.userIdx = userIdx;
+//        this.nickname = ni
+//        this.Introduction = profile.getIntroduction();
+//        this.img =img;
+//    }
 
 }
