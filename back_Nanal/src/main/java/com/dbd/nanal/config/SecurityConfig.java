@@ -58,7 +58,7 @@ public class SecurityConfig{
                         "/user/refresh",    // accessToken 재발급
                         "/user/redirectTest",
                         "/user/check/**",
-                        "/user/validate",
+                        "/user/validate/**",
                         // Swagger 관련 URL
                         "/v2/api-docs/**",
                         "/swagger-resources/**",
