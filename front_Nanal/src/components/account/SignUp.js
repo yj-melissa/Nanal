@@ -33,15 +33,21 @@ function SignUp() {
 
   const sendEmail = (emailstring) => {
     axios_api
-      .get(`user/valicate/${emailstring}`)
+      .get(`user/validate/${emailstring}`)
       .then(({ data }) => {
         if (data.statusCode === 200) {
           if (data.data.responseMessage === '이메일 발송 성공') {
-            setEmailV1();
+            setEmailV1(data.data.code);
             setEmailToggle(true);
+            console.log(data.data.code);
           }
         } else {
-          alert('이메일을 확인하고 다시 입력해주세요.');
+          if (data.data.responseMessage === '사용 불가') {
+            alert('이미 가입한 이메일 입니다.');
+            window.location.replace('/SignIn');
+          } else {
+            alert('이메일을 확인하고 다시 입력해주세요.');
+          }
         }
       })
       .catch((error) => {
