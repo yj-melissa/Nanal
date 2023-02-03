@@ -21,11 +21,13 @@ public class DiaryService {
     private final DiaryCommentRepository diaryCommentRepository;
     private final BookmarkRepository bookmarkRepository;
     private final KeywordRepository keywordRepository;
+    private final UserRepository userRepository;
 
     // write diary
     public DiaryResponseDTO save(DiaryRequestDTO diary){
+        UserEntity user=userRepository.getReferenceById(diary.getUserIdx());
         DiaryEntity diaryEntity=DiaryEntity.builder().creationDate(diary.getCreationDate())
-                .user(UserEntity.builder().userIdx(diary.getUserIdx()).build())
+                .user(user)
                 .content(diary.getContent())
                 .emo(diary.getEmo()).build();
         return new DiaryResponseDTO(diaryRepository.save(diaryEntity));
