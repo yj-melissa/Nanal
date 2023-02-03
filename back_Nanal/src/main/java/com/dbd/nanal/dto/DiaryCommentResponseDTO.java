@@ -11,11 +11,13 @@ public class DiaryCommentResponseDTO {
     private String content;
     private Date creationDate;
     private int userIdx;
+    private String nickname;
 
     public DiaryCommentResponseDTO(DiaryCommentEntity diaryCommentEntity) {
         this.commentIdx=diaryCommentEntity.getCommentIdx();
         this.content=diaryCommentEntity.getContent();
         this.creationDate=diaryCommentEntity.getCreationDate();
         this.userIdx=diaryCommentEntity.getUser().getUserIdx();
+        this.nickname=diaryCommentEntity.getUser().getUserProfile().getNickname();
     }
 }
