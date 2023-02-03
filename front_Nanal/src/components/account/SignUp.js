@@ -13,6 +13,7 @@ function SignUp() {
   const [emailMessage, setEmailMessage] = useState('');
   const [isEmail, setIsEmail] = useState(false);
   const [emailToggle, setEmailToggle] = useState(false);
+  const [emailcheckToggle, setEmailCheckToggle] = useState(false);
   const [emailV1, setEmailV1] = useState('');
   const [emailV2, setEmailV2] = useState('');
 
@@ -39,7 +40,6 @@ function SignUp() {
           if (data.data.responseMessage === '이메일 발송 성공') {
             setEmailV1(data.data.code);
             setEmailToggle(true);
-            console.log(data.data.code);
           }
         } else {
           if (data.data.responseMessage === '사용 불가') {
@@ -63,6 +63,8 @@ function SignUp() {
     if (emailV2 !== '') {
       if (emailV1 === emailV2) {
         setIsEmail(true);
+        setEmailToggle(false);
+        setEmailCheckToggle(true);
       } else {
         alert('이메일 인증 코드를 다시 확인해주세요!');
       }
@@ -234,6 +236,7 @@ function SignUp() {
                 onChange={onChangeEmail}
               />
               <button
+                type='button'
                 onClick={() => {
                   sendEmail(email);
                 }}
@@ -256,6 +259,8 @@ function SignUp() {
                     확인
                   </button>
                 </div>
+              ) : emailcheckToggle === true ? (
+                <p>이메일 인증이 완료 되었습니다.</p>
               ) : (
                 <></>
               )}
