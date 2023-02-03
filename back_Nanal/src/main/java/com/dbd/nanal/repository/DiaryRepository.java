@@ -35,4 +35,7 @@ public interface DiaryRepository extends JpaRepository<DiaryEntity, Integer> {
     List<DiaryEntity> findByUser(UserEntity user);
 
     Long countByUser(UserEntity user);
+
+    @Query("select a from DiaryEntity a where a.content like concat('%', :content, '%') and a.diaryIdx in (select g.diary.diaryIdx from GroupDiaryRelationEntity g where g.groupDetail.groupIdx IN (select u.groupDetail.groupIdx from  GroupUserRelationEntity u where u.user.userIdx=:userIdx) )")
+    List<DiaryEntity> searchDiary(@Param("content") String content, @Param("userIdx") int userIdx);
 }
