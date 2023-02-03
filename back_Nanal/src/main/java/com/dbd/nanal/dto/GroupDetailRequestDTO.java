@@ -21,12 +21,12 @@ public class GroupDetailRequestDTO {
     private int groupIdx;
     private String groupName;
     private boolean isPrivate;
-    private String groupImg;
+    private int groupImgIdx;
     private LocalDateTime creationDate;
     private List<String> tags;
 
 
     public GroupDetailEntity toEntity() {
-        return GroupDetailEntity.builder().groupName(groupName).groupImg(groupImg).isPrivate(isPrivate).groupIdx(groupIdx).build();
+        return GroupDetailEntity.builder().groupName(groupName).groupImgIdx(groupImgIdx).isPrivate(isPrivate).groupIdx(groupIdx).build();
     }
 }

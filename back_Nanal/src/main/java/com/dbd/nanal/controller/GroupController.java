@@ -4,11 +4,14 @@ import com.dbd.nanal.config.common.DefaultRes;
 import com.dbd.nanal.config.common.ResponseMessage;
 import com.dbd.nanal.dto.*;
 import com.dbd.nanal.model.UserEntity;
+import com.dbd.nanal.service.FileService;
 import com.dbd.nanal.service.GroupService;
+import com.dbd.nanal.service.PaintingService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -28,6 +31,9 @@ import java.util.Map;
 public class GroupController {
 
     private final GroupService groupService;
+    private final FileService fileService;
+    private final PaintingService paintingService;
+    private final FileController fileController;
 
     @ApiOperation(value = "새로운 그룹 생성", notes =
             "새로운 그룹을 생성합니다.\n" +

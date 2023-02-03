@@ -89,6 +89,7 @@ public class SecurityConfig{
             "http://192.168.35.39:3000",
             "http://172.30.1.43:3000",
             "http://192.168.0.164:3000",
+            "http://14.46.142.235:3000",
             "http://localhost:3000"));
         configuration.setAllowedMethods(Arrays.asList("*"));
 //        configuration.addAllowedOriginPattern("*");

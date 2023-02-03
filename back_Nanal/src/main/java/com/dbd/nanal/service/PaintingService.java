@@ -4,6 +4,8 @@ import com.dbd.nanal.model.PaintingEntity;
 import com.dbd.nanal.repository.PaintingRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class PaintingService {
 
@@ -13,9 +15,12 @@ public class PaintingService {
         this.paintingRepository = paintingRepository;
     }
 
-    public PaintingEntity save(PaintingEntity paintingEntity){
+    public PaintingEntity save(PaintingEntity paintingEntity) {
         return paintingRepository.save(paintingEntity);
     }
 
 
+    public Optional<PaintingEntity> findById(int paintingIdx) {
+        return paintingRepository.findById(paintingIdx);
+    }
 }
