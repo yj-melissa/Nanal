@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface NoticeRepository extends JpaRepository<NoticeEntity, Integer> {
 
-    List<NoticeEntity> findByUserAndIsChecked(UserEntity user, boolean check);
+    List<NoticeEntity> findByUserAndIsCheckedOrderByCreationDateDesc(UserEntity user, boolean check);
 }
