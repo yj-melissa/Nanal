@@ -57,6 +57,8 @@ public class FileHandler {
                 .fileSize(multipartFile.getSize())
                 .build();
 
+        System.out.println("p[athname : ");
+        System.out.println(absolutePath+path+File.separator+newFileName);
 
         file = new File(absolutePath+path+File.separator+newFileName);
         multipartFile.transferTo(file);

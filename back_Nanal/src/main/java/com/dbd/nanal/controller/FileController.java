@@ -10,13 +10,20 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.util.UriUtils;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.Optional;
 
 
 @Api(tags = {"파일 관련 API"})
@@ -40,8 +47,6 @@ public class FileController {
                     "{pictureIdx, picturePath, creationDate, pictureTitle, fileSize} ")
 
     @Transactional
-//    @PostMapping(consumes = {  MediaType.MULTIPART_FORM_DATA_VALUE,MediaType.APPLICATION_JSON_VALUE
-//           })
     @PostMapping(consumes = {"multipart/form-data"
             , "application/json"})
     public ResponseEntity<?> paintingSave(@ApiParam(value = "달리 이미지") @RequestPart(value = "multipartFile") MultipartFile multipartFile, @ApiParam(value = "받을 dto") @RequestPart(name = "value")
@@ -70,14 +75,21 @@ public class FileController {
 
     }
 
-    @GetMapping("/{paintingIdx}")
-    public ResponseEntity<?> paintingFind(@ApiParam(value = "달리 이미지 idx") @PathVariable("paintingIdx") int paintingIdx) {
+    @GetMapping(value = "/{paintingIdx}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    public ResponseEntity<?> paintingFind(@ApiParam(value = "이미지 idx") @PathVariable("paintingIdx") int paintingIdx) throws IOException {
+        Optional<PaintingEntity> paintingEntity = paintingService.findById(paintingIdx);
 
-//        paintingService.findById(paintingIdx);
+        if (paintingEntity.isPresent()) {
+            UrlResource urlResource = new UrlResource("file:" + paintingEntity.get().getPicturePath());
 
+            String encodedUploadFileName = UriUtils.encode(paintingEntity.get().getPictureTitle(), StandardCharsets.UTF_8);
+            String contentDisposition = "attachment; filename=\"" + encodedUploadFileName + "\"";
 
-        return null;
-
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
+                    .body(urlResource);
+        }
+        return new ResponseEntity<>(DefaultRes.res(500, ResponseMessage.INTERNAL_SERVER_ERROR), HttpStatus.OK);
     }
 
 }

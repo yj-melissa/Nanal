@@ -34,8 +34,7 @@ public class GroupDetailEntity {
     @Column(name = "is_private")
     private boolean isPrivate;
 
-    @Column(name = "group_img")
-    private String groupImg;
+    private int groupImgIdx;
 
     @Column(name = "creation_date", columnDefinition = "TIMESTAMP DEFAULT NOW()")
     @CreatedDate
@@ -69,11 +68,11 @@ public class GroupDetailEntity {
 //    }
 
     @Builder
-    public GroupDetailEntity(int groupIdx, String groupName, boolean isPrivate, String groupImg, Date creationDate, List<GroupTagEntity> groupTags, List<GroupUserRelationEntity> groupUserRelations, List<GroupDiaryRelationEntity> groupDiaries, List<DiaryCommentEntity> diaryComments) {
+    public GroupDetailEntity(int groupIdx, String groupName, boolean isPrivate, int groupImgIdx, Date creationDate, List<GroupTagEntity> groupTags, List<GroupUserRelationEntity> groupUserRelations, List<GroupDiaryRelationEntity> groupDiaries, List<DiaryCommentEntity> diaryComments) {
         this.groupIdx = groupIdx;
         this.groupName = groupName;
         this.isPrivate = isPrivate;
-        this.groupImg = groupImg;
+        this.groupImgIdx = groupImgIdx;
         this.creationDate = creationDate;
         this.groupTags = groupTags;
         this.groupUserRelations = groupUserRelations;
