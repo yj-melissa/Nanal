@@ -93,7 +93,7 @@ public class NoticeService {
 
     //get notice
     public List<NotificationResponseDTO> getNotice(int userIdx){
-        List<NoticeEntity> noticeEntityList=noticeRepository.findByUserAndIsChecked(UserEntity.builder().userIdx(userIdx).build(), false);
+        List<NoticeEntity> noticeEntityList=noticeRepository.findByUserAndIsCheckedOrderByCreationDateDesc(UserEntity.builder().userIdx(userIdx).build(), false);
         return noticeEntityList.stream().map(x->new NotificationResponseDTO(x)).collect(Collectors.toList());
     }
 
