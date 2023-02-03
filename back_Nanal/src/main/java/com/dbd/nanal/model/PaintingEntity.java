@@ -1,19 +1,17 @@
 package com.dbd.nanal.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @Getter
 @NoArgsConstructor
 @Entity
+@Setter
 @Table(name = "painting")
 public class PaintingEntity {
     @Id
@@ -21,24 +19,27 @@ public class PaintingEntity {
     @Column(name="picture_idx", columnDefinition = "INT UNSIGNED")
     private int pictureIdx;
 
-    @Column(name="picture_path")
+//    @Column(name="picture_path")
     private String picturePath;
 
-    @CreationTimestamp
-    @Column(name="creation_date")
-    private Timestamp creationDate;
+    @Column(name = "creation_date", columnDefinition = "TIMESTAMP DEFAULT NOW()")
+    @CreatedDate
+    private LocalDateTime creationDate;
 
-    private String picture;
+    private String pictureTitle;
 
-    @OneToOne(mappedBy = "painting")
-    @JsonIgnore
-    private DiaryEntity diary;
+    private long fileSize;
+
+//    @OneToOne(mappedBy = "painting")
+//    @JsonIgnore
+//    private DiaryEntity diary;
 
     @Builder
-    public PaintingEntity(int pictureIdx, String picturePath, Timestamp creationDate, String picture) {
+    public PaintingEntity(int pictureIdx, String picturePath, String pictureTitle, long fileSize, LocalDateTime creationDate) {
         this.pictureIdx=pictureIdx;
         this.picturePath=picturePath;
-        this.creationDate=creationDate;
-        this.picture=picture;
+        this.pictureTitle=pictureTitle;
+        this.fileSize = fileSize;
+        this.creationDate = creationDate;
     }
 }

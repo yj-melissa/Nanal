@@ -15,6 +15,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +41,10 @@ public class GroupController {
     @PostMapping
     @Transactional
     public ResponseEntity<?> save(@ApiParam(value = "그룹 생성 정보") @RequestBody GroupDetailRequestDTO groupDetailRequestDTO, @AuthenticationPrincipal UserEntity userInfo) {
+//    public ResponseEntity<?> save(@ApiParam(value = "그룹 생성 정보") @RequestBody GroupDetailRequestDTO groupDetailRequestDTO) {
         System.out.println("[그룹 저장] 유저 : idx " + userInfo.getUserIdx() + " name " + userInfo.getUsername());
+        System.out.println("save");
+        System.out.println(new Date().toString());
 
         HashMap<String, Object> responseDTO = new HashMap<>();
 
@@ -55,6 +59,7 @@ public class GroupController {
 
                 // 사용자부터 그룹에 가입!
                 GroupUserRelationRequestDTO groupUserRelationRequestDTO = new GroupUserRelationRequestDTO(userInfo.getUserIdx(), groupDetailRequestDTO.getGroupIdx());
+//                GroupUserRelationRequestDTO groupUserRelationRequestDTO = new GroupUserRelationRequestDTO(userIdx, groupDetailRequestDTO.getGroupIdx());
                 groupService.saveGroupUserRelation(groupUserRelationRequestDTO);
 
                 // 2. group_tag table save, 결과 responseDTO에 저장
