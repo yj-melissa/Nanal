@@ -1,7 +1,8 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios_api from "../../config/Axios";
 import { onLogin } from "../../config/Login";
+import DiaryGroup from "./DiaryGroup";
 
 function DiaryCreate() {
   // 일기, 그룹여부 데이터 받기
@@ -41,6 +42,30 @@ function DiaryCreate() {
 
   // 뒤로가기 기능
   const navigate = useNavigate();
+  // 그룹 리스트 데이터 가져오기
+  const [groupList, setGroupList] = useState([]);
+  useEffect(() => {
+    onLogin();
+    axios_api
+      .get("group/list")
+      .then(({ data }) => {
+        if (data.statusCode === 200) {
+          setGroupList(null);
+          if (data.data.responseMessage === "그룹 리스트 조회 성공") {
+            setGroupList(data.data.groupList);
+          }
+        } else {
+          console.log(data.statusCode);
+          console.log(data.data.responseMessage);
+        }
+      })
+      .catch(({ error }) => {
+        console.log("그룹 리스트 불러오기 오류: " + error);
+      });
+  }, []);
+
+  // 그룹 리스트 보여줄지 말지
+  const [isShow, setShow] = useState(false);
 
   return (
     <div className="border-solid border-1 border-black text-center p-10">
@@ -59,18 +84,34 @@ function DiaryCreate() {
       </div>
       {/* 그룹 여부 선택란 */}
       <div>
-        <select
-          className="mb-10"
-          name="group"
-          value={group}
-          onChange={(e) => {
-            setGroup(e.target.value);
-          }}
-        >
-          <option value="private">개인</option>
-          {/* 추후에 그룹 선택 시, 그룹 목록을 보여줘야 함 */}
-          <option value="group">그룹</option>
-        </select>
+        <input
+          type="radio"
+          value="개인"
+          checked={group === "개인"}
+          onChange={(e) => setGroup(e.target.value)}
+          onClick={() => setShow(false)}
+        />
+        <label>개인</label>
+        <input
+          type="radio"
+          value="그룹"
+          checked={group === "그룹"}
+          onChange={(e) => setGroup(e.target.value)}
+          onClick={() => setShow(true)}
+        />
+        <label>그룹</label>
+        {isShow ? (
+          <>
+            {groupList.map((groupItem) => (
+              <DiaryGroup
+                key={groupItem.groupDetail.groupIdx}
+                item={groupItem}
+              />
+            ))}
+          </>
+        ) : (
+          <></>
+        )}
       </div>
       {/* 작성 취소 및 완료 버튼 */}
       <div className="flex justify-between">

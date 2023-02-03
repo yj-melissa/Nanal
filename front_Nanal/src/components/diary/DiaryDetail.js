@@ -29,19 +29,22 @@ function DiaryDetail() {
 
   // 일기 상세 페이지 불러오기
   useEffect(() => {
-    axios_api.get(`diary/${location.state.diaryIdx}`).then(({ data }) => {
-      if (data.statusCode === 200) {
-        if (data.data.responseMessage === "일기 조회 성공") {
-          setDiaryDetail(data.data.diary); // 데이터는 response.data.data 안에 들어있음
-          if (data.data.isBookmark === true) {
-            setIsBook(!isBook);
+    axios_api
+      .get(`diary/${location.state.diaryIdx}`)
+      .then(({ data }) => {
+        if (data.statusCode === 200) {
+          if (data.data.responseMessage === "일기 조회 성공") {
+            setDiaryDetail(data.data.diary); // 데이터는 response.data.data 안에 들어있음
+            if (data.data.isBookmark === true) {
+              setIsBook(!isBook);
+            }
           }
+        } else {
+          console.log(data.statusCode);
+          console.log(data.data.responseMessage);
         }
-      } else {
-        console.log(data.statusCode);
-        console.log(data.data.responseMessage);
-      }
-    });
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   return (
@@ -131,7 +134,7 @@ function DiaryDetail() {
                     .then(({ data }) => {
                       if (data.statusCode === 200) {
                         if (data.data.responseMessage === "일기 삭제 성공") {
-                          setDiaryDetail(data.data.diary); // 데이터는 response.data.data 안에 들어있음
+                          setDiaryDetail(data.data.diary);
                           navigate("/", { replace: true });
                         }
                       } else {
@@ -161,8 +164,8 @@ function DiaryDetail() {
       </div>
       <div>
         <Comment
-          diaryIdx={diaryDetail.diaryIdx}
-          groupIdx={diaryDetail.groupIdx}
+          diaryIdx={location.state.diaryIdx}
+          groupIdx={location.state.groupIdx}
         />
       </div>
     </div>
