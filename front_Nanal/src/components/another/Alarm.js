@@ -30,7 +30,7 @@ const Alarm = () => {
     axios_api
       .get('notification')
       .then(({ data }) => {
-        console.log(data.data.diary);
+        // console.log(data.data.diary);
         setIsAlarmList(data.data.diary);
       })
       .catch((err) => console.log(err));

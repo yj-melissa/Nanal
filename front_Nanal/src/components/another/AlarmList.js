@@ -1,7 +1,12 @@
-const AlarmList = ({ content, creationDate }) => {
+import { Link } from "react-router-dom";
+
+const AlarmList = ({ content, creationDate, noticeType,  }) => {
+  // console.log(content)
   return (
     <div>
-      <p>안녕하세요</p>
+      <p>{content}</p>
+      <p>{creationDate}</p>
+      <p>{noticeType}</p>
     </div>
   );
 };
