@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -34,13 +37,13 @@ public class GroupDetailEntity {
     @Column(name = "group_img")
     private String groupImg;
 
-    @Column(name = "creation_date")
-    @CreationTimestamp
+    @Column(name = "creation_date", columnDefinition = "TIMESTAMP DEFAULT NOW()")
+    @CreatedDate
     private Date creationDate;
 
 
     // 태그 검색할 때 사용
-    @OneToMany(mappedBy = "groupDetail", cascade = CascadeType.REMOVE) // 읽기만 가능
+    @OneToMany(mappedBy = "groupDetail") // 읽기만 가능
     @JsonIgnore
     private List<GroupTagEntity> groupTags = new ArrayList<>();
 
