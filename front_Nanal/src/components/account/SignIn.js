@@ -42,7 +42,7 @@ function SignIn() {
           }
         } else if (data.statusCode === 500) {
           if (data.data.responseMessage === '로그인 실패') {
-            alert('아이디랑 비밀번호를 다시 확인해주세요.');
+            alert('아이디 또는 비밀번호를 다시 확인해주세요.');
             setUserId('');
             setPw('');
           } else if (data.data.responseMessage === '회원을 찾을 수 없음') {
