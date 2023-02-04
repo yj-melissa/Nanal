@@ -44,7 +44,8 @@ public class NotificationController {
             responseDTO.put("responseMessage", ResponseMessage.NOTICE_SAVE_SUCCESS);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }catch (Exception e){
-            return new ResponseEntity<>("서버오류", HttpStatus.INTERNAL_SERVER_ERROR);
+            responseDTO.put("responseMessage", ResponseMessage.NOTICE_SAVE_FAIL);
+            return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
         }
     }
 
@@ -65,7 +66,8 @@ public class NotificationController {
             responseDTO.put("responseMessage", ResponseMessage.NOTICE_SAVE_SUCCESS);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }catch (Exception e){
-            return new ResponseEntity<>("서버오류", HttpStatus.INTERNAL_SERVER_ERROR);
+            responseDTO.put("responseMessage", ResponseMessage.NOTICE_SAVE_FAIL);
+            return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
         }
     }
 
@@ -85,7 +87,8 @@ public class NotificationController {
             responseDTO.put("responseMessage", ResponseMessage.NOTICE_SAVE_SUCCESS);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }catch (Exception e){
-            return new ResponseEntity<>("서버오류", HttpStatus.INTERNAL_SERVER_ERROR);
+            responseDTO.put("responseMessage", ResponseMessage.NOTICE_SAVE_FAIL);
+            return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
         }
     }
 
@@ -105,7 +108,8 @@ public class NotificationController {
             responseDTO.put("responseMessage", ResponseMessage.NOTICE_SAVE_SUCCESS);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }catch (Exception e){
-            return new ResponseEntity<>("서버오류", HttpStatus.INTERNAL_SERVER_ERROR);
+            responseDTO.put("responseMessage", ResponseMessage.NOTICE_SAVE_FAIL);
+            return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
         }
     }
 
@@ -127,7 +131,7 @@ public class NotificationController {
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }catch (Exception e){
             responseDTO.put("responseMessage", ResponseMessage.NOTICE_GET_FAIL);
-            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+            return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
         }
     }
 
@@ -165,7 +169,7 @@ public class NotificationController {
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }catch (Exception e){
             responseDTO.put("responseMessage", ResponseMessage.NOTICE_GET_FAIL);
-            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+            return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
         }
     }
 }
