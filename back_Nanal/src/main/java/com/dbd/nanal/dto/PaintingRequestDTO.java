@@ -19,4 +19,6 @@ public class PaintingRequestDTO {
     private MultipartFile file;
     private LocalDateTime creationTime;
 
+    private int groupIdx;
+
 }
