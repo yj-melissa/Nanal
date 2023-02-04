@@ -1,12 +1,13 @@
 package com.dbd.nanal.dto;
 
 import com.dbd.nanal.model.DiaryEntity;
-import com.dbd.nanal.model.GroupDetailEntity;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Date;
 
 @Getter
+@Setter
 public class SearchDiaryResponseDTO {
     private int diaryIdx;
     private int userIdx;
@@ -14,8 +15,8 @@ public class SearchDiaryResponseDTO {
     private String content;
     private String nickName;
 
-//    private int groupIdx;
-//    private String groupName;
+    private int groupIdx;
+    private String groupName;
 
     public SearchDiaryResponseDTO(DiaryEntity diary){
         this.diaryIdx=diary.getDiaryIdx();
@@ -23,7 +24,5 @@ public class SearchDiaryResponseDTO {
         this.content=diary.getContent();
         this.userIdx=diary.getUser().getUserIdx();
         this.nickName=diary.getUser().getUserProfile().getNickname();
-//        this.groupIdx=group.getGroupIdx();
-//        this.groupName=group.getGroupName();
     }
 }
