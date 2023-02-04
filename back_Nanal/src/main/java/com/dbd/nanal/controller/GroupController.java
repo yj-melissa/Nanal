@@ -196,7 +196,6 @@ public class GroupController {
                     "[Front] \n" +
                     "{groupIdx(int)) groupName(String), tags(tagIdx(int), String(content)), image(?)} \n\n" +
                     "[Back] \n" +
-                    "JSON\n" +
                     "{GroupDetailResponse}")
     @PutMapping
     public ResponseEntity<?> updateGroupDetail(@ApiParam(value = "groupIdx, groupName, tags, image", required = true) @RequestBody GroupDetailRequestDTO groupDetailRequestDTO, @AuthenticationPrincipal UserEntity userInfo) {
