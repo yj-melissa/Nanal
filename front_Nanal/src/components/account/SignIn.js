@@ -38,7 +38,7 @@ function SignIn() {
           if (data.data.responseMessage === '로그인 성공') {
             // console.log(data.data.token);
             onLoginSuccess(data.data.token);
-            window.location.replace('/');
+            window.location.replace('/home');
           }
         } else if (data.statusCode === 500) {
           if (data.data.responseMessage === '로그인 실패') {

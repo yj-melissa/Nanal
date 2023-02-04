@@ -13,7 +13,7 @@ function Settings() {
     // token 값이 없어졌다면?
     if (denyToken === undefined) {
       alert('로그아웃 되셨습니다!');
-      window.location.replace('/SignIn');
+      window.location.replace('/');
     } else {
       console.log('로그아웃 실패====');
     }

@@ -1,4 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
+import LogoHome from '../components/LogoHome.js';
 import Calendar from '../components/Calendaar.js';
 import BookCase from '../components/BookCase.js';
 import Alarm from '../components/another/Alarm.js';
@@ -22,10 +23,11 @@ import NotFound from '../components/another/NotFound.js';
 const AppMain = ({ isCalendaar }) => {
   return (
     <Routes>
+      <Route path='/' element={<LogoHome />}></Route>
       {isCalendaar ? (
-        <Route path='/' element={<Calendar />}></Route>
+        <Route path='/home' element={<Calendar />}></Route>
       ) : (
-        <Route path='/' element={<BookCase />}></Route>
+        <Route path='/home' element={<BookCase />}></Route>
       )}
       <Route path='/Alarm' element={<Alarm />}></Route>
       <Route path='/SignUp' element={<SignUp />}></Route>
