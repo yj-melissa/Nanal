@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
 import FriendItem from './FriendItem';
@@ -32,9 +33,12 @@ function FriendList() {
   return (
     <div>
       <h1 className='m-1 font-bold'>친구 리스트 조회</h1>
+      <Link to='/Friend/Add'>
+        <button type='button'>친구 추가하기</button>
+      </Link>
 
       {friendList.map((friendItem) => (
-        <FriendItem key={friendItem.groupDetail.groupIdx} item={friendItem} />
+        <FriendItem key={friendItem.userIdx} item={friendItem} />
       ))}
     </div>
   );

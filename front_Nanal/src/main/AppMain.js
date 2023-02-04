@@ -16,6 +16,7 @@ import GroupDetail from '../components/group/GroupDetail';
 import GroupUpdate from '../components/group/GroupUpdate';
 import FriendList from '../components/friend/FriendList';
 import FriendDetail from '../components/friend/FriendDetail';
+import FriendAdd from '../components/friend/FriendAdd';
 import MyPage from '../components/mypage/MyPage.js';
 import RecycleBin from '../components/another/RecycleBin';
 import NotFound from '../components/another/NotFound.js';
@@ -43,6 +44,7 @@ const AppMain = ({ isCalendaar }) => {
       <Route path='/Group/Update/:groupIdx' element={<GroupUpdate />}></Route>
       <Route path='/Friend/List' element={<FriendList />}></Route>
       <Route path='/Friend/:friendIdx' element={<FriendDetail />}></Route>
+      <Route path='/Friend/Add' element={<FriendAdd />}></Route>
       <Route path='/MyPage' element={<MyPage />}></Route>
       <Route path='/RecycleBin' element={<RecycleBin />}></Route>
       <Route path='*' element={<NotFound />}></Route>
