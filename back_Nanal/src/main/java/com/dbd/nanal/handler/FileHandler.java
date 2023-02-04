@@ -25,7 +25,7 @@ public class FileHandler {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMdd");
         String currentDate = now.format(dateTimeFormatter);
         // 파일 만들기
-        String absolutePath = new File("").getAbsolutePath() + File.separator + File.separator;
+        String absolutePath = new File("").getAbsolutePath() + File.separator +File.separator;
 
         String path = "painting" + File.separator + currentDate;
         File file = new File(path);
@@ -52,16 +52,12 @@ public class FileHandler {
         String newFileName = System.nanoTime() + originalFileExtension;
         paintingEntity = PaintingEntity.builder().pictureTitle(multipartFile.getOriginalFilename())
                 // photo 파일 아래 날자 파일 아래 파일을 저장
-                .picturePath(path+File.separator+newFileName)
+                .picturePath(path + File.separator + newFileName)
                 .fileSize(multipartFile.getSize())
                 .build();
 
-        System.out.println("p[athname : ");
-        System.out.println(absolutePath+path+File.separator+newFileName);
-
-        file = new File(absolutePath+path+File.separator+newFileName);
+        file = new File(absolutePath + path + File.separator + newFileName);
         multipartFile.transferTo(file);
-
 
         file.setWritable(true);
         file.setReadable(true);

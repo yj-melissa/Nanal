@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -176,5 +177,13 @@ public class UserService {
         }
     }
 
+
+    @Transactional
+    public void updateUserImg(int userIdx, int newPictureIdx) {
+        System.out.println("useridx : "+userIdx+ " newpictureidx : "+newPictureIdx);
+        UserProfileEntity userProfileEntity = userProfileRepository.getReferenceById(userIdx);
+        System.out.println("userIdx : "+userIdx+" 변경 전 img idx : "+userProfileEntity.getImg()+" 변경 후 img idx : "+newPictureIdx);
+        userProfileEntity.setImg(Integer.toString(newPictureIdx));
+    }
 }
 
