@@ -31,7 +31,7 @@ public class DiaryController {
                     "[Front] \n" +
                     "{content(String), groupIdx(List<Integer>)} \n\n" +
                     "[Back] \n" +
-                    "{diaryIdx(int), userIdx(int), creationDate(Date), content(String), picture(String), music(int), emo(String)} ")
+                    "{diaryIdx(int), userIdx(int), nickname(String), creationDate(Date), content(String), picture(String), music(int), emo(String)} ")
     @PostMapping("")
     public ResponseEntity<?> writeDiary(@ApiParam(value = "일기 정보")@RequestBody DiaryRequestDTO diary, @AuthenticationPrincipal UserEntity userInfo) {
         HashMap<String, Object> responseDTO = new HashMap<>();
@@ -59,7 +59,8 @@ public class DiaryController {
             responseDTO.put("diary", diaryResponseDTO);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }catch (Exception e){
-            return new ResponseEntity<>("서버오류", HttpStatus.INTERNAL_SERVER_ERROR);
+            responseDTO.put("responseMessage", ResponseMessage.DIARY_SAVE_FAIL);
+            return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
         }
     }
 
@@ -68,7 +69,7 @@ public class DiaryController {
                     "[Front] \n" +
                     "{diaryIdx(int)} \n\n" +
                     "[Back] \n" +
-                    "{diaryIdx(int), userIdx(int), creationDate(Date), content(String), picture(String), music(int), emo(String)} ")
+                    "{diaryIdx(int), userIdx(int), nickname(String), creationDate(Date), content(String), picture(String), music(int), emo(String)} ")
     @GetMapping("/{diaryIdx}")
     // 일기 리턴
     public ResponseEntity<?> getDiary(@ApiParam(value = "일기 id")@PathVariable("diaryIdx") int diaryIdx, @AuthenticationPrincipal UserEntity userInfo){
@@ -95,7 +96,7 @@ public class DiaryController {
                     "[Front] \n" +
                     "{diaryIdx(int), content(String), creationDate(Date), userIdx(int)}\n\n" +
                     "[Back] \n" +
-                    "ok(200)")
+                    "{diaryIdx(int), userIdx(int), nickname(String), creationDate(Date), content(String), picture(String), music(int), emo(String)")
     @PutMapping("")
     public ResponseEntity<?> updateDiary(@ApiParam(value = "일기 수정 정보")@RequestBody DiaryRequestDTO diary) {
         HashMap<String, Object> responseDTO = new HashMap<>();
@@ -154,7 +155,7 @@ public class DiaryController {
                     "[Front] \n" +
                     "{groupIdx(int)} \n\n" +
                     "[Back] \n" +
-                    "[{diaryIdx(int), userIdx(int), creationDate(Date), content(String), picture(String), music(int), emo(String)}]")
+                    "[{diaryIdx(int), userIdx(int), nickname(String), creationDate(Date), content(String), picture(String), music(int), emo(String)}]")
     @GetMapping("/list/{groupIdx}")
     public ResponseEntity<?> DiaryList(@PathVariable("groupIdx") int groupIdx){
         HashMap<String, Object> responseDTO = new HashMap<>();
@@ -174,7 +175,7 @@ public class DiaryController {
                     "[Front] \n" +
                     "{date(yyyy-mm-dd)} \n\n" +
                     "[Back] \n" +
-                    "[{diaryIdx(int), userIdx(int), creationDate(Date), content(String), picture(String), music(int), emo(String)}]")
+                    "[{diaryIdx(int), userIdx(int), nickname(String), creationDate(Date), content(String), picture(String), music(int), emo(String)}]")
     @GetMapping("/list/date/{date}")
     public ResponseEntity<?> DiaryList(@PathVariable("date") String date, @AuthenticationPrincipal UserEntity userInfo){
         HashMap<String, Object> responseDTO = new HashMap<>();
@@ -205,7 +206,7 @@ public class DiaryController {
                     "[Front] \n" +
                     "{userIdx(int)} \n\n" +
                     "[Back] \n" +
-                    "[{diaryIdx(int), userIdx(int), creationDate(Date), content(String), picture(String), music(int), emo(String)}]")
+                    "[{diaryIdx(int), userIdx(int), nickname(String), creationDate(Date), content(String), picture(String), music(int), emo(String)}]")
 //    @GetMapping("/list/user/{userIdx}")
     @GetMapping("/list/user")
 //    public ResponseEntity<?> userDiaryList(@PathVariable("userIdx") int userIdx){
@@ -247,7 +248,7 @@ public class DiaryController {
                     "[Front] \n" +
                     "{userIdx(0), diaryIdx(int), groupIdx(int), content(String)} \n\n" +
                     "[Back] \n" +
-                    "ok(200)")
+                    "{commentIdx(int), content(String), creationDate(date), userIdx(int), nickname(String)}")
     @PostMapping("/comment")
     public ResponseEntity<?> writeComment(@ApiParam(value = "댓글 정보") @RequestBody DiaryCommentRequestDTO diaryCommentRequestDTO, @AuthenticationPrincipal UserEntity userInfo) {
         HashMap<String, Object> responseDTO = new HashMap<>();
@@ -263,7 +264,7 @@ public class DiaryController {
                     "[Front] \n" +
                     "{commentIdx(int), content(String)} \n\n" +
                     "[Back] \n" +
-                    "ok(200)")
+                    "{commentIdx(int), content(String), creationDate(date), userIdx(int), nickname(String)}")
     @PutMapping("/comment")
     public ResponseEntity<?> updateComment(@ApiParam(value="댓글 수정 정보") @RequestBody DiaryCommentRequestDTO diaryCommentRequestDTO){
         HashMap<String, Object> responseDTO = new HashMap<>();
@@ -278,7 +279,7 @@ public class DiaryController {
                     "[Front] \n" +
                     "{diaryIdx(int), groupIdx(int)} \n\n" +
                     "[Back] \n" +
-                    "ok(200)")
+                    "[{commentIdx(int), content(String), creationDate(date), userIdx(int), nickname(String)}]")
     @GetMapping("/comment/{groupIdx}/{diaryIdx}")
     public ResponseEntity<?> getCommentList(@ApiParam(value="댓글 리스트 조회 정보")@PathVariable("diaryIdx") int diaryIdx,@PathVariable("groupIdx") int groupIdx){
         HashMap<String, Object> responseDTO = new HashMap<>();

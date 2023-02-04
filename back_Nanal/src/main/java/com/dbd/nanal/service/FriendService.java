@@ -56,10 +56,26 @@ public class FriendService {
             // 일기 하나도 없을 때
             if (diary == null) {
                 friendDetailResponseDTOS.add(new FriendDetailResponseDTO(friend.getUser_idx2().getUserProfile(), friend.getUser_idx2().getUserIdx(), ""));
-            }
-            else {
+            } else {
                 friendDetailResponseDTOS.add(new FriendDetailResponseDTO(friend.getUser_idx2().getUserProfile(), friend.getUser_idx2().getUserIdx(), diary.getContent()));
             }
+        }
+        return friendDetailResponseDTOS;
+    }
+
+    public List<HashMap<String, Object>> findFriendListNotInGroup(int userIdx, int groupIdx) {
+
+        List<FriendEntity> friends = friendRepository.findAllFriendsNotInGroup(userIdx, groupIdx);
+
+        List<HashMap<String, Object>> friendDetailResponseDTOS = new ArrayList<>();
+        for (FriendEntity friend : friends) {
+
+            HashMap<String, Object> responseDto= new HashMap<>();
+            responseDto.put("userIdx",friend.getUser_idx1().getUserIdx());
+            responseDto.put("nickName", friend.getUser_idx1().getUserProfile().getNickname());
+            responseDto.put("img","넣을예정");
+
+            friendDetailResponseDTOS.add(responseDto);
         }
         return friendDetailResponseDTOS;
     }

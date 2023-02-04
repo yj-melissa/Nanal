@@ -92,8 +92,8 @@ public class UserService {
     
     // 유저 프로필 조회
     public HashMap<String, Object> getByUserIdx(final int userIdx) {
+        log.info("userService getByUserIdx", userIdx);
         final UserProfileEntity userProfile = userProfileRepository.findByProfileId(userIdx);
-
         LocalDate createDate = userProfile.getUser().getCreationDate().toLocalDate();
         long days = (LocalDate.now().until(createDate, ChronoUnit.DAYS) * -1) + 1;
 

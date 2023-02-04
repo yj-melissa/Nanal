@@ -1,44 +1,38 @@
 package com.dbd.nanal.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
 
 @Getter
 @NoArgsConstructor
 @Entity
+@Setter
 @Table(name = "painting")
 public class PaintingEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="picture_idx", columnDefinition = "INT UNSIGNED")
+    @Column(columnDefinition = "INT UNSIGNED")
     private int pictureIdx;
-
-    @Column(name="picture_path")
     private String picturePath;
-
     @CreationTimestamp
-    @Column(name="creation_date")
-    private Timestamp creationDate;
+    private Date creationDate;
+    private String pictureTitle;
+    private long fileSize;
 
-    private String picture;
-
-    @OneToOne(mappedBy = "painting")
-    @JsonIgnore
-    private DiaryEntity diary;
+//    @OneToOne(mappedBy = "painting")
+//    @JsonIgnore
+//    private DiaryEntity diary;
 
     @Builder
-    public PaintingEntity(int pictureIdx, String picturePath, Timestamp creationDate, String picture) {
+    public PaintingEntity(int pictureIdx, String picturePath, String pictureTitle, long fileSize, Date creationDate) {
         this.pictureIdx=pictureIdx;
         this.picturePath=picturePath;
-        this.creationDate=creationDate;
-        this.picture=picture;
+        this.pictureTitle=pictureTitle;
+        this.fileSize = fileSize;
+        this.creationDate = creationDate;
     }
 }
