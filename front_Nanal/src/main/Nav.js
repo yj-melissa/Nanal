@@ -27,12 +27,12 @@ function Nav({ changeCalendaar }) {
       <nav className='flex w-80 justify-between space-x-4 m-auto'>
         <div className='flex items-center'>
           <Link
-            to='/'
+            to='/home'
             className='rounded-lg w-8 h-8 pr-1 py-1 my-1 text-slate-700 font-medium hover:bg-slate-100 hover:text-slate-900'
           >
             <img src={logo} />
           </Link>
-          {location.pathname === '/' ? (
+          {location.pathname === '/home' ? (
             <div>
               {isToggle ? (
                 <div className='w-6 h-6 pt-[5px]'>
@@ -72,7 +72,7 @@ function Nav({ changeCalendaar }) {
           <Link to='/Alarm'>
             <img src={bell} className='w-6 h-6 my-3' />
           </Link>
-          {location.pathname === '/' ? (
+          {location.pathname === '/home' ? (
             <Link to='/MyPage' className='ml-5 w-[36px]'>
               <img src={profile} className='w-[30px] h-[30px]' />
             </Link>
