@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { getCookie } from '../../config/Cookie';
+import { onLogin } from '../../config/Login';
 import AlarmList from './AlarmList';
 import axios_api from '../../config/Axios';
 
-// import { onLogin } from '../../config/Login';
 
 const Alarm = () => {
   const [isAlarmList, setIsAlarmList] = useState([]);
@@ -14,7 +14,7 @@ const Alarm = () => {
 
   // DB에서 알람 리스트 다 땡겨와야함.
   useEffect(() => {
-    // onLogin();
+    onLogin();
     axios_api
       .get('notification')
       .then(({ data }) => {

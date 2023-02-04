@@ -4,23 +4,28 @@ import { getCookie } from '../../../config/Cookie';
 import axios_api from '../../../config/Axios';
 import emptyProfile from '../../../src_assets/img/emptyProfile.png';
 import DiaryTotalList from '../../diary/DiaryTotalList';
-// create 시 or mount 시에 총 일기 개수, like 일기 개수 받아와야함.
+
 // username, userMassage, profile 받아와야함
 // 수정 시 파일 전송까지 ㅇㅇ
 function ProfileForm() {
   // user profile
   const [userProfile, setUserProfile] = useState({
+    days: 1,
     img: null,
     introduction: null,
     nickname: '',
   });
 
-  // diary information for user profile
-  const [difup, setDifup] = useState({
-    fromTheStartDay: null,
-    allDiary: null,
-    likeDiary: null,
-  });
+  //총 작성한 일기, 좋아하는 일기, 가입한지 N일째
+  const [pStatus, setPStatus] = useState({})
+  const changePStatus = (a, b) => {
+    setPStatus({
+      'dCount': a,
+      'likeCount': b,
+      'daybyday' : 1,
+    })
+  }
+
   const accessToken = getCookie('accessToken');
   axios_api.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
   // Mount 됐을 때 user
@@ -28,32 +33,56 @@ function ProfileForm() {
     axios_api
       .get('user/profile')
       .then(({ data }) => {
-        console.log('profile====');
+        // console.log('profile====');
         if (data.statusCode === 200) {
           // console.log(data.data)
           if (data.data.responseMessage === '회원 정보 조회 성공') {
             console.log(data.data.profile);
-            setUserProfile(data.data.profile);
+            // setUserProfile(data.data.profile);
+            axios_api
+              .get(`file/${data.data.profile.img}/save`)
+              .then((e) => {
+                  console.log(e)
+
+              })
+              .catch((err) => console.log(err));
           }
         }
       })
       .catch((err) => console.log(err));
-
+    // 총 작성한 일기 수
     axios_api
-      .get('diary/list/user')
+      .get('diary')
       .then(({ data }) => {
-        console.log('user====');
-        console.log(data.data);
+        if (data.statusCode === 200) { 
+          // console.log(data)
+          if (data.data.responseMessage === '일기 개수 조회 성공') { 
+            let daCount = data.data.diaryCount
+            // 좋아하는 일기
+            axios_api
+              .get('diary/bookmark')
+              .then(({ data }) => { 
+                // console.log(data)
+                if (data.statusCode === 200) { 
+                  if (data.data.responseMessage === '일기 북마크 개수 조회 성공') {
+                    let lCount = data.data.bookCount
+                    changePStatus(daCount, lCount)
+                  }
+                }
+              })
+          }
+        }
       })
       .catch((err) => console.log(err));
   }, []);
 
+  const navigate = useNavigate();
+
   const [Image, setImage] = useState(
     userProfile.img === null ? emptyProfile : Image
   );
+  console.log(Image)
   const fileInput = useRef(null);
-
-  const navigate = useNavigate();
 
   const onChange = (e) => {
     if (e.target.files[0]) {
@@ -72,9 +101,6 @@ function ProfileForm() {
     };
     reader.readAsDataURL(e.target.files[0]);
   };
-  // nickname
-
-  // message
 
   return (
     <div>
@@ -95,7 +121,7 @@ function ProfileForm() {
           ref={fileInput}
         />
         <div className='my-auto'>
-          <p className='my-auto text-2xl font-bold p-1'>유저 님의 일기장</p>
+          <p className='my-auto text-2xl font-bold p-1'>{userProfile.nickname} 님의 일기장</p>
           <span className='flex justify-end'>
             <button className=''>닉네임 변경</button>
           </span>
@@ -103,11 +129,12 @@ function ProfileForm() {
       </div>
       <div className='my-3'>
         <p>유저가 설정하는 메시지</p>
+        <p>{userProfile.introduction}</p>
         <button>메시지 수정</button>
       </div>
+      <button>수정하기</button>
       <div className='flex justify-betweendd'>
-        <p className='my-3 font-semibold'>나날과 함께한 N일째 나날입니다.</p>
-        <button>수정하기</button>
+        <p className='my-3 font-semibold'>나날과 함께한 {pStatus.daybyday}일째 나날입니다.</p>
       </div>
       <div className='flex justify-around box-border h-24 w-80 p-4 bg-slate-300/50'>
         <div
@@ -115,14 +142,14 @@ function ProfileForm() {
           onClick={() => navigate('/Diary/Total/List')}
         >
           <p className='text-center'>총 작성한 일기</p>
-          <p className='text-center font-bold'>777</p>
+          <p className='text-center font-bold'>{pStatus.dCount}</p>
         </div>
         <div
           className='grid content-evenly'
           onClick={() => navigate('/Diary/Bookmark/List')}
         >
           <p className='text-center'>좋아하는 일기</p>
-          <p className='text-center font-bold'>32</p>
+          <p className='text-center font-bold'>{pStatus.likeCount}</p>
         </div>
       </div>
     </div>
