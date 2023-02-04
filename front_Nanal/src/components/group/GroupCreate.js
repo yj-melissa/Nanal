@@ -178,67 +178,71 @@ function GroupCreate() {
   return (
     <div id='group-Profile'>
       <h2> 그룹 생성 </h2>
-      <div>
-        <form onSubmit={GroupCreate}>
-          <div id='group-name-div'>
-            <label htmlFor='group-name'>그룹 이름 : </label>
-            <input
-              type='text'
-              id='group-name'
-              className='font-bold m-0.5'
-              onChange={onChangeName}
-            ></input>
-            <p className='message'>{currentGMessage}</p>
-          </div>
-          <div id='group-tag-div'>
-            <label htmlFor='group-tag'>그룹 태그 : (5개까지 가능)</label>
-            <input
-              type='text'
-              id='group-tag'
-              onChange={onChangeTagNew}
-              value={tagNew}
-            />
-            &nbsp;
-            <button onClick={addTag}>추가</button>
-            <p className='message'>{currentGTMessage}</p>
-            {groupTag.map((tagging, idx) => {
-              return (
-                <button
-                  onClick={() => {
-                    setTagNum(idx);
-                    onChangeTagRemove(idx);
-                  }}
-                  key={idx}
-                  className='mr-2'
-                >
-                  #{tagging}
-                </button>
-              );
-            })}
-          </div>
-          <div>
-            <p className='my-1'>✨ 추가 된 사용자 ✨</p>
-            <br />
-
-            {includeFriend.map((friendItem, idx) => {
-              return (
-                <button
-                  key={idx}
-                  onClick={() => {
-                    onChangeFRemove(idx);
-                  }}
-                  className='mr-2'
-                >
-                  {friendItem.nickname}
-                </button>
-              );
-            })}
-          </div>
-
-          <button type='submit' className='my-2'>
-            생성
+      <div id='group-create-form'>
+        <div id='group-name-div'>
+          <label htmlFor='group-name'>그룹 이름 : </label>
+          <input hidden='hidden' />
+          <input
+            type='text'
+            id='group-name'
+            className='font-bold m-0.5'
+            onChange={onChangeName}
+          ></input>
+          <p className='message'>{currentGMessage}</p>
+        </div>
+        <div id='group-tag-div'>
+          <label htmlFor='group-tag'>그룹 태그 : (5개까지 가능)</label>
+          <input hidden='hidden' />
+          <input
+            type='text'
+            id='group-tag'
+            onChange={onChangeTagNew}
+            value={tagNew}
+          />
+          &nbsp;
+          <button type='button' onClick={addTag}>
+            추가
           </button>
-        </form>
+          <p className='message'>{currentGTMessage}</p>
+          {groupTag.map((tagging, idx) => {
+            return (
+              <button
+                type='button'
+                onClick={() => {
+                  setTagNum(idx);
+                  onChangeTagRemove(idx);
+                }}
+                key={idx}
+                className='mr-2'
+              >
+                #{tagging}
+              </button>
+            );
+          })}
+        </div>
+        <div>
+          <p className='my-1'>✨ 추가 된 사용자 ✨</p>
+          <br />
+
+          {includeFriend.map((friendItem, idx) => {
+            return (
+              <button
+                type='button'
+                key={idx}
+                onClick={() => {
+                  onChangeFRemove(idx);
+                }}
+                className='mr-2'
+              >
+                {friendItem.nickname}
+              </button>
+            );
+          })}
+        </div>
+
+        <button type='button' onClick={GroupCreate} className='my-2'>
+          생성
+        </button>
       </div>
 
       <div id='group-Friend'>
@@ -249,6 +253,7 @@ function GroupCreate() {
         {friendList.map((friendItem, idx) => {
           return (
             <button
+              type='button'
               key={idx}
               onClick={() => {
                 addFriend(idx);
