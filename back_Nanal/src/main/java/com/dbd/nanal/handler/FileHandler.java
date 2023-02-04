@@ -53,7 +53,6 @@ public class FileHandler {
         paintingEntity = PaintingEntity.builder().pictureTitle(multipartFile.getOriginalFilename())
                 // photo 파일 아래 날자 파일 아래 파일을 저장
                 .picturePath(path+File.separator+newFileName)
-                .creationDate(now)
                 .fileSize(multipartFile.getSize())
                 .build();
 
