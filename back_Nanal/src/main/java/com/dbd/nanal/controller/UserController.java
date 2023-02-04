@@ -225,15 +225,12 @@ public class UserController {
 
     @ApiOperation(value = "내 프로필 조회", notes =
             "[Front] \n" +
-                    "{userIdx(int)} \n\n" +
-                    "[Back] \n" +
-                    "JSON\n" +
-                    "{img(String), nickname(String), introduction(String)} \n\n")
+            "[Back] \n" +
+                "JSON\n" +
+                "{img(String), nickname(String), introduction(String), days(long)} \n\n")
     @GetMapping("/profile")
     public ResponseEntity<?> getMyProfile(@AuthenticationPrincipal UserEntity userInfo) {
-        log.info("getMyProfile");
-        log.info("userInfo");
-        HashMap<String, String> profile = userService.getByUserIdx(userInfo.getUserIdx());
+        HashMap<String, Object> profile = userService.getByUserIdx(userInfo.getUserIdx());
 
         HashMap<String, Object> responseDTO = new HashMap<>();
         responseDTO.put("responseMessage", ResponseMessage.USER_FIND_SUCCESS);
@@ -300,13 +297,13 @@ public class UserController {
 
     @ApiOperation(value = "다른 회원 프로필 조회", notes =
             "[Front] \n" +
-                    "{userIdx(int)} \n\n" +
-                    "[Back] \n" +
-                    "JSON\n" +
-                    "{img(String), nickname(String), introduction(String)} \n\n")
+                "{userIdx(int)} \n\n" +
+            "[Back] \n" +
+                "JSON\n" +
+                "{img(String), nickname(String), introduction(String), days(long)} \n\n")
     @GetMapping("/profile/{userIdx}")
     public ResponseEntity<?> getUserProfile(@PathVariable int userIdx) {
-        HashMap<String, String> profile = userService.getByUserIdx(userIdx);
+        HashMap<String, Object> profile = userService.getByUserIdx(userIdx);
         HashMap<String, Object> responseDTO = new HashMap<>();
         responseDTO.put("responseMessage", ResponseMessage.SUCCESS);
         responseDTO.put("profile", profile);

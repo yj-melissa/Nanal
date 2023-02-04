@@ -6,7 +6,9 @@ import com.dbd.nanal.model.UserProfileEntity;
 import com.dbd.nanal.repository.UserProfileRepository;
 import com.dbd.nanal.repository.UserRepository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -89,15 +91,18 @@ public class UserService {
 //    }
     
     // 유저 프로필 조회
-    public HashMap<String, String> getByUserIdx(final int userIdx) {
+    public HashMap<String, Object> getByUserIdx(final int userIdx) {
         log.info("userService getByUserIdx", userIdx);
         final UserProfileEntity userProfile = userProfileRepository.findByProfileId(userIdx);
+        LocalDate createDate = userProfile.getUser().getCreationDate().toLocalDate();
+        long days = (LocalDate.now().until(createDate, ChronoUnit.DAYS) * -1) + 1;
 
         if (userProfile != null) {
-            HashMap<String, String> profile = new HashMap<>();
+            HashMap<String, Object> profile = new HashMap<>();
             profile.put("img", userProfile.getImg());
             profile.put("nickname", userProfile.getNickname());
             profile.put("introduction", userProfile.getIntroduction());
+            profile.put("days", days);
 
             return profile;
         }
