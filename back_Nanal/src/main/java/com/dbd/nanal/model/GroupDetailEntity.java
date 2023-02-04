@@ -36,8 +36,8 @@ public class GroupDetailEntity {
 
     private int groupImgIdx;
 
-    @Column(name = "creation_date", columnDefinition = "TIMESTAMP DEFAULT NOW()")
-    @CreatedDate
+    @Column(name = "creation_date")
+    @CreationTimestamp
     private Date creationDate;
 
 

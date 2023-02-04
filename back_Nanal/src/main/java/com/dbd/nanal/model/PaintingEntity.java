@@ -1,11 +1,10 @@
 package com.dbd.nanal.model;
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -16,18 +15,12 @@ import java.util.Date;
 public class PaintingEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="picture_idx", columnDefinition = "INT UNSIGNED")
+    @Column(columnDefinition = "INT UNSIGNED")
     private int pictureIdx;
-
-//    @Column(name="picture_path")
     private String picturePath;
-
-    @Column(name = "creation_date", columnDefinition = "TIMESTAMP DEFAULT NOW()")
-    @CreatedDate
-    private LocalDateTime creationDate;
-
+    @CreationTimestamp
+    private Date creationDate;
     private String pictureTitle;
-
     private long fileSize;
 
 //    @OneToOne(mappedBy = "painting")
@@ -35,7 +28,7 @@ public class PaintingEntity {
 //    private DiaryEntity diary;
 
     @Builder
-    public PaintingEntity(int pictureIdx, String picturePath, String pictureTitle, long fileSize, LocalDateTime creationDate) {
+    public PaintingEntity(int pictureIdx, String picturePath, String pictureTitle, long fileSize, Date creationDate) {
         this.pictureIdx=pictureIdx;
         this.picturePath=picturePath;
         this.pictureTitle=pictureTitle;
