@@ -121,7 +121,7 @@ public class GroupService {
 
         // group detail - 이름, 이미지 수정
         groupDetailEntity.setGroupName(groupDetailRequestDTO.getGroupName());
-        groupDetailEntity.setGroupImg(groupDetailRequestDTO.getGroupImg());
+        groupDetailEntity.setGroupImgIdx(groupDetailRequestDTO.getGroupImgIdx());
 
         // group tag 수정
         List<GroupTagEntity> groupTagEntities = groupDetailEntity.getGroupTags();
@@ -136,7 +136,6 @@ public class GroupService {
         }
 
         HashMap<String, Object> responseDTO = new HashMap<>();
-
         responseDTO.put("tags", tags);
         responseDTO.put("groupDetail", new GroupDetailResponseDTO(groupDetailEntity));
 

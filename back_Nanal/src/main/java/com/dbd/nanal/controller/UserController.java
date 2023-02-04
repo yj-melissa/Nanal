@@ -123,18 +123,26 @@ public class UserController {
 
         String code = emailService.sendSimpleMessage(email);
 
-        HashMap<String, Object> responseDTO = new HashMap<>();
-        if (code == null) {
+        try {
+            HashMap<String, Object> responseDTO = new HashMap<>();
+            if (code == null) {
+                responseDTO.put("responseMessage", ResponseMessage.EMAIL_SEND_FAIL);
+
+                return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+            }
+
+            responseDTO.put("responseMessage", ResponseMessage.EMAIL_SEND_SUCCESS);
+            responseDTO.put("code", code);
+
+            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+        } catch (Exception e){
+            log.info("[이메일 인증] 발송 실패 :"+e);
+            HashMap<String, Object> responseDTO = new HashMap<>();
             responseDTO.put("responseMessage", ResponseMessage.EMAIL_SEND_FAIL);
             responseDTO.put("code", code);
 
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }
-
-        responseDTO.put("responseMessage", ResponseMessage.EMAIL_SEND_SUCCESS);
-        responseDTO.put("code", code);
-
-        return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
 
     @ApiOperation(value = "로그인", notes =
@@ -145,7 +153,7 @@ public class UserController {
                     "JSON\n" +
                     "{accessToken(String), refreshToken(String)} ")
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody @Valid UserRequestDTO userRequestDTO, HttpServletResponse response) {
+    public ResponseEntity<?> login(@RequestBody UserRequestDTO userRequestDTO, HttpServletResponse response) {
         UserEntity user = userService.getByCredentials(
                 userRequestDTO.getUserId(),
                 userRequestDTO.getPassword(),
@@ -229,9 +237,8 @@ public class UserController {
                 "{img(String), nickname(String), introduction(String), days(long)} \n\n")
     @GetMapping("/profile")
     public ResponseEntity<?> getMyProfile(@AuthenticationPrincipal UserEntity userInfo) {
-        log.info("getMyProfile");
-        log.info("userInfo");
         HashMap<String, Object> profile = userService.getByUserIdx(userInfo.getUserIdx());
+
         HashMap<String, Object> responseDTO = new HashMap<>();
         responseDTO.put("responseMessage", ResponseMessage.USER_FIND_SUCCESS);
         responseDTO.put("profile", profile);

@@ -58,7 +58,7 @@ public class SecurityConfig{
                         "/user/refresh",    // accessToken 재발급
                         "/user/redirectTest",
                         "/user/check/**",
-                        "/user/validate",
+                        "/user/validate/**",
                         // Swagger 관련 URL
                         "/v2/api-docs/**",
                         "/swagger-resources/**",
@@ -88,6 +88,9 @@ public class SecurityConfig{
             "http://192.168.100.206:3000",
             "http://192.168.35.39:3000",
             "http://172.30.1.43:3000",
+            "http://192.168.0.164:3000",
+            "http://14.46.142.235:3000",
+            "http://192.168.45.214:3000",
             "http://localhost:3000"));
         configuration.setAllowedMethods(Arrays.asList("*"));
 //        configuration.addAllowedOriginPattern("*");

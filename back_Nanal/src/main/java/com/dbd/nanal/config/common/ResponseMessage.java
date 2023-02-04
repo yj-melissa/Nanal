@@ -28,6 +28,7 @@ public class ResponseMessage {
     public static final String PASSWORD_UPDATE_SUCEESS = "비밀번호 변경 성공";
     
     public static final String DIARY_SAVE_SUCCESS = "일기 생성 성공";
+    public static final String DIARY_SAVE_FAIL="일기 생성 실패";
     public static final String DIARY_GET_SUCCESS = "일기 조회 성공";
     public static final String DIARY_GET_FAIL = "일기 조회 실패";
     public static final String DIARY_UPDATE_SUCCESS = "일기 수정 성공";
@@ -77,4 +78,6 @@ public class ResponseMessage {
     public static final String GROUP_USER_FIND_SUCCESS = "그룹 유저 조회 성공";
     public static final String EMAIL_SEND_SUCCESS = "이메일 발송 성공";
     public static final String EMAIL_SEND_FAIL = "이메일 발송 실패";
+    public static final Object PAINTING_SAVE_SUCCESS = "그림 저장 성공";
+    public static final Object PAINTING_SAVE_FAIL = "그림 저장 실패";
 }
