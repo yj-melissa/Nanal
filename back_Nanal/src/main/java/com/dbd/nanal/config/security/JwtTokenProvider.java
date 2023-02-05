@@ -1,9 +1,8 @@
 package com.dbd.nanal.config.security;
 
-import com.dbd.nanal.dto.JwtTokenDTO;
+import com.dbd.nanal.config.oauth.ApplicationOAuth2User;
 import com.dbd.nanal.model.JwtTokenEntity;
 import com.dbd.nanal.model.UserEntity;
-import com.dbd.nanal.repository.JwtTokenRepository;
 import com.dbd.nanal.repository.UserRepository;
 
 import io.jsonwebtoken.Claims;
@@ -17,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -28,7 +28,6 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class JwtTokenProvider {
 
-//    @Autowired
     private final JwtTokenRepository jwtTokenRepository;
     private final UserRepository userRepository;
 
@@ -89,6 +88,44 @@ public class JwtTokenProvider {
         return jwtTokenDTO;
     }
 
+    public JwtTokenDTO createJwtTokens(final Authentication authentication) {
+        ApplicationOAuth2User userPrincipal = (ApplicationOAuth2User) authentication.getPrincipal();
+        String userId = userPrincipal.getName();
+        String accessToken = createToken(userId, accessTokenExpiryDate);
+        String refreshToken = createToken(userId, refreshTokenExpiryDate);
+
+        JwtTokenDTO jwtTokenDTO= JwtTokenDTO.builder()
+            .accessToken(accessToken)
+            .refreshToken(refreshToken)
+            .userId(userId)
+            .build();
+
+        JwtTokenEntity jwtToken = JwtTokenEntity.builder()
+            .userId(userId)
+            .refreshToken(jwtTokenDTO.getRefreshToken())
+            .build();
+
+        // JWT 쿠키 생성
+//        Cookie accessTokenCookie = new Cookie("accessToken", accessToken);
+//        accessTokenCookie.setMaxAge(1 * 24 * 60 * 60);    // 1일 - 초단위
+//        accessTokenCookie.setPath("/");     // 모든 경로에서 접근 가능
+
+        Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
+        refreshTokenCookie.setMaxAge(14 * 24 * 60 * 60);    // 14일
+        refreshTokenCookie.setPath("/");
+
+
+        if(jwtTokenRepository.existsByUserId(userId)) {
+            // 기존 Refresh 토큰 삭제
+            JwtTokenEntity originalToken = jwtTokenRepository.findByUserId(userId);
+            jwtTokenRepository.delete(originalToken);
+        }
+        jwtTokenRepository.save(jwtToken);
+
+        return jwtTokenDTO;
+
+    }
+
 //    // Access Token 재발급
     public String updateAccessToken(String token){
 
@@ -110,6 +147,26 @@ public class JwtTokenProvider {
         UserEntity user = userRepository.findByUserIdx(userIdx);
         Claims claims = Jwts.claims()
             .setSubject(user.getUserId());
+        claims.put("roles", user.getRoles());
+
+        String token = Jwts.builder()
+            .signWith(SignatureAlgorithm.HS512, secretKey)
+            .setClaims(claims)
+            .setIssuer("nanal")
+            .setIssuedAt(new Date())
+            .setExpiration(expiryDate)
+            .compact();
+
+        log.debug("[createToken] 토큰 생성 완료");
+        return token;
+    }
+    
+    // oauth용
+    public String createToken(String userId, Date expiryDate){
+        log.debug("[createToken] 토큰 생성 시작");
+        UserEntity user = userRepository.findByUserId(userId);
+        Claims claims = Jwts.claims()
+            .setSubject(userId);
         claims.put("roles", user.getRoles());
 
         String token = Jwts.builder()

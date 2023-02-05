@@ -1,4 +1,4 @@
-package com.dbd.nanal.repository;
+package com.dbd.nanal.config.security;
 
 import com.dbd.nanal.model.JwtTokenEntity;
 import java.util.Optional;
@@ -10,5 +10,8 @@ public interface JwtTokenRepository extends JpaRepository<JwtTokenEntity, String
 
     Optional<JwtTokenEntity> findByRefreshToken(String refreshToken);
     JwtTokenEntity findByUserIdx(int userIdx);
+    JwtTokenEntity findByUserId(String userId);
+
     boolean existsByUserIdx(int userIdx);
+    boolean existsByUserId(String userId);
 }
