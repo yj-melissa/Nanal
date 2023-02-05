@@ -12,7 +12,7 @@ function GroupUpdate() {
   const [groupTag, setGroupTag] = useState([]);
 
   const currentName = useRef('');
-  const currentTag = useRef([]);
+  const currentTag = useRef(['', '', '', '', '']);
 
   const [groupFriendList, setGroupFriendList] = useState([]);
   const [groupNotFriendList, setGroupNotFriendList] = useState([]);
@@ -24,7 +24,8 @@ function GroupUpdate() {
   // tag 변경 시 요청되는 함수
   const updateTag = (e, idx) => {
     const newTag = e.target.value;
-    currentTag.current[idx].tag = newTag;
+    // currentTag.current[idx].tag = newTag;
+    currentTag.current[idx] = newTag;
 
     // setGroupTag(
     //   groupTag.map((it) => (it.tagIdx === idx ? { ...it, tag: newTag } : it))
@@ -80,14 +81,14 @@ function GroupUpdate() {
           groupIdx: groupIdx,
           // groupName: groupName,
           // tags: groupTag,
-          groupName: currentName,
-          tags: currentTag,
+          groupName: currentName.current,
+          tags: currentTag.current,
         })
         .then(({ data }) => {
           if (data.statusCode === 200) {
             if (data.data.responseMessage === '그룹 수정 성공') {
-              console.log(data.data.groupDetail);
-              console.log(data.data.tags);
+              // console.log(data.data.groupDetail);
+              // console.log(data.data.tags);
 
               const groupidx = data.data.groupDetail.groupIdx;
 
@@ -134,6 +135,7 @@ function GroupUpdate() {
         if (data.statusCode === 200) {
           setGroupName(null);
           setGroupTag(null);
+          currentName.current = [];
           if (data.data.responseMessage === '그룹 조회 성공') {
             // console.log(data.data.groupDetail);
             setGroupIdx(data.data.groupDetail.groupIdx);
@@ -142,7 +144,11 @@ function GroupUpdate() {
 
             const groupidx = data.data.groupDetail.groupIdx;
             currentName.current = data.data.groupDetail.groupName;
-            currentTag.current = data.data.tags;
+            // currentTag.current = data.data.tags;
+
+            for (const tagging in data.data.tags) {
+              currentTag.current[tagging] = data.data.tags[tagging].tag;
+            }
 
             axios_api
               .get(`group/user/${groupidx}`)
@@ -242,7 +248,8 @@ function GroupUpdate() {
                   type='text'
                   className='mr-2 mb-2'
                   key={idx}
-                  defaultValue={tagging.tag || ''}
+                  // defaultValue={tagging.tag || ''}
+                  defaultValue={tagging || ''}
                   onChange={(e) => {
                     updateTag(e, idx);
                   }}
