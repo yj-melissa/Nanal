@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios_api from "../../config/Axios";
 import Comment from "./Comment";
+import { BookFilled, BookOutlined } from "@ant-design/icons";
 
 function DiaryDetail() {
   const location = useLocation();
@@ -49,57 +50,61 @@ function DiaryDetail() {
 
   return (
     <div>
-      <span>그림 들어갈 자리</span>
-      {isBook ? (
-        <>
-          <button
-            onClick={() =>
-              axios_api
-                .delete(`diary/bookmark/${location.state.diaryIdx}`)
-                .then(({ data }) => {
-                  if (data.statusCode === 200) {
-                    if (data.data.responseMessage === "일기 북마크 삭제 성공") {
-                      setIsBook(!isBook);
+      <div className="flex justify-between">
+        <span>그림 들어갈 자리</span>
+        {isBook ? (
+          <>
+            <BookFilled
+              onClick={() =>
+                axios_api
+                  .delete(`diary/bookmark/${location.state.diaryIdx}`)
+                  .then(({ data }) => {
+                    if (data.statusCode === 200) {
+                      if (
+                        data.data.responseMessage === "일기 북마크 삭제 성공"
+                      ) {
+                        setIsBook(!isBook);
+                      }
+                    } else {
+                      console.log(data.statusCode);
+                      console.log(data.data.responseMessage);
                     }
-                  } else {
-                    console.log(data.statusCode);
-                    console.log(data.data.responseMessage);
-                  }
-                })
-            }
-          >
-            칠한 북마크
-          </button>
-        </>
-      ) : (
-        <>
-          <button
-            onClick={() =>
-              axios_api
-                .get(`diary/bookmark/${location.state.diaryIdx}`)
-                .then(({ data }) => {
-                  if (data.statusCode === 200) {
-                    if (data.data.responseMessage === "일기 북마크 저장 성공") {
-                      setIsBook(!isBook);
+                  })
+              }
+            />
+          </>
+        ) : (
+          <>
+            <BookOutlined
+              onClick={() =>
+                axios_api
+                  .get(`diary/bookmark/${location.state.diaryIdx}`)
+                  .then(({ data }) => {
+                    if (data.statusCode === 200) {
+                      if (
+                        data.data.responseMessage === "일기 북마크 저장 성공"
+                      ) {
+                        setIsBook(!isBook);
+                      }
+                    } else {
+                      console.log(data.statusCode);
+                      console.log(data.data.responseMessage);
                     }
-                  } else {
-                    console.log(data.statusCode);
-                    console.log(data.data.responseMessage);
-                  }
-                })
-            }
-          >
-            빈 북마크
-          </button>
-        </>
-      )}
+                  })
+              }
+            />
+          </>
+        )}
+      </div>
       <div>작성자 프로필 사진 | </div>
       <span>user nickname | </span>
-      <div>작성 시간 : {strDate}</div>
+      <div className="text-sm">{strDate}</div>
       <div>
         {isEdit ? (
           <>
-            <button onClick={handleQuitEdit}>수정 취소</button>
+            <button className="border-rose-500" onClick={handleQuitEdit}>
+              수정 취소
+            </button>
             <button
               onClick={() => {
                 axios_api
@@ -163,10 +168,7 @@ function DiaryDetail() {
         )}
       </div>
       <div>
-        <Comment
-          diaryIdx={location.state.diaryIdx}
-          groupIdx={location.state.groupIdx}
-        />
+        <Comment diaryIdx={location.state.diaryIdx} />
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 // import { useState } from 'react';
-import axios_api from '../../config/Axios';
+import axios_api from "../../config/Axios";
 
 function TrashItem({ diaryIdx, creationDate, content }) {
   const strDate = new Date(creationDate).toLocaleString();
@@ -33,10 +33,11 @@ function TrashItem({ diaryIdx, creationDate, content }) {
           onClick={() => {
             axios_api.put(`diary/trashbin/${diaryIdx}`).then(({ data }) => {
               if (data.statusCode === 200) {
-                if (data.data.responseMessage === '일기 생성 성공') {
+                if (data.data.responseMessage === "일기 복구 성공") {
                   return;
                 }
               } else {
+                console.log("일기 복구 실패 : ");
                 console.log(data.statusCode);
                 console.log(data.data.responseMessage);
               }
