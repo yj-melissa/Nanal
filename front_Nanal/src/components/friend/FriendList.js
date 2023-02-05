@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
 import FriendItem from './FriendItem';
+import addIcon from '../../src_assets/img/user_add_icon.png';
 
 function FriendList() {
   const [friendList, setFriendList] = useState([]);
@@ -32,11 +33,15 @@ function FriendList() {
 
   return (
     <div>
-      <h1 className='m-1 font-bold'>친구 리스트 조회</h1>
-      <Link to='/Friend/Add'>
+      <div id='friend-list-title' className='mb-3'>
+        <h1 className='m-1 font-bold inline'>친구 리스트 조회</h1>
+        {/* <Link to='/Friend/Add'>
         <button type='button'>친구 추가하기</button>
-      </Link>
-
+      </Link> */}
+        <Link to='/Friend/Add' className='inline-block float-right'>
+          <img src={addIcon} className='w-[20px] h-[20px] mx-1.5' />
+        </Link>
+      </div>
       {friendList.map((friendItem) => (
         <FriendItem key={friendItem.userIdx} item={friendItem} />
       ))}

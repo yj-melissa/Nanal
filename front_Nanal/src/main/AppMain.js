@@ -12,6 +12,7 @@ import DiaryTotalList from '../components/diary/DiaryTotalList';
 import BookmarkList from '../components/diary/BookmarkList';
 import GroupCreate from '../components/group/GroupCreate';
 import GroupList from '../components/group/GroupList';
+import GroupSetting from '../components/group/GroupSetting';
 import GroupDetail from '../components/group/GroupDetail';
 import GroupUpdate from '../components/group/GroupUpdate';
 import FriendList from '../components/friend/FriendList';
@@ -41,6 +42,7 @@ const AppMain = ({ isCalendaar }) => {
       <Route path='/Group/Create' element={<GroupCreate />}></Route>
       <Route path='/Group/List' element={<GroupList />}></Route>
       <Route path='/Group/:groupIdx' element={<GroupDetail />}></Route>
+      <Route path='/Group/Setting/:groupIdx' element={<GroupSetting />}></Route>
       <Route path='/Group/Update/:groupIdx' element={<GroupUpdate />}></Route>
       <Route path='/Friend/List' element={<FriendList />}></Route>
       <Route path='/Friend/:friendIdx' element={<FriendDetail />}></Route>
