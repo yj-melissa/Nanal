@@ -275,11 +275,11 @@ public class DiaryController {
         HashMap<String, Object> responseDTO = new HashMap<>();
         try{
             DiaryCommentResponseDTO diaryCommentResponseDTO=diaryService.updateComment(diaryCommentRequestDTO);
-            responseDTO.put("responseMessage", ResponseMessage.DIARY_COMMENT_SAVE_SUCCESS);
+            responseDTO.put("responseMessage", ResponseMessage.DIARY_COMMENT_UPDATE_SUCCESS);
             responseDTO.put("diaryComment", diaryCommentResponseDTO);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }catch (Exception e){
-            responseDTO.put("responseMessage", ResponseMessage.DIARY_COMMENT_SAVE_FAIL);
+            responseDTO.put("responseMessage", ResponseMessage.DIARY_COMMENT_UPDATE_FAIL);
             return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
         }
     }
@@ -378,11 +378,11 @@ public class DiaryController {
         HashMap<String, Object> responseDTO = new HashMap<>();
         try{
             DiaryResponseDTO diaryResponseDTO=diaryService.reDiary(diaryIdx);
-            responseDTO.put("responseMessage", ResponseMessage.DIARY_SAVE_SUCCESS);
+            responseDTO.put("responseMessage", ResponseMessage.DIARY_RETURN_SUCCESS);
             responseDTO.put("diaryComment", diaryResponseDTO);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }catch (Exception e){
-            responseDTO.put("responseMessage", ResponseMessage.DIARY_SAVE_FAIL);
+            responseDTO.put("responseMessage", ResponseMessage.DIARY_RETURN_FAIL);
             return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
         }
     }
