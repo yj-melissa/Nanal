@@ -4,6 +4,7 @@ import com.dbd.nanal.model.UserEntity;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -20,11 +21,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Integer> {
     Boolean existsByUserId(String userId);
     Boolean existsByEmail(String email);
 
-//    List<UserEntity> findByUserIdContaining(String userId);
-
     @Query("select a from UserEntity a where a.userId like concat('%', :userId, '%') and a.userIdx not in (select f.user_idx1.userIdx from FriendEntity f where f.user_idx2.userIdx=:userIdx) and not(a.userIdx=:userIdx)")
-    List<UserEntity> searchUserId(String userId, int userIdx);
-
-
+    List<UserEntity> searchUserId(@Param("userId")  String userId, @Param("userIdx")  int userIdx);
 }
 
