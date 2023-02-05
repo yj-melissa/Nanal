@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router';
 import { getCookie } from '../../../config/Cookie';
 import axios_api from '../../../config/Axios';
 import emptyProfile from '../../../src_assets/img/emptyProfile.png';
-import DiaryTotalList from '../../diary/DiaryTotalList';
+// import DiaryTotalList from '../../diary/DiaryTotalList';
 
 // username, userMassage, profile 받아와야함
 // 수정 시 파일 전송까지 ㅇㅇ
@@ -22,7 +22,6 @@ function ProfileForm() {
     setPStatus({
       'dCount': a,
       'likeCount': b,
-      'daybyday' : 1,
     })
   }
 
@@ -30,6 +29,7 @@ function ProfileForm() {
   axios_api.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
   // Mount 됐을 때 user
   useEffect(() => {
+    //onLogin()
     axios_api
       .get('user/profile')
       .then(({ data }) => {
@@ -43,7 +43,6 @@ function ProfileForm() {
               .get(`file/${data.data.profile.img}/save`)
               .then((e) => {
                   console.log(e)
-
               })
               .catch((err) => console.log(err));
           }
@@ -78,12 +77,14 @@ function ProfileForm() {
 
   const navigate = useNavigate();
 
+  //이미지 useState 삼항연산자 써서 axios로 받아오면 그게 기본 값으로 들어가게 해놨는데 왜 안 되는지 잘 몰겠음.
   const [Image, setImage] = useState(
     userProfile.img === null ? emptyProfile : Image
   );
   console.log(Image)
   const fileInput = useRef(null);
-
+  
+  //이미지 수정 폼. 여기서 setImage로 바꾸면 Image에 저장된거 put으로 올려주기만하면 됨.
   const onChange = (e) => {
     if (e.target.files[0]) {
       setImage(e.target.files[0]);
@@ -134,7 +135,7 @@ function ProfileForm() {
       </div>
       <button>수정하기</button>
       <div className='flex justify-betweendd'>
-        <p className='my-3 font-semibold'>나날과 함께한 {pStatus.daybyday}일째 나날입니다.</p>
+        <p className='my-3 font-semibold'>나날과 함께한 {userProfile.days}일째 나날입니다.</p>
       </div>
       <div className='flex justify-around box-border h-24 w-80 p-4 bg-slate-300/50'>
         <div
