@@ -30,7 +30,7 @@ public class SearchController {
                     "[Front] \n" +
                     "{id(String)} \n\n" +
                     "[Back] \n" +
-                    "{userIdx(int), name(String), email(String), user_id(String)} ")
+                    "{userIdx(int), name(String), email(String), user_id(String), nickanme(String(} ")
     @GetMapping("/user/{id}")
     public ResponseEntity<?> getUserId(@ApiParam(value = "user id")@PathVariable("id") String id, @AuthenticationPrincipal UserEntity userInfo){
         HashMap<String, Object> responseDTO = new HashMap<>();
@@ -50,7 +50,7 @@ public class SearchController {
                     "[Front] \n" +
                     "{content(String)} \n\n" +
                     "[Back] \n" +
-                    "diaryIdx(int), userIdx(int), creationDate(Date), content(String), nickName(String), groupIdx(int), groupName(String)")
+                    "{diaryIdx(int), userIdx(int), creationDate(Date), content(String), nickName(String), groupIdx(int), groupName(String)}")
     @GetMapping("/diary/{content}")
     public ResponseEntity<?> getDiaryContent(@ApiParam(value = "diary content")@PathVariable("content") String content, @AuthenticationPrincipal UserEntity userInfo){
         HashMap<String, Object> responseDTO = new HashMap<>();

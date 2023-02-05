@@ -13,7 +13,7 @@ public class SearchDiaryResponseDTO {
     private int userIdx;
     private Date creationDate;
     private String content;
-    private String nickName;
+    private String nickname;
 
     private int groupIdx;
     private String groupName;
@@ -23,6 +23,6 @@ public class SearchDiaryResponseDTO {
         this.creationDate=diary.getCreationDate();
         this.content=diary.getContent();
         this.userIdx=diary.getUser().getUserIdx();
-        this.nickName=diary.getUser().getUserProfile().getNickname();
+        this.nickname=diary.getUser().getUserProfile().getNickname();
     }
 }
