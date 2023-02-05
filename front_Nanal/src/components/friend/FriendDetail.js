@@ -31,15 +31,18 @@ function FriendDetail() {
 
   return (
     <div>
-      {friend.nickname}
-      <br />
-      {friend.img}
-      <br />
-      {friend.introduction}
-      <br />
-      {friend.shortContent}
-      <br />
-      <br />
+      <div className='flex justify-evenly mt-5'>
+        <img src={friend.img} className='w-28 h-28 p-1 rounded-full'></img>
+        <p className='my-auto text-2xl font-bold p-1'>
+          {friend.nickname} 님의
+          <br />
+          일기장
+        </p>
+      </div>
+      <div className='my-3 flex justify-between'>
+        <p>{friend.introduction}</p>
+      </div>
+      <hr className='border-slate-400/75 w-65 my-5' />
     </div>
   );
 }

@@ -64,7 +64,9 @@ function SignIn() {
   return (
     <div className='flex justify-center'>
       <div className='box-border p-4 w-80 border-[1px] border-gray-500 border-solid'>
-        <h1 className='m-3'> SignIn to 나날</h1>
+        <h1 className='m-3 flex justify-center items-center tracking-wider font-bold'>
+          SignIn to 나날
+        </h1>
         <div id='sign-in-form'>
           <form action='' onSubmit={SignIn}>
             <div className='m-1'>
@@ -91,8 +93,12 @@ function SignIn() {
               />
             </div>
             <div className='m-1'>
-              <button type='submit'>Sign In</button>{' '}
-              <Link to='/SignUp'>SignUp</Link>
+              <button type='submit' className='my-2 mx-9'>
+                Sign In
+              </button>
+              <Link to='/SignUp' className='my-2 mx-9'>
+                SignUp
+              </Link>
             </div>
           </form>
         </div>
