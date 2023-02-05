@@ -194,7 +194,7 @@ public class GroupController {
     @ApiOperation(value = "그룹 정보 수정", notes =
             "groupIdx 그룹의 정보를 수정합니다.\n" +
                     "[Front] \n" +
-                    "{groupIdx(int)) groupName(String), tags(tagIdx(int), String(content)), image(?)} \n\n" +
+                    "{groupIdx(int)) groupName(String), tags({}}), image(?)} \n\n" +
                     "[Back] \n" +
                     "{GroupDetailResponse}")
     @PutMapping
