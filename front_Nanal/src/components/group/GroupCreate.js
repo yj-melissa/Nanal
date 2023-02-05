@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import axios_api from '../../config/Axios';
+import { getCookie } from '../../config/Cookie';
 import { onLogin } from '../../config/Login';
 
 function GroupCreate() {
@@ -67,6 +68,28 @@ function GroupCreate() {
     setGroupTag(tagList);
   };
 
+  // 그룹 이미지 upload
+  const inputRef = useRef();
+  const formData = new FormData();
+
+  const onUploadImage = (e) => {
+    if (!e.target.files) {
+      return;
+    }
+
+    // console.log(e.target.files[0]);
+    formData.append('multipartFile', e.target.files[0]);
+  };
+
+  // const onUploadImageButtonClick = (e) => {
+  //   e.preventDefault();
+  //   if (!inputRef.current) {
+  //     return;
+  //   }
+  //   inputRef.current.click();
+  //   console.log(inputRef.current);
+  // };
+
   // 초대할 사용자 추가
   const addFriend = (idx) => {
     if (!includeFriend.includes(friendList[idx])) {
@@ -115,30 +138,64 @@ function GroupCreate() {
               // console.log(data.data.tags);
 
               const groupidx = data.data.groupDetail.groupIdx;
+              // const headers = {
+              //   Authorization: `Bearer ${getCookie('accessToken')}`,
+              //   'Content-Type': 'multipart/form-data',
+              // };
+              // const dataSet = { groupIdx: groupidx };
+              // formData.append(
+              //   'value',
+              //   new Blob([dataSet], { type: 'application/json' })
+              // );
 
-              if (includeFriend.size !== 0) {
-                // 그룹에 추가할 친구가 있는 경우
-                axios_api
-                  .post('notification/group', {
-                    request_group_idx: groupidx,
-                    userIdx: includeFriendIdx,
-                  })
-                  .then(({ data }) => {
-                    if (data.statusCode === 200) {
-                      if (data.data.responseMessage === '알림 저장 성공') {
-                        alert('그룹을 생성하였습니다!');
-                        window.location.replace('/Group/List');
+              // 이미지 업로드
+              axios_api
+                .post('file/s4', formData, {
+                  // headers: {
+                  //   // Authorization: `Bearer ${getCookie('accessToken')}`,
+                  //   'Content-Type': 'multipart/form-data',
+                  // },
+                })
+                .then(({ data }) => {
+                  if (data.statusCode === 200) {
+                    if (data.data.responseMessage === '그림 저장 성공') {
+                      console.log(data.data);
+
+                      if (includeFriend.size !== 0) {
+                        // 그룹에 추가할 친구가 있는 경우
+                        axios_api
+                          .post('notification/group', {
+                            request_group_idx: groupidx,
+                            userIdx: includeFriendIdx,
+                          })
+                          .then(({ data }) => {
+                            if (data.statusCode === 200) {
+                              if (
+                                data.data.responseMessage === '알림 저장 성공'
+                              ) {
+                                alert('그룹을 생성하였습니다!');
+                                // window.location.replace('/Group/List');
+                              }
+                            } else {
+                              console.log('알림 저장 오류 : ');
+                              console.log(data.statusCode);
+                              console.log(data.data.responseMessage);
+                            }
+                          })
+                          .catch(({ error }) => {
+                            console.log('알림 저장 오류 : ' + error);
+                          });
                       }
-                    } else {
-                      console.log('알림 저장 오류 : ');
-                      console.log(data.statusCode);
-                      console.log(data.data.responseMessage);
                     }
-                  })
-                  .catch(({ error }) => {
-                    console.log('알림 저장 오류 : ' + error);
-                  });
-              }
+                  } else {
+                    console.log('그림 저장 오류 : ');
+                    console.log(data.statusCode);
+                    console.log(data.data.responseMessage);
+                  }
+                })
+                .catch(({ error }) => {
+                  console.log('그림 저장 오류 : ' + error);
+                });
             }
           } else {
             console.log('그룹 생성 오류: ');
@@ -147,7 +204,7 @@ function GroupCreate() {
           }
         })
         .catch(({ error }) => {
-          console.log('그룹 생성 성공: ' + error);
+          console.log('그룹 생성 오류: ' + error);
         });
     }
   };
@@ -179,6 +236,7 @@ function GroupCreate() {
     <div id='group-Profile'>
       <h2> 그룹 생성 </h2>
       <div id='group-create-form'>
+        {/* 그룹 이름 생성 */}
         <div id='group-name-div'>
           <label htmlFor='group-name'>그룹 이름 : </label>
           <input hidden='hidden' />
@@ -190,6 +248,7 @@ function GroupCreate() {
           ></input>
           <p className='message'>{currentGMessage}</p>
         </div>
+        {/* 그룹 태그 생성 */}
         <div id='group-tag-div'>
           <label htmlFor='group-tag'>그룹 태그 : (5개까지 가능)</label>
           <input hidden='hidden' />
@@ -220,7 +279,24 @@ function GroupCreate() {
             );
           })}
         </div>
-        <div>
+        {/* 그룹 프로필 이미지 업로드 */}
+        <div id='group-image-div'>
+          <input
+            type='file'
+            accept='image/*'
+            ref={inputRef}
+            onChange={onUploadImage}
+          />
+          {/* <button
+            type='button'
+            label='이미지 업로드'
+            onClick={onUploadImageButtonClick}
+          >
+            하이하이
+          </button> */}
+        </div>
+        {/* 그룹 친구 추가*/}
+        <div id='group-user-div'>
           <p className='my-1'>✨ 추가 된 사용자 ✨</p>
           <br />
 
@@ -239,7 +315,6 @@ function GroupCreate() {
             );
           })}
         </div>
-
         <button type='button' onClick={GroupCreate} className='my-2'>
           생성
         </button>
