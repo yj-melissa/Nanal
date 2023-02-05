@@ -3,7 +3,7 @@ package com.dbd.nanal.controller;
 import com.dbd.nanal.config.common.DefaultRes;
 import com.dbd.nanal.config.common.ResponseMessage;
 import com.dbd.nanal.config.security.JwtTokenProvider;
-import com.dbd.nanal.dto.JwtTokenDTO;
+import com.dbd.nanal.config.security.JwtTokenDTO;
 import com.dbd.nanal.dto.UserFormDTO;
 import com.dbd.nanal.dto.UserRequestDTO;
 import com.dbd.nanal.model.UserEntity;

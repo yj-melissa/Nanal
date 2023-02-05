@@ -1,6 +1,7 @@
 package com.dbd.nanal.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.Collections;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -45,6 +46,5 @@ public class UserProfileEntity {
 
     @Column(name = "is_private")
     private Boolean isPrivate;
-
 
 }
