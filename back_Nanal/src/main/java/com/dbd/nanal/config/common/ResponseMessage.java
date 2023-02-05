@@ -26,7 +26,7 @@ public class ResponseMessage {
     public static final String USUABLE_KEY = "사용 가능";
     public static final String USER_LIST_FIND_SUCCESS = "유저 목록 조회 성공";
     public static final String PASSWORD_UPDATE_SUCEESS = "비밀번호 변경 성공";
-    
+
     public static final String DIARY_SAVE_SUCCESS = "일기 생성 성공";
     public static final String DIARY_SAVE_FAIL="일기 생성 실패";
     public static final String DIARY_GET_SUCCESS = "일기 조회 성공";
