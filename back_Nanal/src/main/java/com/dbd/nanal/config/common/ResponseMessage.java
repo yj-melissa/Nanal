@@ -42,18 +42,27 @@ public class ResponseMessage {
 
     public static final String DIARY_COMMENT_SAVE_SUCCESS = "일기 댓글 저장 성공";
     public static final String DIARY_COMMENT_SAVE_FAIL = "일기 댓글 저장 실패";
+    public static final String DIARY_COMMENT_UPDATE_SUCCESS="일기 댓글 수정 성공";
+    public static final String DIARY_COMMENT_UPDATE_FAIL="일기 댓글 수정 실패";
     public static final String DIARY_COMMENT_LIST_FIND_SUCCESS = "일기 그룹에 해당하는 댓글 리스트 조회 성공";
+    public static final String DIARY_COMMENT_LIST_FIND_FAIL="일기 그룹에 해당하는 댓글 리스트 조회 실패";
     public static final String DIARY_COMMENT_DELETE_SUCCESS = "일기 댓글 삭제 성공";
     public static final String DIARY_COMMENT_DELETE_FAIL = "일기 댓글 삭제 실패";
+    public static final String DIARY_RETURN_SUCCESS="일기 복구 성공";
+    public static final String DIARY_RETURN_FAIL="일기 복구 실패";
     public static final String TOKEN_NOT_VALID ="유효하지 않은 토큰";
 
 
     public static final String DIARY_BOOKMARK_SAVE_SUCCESS="일기 북마크 저장 성공";
+    public static final String DIARY_BOOKMARK_SAVE_FAIL="일기 북마크 저장 실패";
     public static final String DIARY_BOOKMARK_LIST_SUCCESS="일기 북마크 리스트 조회 성공";
+    public static final String DIARY_BOOKMARK_LIST_FAIL="일기 북마크 리스트 조회 실패";
     public static final String DIARY_BOOKMARK_DELETE_SUCCESS="일기 북마크 삭제 성공";
+    public static final String DIARY_BOOKMARK_DELETE_FAIL="일기 북마크 삭제 실패";
     public static final String DIARY_BOOKMARK_COUNT_SUCCESS="일기 북마크 개수 조회 성공";
     public static final String DIARY_BOOKMARK_COUNT_FAIL="일기 북마크 개수 조회 실패";
     public static final String NOTICE_SAVE_SUCCESS="알림 저장 성공";
+    public static final String NOTICE_SAVE_FAIL="알림 저장 실패";
     public static final String NOTICE_GET_SUCCESS="알림 조회 성공";
     public static final String NOTICE_GET_FAIL="알림 조회 실패";
     public static final String NOTICE_DELETE_SUCCESS="알림 삭제 성공";
@@ -80,4 +89,6 @@ public class ResponseMessage {
     public static final String EMAIL_SEND_FAIL = "이메일 발송 실패";
     public static final Object PAINTING_SAVE_SUCCESS = "그림 저장 성공";
     public static final Object PAINTING_SAVE_FAIL = "그림 저장 실패";
+    public static final String PAINTING_FIND_SUCCESS = "그림 조회 성공";
+    public static final String PAINTING_FIND_FAIL = "그림 조회 실패";
 }
