@@ -9,11 +9,13 @@ public class SearchUserIdResponseDTO {
     private String name;
     private String email;
     private String userId;
+    private String nickname;
 
     public SearchUserIdResponseDTO(UserEntity user){
         this.userIdx=user.getUserIdx();
         this.name=user.getName();
         this.email=user.getEmail();
         this.userId=user.getUserId();
+        this.nickname=user.getUserProfile().getNickname();
     }
 }
