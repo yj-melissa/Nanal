@@ -26,8 +26,8 @@ function Calendaar() {
 
   return (
     <div>
-      캘린더 페이지 입니다. ||
-      <Link to="/SignIn"> 로그인 </Link>
+      {/* 캘린더 페이지 입니다. ||
+      <Link to="/SignIn"> 로그인 </Link> */}
       {/* 일기쓰기 테스트용 */}
       <div className="border-none">
         <Calendar
