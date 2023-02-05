@@ -120,8 +120,9 @@ public class DiaryService {
 
     // save diary comment
     public DiaryCommentResponseDTO saveComment(DiaryCommentRequestDTO diaryCommentRequestDTO){
+        UserEntity user=userRepository.getReferenceById(diaryCommentRequestDTO.getUserIdx());
         DiaryCommentEntity diaryCommentEntity=DiaryCommentEntity.builder().content(diaryCommentRequestDTO.getContent())
-                .user(UserEntity.builder().userIdx(diaryCommentRequestDTO.getUserIdx()).build())
+                .user(user)
                 .diary(DiaryEntity.builder().diaryIdx(diaryCommentRequestDTO.getDiaryIdx()).build())
                 .groupDetail(GroupDetailEntity.builder().groupIdx(diaryCommentRequestDTO.getGroupIdx()).build())
                 .build();
