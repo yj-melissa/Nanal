@@ -1,0 +1,8 @@
+
+## springboot
+src/main/resources/application-db.properties
+src/main/java/com/dbd/nanal/tensorflow/
+src/main/java/com/dbd/nanal/resources/model/
+src/main/java/com/dbd/nanal/resources/model2/
+libs
+Dockerfile

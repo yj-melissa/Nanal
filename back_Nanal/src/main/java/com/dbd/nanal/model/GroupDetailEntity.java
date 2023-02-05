@@ -36,6 +36,8 @@ public class GroupDetailEntity {
 
     private int groupImgIdx;
 
+    private String imgUrl;
+
     @CreationTimestamp
     private Date creationDate;
 
@@ -67,7 +69,7 @@ public class GroupDetailEntity {
 //    }
 
     @Builder
-    public GroupDetailEntity(int groupIdx, String groupName, boolean isPrivate, int groupImgIdx, Date creationDate, List<GroupTagEntity> groupTags, List<GroupUserRelationEntity> groupUserRelations, List<GroupDiaryRelationEntity> groupDiaries, List<DiaryCommentEntity> diaryComments) {
+    public GroupDetailEntity(int groupIdx, String groupName, boolean isPrivate, int groupImgIdx, Date creationDate, List<GroupTagEntity> groupTags, List<GroupUserRelationEntity> groupUserRelations, List<GroupDiaryRelationEntity> groupDiaries, List<DiaryCommentEntity> diaryComments, String imgUrl) {
         this.groupIdx = groupIdx;
         this.groupName = groupName;
         this.isPrivate = isPrivate;
@@ -77,6 +79,7 @@ public class GroupDetailEntity {
         this.groupUserRelations = groupUserRelations;
         this.groupDiaries = groupDiaries;
         this.diaryComments = diaryComments;
+        this.imgUrl = imgUrl;
     }
 
 

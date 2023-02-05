@@ -167,11 +167,11 @@ public class GroupService {
 
 
     @Transactional
-    public void updateGroupImg(int groupIdx, int newGroupImgIdx) {
+    public void updateGroupImg(int groupIdx, int groupImgIdx, String imgUrl) {
         GroupDetailEntity groupDetailEntity = groupRepository.getReferenceById(groupIdx);
-        System.out.println("groupIdx : "+groupIdx+" 변경 전 img idx : "+groupDetailEntity.getGroupImgIdx()+" 변경 후 img idx : "+newGroupImgIdx);
         // 리턴받은 이미지 인덱스로 업데이트
-        groupDetailEntity.setGroupImgIdx(newGroupImgIdx);
+        groupDetailEntity.setImgUrl(imgUrl);
+        groupDetailEntity.setGroupImgIdx(groupImgIdx);
 
     }
 }
