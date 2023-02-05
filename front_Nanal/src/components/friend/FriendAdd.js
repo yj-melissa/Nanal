@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
-import FriendItem from './FriendItem';
 
 function FriendAdd() {
   const [friendList, setFriendList] = useState([]);
@@ -15,7 +14,8 @@ function FriendAdd() {
       .then(({ data }) => {
         if (data.statusCode === 200) {
           if (data.data.responseMessage === '친구 조회 성공') {
-            console.log(data.data);
+            console.log(data.data.userInfo);
+            setFriendList(data.data.userInfo);
           } else {
             console.log('친구 조회 오류 : ');
             console.log(data.statusCode);
@@ -25,6 +25,28 @@ function FriendAdd() {
       })
       .catch(({ error }) => {
         console.log('친구 조회 오류 : ' + error);
+      });
+  };
+
+  const addFriend = (e, useridx) => {
+    e.preventDefault();
+
+    axios_api
+      .post(`notification/friend`, { userIdx: [useridx] })
+      .then(({ data }) => {
+        if (data.statusCode === 200) {
+          if (data.data.responseMessage === '알림 저장 성공') {
+            alert('친구에게 추가를 요청하였습니다!');
+            window.location.reload(false);
+          } else {
+            console.log('알림 저장 오류 : ');
+            console.log(data.statusCode);
+            console.log(data.data.responseMessage);
+          }
+        }
+      })
+      .catch(({ error }) => {
+        console.log('알림 저장 오류 : ' + error);
       });
   };
 
@@ -43,8 +65,20 @@ function FriendAdd() {
       </form>
       <hr className='border-solid border-1 border-slate-800 w-80 my-5' />
       {friendList.map((friendItem) => (
-        <FriendItem key={friendItem.userIdx} item={friendItem} />
+        <div key={friendItem.userIdx} className='mb-2'>
+          {friendItem.userId}
+          <br />
+          {friendItem.email}
+          <br />
+          <button
+            type='button'
+            onClick={(e) => addFriend(e, friendItem.userIdx)}
+          >
+            친구 추가하기
+          </button>
+        </div>
       ))}
+      <div></div>
     </div>
   );
 }
