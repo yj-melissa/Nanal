@@ -179,11 +179,11 @@ public class UserService {
 
 
     @Transactional
-    public void updateUserImg(int userIdx, int newPictureIdx) {
-        System.out.println("useridx : "+userIdx+ " newpictureidx : "+newPictureIdx);
+    public void updateUserImg(int userIdx, String newImgUrl) {
+        System.out.println("useridx : "+userIdx+ " newImgUrl : "+newImgUrl);
         UserProfileEntity userProfileEntity = userProfileRepository.getReferenceById(userIdx);
-        System.out.println("userIdx : "+userIdx+" 변경 전 img idx : "+userProfileEntity.getImg()+" 변경 후 img idx : "+newPictureIdx);
-        userProfileEntity.setImg(Integer.toString(newPictureIdx));
+        System.out.println("userIdx : "+userIdx+" 변경 전 img idx : "+userProfileEntity.getImg()+" 변경 후 img idx : "+newImgUrl);
+        userProfileEntity.setImg(newImgUrl);
     }
 }
 
