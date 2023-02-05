@@ -7,7 +7,7 @@ function DiaryGroup({ item }) {
   const onChecked = (checked, id) => {
     if (checked) {
       setCheckedList([...checkedList, id]);
-    } else if (!checked && checkedList.find((el) => el === id)) {
+    } else {
       setCheckedList(checkedList.filter((el) => el !== id));
     }
   };
@@ -28,10 +28,6 @@ function DiaryGroup({ item }) {
           {item.groupDetail.groupName}
         </label>
         <br />
-        {item.tags.map((tagging, idx) => {
-          if (tagging.tag) return <span key={idx}>#{tagging.tag}&nbsp;</span>;
-          // return tagging.tag ? <span key={idx}>#{tagging.tag}</span> : <></>;
-        })}
       </div>
     </div>
   );

@@ -3,10 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@ant-design/icons": "^5.0.1",
     "@iconify/react": "^4.0.1",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "antd": "^5.1.7",
     "axios": "^1.2.3",
     "date-fns": "^2.29.3",
     "nodemailer": "^6.9.0",
