@@ -286,8 +286,8 @@ public class DiaryController {
         }
     }
 
-    @ApiOperation(value = "일기 댓글 리스트 리턴", notes =
-            "일기에 해당하는 댓글 리스트를 반환합니다..\n" +
+    @ApiOperation(value = "일기 그룹별 댓글 리스트 리턴", notes =
+            "일기에 해당하는 그룹 댓글 리스트를 반환합니다..\n" +
                     "[Front] \n" +
                     "{diaryIdx(int), groupIdx(int)} \n\n" +
                     "[Back] \n" +
@@ -297,6 +297,26 @@ public class DiaryController {
         HashMap<String, Object> responseDTO = new HashMap<>();
         try{
             List<DiaryCommentResponseDTO> diaryCommentList=diaryService.getDiaryCommentList(groupIdx, diaryIdx);
+            responseDTO.put("responseMessage", ResponseMessage.DIARY_COMMENT_LIST_FIND_SUCCESS);
+            responseDTO.put("diaryComment", diaryCommentList);
+            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+        }catch (Exception e){
+            responseDTO.put("responseMessage", ResponseMessage.DIARY_COMMENT_LIST_FIND_FAIL);
+            return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
+        }
+    }
+
+    @ApiOperation(value = "일기 전체 댓글 리스트 리턴", notes =
+            "일기에 해당하는 전체 댓글 리스트를 반환합니다..\n" +
+                    "[Front] \n" +
+                    "{diaryIdx(int)} \n\n" +
+                    "[Back] \n" +
+                    "[{commentIdx(int), content(String), creationDate(date), userIdx(int), nickname(String)}]")
+    @GetMapping("/comment/{diaryIdx}")
+    public ResponseEntity<?> getCommentListAll(@ApiParam(value="댓글 리스트 조회 정보")@PathVariable("diaryIdx") int diaryIdx){
+        HashMap<String, Object> responseDTO = new HashMap<>();
+        try{
+            List<DiaryCommentResponseDTO> diaryCommentList=diaryService.getDiaryCommentListAll(diaryIdx);
             responseDTO.put("responseMessage", ResponseMessage.DIARY_COMMENT_LIST_FIND_SUCCESS);
             responseDTO.put("diaryComment", diaryCommentList);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
