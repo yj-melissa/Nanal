@@ -10,6 +10,7 @@ function GroupUpdate() {
   const [groupIdx, setGroupIdx] = useState(0);
   const [groupName, setGroupName] = useState('');
   const [groupTag, setGroupTag] = useState([]);
+  const [groupImg, setGroupImg] = useState('');
 
   const currentName = useRef('');
   const currentTag = useRef(['', '', '', '', '']);
@@ -30,6 +31,19 @@ function GroupUpdate() {
     // setGroupTag(
     //   groupTag.map((it) => (it.tagIdx === idx ? { ...it, tag: newTag } : it))
     // );
+  };
+
+  // 그룹 이미지 upload
+  const inputRef = useRef();
+  const formData = new FormData();
+
+  const onUploadImage = (e) => {
+    if (!e.target.files) {
+      return;
+    }
+
+    // console.log(e.target.files[0]);
+    formData.append('multipartFile', e.target.files[0]);
   };
 
   // 초대할 사용자 추가
@@ -141,7 +155,7 @@ function GroupUpdate() {
             setGroupIdx(data.data.groupDetail.groupIdx);
             setGroupName(data.data.groupDetail.groupName);
             setGroupTag(data.data.tags);
-
+            setGroupImg(data.data.groupDetail.imgUrl);
             const groupidx = data.data.groupDetail.groupIdx;
             currentName.current = data.data.groupDetail.groupName;
             // currentTag.current = data.data.tags;
@@ -214,12 +228,13 @@ function GroupUpdate() {
   }, []);
 
   return (
-    <div id='group-Profile'>
-      <h2> 그룹 수정 </h2>
+    <div id='group-Update'>
+      <h2 className='m-1 text-lg font-bold text-center'> 그룹 수정 </h2>
       <div>
         <form onSubmit={GroupUpdate}>
+          <p className='my-2 text-center'>✨ 그룹 프로필 ✨</p>
           <div id='group-name-div'>
-            <label htmlFor='group-name'>그룹 이름 : </label>
+            <label htmlFor='group-name'>💙 그룹 이름 : </label>
             <input
               type='text'
               id='group-name'
@@ -233,7 +248,7 @@ function GroupUpdate() {
               return (
                 <input
                   type='text'
-                  className='mr-2 mb-2'
+                  className='mb-2 mr-2'
                   key={tagging.tagIdx}
                   defaultValue={tagging.tag || ''}
                   onChange={(e) => {
@@ -242,34 +257,47 @@ function GroupUpdate() {
                 ></input>
               );
             })} */}
+            <p> 💙 그룹 태그 </p>
             {currentTag.current.map((tagging, idx) => {
               return (
-                <input
-                  type='text'
-                  className='mr-2 mb-2'
-                  key={idx}
-                  // defaultValue={tagging.tag || ''}
-                  defaultValue={tagging || ''}
-                  onChange={(e) => {
-                    updateTag(e, idx);
-                  }}
-                ></input>
+                <p className='inline-block'>
+                  <span className='mr-1'>#</span>
+                  <input
+                    type='text'
+                    key={idx}
+                    // defaultValue={tagging.tag || ''}
+                    defaultValue={tagging || ''}
+                    onChange={(e) => {
+                      updateTag(e, idx);
+                    }}
+                    className='p-0.5 mb-2 mr-2 rounded-lg w-32 bg-[#e9e9e9]'
+                  ></input>
+                </p>
               );
             })}
+          </div>
+          <div id='group-image' className='mb-2'>
+            <p>💙 그룹 이미지 </p>
+            <input
+              type='file'
+              accept='image/*'
+              ref={inputRef}
+              onChange={onUploadImage}
+              className='block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-100 file:text-violet-700 hover:file:bg-violet-200'
+            />
           </div>
           <div>
             {groupFriendList.map((friendItem, idx) => {
               return (
                 <span key={idx} className='mr-2'>
-                  {friendItem.nickName}
+                  💙 {friendItem.nickName}
                 </span>
               );
             })}
           </div>
 
           <div>
-            <p className='my-1'>✨ 추가 된 사용자 ✨</p>
-            <br />
+            <p className='my-2 text-center'>✨ 추가 된 사용자 ✨</p>
 
             {includeFriend.map((friendItem, idx) => {
               return (
@@ -279,7 +307,7 @@ function GroupUpdate() {
                   onClick={() => {
                     onChangeFRemove(idx);
                   }}
-                  className='mr-2'
+                  className='items-center inline-block px-2 mx-12 my-1 rounded-lg bg-slate-100 hover:bg-blue-200'
                 >
                   {friendItem.nickName}
                 </button>
@@ -287,16 +315,19 @@ function GroupUpdate() {
             })}
           </div>
 
-          <button type='submit' className='my-2'>
-            수정
+          <button
+            type='submit'
+            className='hover:bg-sky-700 bg-cyan-600 text-white px-2.5 py-1 rounded-3xl m-auto block'
+          >
+            수정하기
           </button>
         </form>
       </div>
 
       <div id='group-Friend'>
-        <hr className='border-solid border-1 border-slate-800 w-80 my-5' />
+        <hr className='my-5 border-solid border-1 border-slate-800 w-80' />
 
-        <p className='mb-0.5'>내 친구 목록 -----------------------</p>
+        <p className='mb-0.5'>🤗 내 친구 목록 --------------------</p>
 
         {groupNotFriendList.map((friendItem, idx) => {
           return (
@@ -306,7 +337,7 @@ function GroupUpdate() {
               onClick={() => {
                 addFriend(idx);
               }}
-              className='mr-2'
+              className='items-center inline-block px-2 mx-12 my-1 rounded-lg bg-slate-100 hover:bg-blue-200'
             >
               {friendItem.nickName}
             </button>

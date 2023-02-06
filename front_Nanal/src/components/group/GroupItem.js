@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import emo_joy from '../../src_assets/img/emo_joy.png';
 
 function GroupItem({ item }) {
   return (
@@ -8,12 +9,36 @@ function GroupItem({ item }) {
         to={`/Group/${item.groupDetail.groupIdx}`}
         state={{ groupIdx: item.groupDetail.groupIdx }}
       >
-        <div className='bg-[#F7F7F7] border-2 border-solid border-slate-400 rounded-lg m-1 mb-3 p-2'>
-          <p className='font-bold mb-0.5'>{item.groupDetail.groupName}</p>
-          {item.tags.map((tagging, idx) => {
-            if (tagging.tag) return <span key={idx}>#{tagging.tag}&nbsp;</span>;
-            // return tagging.tag ? <span key={idx}>#{tagging.tag}</span> : <></>;
-          })}
+        <div className='overflow-y-auto flex bg-[#F7F7F7] border-2 border-solid border-slate-400 rounded-lg m-1 mb-3 p-2'>
+          {item.groupDetail.imgUrl !== null ? (
+            <img
+              src={item.groupDetail.imgUrl}
+              className='inline-block w-16 h-16 p-1 rounded-lg'
+            ></img>
+          ) : (
+            <>
+              <img
+                src={emo_joy}
+                className='inline-block w-16 h-16 p-1 rounded-md'
+              ></img>
+            </>
+          )}
+          <div className='inline-block px-1 m-1 break-words'>
+            <p className='font-bold text-lg mb-0.5'>
+              {item.groupDetail.groupName}
+            </p>
+            <div className='text-clip'>
+              {item.tags.map((tagging, idx) => {
+                if (tagging.tag)
+                  return (
+                    <span key={idx} className='mr-1'>
+                      #{tagging.tag}
+                    </span>
+                  );
+                // return tagging.tag ? <span key={idx}>#{tagging.tag}</span> : <></>;
+              })}
+            </div>
+          </div>
         </div>
       </Link>
     </div>
