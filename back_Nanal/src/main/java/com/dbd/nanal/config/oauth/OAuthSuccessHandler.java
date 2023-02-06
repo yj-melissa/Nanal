@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
@@ -25,6 +26,8 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
         Authentication authentication) throws IOException, ServletException {
         JwtTokenProvider tokenProvider = new JwtTokenProvider(jwtTokenRepository, userRepository);
+        ApplicationOAuth2User userPrincipal = (ApplicationOAuth2User) authentication.getPrincipal();
+        OAuth2AccessToken oAuth2AccessToken = userPrincipal.getAccessToken();
 
         JwtTokenDTO jwtTokenDTO = tokenProvider.createJwtTokens(authentication);
 
@@ -39,5 +42,6 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         response.addCookie(refreshTokenCookie);
         response.setStatus(200);
         response.addHeader("accessToken", jwtTokenDTO.getAccessToken());
+        response.setHeader("kakaoAccessToken", oAuth2AccessToken.getTokenValue());
     }
 }
