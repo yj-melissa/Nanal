@@ -5,7 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -27,7 +27,7 @@ public class DiaryCommentEntity {
 
     @CreationTimestamp
     @Column(name="creation_date")
-    private Timestamp creationDate;
+    private LocalDateTime creationDate;
 
     @Column(name="parent_comment_idx")
     private int parentCommentIdx;
@@ -43,7 +43,7 @@ public class DiaryCommentEntity {
     private GroupDetailEntity groupDetail;
 
     @Builder
-    public DiaryCommentEntity(int commentIdx, DiaryEntity diary, String content, Timestamp creationDate,
+    public DiaryCommentEntity(int commentIdx, DiaryEntity diary, String content, LocalDateTime creationDate,
                               int parentCommentIdx, UserEntity user, GroupDetailEntity groupDetail) {
         this.commentIdx=commentIdx;
         this.diary=diary;

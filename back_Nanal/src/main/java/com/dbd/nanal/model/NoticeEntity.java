@@ -5,7 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -42,13 +42,13 @@ public class NoticeEntity {
 
     @CreationTimestamp
     @Column(name="creation_date")
-    private Timestamp creationDate;
+    private LocalDateTime creationDate;
 
     @Column(name="expire_date")
-    private Timestamp expireDate;
+    private LocalDateTime expireDate;
 
     @Builder
-    public NoticeEntity(int noticeIdx, int requestUserIdx, int requestGroupIdx, int requestDiaryIdx, UserEntity user, int noticeType, String content, boolean isChecked, Timestamp expireDate) {
+    public NoticeEntity(int noticeIdx, int requestUserIdx, int requestGroupIdx, int requestDiaryIdx, UserEntity user, int noticeType, String content, boolean isChecked, LocalDateTime expireDate) {
         this.noticeIdx=noticeIdx;
         this.requestGroupIdx=requestGroupIdx;
         this.requestUserIdx=requestUserIdx;

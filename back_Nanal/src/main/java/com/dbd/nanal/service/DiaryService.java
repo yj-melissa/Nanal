@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,6 +29,7 @@ public class DiaryService {
         UserEntity user=userRepository.getReferenceById(diary.getUserIdx());
         DiaryEntity diaryEntity=DiaryEntity.builder().creationDate(diary.getCreationDate())
                 .user(user)
+                .diaryDate(diary.getDiaryDate())
                 .content(diary.getContent())
                 .emo(diary.getEmo()).build();
         return new DiaryResponseDTO(diaryRepository.save(diaryEntity));
@@ -59,13 +60,13 @@ public class DiaryService {
         DiaryEntity diaryEntity=diaryRepository.getReferenceById(diaryIdx);
 
         Calendar cal=Calendar.getInstance();
-        cal.setTime(new Date());
+        cal.setTime(new java.sql.Date(System.currentTimeMillis()));
         cal.add(Calendar.DATE, 30);
-        Date date=cal.getTime();
+        long date=cal.getTimeInMillis();
 
         diaryEntity.setDeleted(true);
-        diaryEntity.setDeleteDate(new Date());
-        diaryEntity.setExpireDate(date);
+        diaryEntity.setDeleteDate(new java.sql.Date(System.currentTimeMillis()));
+        diaryEntity.setExpireDate(new Date(date));
 
         diaryRepository.save(diaryEntity);
     }
@@ -75,6 +76,7 @@ public class DiaryService {
         DiaryEntity diaryEntity=diaryRepository.getReferenceById(diary.getDiaryIdx());
 
         diaryEntity.setCreationDate(diaryEntity.getCreationDate());
+        diaryEntity.setDiaryDate(diary.getDiaryDate());
         diaryEntity.setContent(diary.getContent());
         diaryEntity.setPainting(diary.getPainting());
         diaryEntity.setMusic(diary.getMusic());
@@ -90,10 +92,10 @@ public class DiaryService {
     }
 
     // get date diary list
-    public List<DiaryResponseDTO> getDateDiaryList(String findDate, int userIdx){
+    public List<DiaryResponseDTO> getDateDiaryList(Date findDate, int userIdx){
 //    public List<DiaryResponseDTO> getDateDiaryList(Date findDate){
-//        List<DiaryEntity> diaryEntityList=diaryRepository.findDateDiaryList(findDate);
-        List<DiaryEntity> diaryEntityList=diaryRepository.findDateDiaryList(Integer.parseInt(findDate.substring(0,4)), Integer.parseInt(findDate.substring(5,7)), Integer.parseInt(findDate.substring(8,10)), userIdx);
+        List<DiaryEntity> diaryEntityList=diaryRepository.findDateDiaryList(findDate);
+//        List<DiaryEntity> diaryEntityList=diaryRepository.findDateDiaryList(Integer.parseInt(findDate.substring(0,4)), Integer.parseInt(findDate.substring(5,7)), Integer.parseInt(findDate.substring(8,10)), userIdx);
         return diaryEntityList.stream().map(x->new DiaryResponseDTO(x)).collect(Collectors.toList());
     }
 
@@ -105,7 +107,7 @@ public class DiaryService {
 
     // get user diary list
     public List<DiaryResponseDTO> userDiaryList(int userIdx){
-        List<DiaryEntity> diaryEntityList=diaryRepository.findByUserOrderByCreationDateDesc(UserEntity.builder().userIdx(userIdx).build());
+        List<DiaryEntity> diaryEntityList=diaryRepository.findByUserOrderByDiaryDateDescDiaryIdxDesc(UserEntity.builder().userIdx(userIdx).build());
         return diaryEntityList.stream().map(x->new DiaryResponseDTO(x)).collect(Collectors.toList());
     }
 
