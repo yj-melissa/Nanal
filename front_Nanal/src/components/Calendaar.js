@@ -44,9 +44,12 @@ function Calendaar() {
       <br />
       {/* 일기쓰러가기 버튼 */}
       <div className="flex justify-center">
-        <button onClick={() => navigate("/Diary/Create")}>
+        <button
+          className="bg-rose-500 text-white rounded-md cursor-pointer px-2 py-2 whitespace-nowrap font-bold"
+          onClick={() => navigate("/Diary/Create")}
+        >
           {" "}
-          일기 쓰러 가기~! 🖊{" "}
+          일기 쓰기 🖊{" "}
         </button>
       </div>
       {/* 일기 리스트 */}
