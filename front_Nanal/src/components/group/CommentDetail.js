@@ -1,37 +1,38 @@
-import { useState } from "react";
-import axios_api from "../../config/Axios";
+import { useState } from 'react';
+import axios_api from '../../config/Axios';
 
-function CommentItem({ diaryIdx, groupIdx, content, commentIdx }) {
+function CommentDetail({ item }) {
   // 댓글 상세 데이터 받기
-  const [commentDetail, setCommentDetail] = useState({});
+  const [commentDetail, setCommentDetail] = useState(item.content);
   // 댓글 수정
   const [isEdit, setIsEdit] = useState(false);
   const toggleIsEdit = () => {
     setIsEdit(!isEdit);
     setLocalContent(localContent);
   };
-
-  const [localContent, setLocalContent] = useState(content);
+  const [localContent, setLocalContent] = useState(item.content);
   // 수정 취소 시 초기화 함수
   const handleQuitEdit = () => {
     setIsEdit(false);
-    setLocalContent(content);
+    setLocalContent(item.content);
   };
 
   return (
     <div>
       {isEdit ? (
         <>
-          <button onClick={handleQuitEdit}>수정 취소</button>
+          <button className='border-rose-500' onClick={handleQuitEdit}>
+            수정 취소
+          </button>
           <button
             onClick={() => {
               axios_api
-                .put(`diary/comment`, {
-                  commentIdx: commentIdx,
+                .put('diary/comment', {
+                  commentIdx: item.commentIdx,
                   content: localContent,
                 })
                 .then(({ data }) => {
-                  setCommentDetail(data.data.diaryComment);
+                  setCommentDetail(data.data.diaryComment.content);
                   setIsEdit(false);
                 })
                 .catch((err) => console.log(err));
@@ -47,18 +48,17 @@ function CommentItem({ diaryIdx, groupIdx, content, commentIdx }) {
             onClick={() => {
               if (
                 window.confirm(
-                  `${commentIdx}번째 댓글을 정말 삭제하시겠습니까?`
+                  `${item.commentIdx}번째 댓글을 정말 삭제하시겠습니까?`
                 )
               ) {
                 axios_api
-                  .delete(`diary/comment/${commentIdx}`)
+                  .delete(`diary/comment/${item.commentIdx}`)
                   .then(({ data }) => {
                     if (data.statusCode === 200) {
-                      if (data.data.responseMessage === "일기 댓글 삭제 성공") {
+                      if (data.data.responseMessage === '일기 댓글 삭제 성공') {
                         return;
                       }
                     } else {
-                      console.log("일기 댓글 삭제 실패 : ");
                       console.log(data.statusCode);
                       console.log(data.data.responseMessage);
                     }
@@ -73,20 +73,21 @@ function CommentItem({ diaryIdx, groupIdx, content, commentIdx }) {
       <div>
         {isEdit ? (
           <>
-            <form>
-              <input
-                type="text"
-                value={localContent}
-                onChange={(e) => setLocalContent(e.target.value)}
-              />
-            </form>
+            <input
+              type='text'
+              value={localContent}
+              onChange={(e) => setLocalContent(e.target.value)}
+            />
           </>
         ) : (
-          <>{localContent}</>
+          <>
+            <div>{item.nickname}</div>
+            <div>{commentDetail}</div>
+          </>
         )}
       </div>
     </div>
   );
 }
 
-export default CommentItem;
+export default CommentDetail;
