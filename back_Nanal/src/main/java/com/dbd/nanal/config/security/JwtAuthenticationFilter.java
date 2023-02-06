@@ -1,7 +1,11 @@
 package com.dbd.nanal.config.security;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nimbusds.oauth2.sdk.ErrorResponse;
+import io.jsonwebtoken.ExpiredJwtException;
 import java.io.IOException;
 
+import java.util.HashMap;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -27,10 +31,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response,
         @NotNull FilterChain filterChain) throws ServletException, IOException {
         try {
-            logger.info("request" + request);
-            // 요청에서 토큰 가져오기
             String token = parseBearerToken(request);
-            logger.info("doFilterInternal - 토큰 값 추출. token : " + token);
 
             // 토큰 검사
             if (token != null && jwtTokenProvider.isValidateToken(token)) {
@@ -39,10 +40,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 // SecurityContextHolder에 등록
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-                logger.info("doFilterInternal - 토큰 값 유효성 체크 완료");
             }
-        } catch (Exception e) {
-            logger.debug("user authentication 세팅 실패" + e);
+        } catch (ExpiredJwtException e) {
+            logger.info("토큰 만료"+e.getMessage());
+            HashMap<String, Object> responseDTO = new HashMap<>();
+            responseDTO.put("responseMessage", "accessToken 만료");
+            new ObjectMapper().writeValue(response.getWriter(), responseDTO);
         }
 
         filterChain.doFilter(request, response);
