@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import axios_api from '../../config/Axios';
+import { onLogin } from '../../config/Login';
 import CommentDetail from './CommentDetail';
 
 function Comment({ diaryIdx, groupIdx }) {
@@ -19,6 +20,7 @@ function Comment({ diaryIdx, groupIdx }) {
       commentRef.current.focus();
       return;
     }
+
     axios_api
       .post('diary/comment', {
         diaryIdx: diaryIdx,
@@ -60,6 +62,7 @@ function Comment({ diaryIdx, groupIdx }) {
 
   // 디테일 페이지에서 댓글 있으면 보여줘야 함
   useEffect(() => {
+    onLogin();
     axios_api
       .get(`diary/comment/${groupIdx}/${diaryIdx}`)
       .then(({ data }) => {
@@ -78,7 +81,7 @@ function Comment({ diaryIdx, groupIdx }) {
         }
       })
       .catch((err) => console.log(err));
-  }, [diaryComment]);
+  }, []);
 
   return (
     <div className='comment-container'>
