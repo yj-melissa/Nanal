@@ -8,7 +8,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
+import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -16,7 +17,8 @@ import java.util.List;
 public class DiaryRequestDTO {
     private int diaryIdx;
     private int userIdx;
-    private Date creationDate;
+    private LocalDateTime creationDate;
+    private Date diaryDate;
     private String content;
     private int picture;
     private int music;

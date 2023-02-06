@@ -3,6 +3,7 @@ package com.dbd.nanal.dto;
 import com.dbd.nanal.model.ScrapEntity;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -12,7 +13,7 @@ public class BookmarkResponseDTO {
 
     //diary
     private int diaryIdx;
-    private Date creationDate;
+    private LocalDateTime creationDate;
     private String content;
     //    private String picture;
     //    private int music;

@@ -30,7 +30,7 @@ public class DiaryController {
                     "[Front] \n" +
                     "{content(String), groupIdx(List<Integer>)} \n\n" +
                     "[Back] \n" +
-                    "{diaryIdx(int), userIdx(int), nickname(String), creationDate(Date), content(String), picture(String), emo(String)} ")
+                    "{diaryIdx(int), userIdx(int), nickname(String), diaryDate(Date), content(String), picture(String), emo(String)} ")
     @PostMapping("")
     public ResponseEntity<?> writeDiary(@ApiParam(value = "일기 정보")@RequestBody DiaryRequestDTO diary, @AuthenticationPrincipal UserEntity userInfo) {
         HashMap<String, Object> responseDTO = new HashMap<>();
@@ -68,7 +68,7 @@ public class DiaryController {
                     "[Front] \n" +
                     "{diaryIdx(int)} \n\n" +
                     "[Back] \n" +
-                    "{diaryIdx(int), userIdx(int), nickname(String), creationDate(Date), content(String), picture(String), emo(String)} ")
+                    "{diaryIdx(int), userIdx(int), nickname(String), diaryDate(Date), content(String), picture(String), emo(String)} ")
     @GetMapping("/{diaryIdx}")
     // 일기 리턴
     public ResponseEntity<?> getDiary(@ApiParam(value = "일기 id")@PathVariable("diaryIdx") int diaryIdx, @AuthenticationPrincipal UserEntity userInfo){
@@ -94,13 +94,15 @@ public class DiaryController {
     @ApiOperation(value = "일기 내용 수정", notes =
             "일기 내용을 수정합니다.\n" +
                     "[Front] \n" +
-                    "{diaryIdx(int), content(String), creationDate(Date), userIdx(int)}\n\n" +
+                    "{diaryIdx(int), content(String), diaryDate(Date)}\n\n" +
                     "[Back] \n" +
-                    "{diaryIdx(int), userIdx(int), nickname(String), creationDate(Date), content(String), picture(String), emo(String)")
+                    "{diaryIdx(int), userIdx(int), nickname(String), diaryDate(Date), content(String), picture(String), emo(String)")
     @PutMapping("")
-    public ResponseEntity<?> updateDiary(@ApiParam(value = "일기 수정 정보")@RequestBody DiaryRequestDTO diary) {
+    public ResponseEntity<?> updateDiary(@ApiParam(value = "일기 수정 정보")@RequestBody DiaryRequestDTO diary, @AuthenticationPrincipal UserEntity userInfo) {
         HashMap<String, Object> responseDTO = new HashMap<>();
         try{
+            diary.setUserIdx(userInfo.getUserIdx());
+
             //diary keyword analyze
             List<String> keywordList=new ArrayList<>();
 
@@ -151,11 +153,11 @@ public class DiaryController {
     }
 
     @ApiOperation(value = "groupIdx로 일기 리스트 리턴", notes =
-            "일기를 삭제합니다.\n" +
+            "groupIdx로 일기 리스트를 반환합니다.\n" +
                     "[Front] \n" +
                     "{groupIdx(int)} \n\n" +
                     "[Back] \n" +
-                    "[{diaryIdx(int), userIdx(int), nickname(String), creationDate(Date), content(String), picture(String), emo(String)}]")
+                    "[{diaryIdx(int), userIdx(int), nickname(String), diaryDate(Date), content(String), picture(String), emo(String)}]")
     @GetMapping("/list/{groupIdx}")
     public ResponseEntity<?> DiaryList(@PathVariable("groupIdx") int groupIdx){
         HashMap<String, Object> responseDTO = new HashMap<>();
@@ -175,7 +177,7 @@ public class DiaryController {
                     "[Front] \n" +
                     "{date(yyyy-mm-dd)} \n\n" +
                     "[Back] \n" +
-                    "[{diaryIdx(int), userIdx(int), nickname(String), creationDate(Date), content(String), picture(String), emo(String)}]")
+                    "[{diaryIdx(int), userIdx(int), nickname(String), diaryDate(Date), content(String), picture(String), emo(String)}]")
     @GetMapping("/list/date/{date}")
     public ResponseEntity<?> DiaryList(@PathVariable("date") String date, @AuthenticationPrincipal UserEntity userInfo){
         HashMap<String, Object> responseDTO = new HashMap<>();
@@ -188,10 +190,9 @@ public class DiaryController {
             }
             // yyyy-mm-dd
             else {
-//                SimpleDateFormat formatter=new SimpleDateFormat("yyyy-mm-dd");
-//                Date findDate=formatter.parse(date);
+                java.sql.Date findDate=java.sql.Date.valueOf(date);
 //                diaryResponseDTOList = diaryService.getDateDiaryList(findDate);
-                diaryResponseDTOList = diaryService.getDateDiaryList(date, userInfo.getUserIdx());
+                diaryResponseDTOList = diaryService.getDateDiaryList(findDate, userInfo.getUserIdx());
             }
             responseDTO.put("responseMessage", ResponseMessage.DIARY_LIST_FIND_SUCCESS);
             responseDTO.put("diary", diaryResponseDTOList);
@@ -205,9 +206,9 @@ public class DiaryController {
     @ApiOperation(value = "userIdx로 전체 일기 리스트 리턴", notes =
             "일기를 삭제합니다.\n" +
                     "[Front] \n" +
-                    "{userIdx(int)} \n\n" +
+                    "{} \n\n" +
                     "[Back] \n" +
-                    "[{diaryIdx(int), userIdx(int), nickname(String), creationDate(Date), content(String), picture(String), emo(String)}]")
+                    "[{diaryIdx(int), userIdx(int), nickname(String), diaryDate(Date), content(String), picture(String), emo(String)}]")
 //    @GetMapping("/list/user/{userIdx}")
     @GetMapping("/list/user")
 //    public ResponseEntity<?> userDiaryList(@PathVariable("userIdx") int userIdx){
@@ -328,9 +329,9 @@ public class DiaryController {
     @ApiOperation(value = "userIdx로 휴지통 목록 불러오기", notes =
             "사용자의 휴지통 목록을 리턴합니다.\n" +
                     "[Front] \n" +
-                    "{userIdx(int)} \n\n" +
+                    "{} \n\n" +
                     "[Back] \n" +
-                    "[{diaryIdx(int), userIdx(int), creationDate(Date), content(String), picture(String), emo(String)}]")
+                    "[{diaryIdx(int), userIdx(int), diaryDate(Date), content(String), picture(String), emo(String)}]")
 //    @GetMapping("/trashbin/{userIdx}")
     @GetMapping("/trashbin")
 //    public ResponseEntity<?> getTrashBinDiaryList(@PathVariable("userIdx") int userIdx){
@@ -350,7 +351,7 @@ public class DiaryController {
     @ApiOperation(value = "userIdx로 휴지통 비우기", notes =
             "휴지통을 비우기.\n" +
                     "[Front] \n" +
-                    "{userIdx(int)} \n\n" +
+                    "{} \n\n" +
                     "[Back] \n" +
                     "ok(200)")
 //    @DeleteMapping("/trashbin/{userIdx}")
@@ -373,7 +374,7 @@ public class DiaryController {
                     "[Front] \n" +
                     "{diaryIdx(int)} \n\n" +
                     "[Back] \n" +
-                    "{diaryIdx(int), userIdx(int), creationDate(Date), content(String), picture(String), music(int), emo(String)}")
+                    "{diaryIdx(int), userIdx(int), diaryDate(Date), content(String), picture(String), music(int), emo(String)}")
     @PutMapping("/trashbin/{diaryIdx}")
     public ResponseEntity<?> reDiary(@ApiParam(value="일기 번호") @PathVariable("diaryIdx") int diaryIdx){
         HashMap<String, Object> responseDTO = new HashMap<>();
@@ -411,7 +412,7 @@ public class DiaryController {
     @ApiOperation(value = "일기 북마크 리스트 불러오기", notes =
             "일기 북마크 리스트를 반환합니다.\n" +
                     "[Front] \n" +
-                    "{userIdx(int)} \n\n" +
+                    "{} \n\n" +
                     "[Back] \n" +
                     "[{bookmarkIdx(int), diaryIdx(int), userIdx(int), creationDate(Date), content(String), picture(String), music(int), emo(String)}]")
 //    @GetMapping("/bookmark/{userIdx}")

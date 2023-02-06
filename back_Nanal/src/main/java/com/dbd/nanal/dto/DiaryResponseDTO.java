@@ -9,7 +9,7 @@ import java.util.Date;
 public class DiaryResponseDTO {
     private int diaryIdx;
     private int userIdx;
-    private Date creationDate;
+    private Date diaryDate;
     private String content;
     private String nickname;
 //    private String picture;
@@ -22,7 +22,7 @@ public class DiaryResponseDTO {
     public DiaryResponseDTO(DiaryEntity diary) {
         this.diaryIdx = diary.getDiaryIdx();
         this.userIdx=diary.getUser().getUserIdx();
-        this.creationDate = diary.getCreationDate();
+        this.diaryDate = diary.getDiaryDate();
         this.content = diary.getContent();
 //        this.picture = diary.getPainting().getPicturePath();
 //        this.music = diary.getMusic().getMusicIdx();
