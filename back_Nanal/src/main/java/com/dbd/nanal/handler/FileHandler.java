@@ -14,7 +14,7 @@ import java.time.format.DateTimeFormatter;
 @Component
 public class FileHandler {
 
-//    public PaintingEntity parseFileInfo(PaintingRequestDTO paintingRequestDTO) throws IOException {
+    //    public PaintingEntity parseFileInfo(PaintingRequestDTO paintingRequestDTO) throws IOException {
 //
 //
 //        PaintingEntity paintingEntity;
@@ -80,9 +80,9 @@ public class FileHandler {
         // 프로젝트 폴더 내에 "painting" 폴더 생성 후 그 안에 현재 날자로 파일 생성
 
         // 경로가 존재하지 않으면 디렉토리 생성
-//        if (!file.exists()) {
-//            file.mkdirs();
-//        }
+        if (!file.exists()) {
+            file.mkdirs();
+        }
 
         // 저장하기
         String originalFileExtension = null;
@@ -101,11 +101,12 @@ public class FileHandler {
         paintingRequestDTO.setPictureTitle(multipartFile.getOriginalFilename());
 
         file = new File(absolutePath + path + File.separator + newFileName);
+        System.out.println("file : "+file);
         multipartFile.transferTo(file);
-
+        System.out.println("transfoer해줘");
         file.setWritable(true);
         file.setReadable(true);
-
+        System.out.println("여기");
         paintingRequestDTO.setFile(file);
 
         return paintingRequestDTO;

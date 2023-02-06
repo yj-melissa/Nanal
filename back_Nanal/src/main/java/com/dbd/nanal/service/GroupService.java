@@ -94,7 +94,6 @@ public class GroupService {
         return result;
     }
 
-
     // save group - user relation (그룹 생성 시 유저 초대 -> 수락 시 발생)
     @Transactional
     public GroupUserRelationResponseDTO saveGroupUserRelation(GroupUserRelationRequestDTO groupUserRelationRequestDTO) {
@@ -156,7 +155,7 @@ public class GroupService {
         for (UserEntity user : groupUsers) {
             HashMap<String, Object> map = new HashMap<>();
             map.put("userIdx", user.getUserIdx());
-            map.put("nickName", user.getUserProfile().getNickname());
+            map.put("nickname", user.getUserProfile().getNickname());
             map.put("img", user.getUserProfile().getImg());
             map.put("introduction", user.getUserProfile().getIntroduction());
             friendDetailResponseDTOS.add(map);

@@ -24,9 +24,9 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserService {
 
-//    @Autowired
+    //    @Autowired
     private final UserRepository userRepository;
-//    @Autowired
+    //    @Autowired
     private final UserProfileRepository userProfileRepository;
 
     // 회원 가입
@@ -90,7 +90,7 @@ public class UserService {
 //        }
 //        throw new NullPointerException();
 //    }
-    
+
     // 유저 프로필 조회
     public HashMap<String, Object> getByUserIdx(final int userIdx) {
         log.info("userService getByUserIdx", userIdx);
