@@ -1,4 +1,4 @@
-package com.dbd.nanal.controller;
+package com.dbd.nanal.config.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;

@@ -2,9 +2,10 @@ package com.dbd.nanal.config;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
-//import com.dbd.nanal.config.oauth.CustomOAuth2UserService;
+import com.dbd.nanal.config.oauth.OAuthSuccessHandler;
 import com.dbd.nanal.config.security.JwtAuthenticationFilter;
 import com.dbd.nanal.config.security.JwtTokenProvider;
+import com.dbd.nanal.config.oauth.CustomOAuthUserService;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,16 +30,20 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 public class SecurityConfig{
 
-    private final JwtTokenProvider jwtTokenProvider;
-//    private final CustomOAuth2UserService customOAuth2UserService;
+    @Autowired private JwtTokenProvider jwtTokenProvider;
+    @Autowired private CustomOAuthUserService customOAuthUserService;
+    @Autowired private OAuthSuccessHandler oAuthSuccessHandler;
 
-    @Autowired
-    public SecurityConfig(JwtTokenProvider jwtTokenProvider) {
-        this.jwtTokenProvider = jwtTokenProvider;
-    }
+//    @Autowired
+//    public SecurityConfig(JwtTokenProvider jwtTokenProvider,
+//        CustomOAuthUserService customOAuthUserService) {
+//        this.jwtTokenProvider = jwtTokenProvider;
+//        this.customOAuthUserService = customOAuthUserService;
+//    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
         http
             .httpBasic().disable()
             .cors(withDefaults())
@@ -46,34 +51,46 @@ public class SecurityConfig{
             .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)    // 세션 미사용 설정
             .and()
-                .authorizeHttpRequests()
-    //                .antMatchers(
-    //                    "/user/profile",
-    //                    "/user/test",
-    //                    "/group/**").hasRole("USER")
-    //                .antMatchers("/**").permitAll()
-                    .antMatchers(
-                        "/user/signup",
-                        "/user/login",
-                        "/user/refresh",    // accessToken 재발급
-                        "/user/redirectTest",
-                        "/user/check/**",
-                        "/user/validate/**",
-                        // Swagger 관련 URL
-                        "/v2/api-docs/**",
-                        "/swagger-resources/**",
-                        "/swagger-ui/**",
-                        "/webjars/**",
-                        "/swagger/**",
-                        "/sign-api/exception/**"
-                    ).permitAll()
-                .antMatchers("/**").hasRole("USER")
+            .authorizeHttpRequests()
+//                .antMatchers(
+//                    "/user/profile",
+//                    "/user/test",
+//                    "/group/**").hasRole("USER")
+//                .antMatchers("/**").permitAll()
+                .antMatchers(
+                    "/",
+                    "/user/signup",
+                    "/user/login",
+                    "/user/oauth2",
+                    "/oauth2/**",
+                    "/user/refresh",    // accessToken 재발급
+                    "/user/redirectTest",
+                    "/user/check/**",
+                    "/user/validate/**",
+                    // Swagger 관련 URL
+                    "/v2/api-docs/**",
+                    "/swagger-resources/**",
+                    "/swagger-ui/**",
+                    "/webjars/**",
+                    "/swagger/**",
+                    "/sign-api/exception/**"
+                ).permitAll()
+            .antMatchers("/**").hasRole("USER")
             .and()
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
-                    UsernamePasswordAuthenticationFilter.class);
-//            .oauth2Login()
-//                .userInfoEndpoint()
-//                    .userService(customOAuth2UserService);
+            .oauth2Login()
+            .redirectionEndpoint()     // 콜백 요청 후 리다이렉트할 url
+            .and()
+            .authorizationEndpoint()
+            .baseUri("/user/oauth2")
+            .and()
+            .userInfoEndpoint()
+                .userService(customOAuthUserService)
+            .and()
+            .successHandler(oAuthSuccessHandler);
+
+        http
+            .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
+            UsernamePasswordAuthenticationFilter.class);
 
 
         return http.build();
