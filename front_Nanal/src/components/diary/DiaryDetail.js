@@ -41,6 +41,7 @@ function DiaryDetail() {
         if (data.statusCode === 200) {
           if (data.data.responseMessage === '일기 조회 성공') {
             setDiaryDetail(data.data.diary); // 데이터는 response.data.data 안에 들어있음
+            console.log(data);
             if (data.data.isBookmark === true) {
               setIsBook(!isBook);
             }
@@ -102,7 +103,7 @@ function DiaryDetail() {
         )}
       </div>
       <div>작성자 프로필 사진 | </div>
-      <span>user nickname | </span>
+      <span>{diaryDetail.nickname}</span>
       <div>
         {isEdit ? (
           <>
@@ -113,10 +114,10 @@ function DiaryDetail() {
               onClick={() => {
                 axios_api
                   .put('diary', {
-                    // userIdx: 1,
-                    groupIdxList: [1],
+                    userIdx: diaryDetail.userIdx,
                     diaryIdx: diaryDetail.diaryIdx,
                     content: localContent,
+                    diaryDate: diaryDetail.diaryDate,
                   })
                   .then(({ data }) => {
                     setDiaryDetail(data.data.diary);
