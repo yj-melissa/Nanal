@@ -3,7 +3,7 @@ package com.dbd.nanal.controller;
 import com.dbd.nanal.config.common.DefaultRes;
 import com.dbd.nanal.config.common.ResponseMessage;
 import com.dbd.nanal.config.security.JwtTokenProvider;
-import com.dbd.nanal.dto.JwtTokenDTO;
+import com.dbd.nanal.config.security.JwtTokenDTO;
 import com.dbd.nanal.dto.UserFormDTO;
 import com.dbd.nanal.dto.UserRequestDTO;
 import com.dbd.nanal.model.UserEntity;
@@ -26,6 +26,7 @@ import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -114,6 +115,12 @@ public class UserController {
     @ApiOperation(value = "이메일 인증")
     @GetMapping("/validate/{email}")
     public ResponseEntity<?> validateEmail(@PathVariable String email) throws Exception {
+        // 이메일 중복 확인
+        ResponseEntity<?> isDuplicate = checkEmail(email);
+        if (isDuplicate == null) {
+            throw new DuplicateKeyException(email);
+        }
+
         String code = emailService.sendSimpleMessage(email);
 
         try {
@@ -413,10 +420,10 @@ public class UserController {
     public HashMap<String, String> createTokens(UserEntity user) {
         JwtTokenDTO jwtTokenDTO = jwtTokenProvider.createJwtTokens(user);
 
-        HashMap<String, String> Token = new HashMap<>();
-        Token.put("accessToken", jwtTokenDTO.getAccessToken());
-        Token.put("refreshToken", jwtTokenDTO.getRefreshToken());
+        HashMap<String, String> token = new HashMap<>();
+        token.put("accessToken", jwtTokenDTO.getAccessToken());
+        token.put("refreshToken", jwtTokenDTO.getRefreshToken());
 
-        return Token;
+        return token;
     }
 }

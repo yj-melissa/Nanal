@@ -1,4 +1,4 @@
-package com.dbd.nanal.dto;
+package com.dbd.nanal.config.security;
 
 //import lombok.AllArgsConstructor;
 import lombok.Builder;
