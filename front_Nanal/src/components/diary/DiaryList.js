@@ -6,7 +6,6 @@ import DiaryItem from './DiaryItem';
 function DiaryList({ curDate }) {
   // 일기 데이터 받기
   const [diaryList, setDiaryList] = useState([]);
-  console.log(diaryList);
 
   useEffect(() => {
     onLogin();
