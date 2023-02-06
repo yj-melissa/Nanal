@@ -1,7 +1,6 @@
 package com.dbd.nanal.config.security;
 
 import com.dbd.nanal.config.oauth.ApplicationOAuth2User;
-import com.dbd.nanal.model.JwtTokenEntity;
 import com.dbd.nanal.model.UserEntity;
 import com.dbd.nanal.repository.UserRepository;
 
@@ -16,7 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
