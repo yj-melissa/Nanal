@@ -1,15 +1,18 @@
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios_api from '../../config/Axios';
-import Comment from './Comment';
 import { BookFilled, BookOutlined } from '@ant-design/icons';
+
+const getStringDate = (date) => {
+  return date.toISOString().slice(0, 10);
+};
 
 function DiaryDetail() {
   const location = useLocation();
   const [diaryDetail, setDiaryDetail] = useState({});
 
   // 작성 일자 표현법
-  const strDate = new Date(diaryDetail.creationDate).toLocaleString();
+  const strDate = new Date(diaryDetail.diaryDate).toLocaleString().slice(0, 10);
   // 삭제 버튼 클릭 시 URL 이동
   const navigate = useNavigate();
   // 일기 수정
@@ -18,7 +21,9 @@ function DiaryDetail() {
     setIsEdit(!isEdit);
     setLocalContent(diaryDetail.content);
   };
-  // 수정된 데이터
+  // 수정된 날짜 데이터
+  const [localDate, setLocalDate] = useState(getStringDate(new Date()));
+  // 수정된 일기 데이터
   const [localContent, setLocalContent] = useState('');
 
   const handleQuitEdit = () => {
@@ -98,7 +103,6 @@ function DiaryDetail() {
       </div>
       <div>작성자 프로필 사진 | </div>
       <span>user nickname | </span>
-      <div className='text-sm'>{strDate}</div>
       <div>
         {isEdit ? (
           <>
@@ -158,17 +162,22 @@ function DiaryDetail() {
       <div>
         {isEdit ? (
           <>
+            <input
+              value={localDate}
+              onChange={(e) => setLocalDate(e.target.value)}
+              type='date'
+            />
             <textarea
               value={localContent}
               onChange={(e) => setLocalContent(e.target.value)}
             />
           </>
         ) : (
-          <>{diaryDetail.content}</>
+          <>
+            <div className='text-sm'>{strDate}</div>
+            {diaryDetail.content}
+          </>
         )}
-      </div>
-      <div>
-        <Comment diaryIdx={location.state.diaryIdx} groupIdx />
       </div>
     </div>
   );

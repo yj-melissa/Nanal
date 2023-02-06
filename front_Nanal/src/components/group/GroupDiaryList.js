@@ -36,7 +36,11 @@ function GroupDiaryList() {
     <div>
       <div>
         {diaryList.map((diary) => (
-          <GroupDiaryItem key={diary.diaryIdx} item={diary} />
+          <GroupDiaryItem
+            key={diary.diaryIdx}
+            item={diary}
+            groupIdx={location.state.groupDetail.groupIdx}
+          />
         ))}
       </div>
     </div>

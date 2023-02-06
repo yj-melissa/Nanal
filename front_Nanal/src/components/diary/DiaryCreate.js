@@ -3,8 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
 
+const getStringDate = (date) => {
+  return date.toISOString().slice(0, 10);
+};
+
 function DiaryCreate() {
-  // 일기, 그룹여부 데이터 받기
+  // 날짜, 일기, 그룹여부 데이터 받기
+  const [date, setDate] = useState(getStringDate(new Date()));
   const [content, setContent] = useState('');
   const [group, setGroup] = useState('private');
 
@@ -22,6 +27,7 @@ function DiaryCreate() {
     onLogin();
     axios_api
       .post('diary', {
+        // 날짜 데이터도 전달하기
         // 선택한 그룹은 배열 형태로 전달해야 함
         groupIdxList: checkedList,
         content: content,
@@ -80,7 +86,15 @@ function DiaryCreate() {
 
   return (
     <div className='border-solid border-1 border-black text-center p-10'>
-      <h2>오늘의 일기</h2>
+      <h2>일기 작성하기</h2>
+      {/* 날짜 선택란 */}
+      <div>
+        <input
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
+          type='date'
+        />
+      </div>
       {/* 일기 내용 작성란 */}
       <div>
         <textarea
