@@ -65,15 +65,20 @@ function GroupDetail() {
       >
         <img src={settingIcon} className='w-[20px] h-[20px] mx-1.5' />
       </Link>
-      <Link to={`/Group/Diary/List`} state={{ groupDetail: groupDetail }}>
-        <div>
-          <p>{groupDetail.groupName}</p>
-          {groupTag.map((tagging, idx) => {
-            return <span key={idx}>#{tagging.tag}&nbsp;</span>;
-          })}
-        </div>
-      </Link>
-      <hr className='border-solid border-1 border-slate-800 w-80 my-5' />
+      <div>
+        <p className='mb-1 text-2xl font-bold text-center'>
+          {groupDetail.groupName}
+        </p>
+        {groupTag.map((tagging, idx) => {
+          return (
+            <span key={idx} className='text-center from-neutral-700'>
+              #{tagging.tag}&nbsp;
+            </span>
+          );
+        })}
+      </div>
+
+      <hr className='my-5 border-solid border-1 border-slate-600 w-80' />
       {diaryList.map((diary) => (
         <GroupDiaryItem
           key={diary.diaryIdx}

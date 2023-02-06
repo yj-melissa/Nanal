@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
 import FriendItem from '../friend/FriendItem';
+import emo_joy from '../../src_assets/img/emo_joy.png';
 
 function GroupSetting() {
   const { state } = useLocation();
@@ -24,6 +25,7 @@ function GroupSetting() {
           if (data.data.responseMessage === '그룹 조회 성공') {
             setGroupName(data.data.groupDetail);
             setGroupTag(data.data.tags);
+
             const groupidx = data.data.groupDetail.groupIdx;
 
             axios_api
@@ -58,23 +60,44 @@ function GroupSetting() {
 
   return (
     <div>
-      <h1>그룹 상세 페이지</h1>
+      {/* <h1 className='text-center'>그룹 상세 페이지</h1> */}
 
-      <div>
-        <p>{groupDetail.groupName}</p>
+      <div className='w-full my-2'>
+        <div className='my-3'>
+          {groupDetail.imgUrl !== null ? (
+            <img
+              src={groupDetail.imgUrl}
+              className='inline-block p-1 rounded-md w-28 h-28'
+            ></img>
+          ) : (
+            <>
+              <img
+                src={emo_joy}
+                className='inline-block p-1 rounded-md w-28 h-28'
+              ></img>
+            </>
+          )}
 
-        {groupTag.map((tagging, idx) => {
-          return <span key={idx}>#{tagging.tag}&nbsp;</span>;
-        })}
+          <p className='inline-block ml-5 text-2xl font-bold text-center'>
+            {groupDetail.groupName}
+          </p>
+        </div>
+        <div>
+          {groupTag.map((tagging, idx) => {
+            return <span key={idx}>#{tagging.tag}&nbsp;</span>;
+          })}
+        </div>
       </div>
       <Link
         to={`/Group/Update/${groupDetail.groupIdx}`}
         state={{ groupDetail: groupDetail.groupIdx }}
       >
-        <button>수정하기</button>
+        <button className='bg-cyan-600 text-white px-2.5 py-1 rounded-3xl m-auto block'>
+          수정하기
+        </button>
       </Link>
 
-      <hr className='border-solid border-1 border-slate-800 w-80 my-5' />
+      <hr className='my-5 border-solid border-1 border-slate-800 w-80' />
 
       {/* {friendList.map((friendItem, idx) => {
         return (
@@ -93,9 +116,13 @@ function GroupSetting() {
           </Link>
         );
       })} */}
-      {friendList.map((friendItem, idx) => (
-        <FriendItem key={idx} item={friendItem} />
-      ))}
+      {friendList[0] === '아직은 친구가 없습니다.' ? (
+        <p>아직은 그룹에 친구가 없습니다.</p>
+      ) : (
+        friendList.map((friendItem, idx) => (
+          <FriendItem key={idx} item={friendItem} />
+        ))
+      )}
     </div>
   );
 }

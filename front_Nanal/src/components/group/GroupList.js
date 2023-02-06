@@ -17,6 +17,7 @@ function GroupList() {
           setGroupList(null);
           if (data.data.responseMessage === '그룹 리스트 조회 성공') {
             setGroupList(data.data.groupList);
+            console.log(data.data.groupList);
           }
         } else {
           console.log(data.statusCode);
@@ -31,7 +32,7 @@ function GroupList() {
   return (
     <div id='group-list'>
       <div id='group-list-title' className='mb-3'>
-        <h1 className='m-1 font-bold inline'>그룹 리스트</h1>
+        <h1 className='inline m-1 font-bold'>그룹 리스트</h1>
         {/* <Link to='/Group/Create'>
         <button>그룹 생성하기</button>
       </Link> */}
