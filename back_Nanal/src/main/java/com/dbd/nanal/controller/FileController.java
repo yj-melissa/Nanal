@@ -2,7 +2,6 @@ package com.dbd.nanal.controller;
 
 import com.dbd.nanal.config.common.DefaultRes;
 import com.dbd.nanal.config.common.ResponseMessage;
-import com.dbd.nanal.dto.DiaryResponseDTO;
 import com.dbd.nanal.dto.PaintingRequestDTO;
 import com.dbd.nanal.dto.PaintingResponseDTO;
 import com.dbd.nanal.handler.FileHandler;
@@ -13,6 +12,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
@@ -95,53 +95,53 @@ public class FileController {
 //                    "[Back] \n" +
 //                    "{pictureIdx, pictureTitle} ")
 //
-//    @Transactional
-//    @PostMapping(consumes = {"multipart/form-data"
-//            , "application/json"})
-//    public ResponseEntity<?> paintingSave(@ApiParam(value = "달리 이미지") @RequestPart(value = "multipartFile") MultipartFile multipartFile, @ApiParam(value = "받을 dto", required = false) @RequestPart(name = "value")
-//    PaintingRequestDTO paintingRequestDTO, @AuthenticationPrincipal UserEntity userInfo) {
-////    public ResponseEntity<?> paintingSave(@ApiParam(value = "달리 이미지") @RequestPart(value = "multipartFile") MultipartFile multipartFile, @ApiParam(value = "받을 dto",required = false) @RequestPart(name = "value")
-////    PaintingRequestDTO paintingRequestDTO) {
-//
-//
-//        HashMap<String, Object> responseDTO = new HashMap<>();
-//
-//        try {
-//            // dto에 파일을 넣는다.
-//            paintingRequestDTO.setFile(multipartFile);
-//            // 파일을 저장한다. // 파일 인덱스를 받는다.
-//            PaintingResponseDTO painting = fileService.paintingSave(paintingRequestDTO);
-//
-//            if (paintingRequestDTO.getGroupIdx() != 0) {
-//                // group idx를 받았으면 group 인덱스의 이미지 idx를 변경한다.
+    @Transactional
+    @PostMapping(consumes = {"multipart/form-data"
+            , "application/json"})
+    public ResponseEntity<?> paintingSave(@ApiParam(value = "달리 이미지") @RequestPart(value = "multipartFile") MultipartFile multipartFile, @ApiParam(value = "받을 dto", required = false) @RequestPart(name = "value")
+    PaintingRequestDTO paintingRequestDTO, @AuthenticationPrincipal UserEntity userInfo) {
+//    public ResponseEntity<?> paintingSave(@ApiParam(value = "달리 이미지") @RequestPart(value = "multipartFile") MultipartFile multipartFile, @ApiParam(value = "받을 dto",required = false) @RequestPart(name = "value")
+//    PaintingRequestDTO paintingRequestDTO) {
+
+
+        HashMap<String, Object> responseDTO = new HashMap<>();
+
+        try {
+            // dto에 파일을 넣는다.
+            paintingRequestDTO.setMultipartFile(multipartFile);
+            // 파일을 저장한다. // 파일 인덱스를 받는다.
+            PaintingResponseDTO painting = fileService.paintingSave(paintingRequestDTO);
+
+            if (paintingRequestDTO.getGroupIdx() != 0) {
+                // group idx를 받았으면 group 인덱스의 이미지 idx를 변경한다.
 //                groupService.updateGroupImg(paintingRequestDTO.getGroupIdx(), painting.getPictureIdx());
-//            } else {
-//                // group idx를 받지 않았으면 user 인덱스의 이미지 idx를 변경한다.
+            } else {
+                // group idx를 받지 않았으면 user 인덱스의 이미지 idx를 변경한다.
 //                userService.updateUserImg(userInfo.getUserIdx(), painting.getPictureIdx());
-//            }
-//
-//
-//            // 나머지는 달리. diary 인덱스의 이미지 idx를 변경한다. --> 달리는 url로 하기!!!
-//
-//            // 파일 인덱스를 리턴한다.
-//
-//
-//            if (painting != null) {
-//                responseDTO.put("responseMessage", ResponseMessage.PAINTING_SAVE_SUCCESS);
-//                responseDTO.put("pictureInfo", painting);
-//                return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-//            } else {
-//                responseDTO.put("responseMessage", ResponseMessage.PAINTING_SAVE_FAIL);
-//                return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-//            }
-//        }
-//        // Exception 발생
-//        catch (Exception e) {
-//            responseDTO.put("responseMessage", ResponseMessage.EXCEPTION);
-//            return new ResponseEntity<>(DefaultRes.res(500, ResponseMessage.INTERNAL_SERVER_ERROR), HttpStatus.OK);
-//        }
-//
-//    }
+            }
+
+
+            // 나머지는 달리. diary 인덱스의 이미지 idx를 변경한다. --> 달리는 url로 하기!!!
+
+            // 파일 인덱스를 리턴한다.
+
+
+            if (painting != null) {
+                responseDTO.put("responseMessage", ResponseMessage.PAINTING_SAVE_SUCCESS);
+                responseDTO.put("pictureInfo", painting);
+                return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+            } else {
+                responseDTO.put("responseMessage", ResponseMessage.PAINTING_SAVE_FAIL);
+                return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+            }
+        }
+        // Exception 발생
+        catch (Exception e) {
+            responseDTO.put("responseMessage", ResponseMessage.EXCEPTION);
+            return new ResponseEntity<>(DefaultRes.res(500, ResponseMessage.INTERNAL_SERVER_ERROR), HttpStatus.OK);
+        }
+
+    }
 
 
     @ApiOperation(value = "그림 저장", notes =
@@ -154,18 +154,26 @@ public class FileController {
                     "[Back] \n" +
                     "{String imgUrl} ")
     @Transactional
-    @PostMapping(value = "/s3", consumes = {"multipart/form-data"
-            , "application/json"})
+    @PostMapping(value = "/s3", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<?> saveToS3(@ApiParam(value = "사용자 등록 이미지") @RequestPart(value = "multipartFile") MultipartFile multipartFile, @ApiParam(value = "받을 dto", required = false) @RequestPart(name = "value")
     PaintingRequestDTO paintingRequestDTO, @AuthenticationPrincipal UserEntity userInfo) throws IOException {
         HashMap<String, Object> responseDTO = new HashMap<>();
+//        PaintingRequestDTO paintingRequestDTO = new PaintingRequestDTO();
 
+//        System.out.println("map " +map.get("groupIdx"));
+//        System.out.println("mutilpartFile : " + multipartFile);
+
+
+
+//        System.out.println(paintingRequestDTO.getPictureTitle());
         try {
             // 1. multipartfile을 file로 변환해서 s3에 저장
             FileHandler handler = new FileHandler();
             paintingRequestDTO.setMultipartFile(multipartFile);
             paintingRequestDTO = handler.parseFile(paintingRequestDTO);
+            System.out.println("여기"+paintingRequestDTO.getFile());
             String imgUrl = fileService.saveToS3(paintingRequestDTO.getFile());
+            System.out.println("imgurl : "+imgUrl);
             // 2. db에 저장
             paintingRequestDTO.setImgUrl(imgUrl);
             PaintingResponseDTO painting = fileService.paintingSave(paintingRequestDTO);
@@ -173,6 +181,7 @@ public class FileController {
 
             if (paintingRequestDTO.getGroupIdx() != 0) {
                 // group idx를 받았으면 group 인덱스의 이미지 idx를 변경한다.
+                System.out.println("idx : "+paintingRequestDTO.getGroupIdx());
                 groupService.updateGroupImg(paintingRequestDTO.getGroupIdx(), painting.getPictureIdx(), imgUrl);
             } else {
                 // group idx를 받지 않았으면 user 인덱스의 이미지 idx를 변경한다.
@@ -196,6 +205,113 @@ public class FileController {
             return new ResponseEntity<>(DefaultRes.res(500, ResponseMessage.INTERNAL_SERVER_ERROR), HttpStatus.OK);
         }
     }
+
+    @ApiOperation(value = "그림 저장", notes =
+            "이미지를 s3에 저장합니다..\n" +
+                    "[Front] \n" +
+                    "user 프로필 사진 등록할 때 \n" +
+                    "data : formdata, value : {}, headers:{'Content-Type' : 'multipart/form-data'}\n" +
+                    "group 프로필 사진 등록할 때 \n" +
+                    "data : formdata, value : {'groupIdx' : 1}, headers:{'Content-Type' : 'multipart/form-data'}\n" +
+                    "[Back] \n" +
+                    "{String imgUrl} ")
+    @Transactional
+    @PostMapping(value = "/s4")
+    public ResponseEntity<?> saveToS3chanhee(@RequestParam("multipartFile") MultipartFile multipartFile, @AuthenticationPrincipal UserEntity userInfo) throws IOException {
+        HashMap<String, Object> responseDTO = new HashMap<>();
+        System.out.println("함수ㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜ");
+        PaintingRequestDTO paintingRequestDTO = new PaintingRequestDTO();
+        System.out.println(multipartFile);
+//        System.out.println(paintingRequestDTO.getPictureTitle());
+        try {
+            // 1. multipartfile을 file로 변환해서 s3에 저장
+            FileHandler handler = new FileHandler();
+            paintingRequestDTO.setMultipartFile(multipartFile);
+            paintingRequestDTO = handler.parseFile(paintingRequestDTO);
+            String imgUrl = fileService.saveToS3(paintingRequestDTO.getFile());
+            // 2. db에 저장
+            paintingRequestDTO.setImgUrl(imgUrl);
+            PaintingResponseDTO painting = fileService.paintingSave(paintingRequestDTO);
+            painting.setImgUrl(imgUrl);
+
+//            if (paintingRequestDTO.getGroupIdx() != 0) {
+//                // group idx를 받았으면 group 인덱스의 이미지 idx를 변경한다.
+//                groupService.updateGroupImg(paintingRequestDTO.getGroupIdx(), painting.getPictureIdx(), imgUrl);
+//            } else {
+            // group idx를 받지 않았으면 user 인덱스의 이미지 idx를 변경한다.
+            userService.updateUserImg(userInfo.getUserIdx(), imgUrl);
+//                userService.updateUserImg(userInfo.getUserIdx(),  painting.getPictureIdx(), imgUrl);
+//            }
+
+            if (painting != null) {
+                responseDTO.put("responseMessage", ResponseMessage.PAINTING_SAVE_SUCCESS);
+                responseDTO.put("pictureInfo", painting);
+                return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+            } else {
+                responseDTO.put("responseMessage", ResponseMessage.PAINTING_SAVE_FAIL);
+                return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+            }
+        }
+        // Exception 발생
+        catch (Exception e) {
+            responseDTO.put("responseMessage", ResponseMessage.EXCEPTION);
+            return new ResponseEntity<>(DefaultRes.res(500, ResponseMessage.INTERNAL_SERVER_ERROR), HttpStatus.OK);
+        }
+    }
+//    @ApiOperation(value = "그림 저장", notes =
+//            "이미지를 s3에 저장합니다..\n" +
+//                    "[Front] \n" +
+//                    "user 프로필 사진 등록할 때 \n" +
+//                    "data : formdata, value : {}, headers:{'Content-Type' : 'multipart/form-data'}\n" +
+//                    "group 프로필 사진 등록할 때 \n" +
+//                    "data : formdata, value : {'groupIdx' : 1}, headers:{'Content-Type' : 'multipart/form-data'}\n" +
+//                    "[Back] \n" +
+//                    "{String imgUrl} ")
+//    @Transactional
+//    @PostMapping(value = "/s3/dd", consumes = {"multipart/form-data"
+//            , "application/json"})
+//    public ResponseEntity<?> saveTosagsdgsdgS3(@ApiParam(value = "사용자 등록 이미지") @RequestPart(value = "multipartFile") MultipartFile multipartFile, @ApiParam(value = "받을 dto", required = false) @RequestPart(name = "value")
+//    PaintingRequestDTO paintingRequestDTO, @AuthenticationPrincipal UserEntity userInfo) throws IOException {
+//        HashMap<String, Object> responseDTO = new HashMap<>();
+//        System.out.println("함수ㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜ");
+//        System.out.println(multipartFile);
+//        System.out.println(paintingRequestDTO.getPictureTitle());
+//        try {
+//            // 1. multipartfile을 file로 변환해서 s3에 저장
+//            FileHandler handler = new FileHandler();
+//            paintingRequestDTO.setMultipartFile(multipartFile);
+//            paintingRequestDTO = handler.parseFile(paintingRequestDTO);
+//            String imgUrl = fileService.saveToS3(paintingRequestDTO.getFile());
+//            // 2. db에 저장
+//            paintingRequestDTO.setImgUrl(imgUrl);
+//            PaintingResponseDTO painting = fileService.paintingSave(paintingRequestDTO);
+//            painting.setImgUrl(imgUrl);
+//
+//            if (paintingRequestDTO.getGroupIdx() != 0) {
+//                // group idx를 받았으면 group 인덱스의 이미지 idx를 변경한다.
+//                groupService.updateGroupImg(paintingRequestDTO.getGroupIdx(), painting.getPictureIdx(), imgUrl);
+//            } else {
+//                // group idx를 받지 않았으면 user 인덱스의 이미지 idx를 변경한다.
+//                userService.updateUserImg(userInfo.getUserIdx(), imgUrl);
+////                userService.updateUserImg(userInfo.getUserIdx(),  painting.getPictureIdx(), imgUrl);
+//            }
+//
+//
+//            if (painting != null) {
+//                responseDTO.put("responseMessage", ResponseMessage.PAINTING_SAVE_SUCCESS);
+//                responseDTO.put("pictureInfo", painting);
+//                return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+//            } else {
+//                responseDTO.put("responseMessage", ResponseMessage.PAINTING_SAVE_FAIL);
+//                return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+//            }
+//        }
+//        // Exception 발생
+//        catch (Exception e) {
+//            responseDTO.put("responseMessage", ResponseMessage.EXCEPTION);
+//            return new ResponseEntity<>(DefaultRes.res(500, ResponseMessage.INTERNAL_SERVER_ERROR), HttpStatus.OK);
+//        }
+//    }
 
     @ApiOperation(value = "달리 저장", notes =
             "이미지를 s3에 저장합니다..\n" +
