@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -41,6 +42,16 @@ public class DiaryService {
 
     public boolean isBookmark(int diaryIdx, int userIdx){
         return bookmarkRepository.existsByDiaryAndUser(DiaryEntity.builder().diaryIdx(diaryIdx).build(), UserEntity.builder().userIdx(userIdx).build());
+    }
+
+    //get diary group List
+    public List<Integer> getGroupList(int diaryIdx){
+        List<Integer> groupList=new ArrayList<>();
+        List<GroupDiaryRelationEntity> groupDiaryRelationEntityList=groupDiaryRelationRepository.findByDiary(DiaryEntity.builder().diaryIdx(diaryIdx).build());
+        for(GroupDiaryRelationEntity groupDiaryRelationEntity: groupDiaryRelationEntityList){
+            groupList.add(groupDiaryRelationEntity.getGroupDetail().getGroupIdx());
+        }
+        return groupList;
     }
 
     // delete diary
