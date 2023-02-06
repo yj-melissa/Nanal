@@ -5,7 +5,8 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,9 +28,14 @@ public class DiaryEntity {
 
     @Column(name="creation_date")
     @CreationTimestamp
-    private Date creationDate;
+    private LocalDateTime creationDate;
+
+    @Column(name="diary_date")
+    private Date diaryDate;
 
     private String content;
+
+    private String imgUrl;
 
     @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     @JoinColumn(name="pictureIdx")
@@ -67,12 +73,13 @@ public class DiaryEntity {
     private List<GroupDiaryRelationEntity> groupDiaryRelations=new ArrayList<>();
 
     @Builder
-    public DiaryEntity(int diaryIdx, UserEntity user, Date creationDate,
+    public DiaryEntity(int diaryIdx, UserEntity user, LocalDateTime creationDate, Date diaryDate,
                        String content, PaintingEntity painting, MusicEntity music, boolean isDeleted,
                        Date deleteDate, Date expireDate, String emo) {
         this.diaryIdx=diaryIdx;
         this.user=user;
         this.creationDate=creationDate;
+        this.diaryDate=diaryDate;
         this.content=content;
         this.painting=painting;
         this.music=music;
