@@ -155,6 +155,12 @@ public class DiaryService {
         return diaryCommentEntityList.stream().map(x-> new DiaryCommentResponseDTO(x)).collect(Collectors.toList());
     }
 
+    // get diary comment List All
+    public List<DiaryCommentResponseDTO> getDiaryCommentListAll(int diaryIdx){
+        List<DiaryCommentEntity> diaryCommentEntityList=diaryCommentRepository.findByDiary(DiaryEntity.builder().diaryIdx(diaryIdx).build());
+        return diaryCommentEntityList.stream().map(x-> new DiaryCommentResponseDTO(x)).collect(Collectors.toList());
+    }
+
     // delete diary comment
     public void deleteDiaryComment(int commentIdx){
         diaryCommentRepository.deleteById(commentIdx);
