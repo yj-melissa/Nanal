@@ -3,6 +3,7 @@ package com.dbd.nanal.controller;
 import com.dbd.nanal.config.common.DefaultRes;
 import com.dbd.nanal.config.common.ResponseMessage;
 import com.dbd.nanal.dto.*;
+import com.dbd.nanal.model.GroupDetailEntity;
 import com.dbd.nanal.model.UserEntity;
 import com.dbd.nanal.service.FileService;
 import com.dbd.nanal.service.GroupService;
@@ -11,14 +12,12 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -160,7 +159,7 @@ public class GroupController {
     }
 
     @ApiOperation(value = "그룹 리스트 조회", notes =
-            "userIdx 사용자가 소속된 그룹 리스트를 조회합니다.\n" +
+            "사용자가 소속된 그룹 리스트를 일기 최신 작성 순으로 조회합니다.\n" +
                     "[Front] \n" +
                     "[Back] \n" +
                     "{List<GroupDetailResponse>}")
@@ -172,8 +171,13 @@ public class GroupController {
 
         try {
             // group_user_relation 테이블에서 userIdx가 포함된 group찾기
-            List<HashMap<String, Object>> groupDetailResponseDTOS =
-                    groupService.getGroupList(userInfo.getUserIdx());
+//            List<HashMap<String, Object>> groupDetailResponseDTOS =
+//                    groupService.getGroupList(userInfo.getUserIdx());
+
+            List<HashMap<String, Object>> groupDetailResponseDTOS = groupService.getGroupList(userInfo.getUserIdx());
+
+            System.out.println("size : dgsdg");
+            System.out.println(groupDetailResponseDTOS.size());
 
             if (groupDetailResponseDTOS != null) {
                 responseDTO.put("groupList", groupDetailResponseDTOS);
@@ -246,7 +250,7 @@ public class GroupController {
                     "[Front] \n" +
                     "{groupIdx(int)} \n\n" +
                     "[Back] \n" +
-                    "groupUserList : [{userIdx(int), nickName(String), img(String)] ")
+                    "groupUserList : [{userIdx(int), nickname(String), img(String)] ")
     @GetMapping("user/{groupIdx}")
     public ResponseEntity<?> getGroupUserList(@ApiParam(value = "유저 idx", required = true) @AuthenticationPrincipal UserEntity userInfo, @ApiParam(value = "그룹 idx", required = true) @PathVariable int groupIdx) {
         System.out.println("[그룹 유저 리스트] 유저 : idx " + userInfo.getUserIdx() + " name " + userInfo.getUsername());
