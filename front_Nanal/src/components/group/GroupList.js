@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
 import { Link } from 'react-router-dom';
-import GroupDetail from './GroupDetail';
+import GroupItem from './GroupItem';
 import addIcon from '../../src_assets/img/group_add_icon.png';
 
 function GroupList() {
@@ -40,7 +40,7 @@ function GroupList() {
         </Link>
       </div>
       {groupList.map((groupItem) => (
-        <GroupDetail key={groupItem.groupDetail.groupIdx} item={groupItem} />
+        <GroupItem key={groupItem.groupDetail.groupIdx} item={groupItem} />
       ))}
     </div>
   );

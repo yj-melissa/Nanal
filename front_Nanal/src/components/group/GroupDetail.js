@@ -3,18 +3,21 @@ import { useLocation } from 'react-router';
 import { Link } from 'react-router-dom';
 import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
+import GroupDiaryItem from './GroupDiaryItem';
 import settingIcon from '../../src_assets/img/setting_icon.png';
 
-function GroupDetail({ item }) {
+function GroupDetail() {
   const { state } = useLocation();
 
   const [groupDetail, setGroupName] = useState('');
   const [groupTag, setGroupTag] = useState([]);
 
+  const [diaryList, setDiaryList] = useState([]);
+
   useEffect(() => {
     onLogin();
     axios_api
-      .get(`/group/${item.groupDetail.groupIdx}`)
+      .get(`/group/${state.groupIdx}`)
       .then(({ data }) => {
         if (data.statusCode === 200) {
           setGroupName(null);
@@ -23,6 +26,25 @@ function GroupDetail({ item }) {
             setGroupName(data.data.groupDetail);
             setGroupTag(data.data.tags);
             const groupidx = data.data.groupDetail.groupIdx;
+
+            axios_api
+              .get(`diary/list/${groupidx}`)
+              .then(({ data }) => {
+                if (data.statusCode === 200) {
+                  // 초기화 필요!
+                  setDiaryList(null);
+                  if (data.data.responseMessage === '일기 리스트 조회 성공') {
+                    setDiaryList(data.data.diary);
+                  }
+                } else {
+                  console.log('일기 리스트 불러오기 오류: ');
+                  console.log(data.statusCode);
+                  console.log(data.data.responseMessage);
+                }
+              })
+              .catch(({ err }) => {
+                console.log('일기 리스트 불러오기 오류: ', err);
+              });
           }
         } else {
           console.log(data.statusCode);
@@ -52,6 +74,13 @@ function GroupDetail({ item }) {
         </div>
       </Link>
       <hr className='border-solid border-1 border-slate-800 w-80 my-5' />
+      {diaryList.map((diary) => (
+        <GroupDiaryItem
+          key={diary.diaryIdx}
+          item={diary}
+          groupIdx={state.groupIdx}
+        />
+      ))}
     </div>
   );
 }
