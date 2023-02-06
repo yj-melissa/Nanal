@@ -142,24 +142,27 @@ function GroupCreate() {
               //   Authorization: `Bearer ${getCookie('accessToken')}`,
               //   'Content-Type': 'multipart/form-data',
               // };
-              // const dataSet = { groupIdx: groupidx };
-              // formData.append(
-              //   'value',
-              //   new Blob([dataSet], { type: 'application/json' })
-              // );
+              const dataSet = { groupIdx: groupidx };
+              formData.append(
+                'value',
+                // dataSet
+
+                new Blob([JSON.stringify(dataSet)], {
+                  type: 'application/json',
+                })
+              );
 
               // 이미지 업로드
               axios_api
-                .post('file/s4', formData, {
-                  // headers: {
-                  //   // Authorization: `Bearer ${getCookie('accessToken')}`,
-                  //   'Content-Type': 'multipart/form-data',
-                  // },
+                .post('file/s3', formData, {
+                  headers: {
+                    'Content-Type': 'multipart/form-data',
+                  },
                 })
                 .then(({ data }) => {
                   if (data.statusCode === 200) {
                     if (data.data.responseMessage === '그림 저장 성공') {
-                      console.log(data.data);
+                      // console.log(data.data);
 
                       if (includeFriend.size !== 0) {
                         // 그룹에 추가할 친구가 있는 경우
@@ -174,7 +177,7 @@ function GroupCreate() {
                                 data.data.responseMessage === '알림 저장 성공'
                               ) {
                                 alert('그룹을 생성하였습니다!');
-                                // window.location.replace('/Group/List');
+                                window.location.replace('/Group/List');
                               }
                             } else {
                               console.log('알림 저장 오류 : ');
@@ -361,3 +364,21 @@ function getByteLength(strValue) {
   }
   return byte;
 }
+
+// const instance = axios.create({
+//   baseURL: `http://192.168.100.208:8080/nanal/`,
+//   headers: {
+//     'content-type': 'application/json;charset=UTF-8',
+//     Authorization: `Bearer ${getCookie('accessToken')}`,
+//     accept: 'application/json,',
+//   },
+// });
+
+// const instances = {
+//   createGroup: (data) =>
+//     instance.post(`file/s3`, data, {
+//       headers: {
+//         'Content-Type': `multipart/form-data`,
+//       },
+//     }),
+// };

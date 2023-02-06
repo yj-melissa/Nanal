@@ -42,9 +42,13 @@ function FriendList() {
           <img src={addIcon} className='w-[20px] h-[20px] mx-1.5' />
         </Link>
       </div>
-      {friendList.map((friendItem) => (
-        <FriendItem key={friendItem.userIdx} item={friendItem} />
-      ))}
+      {friendList.length === 0 ? (
+        friendList.map((friendItem) => (
+          <FriendItem key={friendItem.userIdx} item={friendItem} />
+        ))
+      ) : (
+        <p>아직은 친구가 없습니다.</p>
+      )}
     </div>
   );
 }
