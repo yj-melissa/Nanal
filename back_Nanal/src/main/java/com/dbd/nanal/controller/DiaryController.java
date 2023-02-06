@@ -79,6 +79,7 @@ public class DiaryController {
                 responseDTO.put("responseMessage", ResponseMessage.DIARY_GET_SUCCESS);
                 responseDTO.put("diary", diaryResponseDTO);
                 responseDTO.put("isBookmark", diaryService.isBookmark(diaryIdx, userInfo.getUserIdx()));
+                responseDTO.put("groupList", diaryService.getGroupList(diaryIdx));
                 return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
             }else{
                 responseDTO.put("responseMessage", ResponseMessage.DIARY_GET_FAIL);
