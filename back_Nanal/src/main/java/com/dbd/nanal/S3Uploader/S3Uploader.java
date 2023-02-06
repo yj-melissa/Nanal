@@ -36,8 +36,10 @@ public class S3Uploader {
 //    }
 
     public String upload(File uploadFile, String dirName) {
+        System.out.println("업로드 함수!!"+uploadFile);
         String fileName = dirName + "/" + uploadFile.getName();
         String uploadImageUrl = putS3(uploadFile, fileName);
+        System.out.println("uploadImageUrl "+uploadImageUrl);
         removeNewFile(uploadFile);  // 로컬에 생성된 File 삭제 (MultipartFile -> File 전환 하며 로컬에 파일 생성됨)
 
         return uploadImageUrl;      // 업로드된 파일의 S3 URL 주소 반환
@@ -53,6 +55,7 @@ public class S3Uploader {
 
     private void removeNewFile(File targetFile) {
         if(targetFile.delete()) {
+            System.out.println("삭제되었습니다.");
             log.info("파일이 삭제되었습니다.");
         }else {
             log.info("파일이 삭제되지 못했습니다.");
