@@ -8,7 +8,7 @@ function GroupDiaryDetail() {
   return (
     <div>
       <span>작성자 : {location.state.nickname}</span>
-      <div>{location.state.creationDate.slice(0, 10)}</div>
+      <div>{location.state.creationDate}</div>
       <div>{location.state.content}</div>
       <div>
         <Comment

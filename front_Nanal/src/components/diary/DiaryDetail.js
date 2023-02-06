@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios_api from '../../config/Axios';
+import { onLogin } from '../../config/Login';
 import { BookFilled, BookOutlined } from '@ant-design/icons';
 
 const getStringDate = (date) => {
@@ -35,6 +36,7 @@ function DiaryDetail() {
 
   // 일기 상세 페이지 불러오기
   useEffect(() => {
+    onLogin();
     axios_api
       .get(`diary/${location.state.diaryIdx}`)
       .then(({ data }) => {
