@@ -5,7 +5,7 @@ import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
 import settingIcon from '../../src_assets/img/setting_icon.png';
 
-function GroupDetail() {
+function GroupDetail({ item }) {
   const { state } = useLocation();
 
   const [groupDetail, setGroupName] = useState('');
@@ -14,7 +14,7 @@ function GroupDetail() {
   useEffect(() => {
     onLogin();
     axios_api
-      .get(`/group/${state.groupIdx}`)
+      .get(`/group/${item.groupDetail.groupIdx}`)
       .then(({ data }) => {
         if (data.statusCode === 200) {
           setGroupName(null);
@@ -36,7 +36,6 @@ function GroupDetail() {
 
   return (
     <div>
-      <h1>그룹 상세 페이지</h1>{' '}
       <Link
         to={`/Group/Setting/${groupDetail.groupIdx}`}
         state={{ groupIdx: groupDetail.groupIdx }}
@@ -44,13 +43,14 @@ function GroupDetail() {
       >
         <img src={settingIcon} className='w-[20px] h-[20px] mx-1.5' />
       </Link>
-      <div>
-        <p>{groupDetail.groupName}</p>
-
-        {groupTag.map((tagging, idx) => {
-          return <span key={idx}>#{tagging.tag}&nbsp;</span>;
-        })}
-      </div>
+      <Link to={`/Group/Diary/List`} state={{ groupDetail: groupDetail }}>
+        <div>
+          <p>{groupDetail.groupName}</p>
+          {groupTag.map((tagging, idx) => {
+            return <span key={idx}>#{tagging.tag}&nbsp;</span>;
+          })}
+        </div>
+      </Link>
       <hr className='border-solid border-1 border-slate-800 w-80 my-5' />
     </div>
   );

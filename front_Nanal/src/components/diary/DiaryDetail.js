@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import axios_api from "../../config/Axios";
-import Comment from "./Comment";
-import { BookFilled, BookOutlined } from "@ant-design/icons";
+import { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import axios_api from '../../config/Axios';
+import Comment from './Comment';
+import { BookFilled, BookOutlined } from '@ant-design/icons';
 
 function DiaryDetail() {
   const location = useLocation();
@@ -19,7 +19,7 @@ function DiaryDetail() {
     setLocalContent(diaryDetail.content);
   };
   // 수정된 데이터
-  const [localContent, setLocalContent] = useState("");
+  const [localContent, setLocalContent] = useState('');
 
   const handleQuitEdit = () => {
     setIsEdit(false);
@@ -34,7 +34,7 @@ function DiaryDetail() {
       .get(`diary/${location.state.diaryIdx}`)
       .then(({ data }) => {
         if (data.statusCode === 200) {
-          if (data.data.responseMessage === "일기 조회 성공") {
+          if (data.data.responseMessage === '일기 조회 성공') {
             setDiaryDetail(data.data.diary); // 데이터는 response.data.data 안에 들어있음
             if (data.data.isBookmark === true) {
               setIsBook(!isBook);
@@ -50,7 +50,7 @@ function DiaryDetail() {
 
   return (
     <div>
-      <div className="flex justify-between">
+      <div className='flex justify-between'>
         <span>그림 들어갈 자리</span>
         {isBook ? (
           <>
@@ -61,7 +61,7 @@ function DiaryDetail() {
                   .then(({ data }) => {
                     if (data.statusCode === 200) {
                       if (
-                        data.data.responseMessage === "일기 북마크 삭제 성공"
+                        data.data.responseMessage === '일기 북마크 삭제 성공'
                       ) {
                         setIsBook(!isBook);
                       }
@@ -82,7 +82,7 @@ function DiaryDetail() {
                   .then(({ data }) => {
                     if (data.statusCode === 200) {
                       if (
-                        data.data.responseMessage === "일기 북마크 저장 성공"
+                        data.data.responseMessage === '일기 북마크 저장 성공'
                       ) {
                         setIsBook(!isBook);
                       }
@@ -98,17 +98,17 @@ function DiaryDetail() {
       </div>
       <div>작성자 프로필 사진 | </div>
       <span>user nickname | </span>
-      <div className="text-sm">{strDate}</div>
+      <div className='text-sm'>{strDate}</div>
       <div>
         {isEdit ? (
           <>
-            <button className="border-rose-500" onClick={handleQuitEdit}>
+            <button className='border-rose-500' onClick={handleQuitEdit}>
               수정 취소
             </button>
             <button
               onClick={() => {
                 axios_api
-                  .put("diary", {
+                  .put('diary', {
                     // userIdx: 1,
                     groupIdxList: [1],
                     diaryIdx: diaryDetail.diaryIdx,
@@ -138,9 +138,9 @@ function DiaryDetail() {
                     .delete(`diary/${location.state.diaryIdx}`)
                     .then(({ data }) => {
                       if (data.statusCode === 200) {
-                        if (data.data.responseMessage === "일기 삭제 성공") {
+                        if (data.data.responseMessage === '일기 삭제 성공') {
                           setDiaryDetail(data.data.diary);
-                          navigate("/", { replace: true });
+                          navigate('/', { replace: true });
                         }
                       } else {
                         console.log(data.statusCode);
@@ -168,7 +168,7 @@ function DiaryDetail() {
         )}
       </div>
       <div>
-        <Comment diaryIdx={location.state.diaryIdx} />
+        <Comment diaryIdx={location.state.diaryIdx} groupIdx />
       </div>
     </div>
   );

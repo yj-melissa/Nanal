@@ -1,17 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useLocation, Link } from 'react-router-dom';
 import { onLogin } from '../../config/Login';
 import axios_api from '../../config/Axios';
 import GroupDiaryItem from './GroupDiaryItem';
 
-function GroupItem({ item }) {
+function GroupDiaryList() {
+  const location = useLocation();
+
   // 일기 데이터 받기
   const [diaryList, setDiaryList] = useState([]);
 
+  // 그룹에 속한 일기 작성하기
   useEffect(() => {
     onLogin();
     axios_api
-      .get(`diary/list/${item.groupDetail.groupIdx}`)
+      .get(`diary/list/${location.state.groupDetail.groupIdx}`)
       .then(({ data }) => {
         if (data.statusCode === 200) {
           // 초기화 필요!
@@ -27,24 +30,17 @@ function GroupItem({ item }) {
       .catch(({ err }) => {
         console.log('일기 리스트 불러오기 오류: ', err);
       });
-  }, []);
+  }, [location.state.groupDetail.groupIdx]);
 
   return (
     <div>
-      <Link
-        to={`/Group/${item.groupDetail.groupIdx}`}
-        state={{ groupIdx: item.groupDetail.groupIdx }}
-      >
-        <div className='bg-[#F7F7F7] border-2 border-solid border-slate-400 rounded-lg m-1 mb-3 p-2'>
-          <p className='font-bold mb-0.5'>{item.groupDetail.groupName}</p>
-          {item.tags.map((tagging, idx) => {
-            if (tagging.tag) return <span key={idx}>#{tagging.tag}&nbsp;</span>;
-            // return tagging.tag ? <span key={idx}>#{tagging.tag}</span> : <></>;
-          })}
-        </div>
-      </Link>
+      <div>
+        {diaryList.map((diary) => (
+          <GroupDiaryItem key={diary.diaryIdx} item={diary} />
+        ))}
+      </div>
     </div>
   );
 }
 
-export default GroupItem;
+export default GroupDiaryList;
