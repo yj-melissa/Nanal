@@ -34,13 +34,6 @@ public class SecurityConfig{
     @Autowired private CustomOAuthUserService customOAuthUserService;
     @Autowired private OAuthSuccessHandler oAuthSuccessHandler;
 
-//    @Autowired
-//    public SecurityConfig(JwtTokenProvider jwtTokenProvider,
-//        CustomOAuthUserService customOAuthUserService) {
-//        this.jwtTokenProvider = jwtTokenProvider;
-//        this.customOAuthUserService = customOAuthUserService;
-//    }
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
