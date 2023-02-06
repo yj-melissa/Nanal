@@ -91,6 +91,7 @@ public class JwtTokenProvider {
     public JwtTokenDTO createJwtTokens(final Authentication authentication) {
         ApplicationOAuth2User userPrincipal = (ApplicationOAuth2User) authentication.getPrincipal();
         String userId = userPrincipal.getName();
+        int userIdx = userRepository.findByUserId(userId).getUserIdx();
         String accessToken = createToken(userId, accessTokenExpiryDate);
         String refreshToken = createToken(userId, refreshTokenExpiryDate);
 
@@ -98,10 +99,12 @@ public class JwtTokenProvider {
             .accessToken(accessToken)
             .refreshToken(refreshToken)
             .userId(userId)
+            .userIdx(userIdx)
             .build();
 
         JwtTokenEntity jwtToken = JwtTokenEntity.builder()
             .userId(userId)
+            .userIdx(userIdx)
             .refreshToken(jwtTokenDTO.getRefreshToken())
             .build();
 
