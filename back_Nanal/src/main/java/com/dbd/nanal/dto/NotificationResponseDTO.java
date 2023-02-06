@@ -3,6 +3,7 @@ package com.dbd.nanal.dto;
 import com.dbd.nanal.model.NoticeEntity;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -15,7 +16,7 @@ public class NotificationResponseDTO {
     private int noticeType;
     private String content;
     private boolean isChecked;
-    private Date creationDate;
+    private LocalDateTime creationDate;
 
     public NotificationResponseDTO(NoticeEntity noticeEntity) {
         this.noticeIdx = noticeEntity.getNoticeIdx();

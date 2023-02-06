@@ -48,6 +48,7 @@ public class NoticeService {
                     .requestUserIdx(notice.getRequest_user_idx())
                     .requestGroupIdx(notice.getRequest_group_idx())
                     .requestDiaryIdx(notice.getRequest_diary_idx())
+                    .noticeType(notice.getNotice_type())
                     .content(str)
                     .build();
             noticeRepository.save(noticeEntity);

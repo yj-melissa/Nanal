@@ -3,11 +3,9 @@ package com.dbd.nanal.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
@@ -27,7 +25,7 @@ public class MusicEntity {
 
     @CreationTimestamp
     @Column(name = "creation_date")
-    private Timestamp creationDate;
+    private LocalDateTime creationDate;
 
     @Column(name="music_title")
     private String musicTitle;
@@ -37,7 +35,7 @@ public class MusicEntity {
     private DiaryEntity diary;
 
     @Builder
-    public MusicEntity(int musicIdx, String title, String artist, String musicPath, Timestamp creationDate, String musicTitle) {
+    public MusicEntity(int musicIdx, String title, String artist, String musicPath, LocalDateTime creationDate, String musicTitle) {
         this.musicIdx=musicIdx;
         this.title=title;
         this.artist=artist;
