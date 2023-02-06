@@ -5,7 +5,9 @@ import com.dbd.nanal.config.security.JwtTokenDTO;
 import com.dbd.nanal.config.security.JwtTokenRepository;
 import com.dbd.nanal.repository.UserRepository;
 import java.io.IOException;
+import java.util.HashMap;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
@@ -23,10 +25,19 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
         Authentication authentication) throws IOException, ServletException {
         JwtTokenProvider tokenProvider = new JwtTokenProvider(jwtTokenRepository, userRepository);
-        JwtTokenDTO token = tokenProvider.createJwtTokens(authentication);
-        System.out.println("AccessToken : "+token.getAccessToken());
-        System.out.println("RefreshToken : "+token.getRefreshToken());
-        response.getWriter().write(token.getAccessToken());
-        response.getWriter().write(token.getRefreshToken());
+
+        JwtTokenDTO jwtTokenDTO = tokenProvider.createJwtTokens(authentication);
+
+        // 토큰
+
+        int expTime = 10;
+
+        Cookie refreshTokenCookie = new Cookie("refreshToken", jwtTokenDTO.getRefreshToken());
+        refreshTokenCookie.setMaxAge(expTime * 60);    // 초 단위
+        refreshTokenCookie.setPath("/");     // 모든 경로에서 접근 가능
+
+        response.addCookie(refreshTokenCookie);
+        response.setStatus(200);
+        response.addHeader("accessToken", jwtTokenDTO.getAccessToken());
     }
 }

@@ -420,10 +420,10 @@ public class UserController {
     public HashMap<String, String> createTokens(UserEntity user) {
         JwtTokenDTO jwtTokenDTO = jwtTokenProvider.createJwtTokens(user);
 
-        HashMap<String, String> Token = new HashMap<>();
-        Token.put("accessToken", jwtTokenDTO.getAccessToken());
-        Token.put("refreshToken", jwtTokenDTO.getRefreshToken());
+        HashMap<String, String> token = new HashMap<>();
+        token.put("accessToken", jwtTokenDTO.getAccessToken());
+        token.put("refreshToken", jwtTokenDTO.getRefreshToken());
 
-        return Token;
+        return token;
     }
 }

@@ -61,6 +61,7 @@ public class SecurityConfig{
                     "/",
                     "/user/signup",
                     "/user/login",
+                    "/user/oauth2",
                     "/oauth2/**",
                     "/user/refresh",    // accessToken 재발급
                     "/user/redirectTest",
@@ -78,6 +79,9 @@ public class SecurityConfig{
             .and()
             .oauth2Login()
             .redirectionEndpoint()     // 콜백 요청 후 리다이렉트할 url
+            .and()
+            .authorizationEndpoint()
+            .baseUri("/user/oauth2")
             .and()
             .userInfoEndpoint()
                 .userService(customOAuthUserService)
