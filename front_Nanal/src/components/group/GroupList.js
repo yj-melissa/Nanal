@@ -17,7 +17,6 @@ function GroupList() {
           setGroupList(null);
           if (data.data.responseMessage === '그룹 리스트 조회 성공') {
             setGroupList(data.data.groupList);
-            console.log(data.data.groupList);
           }
         } else {
           console.log(data.statusCode);

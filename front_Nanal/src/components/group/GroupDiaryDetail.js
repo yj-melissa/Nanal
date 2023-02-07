@@ -1,9 +1,10 @@
 import { useLocation } from 'react-router-dom';
-import Comment from './Comment';
+import CommentList from './CommentList';
 
 // 댓글 불러오기
 function GroupDiaryDetail() {
   const location = useLocation();
+  console.log(location);
 
   return (
     <div>
@@ -11,7 +12,7 @@ function GroupDiaryDetail() {
       <div>{location.state.creationDate}</div>
       <div>{location.state.content}</div>
       <div>
-        <Comment
+        <CommentList
           diaryIdx={location.state.diaryIdx}
           groupIdx={location.state.groupIdx}
         />
