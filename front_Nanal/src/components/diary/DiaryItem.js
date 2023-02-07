@@ -13,20 +13,14 @@ function DiaryItem({ nickname, diaryIdx, diaryDate, content }) {
         diaryIdx: diaryIdx,
       }}
     >
-      <div className='w-full'>
-        <div>Diary No. {diaryIdx}</div>
-        <img
-          src={emo_joy}
-          alt='DALL:E2'
-          className='inline-block w-16 h-16 p-1 rounded-lg'
-        ></img>
-        <div className='inline-block px-1 m-1 break-words'>
-          <span>{nickname}</span>
-          <span>감정</span>
+      <div className='flex items-center p-2 m-1 mb-3'>
+        <img src={emo_joy} alt='DALL:E2' className='w-16 h-16 p-1 rounded-lg' />
+        <div className='px-1 m-1 text-sm justify-evenly max-w-160'>
+          <span className='mr-2'>감정</span>
           <span className='text-sm'>
             {strMonth}월 {strDay}일
           </span>
-          <div className='inline-block truncate ...'>{content}</div>
+          <strong className='truncate ...'>{content}</strong>
         </div>
       </div>
     </Link>
