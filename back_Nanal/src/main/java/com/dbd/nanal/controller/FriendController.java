@@ -59,7 +59,8 @@ public class FriendController {
                     "[Front] \n" +
                     "{friendIdx(int)} \n\n" +
                     "[Back] \n" +
-                    "friendList : [{userIdx(int), nickname(String), img(String), introduction(String)}, {..}] ")
+                    "friendList : [{userIdx(int), nickname(String), img(String), introduction(String)}, {..}] \n"+
+                    "diary: [{diaryIdx(int), imgUrl}]")
 //    @GetMapping
     @GetMapping("/{friendIdx}")
     public ResponseEntity<?> getFriend(@ApiParam(value = "친구 idx", required = true) @PathVariable("friendIdx") int friendIdx) {
@@ -67,11 +68,12 @@ public class FriendController {
         HashMap<String, Object> responseDTO = new HashMap<>();
         try {
             FriendDetailResponseDTO friend = friendService.findFriend(friendIdx);
-
+            List<HashMap<String, Object>> friendDiaryList=friendService.findFriendDiary(friendIdx);
             // 반환 성공
             if (friend != null) {
                 responseDTO.put("responseMessage", ResponseMessage.FRIEND_FIND_SUCCESS);
                 responseDTO.put("friend", friend);
+                responseDTO.put("diary", friendDiaryList);
                 return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
             } else {
                 responseDTO.put("responseMessage", ResponseMessage.FRIEND_FIND_FAIL);
