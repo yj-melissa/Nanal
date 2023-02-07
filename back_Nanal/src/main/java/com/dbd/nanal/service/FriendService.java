@@ -35,6 +35,11 @@ public class FriendService {
     @Transactional
     public boolean save(HashMap<String, Integer> map) {
 
+        FriendEntity check = friendRepository.isFriendExist(map.get("userIdx"), map.get("friendIdx"));
+        if (check.getUser_idx1() != null) {
+            // 이미 등록된 친구면 false 리턴
+            return false;
+        }
         UserEntity user = userRepository.findByUserIdx(map.get("userIdx"));
         UserEntity friend = userRepository.findByUserIdx(map.get("friendIdx"));
 
@@ -70,10 +75,10 @@ public class FriendService {
         List<HashMap<String, Object>> friendDetailResponseDTOS = new ArrayList<>();
         for (FriendEntity friend : friends) {
 
-            HashMap<String, Object> responseDto= new HashMap<>();
-            responseDto.put("userIdx",friend.getUser_idx1().getUserIdx());
+            HashMap<String, Object> responseDto = new HashMap<>();
+            responseDto.put("userIdx", friend.getUser_idx1().getUserIdx());
             responseDto.put("nickName", friend.getUser_idx1().getUserProfile().getNickname());
-            responseDto.put("img","넣을예정");
+            responseDto.put("img", "넣을예정");
 
             friendDetailResponseDTOS.add(responseDto);
         }
