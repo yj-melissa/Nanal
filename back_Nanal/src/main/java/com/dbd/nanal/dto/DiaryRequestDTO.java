@@ -42,7 +42,7 @@ public class DiaryRequestDTO {
 
     public DiaryEntity toEntity(){
         return DiaryEntity.builder()
-                .creationDate(creationDate)
+                .diaryDate(diaryDate)
                 .diaryIdx(diaryIdx)
                 .content(content)
 //                .painting(picture)
