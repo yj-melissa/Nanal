@@ -240,6 +240,8 @@ public class UserController {
 
         responseDTO.put("responseMessage", ResponseMessage.SUCCESS);
         responseDTO.put("accessToken", newToken);
+        response.setHeader("accessToken", newToken);
+
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
 
