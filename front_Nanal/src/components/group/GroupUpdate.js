@@ -372,7 +372,7 @@ function GroupUpdate() {
                 />
                 <button
                   type='button'
-                  className='inline-block px-4 py-2 my-2 text-xs font-semibold border-0 rounded-full font- text-slate-500 bg-violet-100 text-violet-500 hover:bg-violet-200'
+                  className='inline-block px-4 py-2 my-2 text-xs font-semibold border-0 rounded-full bg-violet-100 text-violet-500 hover:bg-violet-200'
                   onClick={onUploadBaseImage}
                 >
                   기본 이미지로 선택하기
