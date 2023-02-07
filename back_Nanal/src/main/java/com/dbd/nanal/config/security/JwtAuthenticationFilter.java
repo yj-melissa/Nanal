@@ -45,6 +45,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 "/user/check/**",
                 "/user/validate/**",
                 // Swagger 관련 URL
+                "/swagger-ui/",
                 "/v2/api-docs/**",
                 "/swagger-resources/**",
                 "/swagger-ui/**",
@@ -62,7 +63,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 Authentication authentication = jwtTokenProvider.getAuthentication(token);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
-                filterChain.doFilter(request, response);
+//                filterChain.doFilter(request, response);
         } else if (isValidate == 1) {           // 토큰이 만료된 경우
             logger.info("token 만료");
 
@@ -77,19 +78,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             responseDTO.put("data", data);
 
             new ObjectMapper().writeValue(response.getWriter(), responseDTO);
-        } else {                            // 기타 예외 발생
-            response.setStatus(HttpServletResponse.SC_OK);
-            response.setContentType(APPLICATION_JSON_VALUE);
-            response.setCharacterEncoding("utf-8");
-
-            HashMap<String, Object> responseDTO = new HashMap<>();
-            responseDTO.put("statusCode", 500);
-            HashMap<String, Object> data = new HashMap<>();
-            data.put("responseMessage", ResponseMessage.TOKEN_NOT_VALID);
-            responseDTO.put("data", data);
-
-            new ObjectMapper().writeValue(response.getWriter(), responseDTO);
         }
+        filterChain.doFilter(request, response);
     }
 
     private String parseBearerToken(HttpServletRequest request) {
