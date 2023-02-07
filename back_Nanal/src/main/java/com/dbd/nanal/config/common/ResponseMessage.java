@@ -7,7 +7,7 @@ public class ResponseMessage {
     public static final String GROUP_FIND_SUCCESS = "그룹 조회 성공";
     public static final String GROUP_FIND_FAIL = "그룹 조회 실패";
     public static final String GROUP_JOIN_SUCCESS = "그룹 가입 성공";
-    public static final String GROUP_JOIN_FAIL = "그룹 가입 실패";
+    public static final String GROUP_JOIN_FAIL = "이미 가입한 그룹";
     public static final String GROUP_LIST_FIND_SUCCESS = "그룹 리스트 조회 성공";
     public static final String GROUP_LIST_FIND_FAIL = "그룹 리스트 조회 실패";
     public static final String GROUP_UPDATE_SUCCESS = "그룹 수정 성공";

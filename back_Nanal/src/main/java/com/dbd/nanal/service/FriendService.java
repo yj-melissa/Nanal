@@ -36,8 +36,10 @@ public class FriendService {
     public boolean save(HashMap<String, Integer> map) {
 
         FriendEntity check = friendRepository.isFriendExist(map.get("userIdx"), map.get("friendIdx"));
-        if (check.getUser_idx1() != null) {
+
+        if (check != null) {
             // 이미 등록된 친구면 false 리턴
+            System.out.println("이미 들");
             return false;
         }
         UserEntity user = userRepository.findByUserIdx(map.get("userIdx"));
