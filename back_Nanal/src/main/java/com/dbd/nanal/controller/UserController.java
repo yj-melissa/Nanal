@@ -103,11 +103,6 @@ public class UserController {
         responseDTO.put("accessToken", token.get("accessToken"));
         response.setHeader("accessToken", token.get("accessToken"));
 
-//        int cookieExpTime = 14 * 24 * 60 * 60;     // 초단위 : 14일로 설정
-//        Cookie refreshTokenCookie = new Cookie("refreshToken", token.get("refreshToken"));
-//        refreshTokenCookie.setMaxAge(cookieExpTime);    // 초 단위
-//        refreshTokenCookie.setPath("/");     // 모든 경로에서 접근 가능
-
         Cookie refreshTokenCookie = refreshTokenCookie(token.get("refreshToken"));
 
         response.addCookie(refreshTokenCookie);

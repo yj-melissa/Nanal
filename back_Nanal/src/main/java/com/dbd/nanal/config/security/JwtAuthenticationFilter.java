@@ -6,10 +6,7 @@ import com.dbd.nanal.config.common.ResponseMessage;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -31,42 +28,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
-    // 인증에서 제외할 url
-    private static final List<String> EXCLUDE_URL =
-        Collections.unmodifiableList(
-            Arrays.asList(
-                "/",
-                "/user/signup",
-                "/user/login",
-                "/user/oauth2",
-                "/oauth2/**",
-                "/user/refresh",    // accessToken 재발급
-                "/user/redirectTest",
-                "/user/check/**",
-                "/user/validate/**",
-                // Swagger 관련 URL
-                "/swagger-ui/",
-                "/v2/api-docs/**",
-                "/swagger-resources/**",
-                "/swagger-ui/**",
-                "/webjars/**",
-                "/swagger/**",
-                "/sign-api/exception/**"
-            ));
-
     @Override
     protected void doFilterInternal(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull FilterChain filterChain) throws ServletException, IOException {
         String token = parseBearerToken(request);
         int isValidate = jwtTokenProvider.isValidateToken(token);
 
         if (token != null && isValidate == 0) {
-                Authentication authentication = jwtTokenProvider.getAuthentication(token);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-
-//                filterChain.doFilter(request, response);
+            Authentication authentication = jwtTokenProvider.getAuthentication(token);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
         } else if (isValidate == 1) {           // 토큰이 만료된 경우
-            logger.info("token 만료");
-
             response.setStatus(HttpServletResponse.SC_OK);
             response.setContentType(APPLICATION_JSON_VALUE);
             response.setCharacterEncoding("utf-8");
@@ -91,11 +61,4 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
         return null;
     }
-
-    // Filter에서 제외할 URL 설정
-    @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-        return EXCLUDE_URL.stream().anyMatch(exclude -> exclude.equalsIgnoreCase(request.getServletPath()));
-    }
-
 }
