@@ -21,9 +21,7 @@ function CommentDetail({ item }) {
     <div>
       {isEdit ? (
         <>
-          <button className='border-rose-500' onClick={handleQuitEdit}>
-            수정 취소
-          </button>
+          <button onClick={handleQuitEdit}>수정 취소</button>
           <button
             onClick={() => {
               axios_api
