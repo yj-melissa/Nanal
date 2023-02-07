@@ -1,14 +1,14 @@
 /* font */
 @font-face {
-  font-family: "Cafe24Ssurround";
-  src: url("./src_assets/fonts/Cafe24Ssurround.ttf") format("woff");
+  font-family: 'Cafe24Ssurround';
+  src: url('./src_assets/fonts/Cafe24Ssurround.ttf') format('woff');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: "Cafe24SsurroundAir";
-  src: url("./src_assets/fonts/Cafe24SsurroundAir.ttf") format("woff");
+  font-family: 'Cafe24SsurroundAir';
+  src: url('./src_assets/fonts/Cafe24SsurroundAir.ttf') format('woff');
   font-weight: normal;
   font-style: normal;
 }
@@ -19,8 +19,8 @@ body {
 }
 
 .App {
-  font-family: "Cafe24Ssurround";
-  font-family: "Cafe24SsurroundAir";
+  font-family: 'Cafe24Ssurround';
+  font-family: 'Cafe24SsurroundAir';
   min-height: 100vh;
   padding-left: 20px;
   padding-right: 20px;
@@ -29,9 +29,7 @@ body {
 /* List */
 .DiaryList {
   width: 320px;
-  border: 1px solid gray;
   padding: 20px;
-  margin-top: 20px;
 }
 
 .DiaryList h2 {

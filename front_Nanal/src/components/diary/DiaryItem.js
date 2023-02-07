@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import emo_joy from '../../src_assets/img/emo_joy.png';
 
 function DiaryItem({ nickname, diaryIdx, diaryDate, content }) {
   // 월, 일만 추출
@@ -12,17 +13,21 @@ function DiaryItem({ nickname, diaryIdx, diaryDate, content }) {
         diaryIdx: diaryIdx,
       }}
     >
-      <div className='p-2 my-2'>
-        {/* <div>Diary No. {diaryIdx}</div> */}
-        <span className='box-content h-256 w-256'>그림</span>
-        <div className='flex justify-between'>
+      <div className='w-full'>
+        <div>Diary No. {diaryIdx}</div>
+        <img
+          src={emo_joy}
+          alt='DALL:E2'
+          className='inline-block w-16 h-16 p-1 rounded-lg'
+        ></img>
+        <div className='inline-block px-1 m-1 break-words'>
           <span>{nickname}</span>
           <span>감정</span>
           <span className='text-sm'>
             {strMonth}월 {strDay}일
           </span>
+          <div className='inline-block truncate ...'>{content}</div>
         </div>
-        <p className='truncate ...'>{content}</p>
       </div>
     </Link>
   );
