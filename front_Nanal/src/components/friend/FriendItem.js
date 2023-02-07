@@ -4,19 +4,16 @@ function FriendItem({ item }) {
   return (
     <div>
       <Link to={`/Friend`} state={{ friendIdx: item.userIdx }}>
-        <div className='bg-[#EBEBEB] border-2 border-solid border-slate-400 rounded-lg m-1 mb-3 p-2'>
-          {item.nickname}
-          <br />
+        {/* <div className='flex bg-[#EBEBEB] border-2 border-dashed border-slate-200 rounded-lg m-1 mb-3 p-2'> */}
+        <div className='flex bg-[#EBEBEB] border-1 border-slate-200 rounded-lg m-1 mb-3 p-2'>
           <img
             src={item.img}
-            className='w-[80px] h-[80px] inline-block float-left m-1 mr-2'
+            className='inline-block w-1/4 p-1 mr-3 rounded-full h-1/4'
           ></img>
-          <br />
-          {item.introduction}
-          <br />
-          {item.shortContent}
-          <br />
-          <br />
+          <div className='my-2'>
+            <p className='mb-1 font-bold'>{item.nickname}</p>
+            <p className='break-all'>{item.introduction}</p>
+          </div>
         </div>
       </Link>
     </div>
