@@ -9,7 +9,8 @@ import logOutImg from '../../../src_assets/img/log-out.svg';
 import settingImg from '../../../src_assets/img/cog.svg';
 
 function Settings() {
-  
+  const navigate = useNavigate
+
   const onLogout = () => {
     const denyToken = removeCookie('accessToken');
     // token 값이 없어졌다면?
