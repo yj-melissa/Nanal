@@ -1,8 +1,9 @@
 package com.dbd.nanal.config.security;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
+import com.dbd.nanal.config.common.ResponseMessage;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nimbusds.oauth2.sdk.ErrorResponse;
-import io.jsonwebtoken.ExpiredJwtException;
 import java.io.IOException;
 
 import java.util.HashMap;
@@ -28,27 +29,42 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response,
-        @NotNull FilterChain filterChain) throws ServletException, IOException {
-        try {
-            String token = parseBearerToken(request);
+    protected void doFilterInternal(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull FilterChain filterChain) throws ServletException, IOException {
+        String token = parseBearerToken(request);
+        int isValidate = jwtTokenProvider.isValidateToken(token);
 
-            // 토큰 검사
-            if (token != null && jwtTokenProvider.isValidateToken(token)) {
-                // userId 가져오기. 위조된 경우 예외처리됨
+        if (token != null && isValidate == 0) {
                 Authentication authentication = jwtTokenProvider.getAuthentication(token);
-
-                // SecurityContextHolder에 등록
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-            }
-        } catch (ExpiredJwtException e) {
-            logger.info("토큰 만료"+e.getMessage());
+
+                filterChain.doFilter(request, response);
+        } else if (isValidate == 1) {           // 토큰이 만료된 경우
+            logger.info("token 만료");
+
+            response.setStatus(HttpServletResponse.SC_OK);
+            response.setContentType(APPLICATION_JSON_VALUE);
+            response.setCharacterEncoding("utf-8");
+
             HashMap<String, Object> responseDTO = new HashMap<>();
-            responseDTO.put("responseMessage", "accessToken 만료");
+            responseDTO.put("statusCode", 500);
+            HashMap<String, Object> data = new HashMap<>();
+            data.put("responseMessage", ResponseMessage.TOKEN_EXPIRED);
+            responseDTO.put("data", data);
+
+            new ObjectMapper().writeValue(response.getWriter(), responseDTO);
+        } else {                            // 기타 예외 발생
+            response.setStatus(HttpServletResponse.SC_OK);
+            response.setContentType(APPLICATION_JSON_VALUE);
+            response.setCharacterEncoding("utf-8");
+
+            HashMap<String, Object> responseDTO = new HashMap<>();
+            responseDTO.put("statusCode", 500);
+            HashMap<String, Object> data = new HashMap<>();
+            data.put("responseMessage", ResponseMessage.TOKEN_NOT_VALID);
+            responseDTO.put("data", data);
+
             new ObjectMapper().writeValue(response.getWriter(), responseDTO);
         }
-
-        filterChain.doFilter(request, response);
     }
 
     private String parseBearerToken(HttpServletRequest request) {
@@ -61,50 +77,4 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         return null;
     }
 
-
-//    // 토크 인증 테스트용 코드
-//    @Override
-//    protected void doFilterInternal(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response,
-//        @NotNull FilterChain filterChain) throws ServletException, IOException {
-//        try {
-//            logger.info("request" + request);
-//            // 요청에서 토큰 가져오기
-//            String token = parseBearerToken(request);
-//            logger.info("doFilterInternal - 토큰 값 추출. token : " + token);
-//
-//            // 토큰 검사
-//            if (token != null && jwtTokenProvider.isValidateToken(token)) {
-//                // userId 가져오기. 위조된 경우 예외처리됨
-//                Authentication authentication = jwtTokenProvider.getAuthentication(token);
-//
-//                // SecurityContextHolder에 등록
-//                SecurityContextHolder.getContext().setAuthentication(authentication);
-//                logger.info("doFilterInternal - 토큰 값 유효성 체크 완료");
-//            }
-//        } catch (Exception e) {
-//            logger.debug("user authentication 세팅 실패" + e);
-//        }
-//
-//        filterChain.doFilter(request, response);
-//    }
-//
-//    private String parseBearerToken(HttpServletRequest request) {
-//
-//        logger.info("request" + request);
-//        String bearerToken = null;
-//        // 요청에서 토큰 가져오기
-//        Cookie[] cookies = request.getCookies();
-//        for(Cookie cookie:cookies) {
-//            if(cookie.getName().equals("accessToken")) {
-//                bearerToken = cookie.getValue();
-//                logger.info("bearerToken :"+bearerToken);
-//            }
-//        }
-//
-//
-//        if (StringUtils.hasText(bearerToken)) {
-//            return bearerToken;
-//        }
-//        return null;
-//    }
 }
