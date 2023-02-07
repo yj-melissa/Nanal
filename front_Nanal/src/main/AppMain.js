@@ -19,6 +19,7 @@ import FriendDetail from '../components/friend/FriendDetail';
 import FriendAdd from '../components/friend/FriendAdd';
 import AlarmList from '../components/another/AlarmList.js';
 // import AlarmItem from '../components/another/AlarmItem.js';
+import Tuning from '../components/mypage/profile/Tuning';
 import MyPage from '../components/mypage/MyPage.js';
 import RecycleBin from '../components/another/RecycleBin';
 import NotFound from '../components/another/NotFound.js';
@@ -50,6 +51,7 @@ const AppMain = ({ isCalendaar }) => {
       <Route path='/Friend/:friendIdx' element={<FriendDetail />}></Route>
       <Route path='/Friend/Add' element={<FriendAdd />}></Route>
       <Route path='/Alarm' element={<AlarmList />}></Route>
+      <Route path='/Tuning' element={<Tuning />}></Route>
       <Route path='/MyPage' element={<MyPage />}></Route>
       <Route path='/RecycleBin' element={<RecycleBin />}></Route>
       <Route path='*' element={<NotFound />}></Route>

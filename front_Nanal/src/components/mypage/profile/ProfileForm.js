@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
 import axios_api from '../../../config/Axios';
-import { onLogin } from '../../../config/Login';
 import emptyProfile from '../../../src_assets/img/emptyProfile.png';
 // import DiaryTotalList from '../../diary/DiaryTotalList';
 
@@ -55,7 +54,6 @@ function ProfileForm() {
 
   // Mount 됐을 때 user
   useEffect(() => {
-    onLogin();
     axios_api
       .get('user/profile')
       .then(({ data }) => {
@@ -132,17 +130,13 @@ function ProfileForm() {
           <p className='my-auto text-2xl font-bold p-1'>
             {userProfile.nickname} 님의 일기장
           </p>
-          <span className='flex justify-end'>
-            <button className=''>닉네임 변경</button>
-          </span>
+
         </div>
       </div>
-      <div className='my-3'>
-        <p>유저가 설정하는 메시지</p>
+      <div className='box-border my-3 mx-auto w-76 h-32 border-1 '>
+        <p>유저 프로필 들어가면 없어져야함.</p>
         <p>{userProfile.introduction}</p>
-        <button>메시지 수정</button>
       </div>
-      <button>수정하기</button>
       <div className='flex justify-between'>
         <p className='my-3 font-semibold'>
           나날과 함께한 {userProfile.days}일째 나날입니다.

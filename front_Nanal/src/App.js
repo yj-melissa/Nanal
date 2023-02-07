@@ -13,8 +13,13 @@ function App() {
   };
   return (
     <div className='App max-w-sm justify-center'>
-      {/*만약 주소가 sign in, sign up이라면 nav가 안 보이게*/}
-      { accessToken !== undefined ? <Nav changeCalendaar={changeCalendaar} /> : null}
+      {/*만약 주소가 sign in, sign up, /이라면 nav가 안 보이게*/}
+      {accessToken !== undefined ?
+        <div>
+          <Nav changeCalendaar={changeCalendaar} />
+          <hr className='mb-3 border-slate-500/75' />
+        </div>
+        : null}
       <AppMain isCalendaar={isCalendaar} />
     </div>
   );

@@ -8,6 +8,7 @@ import logOutImg from '../../../src_assets/img/log-out.svg';
 import settingImg from '../../../src_assets/img/cog.svg';
 
 function Settings() {
+  
   const onLogout = () => {
     const denyToken = removeCookie('accessToken');
     // token 값이 없어졌다면?
@@ -42,7 +43,7 @@ function Settings() {
           <img src={logOutImg} className='w-10 h-10 m-auto' />
           <p className='text-center my-1 ml-3'>로그아웃</p>
         </div>
-        <Link to='/Friend/List' className='grid content-evenly pr-10'>
+        <Link to='/Tuning' className='grid content-evenly pr-10'>
           <img src={settingImg} className='w-10 h-10 m-auto' />
           <p className='text-center my-1'>설정</p>
         </Link>
