@@ -27,6 +27,7 @@ public class CustomOAuthUserService extends DefaultOAuth2UserService {
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         final OAuth2User oAuth2User = super.loadUser(userRequest);  // 기존 loadUser 호출. user-info-uri 이용해 사용자 정보 가져옴
         final String authProvider = userRequest.getClientRegistration().getClientName();
+        OAuth2AccessToken oAuth2AccessToken = userRequest.getAccessToken();
 
         Map<String, Object> kakaoAccount = (Map<String, Object>) oAuth2User.getAttributes().get("kakao_account");
         Map<String, Object> kakaoProfile = (Map<String, Object>) kakaoAccount.get("profile");
@@ -67,6 +68,6 @@ public class CustomOAuthUserService extends DefaultOAuth2UserService {
             user = userRepository.save(user);
         }
 
-        return new ApplicationOAuth2User(user.getUserId(), oAuth2User.getAttributes());
+        return new ApplicationOAuth2User(user.getUserId(), oAuth2User.getAttributes(), oAuth2AccessToken);
     }
 }

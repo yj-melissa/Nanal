@@ -1,4 +1,4 @@
-package com.dbd.nanal.model;
+package com.dbd.nanal.config.security;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
