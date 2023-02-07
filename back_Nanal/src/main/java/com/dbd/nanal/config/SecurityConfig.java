@@ -2,10 +2,13 @@ package com.dbd.nanal.config;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+import com.dbd.nanal.config.oauth.OAuthFailureHandler;
 import com.dbd.nanal.config.oauth.OAuthSuccessHandler;
+import com.dbd.nanal.config.security.CustomAuthenticationEntryPoint;
 import com.dbd.nanal.config.security.JwtAuthenticationFilter;
 import com.dbd.nanal.config.security.JwtTokenProvider;
 import com.dbd.nanal.config.oauth.CustomOAuthUserService;
+import com.dbd.nanal.config.security.TokenAccessDeniedHandler;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +36,10 @@ public class SecurityConfig{
     @Autowired private JwtTokenProvider jwtTokenProvider;
     @Autowired private CustomOAuthUserService customOAuthUserService;
     @Autowired private OAuthSuccessHandler oAuthSuccessHandler;
+    @Autowired private OAuthFailureHandler oAuthFailureHandler;
+    @Autowired private TokenAccessDeniedHandler tokenAccessDeniedHandler;
+    @Autowired private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -70,6 +77,10 @@ public class SecurityConfig{
                 ).permitAll()
             .antMatchers("/**").hasRole("USER")
             .and()
+            .exceptionHandling()
+            .accessDeniedHandler(tokenAccessDeniedHandler)
+            .authenticationEntryPoint(customAuthenticationEntryPoint)
+            .and()
             .oauth2Login()
             .redirectionEndpoint()     // 콜백 요청 후 리다이렉트할 url
             .and()
@@ -79,7 +90,8 @@ public class SecurityConfig{
             .userInfoEndpoint()
                 .userService(customOAuthUserService)
             .and()
-            .successHandler(oAuthSuccessHandler);
+            .successHandler(oAuthSuccessHandler)
+            .failureHandler(oAuthFailureHandler);
 
         http
             .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
