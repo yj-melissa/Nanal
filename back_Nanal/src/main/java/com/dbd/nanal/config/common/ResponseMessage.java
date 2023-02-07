@@ -90,6 +90,6 @@ public class ResponseMessage {
     public static final String EMAIL_SEND_FAIL = "이메일 발송 실패";
     public static final Object PAINTING_SAVE_SUCCESS = "그림 저장 성공";
     public static final Object PAINTING_SAVE_FAIL = "그림 저장 실패";
-    public static final String PAINTING_FIND_SUCCESS = "그림 조회 성공";
-    public static final String PAINTING_FIND_FAIL = "그림 조회 실패";
+    public static final String PAINTING_UPDATE_SUCCESS = "그림 저장 성공";
+    public static final String PAINTING_UPDATE_FAIL = "그림 저장 실패";
 }
