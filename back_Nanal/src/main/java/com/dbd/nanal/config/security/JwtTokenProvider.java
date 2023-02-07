@@ -42,10 +42,6 @@ public class JwtTokenProvider {
         Instant.now().plus(1, ChronoUnit.DAYS)
     );
 
-//    private final Date accessTokenExpiryDate = Date.from(
-//        Instant.now().plus(1, ChronoUnit.MINUTES)
-//    );
-
     // Refresh Token 기한 = 2주
     private final Date refreshTokenExpiryDate = Date.from(
         Instant.now().plus(14, ChronoUnit.DAYS)
