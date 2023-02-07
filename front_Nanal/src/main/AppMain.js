@@ -44,15 +44,15 @@ const AppMain = ({ isCalendaar }) => {
       <Route path='/Diary/Detail' element={<DiaryDetail />}></Route>
       <Route path='/Group/Create' element={<GroupCreate />}></Route>
       <Route path='/Group/List' element={<GroupList />}></Route>
-      <Route path='/Group/:groupIdx' element={<GroupDetail />}></Route>
+      <Route path='/Group/Detail' element={<GroupDetail />}></Route>
       <Route
         path='/Group/Diary/:diaryIdx'
         element={<GroupDiaryDetail />}
       ></Route>
-      <Route path='/Group/Setting/:groupIdx' element={<GroupSetting />}></Route>
-      <Route path='/Group/Update/:groupIdx' element={<GroupUpdate />}></Route>
+      <Route path='/Group/Setting' element={<GroupSetting />}></Route>
+      <Route path='/Group/Update' element={<GroupUpdate />}></Route>
       <Route path='/Friend/List' element={<FriendList />}></Route>
-      <Route path='/Friend/:friendIdx' element={<FriendDetail />}></Route>
+      <Route path='/Friend' element={<FriendDetail />}></Route>
       <Route path='/Friend/Add' element={<FriendAdd />}></Route>
       <Route path='/Alarm' element={<AlarmList />}></Route>
       <Route path='/MyPage' element={<MyPage />}></Route>
