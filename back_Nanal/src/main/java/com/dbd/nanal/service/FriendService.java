@@ -96,4 +96,20 @@ public class FriendService {
 
 
     }
+
+    // 친구 일기 조회
+    public List<HashMap<String,Object>> findFriendDiary(int friendIdx){
+        List<HashMap<String, Object>> findFriendDiaryList = new ArrayList<>();
+        List<DiaryEntity> diaryEntityList=diaryRepository.findByUserIdxList(friendIdx);
+
+        for (DiaryEntity diary : diaryEntityList) {
+
+            HashMap<String, Object> responseDto = new HashMap<>();
+            responseDto.put("diaryIdx", diary.getDiaryIdx());
+            responseDto.put("imgUrl", diary.getImgUrl());
+
+            findFriendDiaryList.add(responseDto);
+        }
+        return findFriendDiaryList;
+    }
 }

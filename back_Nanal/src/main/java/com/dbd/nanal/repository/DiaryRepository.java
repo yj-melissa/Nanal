@@ -32,7 +32,10 @@ public interface DiaryRepository extends JpaRepository<DiaryEntity, Integer> {
     @Query("select a from DiaryEntity a where function('YEAR', a.diaryDate)=:year and function('MONTH',a.diaryDate)=:month and a.isDeleted=false and a.user.userIdx=:userIdx order by a.diaryDate desc, a.diaryIdx desc")
     List<DiaryEntity> findMonthDiaryList(@Param("year")int year, @Param("month")int month, @Param("userIdx") int userIdx);
 
-    List<DiaryEntity> findByUserOrderByDiaryDateDescDiaryIdxDesc(UserEntity user);
+    @Query("select a from DiaryEntity a where a.user.userIdx=:userIdx and a.isDeleted=false order by a.diaryDate desc , a.diaryIdx desc ")
+    List<DiaryEntity> findByUserIdxList(@Param("userIdx") int userIdx);
+
+//    List<DiaryEntity> findByUserOrderByDiaryDateDescDiaryIdxDesc(UserEntity user);
 
     Long countByUser(UserEntity user);
 
