@@ -6,7 +6,10 @@ import com.dbd.nanal.config.common.ResponseMessage;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -27,6 +30,28 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     public JwtAuthenticationFilter(JwtTokenProvider jwtTokenProvider) {
         this.jwtTokenProvider = jwtTokenProvider;
     }
+
+    // 인증에서 제외할 url
+    private static final List<String> EXCLUDE_URL =
+        Collections.unmodifiableList(
+            Arrays.asList(
+                "/",
+                "/user/signup",
+                "/user/login",
+                "/user/oauth2",
+                "/oauth2/**",
+                "/user/refresh",    // accessToken 재발급
+                "/user/redirectTest",
+                "/user/check/**",
+                "/user/validate/**",
+                // Swagger 관련 URL
+                "/v2/api-docs/**",
+                "/swagger-resources/**",
+                "/swagger-ui/**",
+                "/webjars/**",
+                "/swagger/**",
+                "/sign-api/exception/**"
+            ));
 
     @Override
     protected void doFilterInternal(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull FilterChain filterChain) throws ServletException, IOException {
@@ -75,6 +100,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return bearerToken.substring(7);
         }
         return null;
+    }
+
+    // Filter에서 제외할 URL 설정
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        return EXCLUDE_URL.stream().anyMatch(exclude -> exclude.equalsIgnoreCase(request.getServletPath()));
     }
 
 }
