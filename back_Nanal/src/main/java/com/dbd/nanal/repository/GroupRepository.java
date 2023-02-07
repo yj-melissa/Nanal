@@ -12,4 +12,5 @@ import org.springframework.stereotype.Repository;
 public interface GroupRepository extends JpaRepository<GroupDetailEntity, Integer> {
 
 
+    GroupDetailEntity findByGroupImgIdx(int groupImgIdx);
 }

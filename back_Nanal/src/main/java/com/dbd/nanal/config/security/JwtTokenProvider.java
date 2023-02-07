@@ -1,11 +1,11 @@
 package com.dbd.nanal.config.security;
 
 import com.dbd.nanal.config.oauth.ApplicationOAuth2User;
-import com.dbd.nanal.model.JwtTokenEntity;
 import com.dbd.nanal.model.UserEntity;
 import com.dbd.nanal.repository.UserRepository;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -16,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -132,11 +131,11 @@ public class JwtTokenProvider {
 //    // Access Token 재발급
     public String updateAccessToken(String token){
 
-        boolean isValidate = isValidateToken(token);
+        int isValidate = isValidateToken(token);
         Optional<JwtTokenEntity> refreshToken = jwtTokenRepository.findByRefreshToken(token);
 
         //refresh 토큰 만료 전이고, 저장된 토큰과 일치하면 새 새로운 access 토큰을 생성
-        if (isValidate && refreshToken.isPresent()) {
+        if (isValidate == 0 && refreshToken.isPresent()) {
             return createToken(refreshToken.get().getUserIdx(), accessTokenExpiryDate);
         } else {
             // 토큰 유효하지 않은 경우 재로그인 필요
@@ -186,11 +185,7 @@ public class JwtTokenProvider {
 
     // JWT에서 인증 정보 조회
     public Authentication getAuthentication(String token) {
-        log.debug("getAuthentication - 토큰 인증 정보 조회 시작");
-
         UserEntity userInfo = userRepository.findByUserId(this.getUserId(token));
-
-        log.debug("getAuthentication - 토큰 인증 정보 조회 완료, userInfo userId : {}", userInfo.getUserId());
 
         return new UsernamePasswordAuthenticationToken(userInfo, "", userInfo.getAuthorities());
     }
@@ -212,19 +207,19 @@ public class JwtTokenProvider {
     }
 
     // 토큰의 유효성 + 만료일자 확인
-    public boolean isValidateToken (String token) {
-        log.debug("isValidateToken - 토큰 유효 체크 시작");
+    public int isValidateToken (String token){
         try {
             Jws<Claims> claims = Jwts
                 .parserBuilder()
                 .setSigningKey(secretKey)
                 .build()
                 .parseClaimsJws(token);
-            return !claims.getBody().getExpiration().before(new Date());
-        } catch (Exception e) {
-            log.debug("isValidateToken - 토큰 유효체크 예외 발생");
-            return false;
+        } catch (ExpiredJwtException e) {       // 토큰 만료
+            return 1;
+        } catch (Exception e) {     // 유효하지 않은 토큰
+            return 2;
         }
+        return 0;
     }
 
     public void deleteRefreshToken(int userIdx) {
