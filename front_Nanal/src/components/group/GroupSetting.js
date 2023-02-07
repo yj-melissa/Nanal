@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router';
+// import { useLocation } from 'react-router';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
@@ -8,11 +9,38 @@ import emo_joy from '../../src_assets/img/emo_joy.png';
 
 function GroupSetting() {
   const { state } = useLocation();
+  const navigator = useNavigate();
 
   const [groupDetail, setGroupName] = useState('');
   const [groupTag, setGroupTag] = useState([]);
 
   const [friendList, setFriendList] = useState([{}]);
+
+  const deleteGroup = (e) => {
+    e.preventDefault();
+
+    if (!window.confirm('그룹을 정말 나가실 건가요?')) {
+      // 취소(아니오) 버튼 클릭 시 이벤트
+      // axios_api
+      //   .delete(`group/${state.groupIdx}`)
+      //   .then(({ data }) => {
+      //     if (data.statusCode === 200) {
+      //       if (data.data.responseMessage === '그룹 탈퇴 성공') {
+      //         navigator(`/Group/List`);
+      //       }
+      //     } else {
+      //       console.log('그룹 탈퇴 오류: ');
+      //       console.log(data.statusCode);
+      //       console.log(data.data.responseMessage);
+      //     }
+      //   })
+      //   .catch(({ error }) => {
+      //     console.log('그룹 탈퇴 오류: ' + error);
+      //   });
+    } else {
+      // 확인(예) 버튼 클릭 시 이벤트
+    }
+  };
 
   useEffect(() => {
     onLogin();
@@ -88,15 +116,23 @@ function GroupSetting() {
           })}
         </div>
       </div>
-      <Link
-        to={`/Group/Update/${groupDetail.groupIdx}`}
-        state={{ groupDetail: groupDetail.groupIdx }}
-      >
-        <button className='bg-cyan-600 text-white px-2.5 py-1 rounded-3xl m-auto block'>
-          수정하기
+      <div>
+        <Link
+          to={`/Group/Update`}
+          state={{ groupDetail: groupDetail.groupIdx }}
+        >
+          <button className='bg-cyan-600 text-white px-2.5 py-1 rounded-3xl m-auto mx-10 inline-block'>
+            수정하기
+          </button>
+        </Link>
+        <button
+          type='button'
+          className='bg-rose-600 text-white px-2.5 py-1 rounded-3xl m-auto mx-10 inline-block'
+          onClick={deleteGroup}
+        >
+          탈퇴하기
         </button>
-      </Link>
-
+      </div>
       <hr className='my-5 border-solid border-1 border-slate-800 w-80' />
 
       {/* {friendList.map((friendItem, idx) => {

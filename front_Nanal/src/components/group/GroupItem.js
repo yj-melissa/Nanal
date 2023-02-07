@@ -6,7 +6,7 @@ function GroupItem({ item }) {
   return (
     <div>
       <Link
-        to={`/Group/${item.groupDetail.groupIdx}`}
+        to={`/Group/Detail`}
         state={{ groupIdx: item.groupDetail.groupIdx }}
       >
         <div className='overflow-y-auto flex bg-[#F7F7F7] border-2 border-solid border-slate-400 rounded-lg m-1 mb-3 p-2'>
