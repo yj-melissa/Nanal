@@ -167,7 +167,10 @@ public class GroupService {
 
     @Transactional
     public void updateGroupImg(int groupIdx, int groupImgIdx, String imgUrl) {
+        System.out.println("groupIdx : "+groupIdx);
+
         GroupDetailEntity groupDetailEntity = groupRepository.getReferenceById(groupIdx);
+        System.out.println("groupIdx : "+groupDetailEntity.getGroupIdx());
         // 리턴받은 이미지 인덱스로 업데이트
         groupDetailEntity.setImgUrl(imgUrl);
         groupDetailEntity.setGroupImgIdx(groupImgIdx);
