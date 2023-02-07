@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios_api from '../../config/Axios';
 
 // 친구 등록 = friend
@@ -13,11 +13,10 @@ function AlarmItem({
   requestDiaryIdx,
   requestGroupIdx,
   requestUserIdx,
-  userIdx,
   noticeIdx,
 }) {
   // 새 글이나 댓글은 해당 글로 이동 시켜줘야함.
-  const navigate = useNavigate();
+  let navigate = useNavigate();
 
   // 친구 등록 성공.
   const addFriend = () => {
@@ -28,6 +27,7 @@ function AlarmItem({
       .then(({ data }) => {
         if (data.statusCode === 200) {
           if (data.data.responseMessage === '친구 등록 성공') {
+            checkAlarm();
             alert('친구 등록에 성공하셨습니다.');
             navigate(`/Friend/List`);
           }
@@ -51,6 +51,7 @@ function AlarmItem({
       .then(({ data }) => {
         if (data.statusCode === 200) {
           if (data.data.responseMessage === '그룹 가입 성공') {
+            checkAlarm();
             alert('그룹 가입 등록에 성공하셨습니다.');
             navigate(`/Group/List`);
           }
@@ -110,18 +111,18 @@ function AlarmItem({
       <div>
         <div className='flex justify-between'>
           <p>{content}</p>
-          <button className='grid content-start'>X</button>
+          {/* <button className='grid content-start'>X</button> */}
         </div>
         <div className='flex justify-end'>
           <button
             onClick={() => {
               addFriend();
-              checkAlarm();
+              // checkAlarm();
             }}
           >
             수락
           </button>
-          <button onClick={checkAlarm}>거절</button>
+          <button onClick={checkAlarm()}>거절</button>
         </div>
       </div>
     );
@@ -130,18 +131,18 @@ function AlarmItem({
       <div>
         <div className='flex justify-between'>
           <p>{content}</p>
-          <button className='grid content-start'>X</button>
+          {/* <button className='grid content-start'>X</button> */}
         </div>
         <div className='flex justify-end'>
           <button
             onClick={() => {
               addGroup();
-              checkAlarm();
+              // checkAlarm();
             }}
           >
             수락
           </button>
-          <button onClick={checkAlarm}>거절</button>
+          <button onClick={checkAlarm()}>거절</button>
         </div>
       </div>
     );
@@ -150,9 +151,9 @@ function AlarmItem({
       <div>
         <div className='flex justify-between'>
           <p>{content}</p>
-          <button className='grid content-start'>X</button>
+          {/* <button className='grid content-start'>X</button> */}
         </div>
-        <button onClick={linkedDiary} className='flex justify-end'>
+        <button onClick={linkedDiary()} className='flex justify-end'>
           바로가기
         </button>
       </div>
@@ -162,15 +163,15 @@ function AlarmItem({
       <div>
         <div className='flex justify-between'>
           <p>{content}</p>
-          <button className='grid content-start'>X</button>
+          {/* <button className='grid content-start'>X</button> */}
         </div>
-        <button onClick={linkedDiary} className='flex justify-end'>
+        <button onClick={linkedDiary()} className='flex justify-end'>
           바로가기
         </button>
       </div>
     );
   } else {
-    return null;
+    return <></>;
   }
 }
 

@@ -31,7 +31,7 @@ function GroupItem({ item }) {
               {item.tags.map((tagging, idx) => {
                 if (tagging.tag)
                   return (
-                    <span key={idx} className='mr-1'>
+                    <span key={idx} className='mr-1 break-all'>
                       #{tagging.tag}
                     </span>
                   );

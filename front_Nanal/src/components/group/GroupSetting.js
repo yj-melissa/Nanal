@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 // import { useLocation } from 'react-router';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
 import FriendItem from '../friend/FriendItem';
-import emo_joy from '../../src_assets/img/emo_joy.png';
 
 function GroupSetting() {
   const { state } = useLocation();
-  const navigator = useNavigate();
+  const navigate = useNavigate();
 
   const [groupDetail, setGroupName] = useState('');
   const [groupTag, setGroupTag] = useState([]);
@@ -19,27 +19,38 @@ function GroupSetting() {
   const deleteGroup = (e) => {
     e.preventDefault();
 
-    if (!window.confirm('그룹을 정말 나가실 건가요?')) {
-      // 취소(아니오) 버튼 클릭 시 이벤트
-      // axios_api
-      //   .delete(`group/${state.groupIdx}`)
-      //   .then(({ data }) => {
-      //     if (data.statusCode === 200) {
-      //       if (data.data.responseMessage === '그룹 탈퇴 성공') {
-      //         navigator(`/Group/List`);
-      //       }
-      //     } else {
-      //       console.log('그룹 탈퇴 오류: ');
-      //       console.log(data.statusCode);
-      //       console.log(data.data.responseMessage);
-      //     }
-      //   })
-      //   .catch(({ error }) => {
-      //     console.log('그룹 탈퇴 오류: ' + error);
-      //   });
-    } else {
-      // 확인(예) 버튼 클릭 시 이벤트
-    }
+    Swal.fire({
+      // title: '그룹을 정말 나가실 건가요?',
+      text: '그룹을 정말 나가실 건가요?',
+      icon: 'warning',
+      reverseButtons: true, // 버튼 순서 거꾸로
+      showCancelButton: true,
+      confirmButtonColor: '#0891b2',
+      cancelButtonColor: '#e11d48',
+      confirmButtonText: '확인',
+      cancelButtonText: '취소',
+      width: '35%',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // 확인(예) 버튼 클릭 시 이벤트
+        axios_api
+          .delete(`group/${state.groupIdx}`)
+          .then(({ data }) => {
+            if (data.statusCode === 200) {
+              if (data.data.responseMessage === '그룹 탈퇴 성공') {
+                navigate('/Group/List');
+              }
+            } else {
+              console.log('그룹 탈퇴 오류: ');
+              console.log(data.statusCode);
+              console.log(data.data.responseMessage);
+            }
+          })
+          .catch(({ error }) => {
+            console.log('그룹 탈퇴 오류: ' + error);
+          });
+      }
+    });
   };
 
   useEffect(() => {
@@ -92,27 +103,24 @@ function GroupSetting() {
 
       <div className='w-full my-2'>
         <div className='my-3'>
-          {groupDetail.imgUrl !== null ? (
-            <img
-              src={groupDetail.imgUrl}
-              className='inline-block p-1 rounded-md w-28 h-28'
-            ></img>
-          ) : (
-            <>
-              <img
-                src={emo_joy}
-                className='inline-block p-1 rounded-md w-28 h-28'
-              ></img>
-            </>
-          )}
-
+          <img
+            src={groupDetail.imgUrl}
+            className='inline-block p-1 rounded-md w-28 h-28'
+          ></img>
           <p className='inline-block ml-5 text-2xl font-bold text-center'>
             {groupDetail.groupName}
           </p>
         </div>
-        <div>
+        <div className='my-1 mb-2 break-words'>
           {groupTag.map((tagging, idx) => {
-            return <span key={idx}>#{tagging.tag}&nbsp;</span>;
+            return (
+              <span
+                key={idx}
+                className='items-center inline-block p-1 mx-2 my-1 text-xs break-all rounded-lg bg-slate-200 hover:bg-blue-300'
+              >
+                #{tagging.tag}
+              </span>
+            );
           })}
         </div>
       </div>
