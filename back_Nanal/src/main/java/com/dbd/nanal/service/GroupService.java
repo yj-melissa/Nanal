@@ -98,16 +98,26 @@ public class GroupService {
     @Transactional
     public GroupUserRelationResponseDTO saveGroupUserRelation(GroupUserRelationRequestDTO groupUserRelationRequestDTO) {
 
-        // GroupUserRelationRequestDTO의 userEntity 채우기
-        groupUserRelationRequestDTO.setUserEntity(userRepository.getReferenceById(groupUserRelationRequestDTO.getUserIdx()));
 
-        // GroupUserRelationRequestDTO의 groupDetail 채우기
-        groupUserRelationRequestDTO.setGroupDetail(groupRepository.getReferenceById(groupUserRelationRequestDTO.getGroupIdx()));
+        // 이미 가입했는지 확인하기
+        GroupUserRelationEntity groupUserRelationEntity = groupUserRelationRepository.findByUserIdGroupID(groupUserRelationRequestDTO.getUserIdx(), groupUserRelationRequestDTO.getGroupIdx());
 
-        // 엔티티로 변환해서 저장
-        GroupUserRelationEntity groupUserRelationEntity = groupUserRelationRepository.save(groupUserRelationRequestDTO.toEntity());
+        if (groupUserRelationEntity == null) {
 
-        return new GroupUserRelationResponseDTO(groupUserRelationEntity);
+            // GroupUserRelationRequestDTO의 userEntity 채우기
+            groupUserRelationRequestDTO.setUserEntity(userRepository.getReferenceById(groupUserRelationRequestDTO.getUserIdx()));
+
+            // GroupUserRelationRequestDTO의 groupDetail 채우기
+            groupUserRelationRequestDTO.setGroupDetail(groupRepository.getReferenceById(groupUserRelationRequestDTO.getGroupIdx()));
+
+            // 엔티티로 변환해서 저장
+            groupUserRelationEntity = groupUserRelationRepository.save(groupUserRelationRequestDTO.toEntity());
+            System.out.println("가입 성공");
+
+            return new GroupUserRelationResponseDTO(groupUserRelationEntity);
+        }
+        System.out.println("이미 가입");
+        return null;
     }
 
 
@@ -167,13 +177,12 @@ public class GroupService {
 
     @Transactional
     public void updateGroupImg(int groupIdx, int groupImgIdx, String imgUrl) {
-        System.out.println("groupIdx : "+groupIdx);
 
         GroupDetailEntity groupDetailEntity = groupRepository.getReferenceById(groupIdx);
-        System.out.println("groupIdx : "+groupDetailEntity.getGroupIdx());
         // 리턴받은 이미지 인덱스로 업데이트
         groupDetailEntity.setImgUrl(imgUrl);
         groupDetailEntity.setGroupImgIdx(groupImgIdx);
 
     }
+
 }

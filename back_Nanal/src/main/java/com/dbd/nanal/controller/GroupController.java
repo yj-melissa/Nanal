@@ -141,6 +141,8 @@ public class GroupController {
         try {
 
             GroupUserRelationRequestDTO groupUserRelationRequestDTO = new GroupUserRelationRequestDTO(userInfo.getUserIdx(), requestDTO.get("groupIdx"));
+
+            System.out.println("ㅇㄹㅇㄹㅇㄹ");
             GroupUserRelationResponseDTO groupUserRelationResponseDTO = groupService.saveGroupUserRelation(groupUserRelationRequestDTO);
 
             if (groupUserRelationResponseDTO != null) {
@@ -149,7 +151,7 @@ public class GroupController {
                 return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
             } else {
                 responseDTO.put("responseMessage", ResponseMessage.GROUP_JOIN_FAIL);
-                return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.INTERNAL_SERVER_ERROR);
+                return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.INTERNAL_SERVER_ERROR);
             }
 
         } catch (Exception e) {
