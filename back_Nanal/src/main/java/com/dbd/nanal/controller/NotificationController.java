@@ -128,7 +128,7 @@ public class NotificationController {
         try{
             List<NotificationResponseDTO> notificationResponseDTOList =noticeService.getNotice(userInfo.getUserIdx());
             responseDTO.put("responseMessage", ResponseMessage.NOTICE_GET_SUCCESS);
-            responseDTO.put("diary", notificationResponseDTOList);
+            responseDTO.put("notice", notificationResponseDTOList);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }catch (Exception e){
             responseDTO.put("responseMessage", ResponseMessage.NOTICE_GET_FAIL);
