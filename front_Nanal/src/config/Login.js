@@ -1,9 +1,12 @@
+import Swal from 'sweetalert2';
 import axios_api from './Axios';
 import { getCookie } from './Cookie';
 
 const JWT_EXPIRY_TIME = 24 * 3600 * 1000; // 만료 시간 (24시간 밀리 초로 표현)
 
 export function onLogin() {
+  // const navigate = useNavigate();
+
   const accessToken = getCookie('accessToken');
 
   if (accessToken !== undefined) {
@@ -12,8 +15,17 @@ export function onLogin() {
       'Authorization'
     ] = `Bearer ${accessToken}`;
   } else {
-    alert('로그인 후 접근 가능해요!');
-    window.location.replace('/SignIn');
+    // alert('로그인 후 접근 가능해요!');
+    Swal.fire({
+      icon: 'warning',
+      text: '로그인 후 접근 가능해요!',
+      width: '30%',
+    }).then(function () {
+      // navigate(`/SignIn`, {
+      //   replace: true,
+      // });
+      window.location.replace('/SignIn');
+    });
   }
 
   // accessToken 만료하기 1분 전에 로그인 연장

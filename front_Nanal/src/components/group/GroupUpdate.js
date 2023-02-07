@@ -358,10 +358,9 @@ function GroupUpdate() {
             <p>💙 그룹 이미지 </p>
             <div className='flex'>
               <img
-                src={emo_joy}
+                src={groupImg}
                 className='inline-block w-24 h-24 p-1 mr-3 rounded-md'
               ></img>
-
               <p className='my-2'>
                 <input
                   type='file'
@@ -381,10 +380,11 @@ function GroupUpdate() {
             </div>
           </div>
           <div>
+            <p>💙 그룹 기존 친구</p>
             {groupFriendList.map((friendItem, idx) => {
               return (
                 <span key={idx} className='mr-2'>
-                  💙 {friendItem.nickName}
+                  {friendItem.nickName}
                 </span>
               );
             })}

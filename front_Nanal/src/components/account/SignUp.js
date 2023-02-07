@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router';
+import Swal from 'sweetalert2';
 import axios_api from '../../config/Axios';
 
 function SignUp() {
@@ -7,6 +9,8 @@ function SignUp() {
   // [오류발생시 내용부분]
   // [형식 Boolean 값 나타내는 부분]
   // 형식 올바름 판별하는 함수()
+
+  const navigate = useNavigate();
 
   // 이메일 E-mail
   const [email, setEmail] = useState('');
@@ -43,10 +47,20 @@ function SignUp() {
           }
         } else {
           if (data.data.responseMessage === '사용 불가') {
-            alert('이미 가입한 이메일 입니다.');
+            // alert('이미 가입한 이메일 입니다.');
+            Swal.fire({
+              icon: 'warning', // Alert 타입
+              text: '이미 가입한 이메일 입니다', // Alert 내용
+              width: '30%',
+            }).then(function () {});
             window.location.replace('/SignIn');
           } else {
-            alert('이메일을 확인하고 다시 입력해주세요.');
+            // alert('이메일을 확인하고 다시 입력해주세요.');
+            Swal.fire({
+              icon: 'warning',
+              text: '이메일을 확인하고 다시 입력해주세요',
+              width: '30%',
+            }).then(function () {});
           }
         }
       })
@@ -66,7 +80,11 @@ function SignUp() {
         setEmailToggle(false);
         setEmailCheckToggle(true);
       } else {
-        alert('이메일 인증 코드를 다시 확인해주세요!');
+        Swal.fire({
+          icon: 'warning',
+          text: '이메일 인증 코드를 다시 확인해주세요!',
+          width: '30%',
+        }).then(function () {});
       }
     }
   };
@@ -175,15 +193,40 @@ function SignUp() {
     e.preventDefault();
 
     if (isEmail !== true) {
-      alert('이메일 인증을 확인해주세요.');
+      // alert('이메일 인증을 확인해주세요.');
+      Swal.fire({
+        icon: 'warning',
+        text: '이메일 인증을 확인해주세요.',
+        width: '30%',
+      }).then(function () {});
     } else if (isId !== true) {
-      alert('아이디를 확인해주세요.');
+      // alert('아이디를 확인해주세요.');
+      Swal.fire({
+        icon: 'warning',
+        text: '아이디를 확인해주세요.',
+        width: '30%',
+      }).then(function () {});
     } else if (isPassword !== true) {
-      alert('비밀번호를 확인해주세요.');
+      // alert('비밀번호를 확인해주세요.');
+      Swal.fire({
+        icon: 'warning',
+        text: '비밀번호를 확인해주세요.',
+        width: '30%',
+      }).then(function () {});
     } else if (isPasswordConfirm !== true) {
-      alert('비밀번호를 맞게 입력했는지 확인해주세요.');
+      // alert('비밀번호를 맞게 입력했는지 확인해주세요.');
+      Swal.fire({
+        icon: 'warning',
+        text: '비밀번호를 맞게 입력했는지 확인해주세요.',
+        width: '30%',
+      }).then(function () {});
     } else if (isNickName !== true) {
-      alert('닉네임을 확인해주세요.');
+      // alert('닉네임을 확인해주세요.');
+      Swal.fire({
+        icon: 'warning',
+        text: '닉네임을 확인해주세요.',
+        width: '30%',
+      }).then(function () {});
     } else {
       axios_api
         .post('user/signup', {
@@ -199,17 +242,31 @@ function SignUp() {
           // console.log(data.data.ResponseMessage);
           if (data.statusCode === 200) {
             if (data.data.responseMessage === '회원 가입 성공') {
-              alert('회원 가입 성공!!!');
-              window.location.replace('/SignIn');
+              // alert('회원 가입 성공!!!');
+              Swal.fire({
+                icon: 'success',
+                text: '회원 가입 성공!!!',
+                width: '30%',
+              }).then(function () {});
+              navigate(`/SignIn`, {
+                replace: true,
+              });
+              // window.location.replace('/SignIn');
             }
           } else {
             console.log(data.data.responseMessage);
-            alert('이미 가입된 이메일입니다!');
-            setEmail('');
-            setId('');
-            setPassword('');
-            setPasswordConfirm('');
-            setNickName('');
+            // alert('이미 가입된 이메일입니다!');
+            Swal.fire({
+              icon: 'warning',
+              text: '이미 가입된 이메일입니다!',
+              width: '30%',
+            }).then(function () {
+              setEmail('');
+              setId('');
+              setPassword('');
+              setPasswordConfirm('');
+              setNickName('');
+            });
           }
         })
         .catch((error) => {
@@ -221,17 +278,18 @@ function SignUp() {
   return (
     <div className='flex justify-center'>
       <div className='box-border p-4 w-80 border-[1px] border-gray-500 border-solid'>
-        <h1 className='p-3'>SignUp</h1>
+        <h1 className='p-3 text-lg font-bold text-center'>
+          나날에 회원가입하기
+        </h1>
         <form action='' onSubmit={SignUp}>
           {/* 이메일 email */}
           <div className='m-1'>
-            <label htmlFor='email'>Email</label>
-            <br />
+            <label htmlFor='email'>🧡 Email</label>
             <div>
               <input
                 type='email'
                 id='email'
-                className='mr-5 mb-2'
+                className='mr-5 mb-1 max-w-full p-0.5 rounded-lg'
                 value={email}
                 onChange={onChangeEmail}
               />
@@ -240,14 +298,17 @@ function SignUp() {
                 onClick={() => {
                   sendEmail(email);
                 }}
+                className='inline-block px-4 py-2 my-1 text-xs font-semibold border-0 rounded-full bg-violet-100 text-violet-500 hover:bg-violet-200'
               >
                 인증요청
               </button>
+            </div>
+            <div>
               {emailToggle === true ? (
                 <div>
                   <input
                     type='text'
-                    className='mr-5'
+                    className='mr-5 max-w-full p-0.5 rounded-lg'
                     onChange={onChangeEmailValidation}
                   ></input>
                   <button
@@ -255,6 +316,7 @@ function SignUp() {
                     onClick={() => {
                       checkEmail();
                     }}
+                    className='inline-block px-4 py-2 text-xs font-semibold border-0 rounded-full bg-violet-100 text-violet-500 hover:bg-violet-200'
                   >
                     확인
                   </button>
@@ -265,58 +327,67 @@ function SignUp() {
                 <></>
               )}
             </div>
-            <p className='message'>{emailMessage}</p>
+            {/* <p className='message'>{emailMessage}</p> */}
           </div>
           {/* 유저아이디 id */}
           <div className='m-1'>
-            <label htmlFor='id'>UserId</label> <br />
+            <label htmlFor='id'>💛 UserId</label> <br />
             <input
               type='text'
               id='id'
               name='id'
               value={id}
               onChange={onChangeId}
+              className='mr-5 max-w-full p-0.5 mb-2 rounded-lg'
             />
-            <p className='message'> {idMessage} </p>
+            <p className='text-sm'> {idMessage} </p>
           </div>
           {/* 비밀번호 password */}
           <div className='m-1'>
-            <label htmlFor='password'>Password</label> <br />
+            <label htmlFor='password'>💚 Password</label> <br />
             <input
               type='password'
               id='password'
               name='password'
               value={password}
               onChange={onChangePassword}
+              className='mr-5 max-w-full p-0.5 mb-2 rounded-lg'
             />
-            <p className='message'>{passwordMessage}</p>
+            <p className='text-sm'>{passwordMessage}</p>
           </div>
           {/* 비밀번호 확인 passwordConfirm */}
           <div className='m-1'>
-            <label htmlFor='passwordConfirm'>Password Confirm</label> <br />
+            <label htmlFor='passwordConfirm'>💚 Password Confirm</label> <br />
             <input
               type='password'
               id='passwordConfirm'
               name='passwordConfirm'
               value={passwordConfirm}
               onChange={onChangePasswordConfirm}
+              className='mr-5 max-w-full p-0.5 mb-2 rounded-lg'
             />
-            <p className='message'>{passwordConfirmMessage}</p>
+            <p className='text-sm'>{passwordConfirmMessage}</p>
           </div>
           {/* 닉네임 nickName */}
           <div className='m-1'>
-            <label htmlFor='user-nick-name'>Nick Name</label> <br />
+            <label htmlFor='user-nick-name'>💙 Nick Name</label> <br />
             <input
               type='text'
               id='user-nick-name'
               name='user-nick-name'
               value={nickName}
               onChange={onChangeNickName}
+              className='mr-5 max-w-full p-0.5 mb-2 rounded-lg'
             />
-            <p className='message'>{nickNameMessage}</p>
+            <p className='text-sm'>{nickNameMessage}</p>
           </div>
-          <div className='mx-1 mt-2'>
-            <button type='submit'>SignUp</button>
+          <div className='mt-3 text-center'>
+            <button
+              type='submit'
+              className='bg-teal-500 text-white px-2.5 py-1 rounded-3xl m-auto '
+            >
+              SignUp
+            </button>
           </div>
         </form>
       </div>
