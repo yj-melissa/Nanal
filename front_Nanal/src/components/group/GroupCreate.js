@@ -1,9 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import axios_api from '../../config/Axios';
-import { getCookie } from '../../config/Cookie';
 import { onLogin } from '../../config/Login';
 
 function GroupCreate() {
+  const navigate = useNavigate();
+
   const [groupName, setGroupName] = useState('');
   const [groupTag, setGroupTag] = useState([]);
   const [tagNum, setTagNum] = useState(0);
@@ -151,7 +154,7 @@ function GroupCreate() {
               );
 
               if (formData.get('multipartFile') === null) {
-                formData.append('multipartFile', e.target.files[0]);
+                formData.append('multipartFile', null);
               }
 
               // 이미지 업로드
@@ -165,8 +168,7 @@ function GroupCreate() {
                   if (data.statusCode === 200) {
                     if (data.data.responseMessage === '그림 저장 성공') {
                       // console.log(data.data);
-
-                      if (includeFriend.size !== 0) {
+                      if (includeFriend.length !== 0) {
                         // 그룹에 추가할 친구가 있는 경우
                         axios_api
                           .post('notification/group', {
@@ -178,8 +180,10 @@ function GroupCreate() {
                               if (
                                 data.data.responseMessage === '알림 저장 성공'
                               ) {
-                                alert('그룹을 생성하였습니다!');
-                                // window.location.replace('/Group/List');
+                                navigate(`/Group/Setting`, {
+                                  state: { groupIdx: groupidx },
+                                  replace: true,
+                                });
                               }
                             } else {
                               console.log('알림 저장 오류 : ');
@@ -190,6 +194,11 @@ function GroupCreate() {
                           .catch(({ error }) => {
                             console.log('알림 저장 오류 : ' + error);
                           });
+                      } else {
+                        navigate(`/Group/Setting`, {
+                          state: { groupIdx: groupidx },
+                          replace: true,
+                        });
                       }
                     }
                   } else {
@@ -388,3 +397,15 @@ function getByteLength(strValue) {
 //       },
 //     }),
 // };
+
+// const Toast = Swal.mixin({
+//   toast: true,
+//   // position: 'center-center',
+//   showConfirmButton: false,
+//   timer: 500,
+//   timerProgressBar: true,
+//   didOpen: (toast) => {
+//     toast.addEventListener('mouseenter', Swal.stopTimer);
+//     toast.addEventListener('mouseleave', Swal.resumeTimer);
+//   },
+// });

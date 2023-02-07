@@ -71,14 +71,17 @@ function GroupDetail() {
         </p>
         {groupTag.map((tagging, idx) => {
           return (
-            <span key={idx} className='text-center from-neutral-700'>
+            <span
+              key={idx}
+              className='inline-block p-1 mx-1 my-1 text-xs break-all rounded-lg bg-stone-200 hover:bg-blue-200'
+            >
               #{tagging.tag}&nbsp;
             </span>
           );
         })}
       </div>
+      {/* <hr className='mx-5 my-5 text-center border-solid w-72 border-1 border-slate-600' /> */}
 
-      <hr className='my-5 border-solid border-1 border-slate-600 w-80' />
       {diaryList.map((diary) => (
         <GroupDiaryItem
           key={diary.diaryIdx}
