@@ -107,7 +107,7 @@ public class DiaryService {
 
     // get user diary list
     public List<DiaryResponseDTO> userDiaryList(int userIdx){
-        List<DiaryEntity> diaryEntityList=diaryRepository.findByUserOrderByDiaryDateDescDiaryIdxDesc(UserEntity.builder().userIdx(userIdx).build());
+        List<DiaryEntity> diaryEntityList=diaryRepository.findByUserIdxList(userIdx);
         return diaryEntityList.stream().map(x->new DiaryResponseDTO(x)).collect(Collectors.toList());
     }
 
