@@ -22,7 +22,7 @@ public class NotificationResponseDTO {
         this.noticeIdx = noticeEntity.getNoticeIdx();
         this.userIdx = noticeEntity.getUser().getUserIdx();
         this.requestUserIdx = noticeEntity.getRequestUserIdx();
-        this.requestGroupIdx = noticeEntity.getRequestDiaryIdx();
+        this.requestGroupIdx = noticeEntity.getRequestGroupIdx();
         this.requestDiaryIdx = noticeEntity.getRequestDiaryIdx();
         this.noticeType = noticeEntity.getNoticeType();
         this.content = noticeEntity.getContent();
