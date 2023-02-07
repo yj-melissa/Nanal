@@ -94,7 +94,7 @@ public class DiaryService {
     // get date diary list
     public List<DiaryResponseDTO> getDateDiaryList(Date findDate, int userIdx){
 //    public List<DiaryResponseDTO> getDateDiaryList(Date findDate){
-        List<DiaryEntity> diaryEntityList=diaryRepository.findDateDiaryList(findDate);
+        List<DiaryEntity> diaryEntityList=diaryRepository.findDateDiaryList(findDate, userIdx);
 //        List<DiaryEntity> diaryEntityList=diaryRepository.findDateDiaryList(Integer.parseInt(findDate.substring(0,4)), Integer.parseInt(findDate.substring(5,7)), Integer.parseInt(findDate.substring(8,10)), userIdx);
         return diaryEntityList.stream().map(x->new DiaryResponseDTO(x)).collect(Collectors.toList());
     }
