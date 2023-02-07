@@ -100,12 +100,14 @@ public class UserController {
         HashMap<String, Object> responseDTO = new HashMap<>();
         responseDTO.put("responseMessage", ResponseMessage.USER_CREATE_SUCCESS);
         responseDTO.put("accessToken", token.get("accessToken"));
+        response.setHeader("accessToken", token.get("accessToken"));
 
-        int expTime = 10;
+//        int cookieExpTime = 14 * 24 * 60 * 60;     // 초단위 : 14일로 설정
+//        Cookie refreshTokenCookie = new Cookie("refreshToken", token.get("refreshToken"));
+//        refreshTokenCookie.setMaxAge(cookieExpTime);    // 초 단위
+//        refreshTokenCookie.setPath("/");     // 모든 경로에서 접근 가능
 
-        Cookie refreshTokenCookie = new Cookie("refreshToken", token.get("refreshToken"));
-        refreshTokenCookie.setMaxAge(expTime * 60);    // 초 단위
-        refreshTokenCookie.setPath("/");     // 모든 경로에서 접근 가능
+        Cookie refreshTokenCookie = refreshTokenCookie(token.get("refreshToken"));
 
         response.addCookie(refreshTokenCookie);
 
@@ -166,19 +168,21 @@ public class UserController {
             HashMap<String, Object> responseDTO = new HashMap<>();
             responseDTO.put("responseMessage", ResponseMessage.LOGIN_SUCCESS);
             responseDTO.put("token", token);
-
-            int expTime = 10;
+            response.setHeader("accessToken", token.get("accessToken"));
 
             // 쿠키생성
+//            int cookieExpTime = 14 * 24 * 60 * 60;     // 초단위 : 14일로 설정
 //            Cookie accessTokenCookie = new Cookie("accessToken", token.get("accessToken"));
-//            accessTokenCookie.setMaxAge(expTime * 60);    // 초 단위
+//            accessTokenCookie.setMaxAge(cookieExpTime);    // 초 단위
 //            accessTokenCookie.setPath("/");     // 모든 경로에서 접근 가능
 
 //            response.addCookie(accessTokenCookie);
 
-            Cookie refreshTokenCookie = new Cookie("refreshToken", token.get("refreshToken"));
-            refreshTokenCookie.setMaxAge(expTime * 60);    // 초 단위
-            refreshTokenCookie.setPath("/");     // 모든 경로에서 접근 가능
+//            Cookie refreshTokenCookie = new Cookie("refreshToken", token.get("refreshToken"));
+//            refreshTokenCookie.setMaxAge(cookieExpTime);
+//            refreshTokenCookie.setPath("/");     // 모든 경로에서 접근 가능
+
+            Cookie refreshTokenCookie = refreshTokenCookie(token.get("refreshToken"));
 
             response.addCookie(refreshTokenCookie);
 
@@ -198,6 +202,15 @@ public class UserController {
             }
             return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
         }
+    }
+
+    public Cookie refreshTokenCookie(String refreshToken) {
+        int cookieExpTime = 14 * 24 * 60 * 60;     // 초단위 : 14일로 설정
+        Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
+        refreshTokenCookie.setMaxAge(cookieExpTime);
+        refreshTokenCookie.setPath("/");     // 모든 경로에서 접근 가능
+
+        return refreshTokenCookie;
     }
 
     @ApiOperation(value = "로그아웃")
