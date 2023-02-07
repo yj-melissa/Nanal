@@ -5,14 +5,18 @@ import com.dbd.nanal.config.common.ResponseMessage;
 import com.dbd.nanal.dto.*;
 import com.dbd.nanal.model.UserEntity;
 import com.dbd.nanal.service.DiaryService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.nimbusds.jose.shaded.json.JSONObject;
+import com.nimbusds.jose.shaded.json.parser.JSONParser;
+import com.nimbusds.jose.shaded.json.parser.ParseException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
 
@@ -42,6 +46,10 @@ public class DiaryController {
 
             diary.setUserIdx(userInfo.getUserIdx());
             //save diary
+            // 감정 분석
+            String emotion = requestToFlask(diary.getContent());
+            System.out.println("emotion : "+emotion);
+            diary.setEmo(emotion);
             DiaryResponseDTO diaryResponseDTO=diaryService.save(diary);
             int diaryIdx=diaryResponseDTO.getDiaryIdx();
 
@@ -487,6 +495,58 @@ public class DiaryController {
         }catch (Exception e){
             responseDTO.put("responseMessage", ResponseMessage.DIARY_BOOKMARK_COUNT_FAIL);
             return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
+        }
+    }
+    private String requestToFlask(String content) throws JsonProcessingException, ParseException {
+
+        RestTemplate restTemplate = new RestTemplate();
+        // url
+        String url = "http://i8d110.p.ssafy.io:5000/predict";
+
+        // Header set
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        // Body set
+        EmotionDTO body = new EmotionDTO(content);
+
+        // Message
+        HttpEntity<?> requestMessage = new HttpEntity<>(body, httpHeaders);
+        // Request
+        ResponseEntity<String> response = restTemplate.postForEntity(url, requestMessage, String.class);
+
+        // 요청 후 응답 확인
+//        System.out.println(response.getStatusCode());
+//        System.out.println(response.getBody());
+
+        JSONObject jsonObj = (JSONObject) new JSONParser().parse(response.getBody().toString());
+
+        return (String) jsonObj.get("result");
+    }
+
+    static class EmotionDTO{
+        String content;
+        public EmotionDTO(String content) {
+            this.content = content;
+        }
+
+        public String getContent() {
+            return content;
+        }
+
+    }
+    static class ResultDTO{
+        String result;
+
+        public ResultDTO(String result) {
+            this.result = result;
+        }
+
+        public String getResult() {
+            return result;
+        }
+
+        public void setResult(String result) {
+            this.result = result;
         }
     }
 }
