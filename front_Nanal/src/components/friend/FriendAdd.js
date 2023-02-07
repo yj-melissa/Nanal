@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Swal from 'sweetalert2';
 import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
 
@@ -14,7 +15,7 @@ function FriendAdd() {
       .then(({ data }) => {
         if (data.statusCode === 200) {
           if (data.data.responseMessage === '친구 조회 성공') {
-            console.log(data.data.userInfo);
+            // console.log(data.data.userInfo);
             setFriendList(data.data.userInfo);
           } else {
             console.log('친구 조회 오류 : ');
@@ -36,17 +37,22 @@ function FriendAdd() {
       .then(({ data }) => {
         if (data.statusCode === 200) {
           if (data.data.responseMessage === '알림 저장 성공') {
-            alert('친구에게 추가를 요청하였습니다!');
-            window.location.reload(false);
+            Swal.fire({
+              icon: 'success', // Alert 타입
+              text: '친구 추가를 요청했어요!', // Alert 내용
+              width: '35%',
+            }).then(function () {
+              window.location.reload(true);
+            });
           } else {
-            console.log('알림 저장 오류 : ');
+            console.log('친구 추가 알림 저장 오류 : ');
             console.log(data.statusCode);
             console.log(data.data.responseMessage);
           }
         }
       })
       .catch(({ error }) => {
-        console.log('알림 저장 오류 : ' + error);
+        console.log('친구 추가 알림 저장 오류 : ' + error);
       });
   };
 
@@ -55,18 +61,18 @@ function FriendAdd() {
   }, []);
   return (
     <div>
-      <p className='flex justify-around box-border h-20 w-70 p-4'>
+      <p className='box-border flex justify-around h-20 p-4 w-70'>
         찾고자 하는 친구의 아이디를 <br />
         입력 후 검색해주세요
       </p>
       <form
         onSubmit={searchFriend}
-        className='flex justify-around h-18 w-70 p-1'
+        className='flex justify-around p-1 h-18 w-70'
       >
         <input type='text' id='searchId'></input>
         <button type='submit'>검색하기</button>
       </form>
-      <hr className='border-solid border-1 border-slate-800 w-80 my-5' />
+      <hr className='my-5 border-solid border-1 border-slate-800 w-80' />
       {friendList.map((friendItem) => (
         <div key={friendItem.userIdx} className='my-2'>
           <p className='font-semibold'>친구의 </p>
@@ -76,7 +82,7 @@ function FriendAdd() {
             <button
               type='button'
               onClick={(e) => addFriend(e, friendItem.userIdx)}
-              className='font-semibold'
+              className='p-2 text-sm font-semibold rounded-lg cursor-pointer bg-violet-100 text-violet-700 hover:bg-violet-300 whitespace-nowrap'
             >
               친구 추가하기
             </button>

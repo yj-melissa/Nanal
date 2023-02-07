@@ -31,18 +31,20 @@ function FriendDetail() {
 
   return (
     <div>
-      <div className='flex justify-evenly mt-5'>
-        <img src={friend.img} className='w-28 h-28 p-1 rounded-full'></img>
-        <p className='my-auto text-2xl font-bold p-1'>
-          {friend.nickname} 님의
-          <br />
-          일기장
-        </p>
+      <div className='flex mt-5 justify-evenly'>
+        <img src={friend.img} className='p-1 rounded-full w-28 h-28'></img>
+        <div className='p-1 my-auto font-bold'>
+          <p className=''>
+            <span className='mr-1.5 text-2xl'>{friend.nickname}</span>
+            <span>님의</span>
+          </p>
+          <p className='my-0.5'>일기장</p>
+        </div>
       </div>
-      <div className='my-3 flex justify-between'>
+      <div className='flex justify-between my-3'>
         <p>{friend.introduction}</p>
       </div>
-      <hr className='border-slate-400/75 w-65 my-5' />
+      <hr className='my-2 border-dashed border-slate-400/75 w-65' />
     </div>
   );
 }

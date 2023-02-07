@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios_api from '../../config/Axios';
-import { getCookie } from '../../config/Cookie';
 import { onLogin } from '../../config/Login';
 
 function GroupCreate() {
+  const navigate = useNavigate();
+
   const [groupName, setGroupName] = useState('');
   const [groupTag, setGroupTag] = useState([]);
   const [tagNum, setTagNum] = useState(0);
@@ -142,26 +144,30 @@ function GroupCreate() {
               //   Authorization: `Bearer ${getCookie('accessToken')}`,
               //   'Content-Type': 'multipart/form-data',
               // };
-              // const dataSet = { groupIdx: groupidx };
-              // formData.append(
-              //   'value',
-              //   new Blob([dataSet], { type: 'application/json' })
-              // );
+              const dataSet = { groupIdx: groupidx };
+              formData.append(
+                'value',
+                new Blob([JSON.stringify(dataSet)], {
+                  type: 'application/json',
+                })
+              );
+
+              if (formData.get('multipartFile') === null) {
+                formData.append('multipartFile', null);
+              }
 
               // 이미지 업로드
               axios_api
-                .post('file/s4', formData, {
-                  // headers: {
-                  //   // Authorization: `Bearer ${getCookie('accessToken')}`,
-                  //   'Content-Type': 'multipart/form-data',
-                  // },
+                .post('file/s3', formData, {
+                  headers: {
+                    'Content-Type': 'multipart/form-data',
+                  },
                 })
                 .then(({ data }) => {
                   if (data.statusCode === 200) {
                     if (data.data.responseMessage === '그림 저장 성공') {
-                      console.log(data.data);
-
-                      if (includeFriend.size !== 0) {
+                      // console.log(data.data);
+                      if (includeFriend.length !== 0) {
                         // 그룹에 추가할 친구가 있는 경우
                         axios_api
                           .post('notification/group', {
@@ -173,8 +179,10 @@ function GroupCreate() {
                               if (
                                 data.data.responseMessage === '알림 저장 성공'
                               ) {
-                                alert('그룹을 생성하였습니다!');
-                                // window.location.replace('/Group/List');
+                                navigate(`/Group/Setting`, {
+                                  state: { groupIdx: groupidx },
+                                  replace: true,
+                                });
                               }
                             } else {
                               console.log('알림 저장 오류 : ');
@@ -185,6 +193,11 @@ function GroupCreate() {
                           .catch(({ error }) => {
                             console.log('알림 저장 오류 : ' + error);
                           });
+                      } else {
+                        navigate(`/Group/Setting`, {
+                          state: { groupIdx: groupidx },
+                          replace: true,
+                        });
                       }
                     }
                   } else {
@@ -234,8 +247,9 @@ function GroupCreate() {
 
   return (
     <div id='group-Profile'>
-      <h2> 그룹 생성 </h2>
+      <h1 className='m-1 text-lg font-bold text-center'> 그룹 생성 </h1>
       <div id='group-create-form'>
+        <p className='my-2 text-center'>✨ 그룹 프로필 ✨</p>
         {/* 그룹 이름 생성 */}
         <div id='group-name-div'>
           <label htmlFor='group-name'>그룹 이름 : </label>
@@ -243,25 +257,31 @@ function GroupCreate() {
           <input
             type='text'
             id='group-name'
-            className='font-bold m-0.5'
             onChange={onChangeName}
+            className='p-1 m-0.5 font-bold rounded-lg'
           ></input>
           <p className='message'>{currentGMessage}</p>
         </div>
         {/* 그룹 태그 생성 */}
-        <div id='group-tag-div'>
-          <label htmlFor='group-tag'>그룹 태그 : (5개까지 가능)</label>
+        <div id='group-tag-div' className='mb-2'>
+          <label htmlFor='group-tag'>그룹 태그 : </label>
           <input hidden='hidden' />
           <input
             type='text'
             id='group-tag'
             onChange={onChangeTagNew}
             value={tagNew}
+            className='w-fit p-1 m-0.5 rounded-lg'
           />
-          &nbsp;
-          <button type='button' onClick={addTag}>
+          <button
+            type='button'
+            onClick={addTag}
+            className='p-1 ml-3 rounded-xl bg-violet-100 text-violet-700'
+          >
             추가
           </button>
+          <p htmlFor='group-tag'>(5개까지 가능)</p>
+
           <p className='message'>{currentGTMessage}</p>
           {groupTag.map((tagging, idx) => {
             return (
@@ -272,7 +292,7 @@ function GroupCreate() {
                   onChangeTagRemove(idx);
                 }}
                 key={idx}
-                className='mr-2'
+                className='items-center inline-block p-1 mr-4 space-y-3 rounded-lg bg-slate-200 hover:bg-blue-300'
               >
                 #{tagging}
               </button>
@@ -286,19 +306,12 @@ function GroupCreate() {
             accept='image/*'
             ref={inputRef}
             onChange={onUploadImage}
+            className='block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-100 file:text-violet-700 hover:file:bg-violet-200'
           />
-          {/* <button
-            type='button'
-            label='이미지 업로드'
-            onClick={onUploadImageButtonClick}
-          >
-            하이하이
-          </button> */}
         </div>
         {/* 그룹 친구 추가*/}
         <div id='group-user-div'>
-          <p className='my-1'>✨ 추가 된 사용자 ✨</p>
-          <br />
+          <p className='my-2 text-center'>✨ 추가 된 사용자 ✨</p>
 
           {includeFriend.map((friendItem, idx) => {
             return (
@@ -308,22 +321,26 @@ function GroupCreate() {
                 onClick={() => {
                   onChangeFRemove(idx);
                 }}
-                className='mr-2'
+                className='items-center inline-block px-2 mx-12 my-1 rounded-lg bg-slate-100 hover:bg-blue-200'
               >
                 {friendItem.nickname}
               </button>
             );
           })}
         </div>
-        <button type='button' onClick={GroupCreate} className='my-2'>
-          생성
+        <button
+          type='button'
+          onClick={GroupCreate}
+          className='hover:bg-sky-700 bg-cyan-600 text-white px-2.5 py-1 rounded-3xl m-auto block'
+        >
+          생성하기
         </button>
       </div>
 
       <div id='group-Friend'>
-        <hr className='border-solid border-1 border-slate-800 w-80 my-5' />
+        <hr className='my-5 border-solid border-1 border-slate-800 w-80' />
 
-        <p className='mb-0.5'>내 친구 목록 -----------------------</p>
+        <p className='mb-0.5'>🤗 내 친구 목록 --------------------</p>
 
         {friendList.map((friendItem, idx) => {
           return (
@@ -333,7 +350,7 @@ function GroupCreate() {
               onClick={() => {
                 addFriend(idx);
               }}
-              className='mr-2'
+              className='items-center inline-block px-2 mx-12 my-1 rounded-lg bg-slate-100 hover:bg-blue-200'
             >
               {friendItem.nickname}
             </button>
@@ -361,3 +378,33 @@ function getByteLength(strValue) {
   }
   return byte;
 }
+
+// const instance = axios.create({
+//   baseURL: `http://192.168.100.208:8080/nanal/`,
+//   headers: {
+//     'content-type': 'application/json;charset=UTF-8',
+//     Authorization: `Bearer ${getCookie('accessToken')}`,
+//     accept: 'application/json,',
+//   },
+// });
+
+// const instances = {
+//   createGroup: (data) =>
+//     instance.post(`file/s3`, data, {
+//       headers: {
+//         'Content-Type': `multipart/form-data`,
+//       },
+//     }),
+// };
+
+// const Toast = Swal.mixin({
+//   toast: true,
+//   // position: 'center-center',
+//   showConfirmButton: false,
+//   timer: 500,
+//   timerProgressBar: true,
+//   didOpen: (toast) => {
+//     toast.addEventListener('mouseenter', Swal.stopTimer);
+//     toast.addEventListener('mouseleave', Swal.resumeTimer);
+//   },
+// });

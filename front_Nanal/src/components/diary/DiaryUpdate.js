@@ -1,55 +1,35 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { set } from 'date-fns';
+import { useState, useEffect, useRef } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
 
-const getStringDate = (date) => {
-  return date.toISOString().slice(0, 10);
-};
+function DiaryUpdate() {
+  const location = useLocation();
+  const [group, setGroup] = useState('개인');
+  const navigate = useNavigate();
 
-function DiaryCreate() {
-  // 날짜, 일기, 그룹여부 데이터 받기
-  const [date, setDate] = useState(getStringDate(new Date()));
-  const [content, setContent] = useState('');
-  const [group, setGroup] = useState('private');
-
-  // 포커싱 기능
-  const contentRef = useRef();
-
-  // 작성완료 버튼 누르면 실행되는 함수 - axios 사용해서 백s엔드와 통신
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // 유효성 검사 후 포커싱
-    if (content.length < 2) {
-      contentRef.current.focus();
-      return;
-    }
-    onLogin();
-    axios_api
-      .post('diary', {
-        // 날짜 데이터도 전달하기
-        diaryDate: date,
-        // 선택한 그룹은 배열 형태로 전달해야 함
-        groupIdxList: checkedList,
-        content: content,
-      })
-      .then((response) => {
-        alert('저장 성공');
-        // 일기 생성 후 홈으로 보내기
-        navigate('/', { replace: true });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-
-    // 저장 후 일기 데이터 초기화
-    setContent('');
-    setGroup('private');
-  };
+  // 수정된 날짜, 일기, 기존 그룹 리스트 데이터
+  const [localDate, setLocalDate] = useState(
+    location.state.diaryDetail.diaryDate
+  );
+  const [localContent, setLocalContent] = useState(
+    location.state.diaryDetail.content
+  );
+  const localConetRef = useRef();
 
   // 체크된 그룹을 넣어줄 배열
-  const [checkedList, setCheckedList] = useState([]);
-  // input 태그가 체크된 경우 실행되는 함수
+  const originGroupList = location.state.originGroupList;
+  const [checkedList, setCheckedList] = useState(originGroupList);
+
+  // 수정 취소 버튼 클릭 시 실행되는 함수
+  const handleQuitEdit = () => {
+    setLocalDate(location.state.diaryDate);
+    setLocalContent(location.state.diaryDetail.content);
+    navigate(-1);
+  };
+
+  // input 태그가 체크된 경우 실행되는 함수 = 다중 선택 가능
   const onChecked = (checked, id) => {
     if (checked) {
       setCheckedList([...checkedList, id]);
@@ -58,8 +38,6 @@ function DiaryCreate() {
     }
   };
 
-  // 뒤로가기 기능
-  const navigate = useNavigate();
   // 그룹 리스트 데이터 가져오기
   const [groupList, setGroupList] = useState([]);
   useEffect(() => {
@@ -71,6 +49,10 @@ function DiaryCreate() {
           setGroupList(null);
           if (data.data.responseMessage === '그룹 리스트 조회 성공') {
             setGroupList(data.data.groupList);
+            if (checkedList.length !== 0) {
+              setGroup('그룹');
+              setShow(true);
+            }
           }
         } else {
           console.log(data.statusCode);
@@ -88,25 +70,24 @@ function DiaryCreate() {
   return (
     <div>
       <div className='h-auto min-h-full pb-5'>
-        <h2 className='my-5 text-lg font-bold text-center'>일기 작성</h2>
+        <h2 className='my-5 text-lg font-bold text-center'>일기 수정하기</h2>
         {/* 날짜 선택란 */}
         <div>
           <input
             className='p-2 rounded-lg cursor-pointer bg-slate-300/50'
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
+            value={localDate}
+            onChange={(e) => setLocalDate(e.target.value)}
             type='date'
           />
           {/* 일기 내용 작성란 */}
           <div>
             <textarea
               className='w-full h-auto px-2 py-2 my-2 rounded-lg bg-slate-300/50'
-              placeholder='오늘의 하루는 어땠나요?'
               name='content'
-              ref={contentRef}
-              value={content}
+              ref={localConetRef}
+              value={localContent}
               onChange={(e) => {
-                setContent(e.target.value);
+                setLocalContent(e.target.value);
               }}
             />
           </div>
@@ -121,7 +102,10 @@ function DiaryCreate() {
             value='개인'
             checked={group === '개인'}
             onChange={(e) => setGroup(e.target.value)}
-            onClick={() => setShow(false)}
+            onClick={() => {
+              setShow(false);
+              setCheckedList([]);
+            }}
           />
           <label className='ml-2 mr-4 cursor-pointer' htmlFor='private'>
             개인
@@ -176,19 +160,37 @@ function DiaryCreate() {
             <></>
           )}
         </div>
-        {/* 작성 취소 및 완료 버튼 */}
+        {/* 수정 취소 및 수정 완료 버튼 */}
         <footer className='relative flex justify-between px-1 pb-5 translate-y-full'>
           <button
             className='hover:bg-slate-300 bg-slate-300/50 rounded-xl px-2.5 py-1 block'
-            onClick={() => navigate(-1)}
+            onClick={handleQuitEdit}
           >
-            작성 취소
+            수정 취소
           </button>
           <button
             className='hover:bg-sky-700 bg-cyan-600 text-white px-2.5 py-1 rounded-xl block'
-            onClick={handleSubmit}
+            onClick={() => {
+              axios_api
+                .put('diary', {
+                  userIdx: location.state.diaryDetail.userIdx,
+                  diaryIdx: location.state.diaryDetail.diaryIdx,
+                  content: localContent,
+                  diaryDate: localDate,
+                  groupIdxList: checkedList,
+                })
+                .then(({ data }) => {
+                  navigate('/Diary/Detail', {
+                    state: {
+                      diaryIdx: location.state.diaryDetail.diaryIdx,
+                    },
+                    replace: true,
+                  });
+                })
+                .catch((err) => console.log(err));
+            }}
           >
-            작성 완료
+            수정 완료
           </button>
         </footer>
       </div>
@@ -196,4 +198,4 @@ function DiaryCreate() {
   );
 }
 
-export default DiaryCreate;
+export default DiaryUpdate;

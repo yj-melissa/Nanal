@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import Calendar from "react-calendar";
-import "../src_assets/css/Calendar.css";
-import { Link, useNavigate } from "react-router-dom";
-import DiaryList from "../components/diary/DiaryList";
+import React, { useState } from 'react';
+import Calendar from 'react-calendar';
+import '../src_assets/css/Calendar.css';
+import { Link, useNavigate } from 'react-router-dom';
+import DiaryList from '../components/diary/DiaryList';
 
 // 날짜를 'YYYY-MM-DD' 형태로 바꾸는 함수들
 const leftPad = (value) => {
@@ -12,7 +12,7 @@ const leftPad = (value) => {
   return `0${value}`;
 };
 
-const toStringByFormatting = (value, delimeter = "-") => {
+const toStringByFormatting = (value, delimeter = '-') => {
   const year = value.getFullYear();
   const month = leftPad(value.getMonth() + 1);
   const date = leftPad(value.getDate());
@@ -29,24 +29,27 @@ function Calendaar() {
       {/* 캘린더 페이지 입니다. ||
       <Link to="/SignIn"> 로그인 </Link> */}
       {/* 일기쓰기 테스트용 */}
-      <div className="border-none">
+      <div className='border-none'>
         <Calendar
           onChange={onChange}
           value={value}
-          calendarType="ISO 8601"
+          calendarType='ISO 8601'
           formatDay={(locale, date) =>
-            date.toLocaleString("en", { day: "numeric" })
+            date.toLocaleString('en', { day: 'numeric' })
           }
         />
       </div>
       <br />
-      <hr className="border-slate-500/75" />
+      <hr className='border-slate-500/75' />
       <br />
       {/* 일기쓰러가기 버튼 */}
-      <div className="flex justify-center">
-        <button onClick={() => navigate("/Diary/Create")}>
-          {" "}
-          일기 쓰러 가기~! 🖊{" "}
+      <div className='flex justify-center'>
+        <button
+          className='bg-violet-100 text-violet-700 rounded-lg cursor-pointer p-2 whitespace-nowrap font-bold'
+          onClick={() => navigate('/Diary/Create')}
+        >
+          {' '}
+          일기 쓰기 🖊{' '}
         </button>
       </div>
       {/* 일기 리스트 */}

@@ -1,46 +1,48 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { onLogin } from '../../config/Login';
-import axios_api from '../../config/Axios';
-import GroupDiaryItem from './GroupDiaryItem';
+import emo_joy from '../../src_assets/img/emo_joy.png';
 
 function GroupItem({ item }) {
-  // 일기 데이터 받기
-  const [diaryList, setDiaryList] = useState([]);
-
-  useEffect(() => {
-    onLogin();
-    axios_api
-      .get(`diary/list/${item.groupDetail.groupIdx}`)
-      .then(({ data }) => {
-        if (data.statusCode === 200) {
-          // 초기화 필요!
-          setDiaryList(null);
-          if (data.data.responseMessage === '일기 리스트 조회 성공') {
-            setDiaryList(data.data.diary);
-          }
-        } else {
-          console.log(data.statusCode);
-          console.log(data.data.responseMessage);
-        }
-      })
-      .catch(({ err }) => {
-        console.log('일기 리스트 불러오기 오류: ', err);
-      });
-  }, []);
-
   return (
     <div>
       <Link
-        to={`/Group/${item.groupDetail.groupIdx}`}
+        to={`/Group/Detail`}
         state={{ groupIdx: item.groupDetail.groupIdx }}
       >
-        <div className='bg-[#F7F7F7] border-2 border-solid border-slate-400 rounded-lg m-1 mb-3 p-2'>
-          <p className='font-bold mb-0.5'>{item.groupDetail.groupName}</p>
-          {item.tags.map((tagging, idx) => {
-            if (tagging.tag) return <span key={idx}>#{tagging.tag}&nbsp;</span>;
-            // return tagging.tag ? <span key={idx}>#{tagging.tag}</span> : <></>;
-          })}
+        <div className='flex bg-[#F7F7F7] border-2 border-solid border-slate-400 rounded-lg m-1 mb-3 p-2'>
+          {/* {item.groupDetail.imgUrl !== null ? (
+            <img
+              src={item.groupDetail.imgUrl}
+              className='inline-block w-16 h-16 p-1 rounded-lg'
+            ></img>
+          ) : (
+            <>
+              <img
+                src={emo_joy}
+                className='inline-block w-16 h-16 p-1 rounded-md'
+              ></img>
+            </>
+          )} */}
+          <img
+            src={item.groupDetail.imgUrl}
+            className='inline-block w-1/4 p-1 rounded-lg h-1/4'
+          ></img>
+          <div className='inline-block px-1 m-1 break-words'>
+            <p className='font-bold text-lg mb-0.5'>
+              {item.groupDetail.groupName}
+            </p>
+            <div className=''>
+              {item.tags.map((tagging, idx) => {
+                if (tagging.tag)
+                  return (
+                    <span key={idx} className='mr-1 text-sm break-all'>
+                      #{tagging.tag}
+                    </span>
+                  );
+                // return tagging.tag ? <span key={idx}>#{tagging.tag}</span> : <></>;
+              })}
+            </div>
+          </div>
         </div>
       </Link>
     </div>

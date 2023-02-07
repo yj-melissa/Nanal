@@ -20,26 +20,25 @@ function AlarmList() {
         if (data.statusCode === 200) {
           setIsAlarmList(null);
           if (data.data.responseMessage === '알림 조회 성공') {
-            // console.log(data.data.diary);
             setIsAlarmList(data.data.diary);
+            // console.log(data.data.diary);
           }
         } else {
-          console.log('알림 조회 오류: ');
+          console.log('알림 리스트 조회 오류: ');
           console.log(data.statusCode);
           console.log(data.data.responseMessage);
         }
       })
       .catch(({ error }) => {
-        console.log('알림 조회 오류: ' + error);
+        console.log('알림 리스트 조회 오류: ' + error);
       });
   }, []);
 
   //알람은 최근 30일 것까지만...
   return (
-    <div className='grid grid-cols-1 '>
-      <p className='text-xl text-center m-auto'>알람 목록</p>
-      <br />
-      <div className='divide-y divide-dashed divide-current'>
+    <div className='grid grid-cols-1'>
+      <p className='m-auto text-xl font-bold text-center'>알람 목록 🔔</p>
+      <div className=''>
         {isAlarmList.map((ar) => (
           <AlarmItem key={ar.noticeIdx} {...ar} />
         ))}

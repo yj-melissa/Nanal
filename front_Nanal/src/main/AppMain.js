@@ -4,14 +4,17 @@ import Calendar from '../components/Calendaar.js';
 import BookCase from '../components/BookCase.js';
 import SignIn from '../components/account/SignIn.js';
 import SignUp from '../components/account/SignUp.js';
+import UserUpdate from '../components/account/UserUpdate.js';
 import DiaryCreate from '../components/diary/DiaryCreate';
 import DiaryList from '../components/diary/DiaryList';
+import DiaryUpdate from '../components/diary/DiaryUpdate.js';
 import DiaryDetail from '../components/diary/DiaryDetail';
 import DiaryTotalList from '../components/diary/DiaryTotalList';
 import BookmarkList from '../components/diary/BookmarkList';
 import GroupCreate from '../components/group/GroupCreate';
 import GroupList from '../components/group/GroupList';
 import GroupDetail from '../components/group/GroupDetail';
+import GroupDiaryDetail from '../components/group/GroupDiaryDetail.js';
 import GroupSetting from '../components/group/GroupSetting';
 import GroupUpdate from '../components/group/GroupUpdate';
 import FriendList from '../components/friend/FriendList';
@@ -23,7 +26,6 @@ import Tuning from '../components/mypage/profile/Tuning';
 import MyPage from '../components/mypage/MyPage.js';
 import RecycleBin from '../components/another/RecycleBin';
 import NotFound from '../components/another/NotFound.js';
-import GroupDiaryList from '../components/group/GroupDiaryList.js';
 
 const AppMain = ({ isCalendaar }) => {
   return (
@@ -36,19 +38,24 @@ const AppMain = ({ isCalendaar }) => {
       )}
       <Route path='/SignUp' element={<SignUp />}></Route>
       <Route path='/SignIn' element={<SignIn />}></Route>
+      <Route path='/User/Update' element={<UserUpdate />}></Route>
       <Route path='/Diary/Create' element={<DiaryCreate />}></Route>
       <Route path='/Diary/List' element={<DiaryList />}></Route>
+      <Route path='/Diary/Edit' element={<DiaryUpdate />}></Route>
       <Route path='/Diary/Total/List' element={<DiaryTotalList />}></Route>
       <Route path='/Diary/Bookmark/List' element={<BookmarkList />}></Route>
-      <Route path='/Diary/:diaryIdx' element={<DiaryDetail />}></Route>
+      <Route path='/Diary/Detail' element={<DiaryDetail />}></Route>
       <Route path='/Group/Create' element={<GroupCreate />}></Route>
       <Route path='/Group/List' element={<GroupList />}></Route>
-      <Route path='/Group/Diary/List' element={<GroupDiaryList />}></Route>
-      <Route path='/Group/:groupIdx' element={<GroupDetail />}></Route>
-      <Route path='/Group/Setting/:groupIdx' element={<GroupSetting />}></Route>
-      <Route path='/Group/Update/:groupIdx' element={<GroupUpdate />}></Route>
+      <Route path='/Group/Detail' element={<GroupDetail />}></Route>
+      <Route
+        path='/Group/Diary/:diaryIdx'
+        element={<GroupDiaryDetail />}
+      ></Route>
+      <Route path='/Group/Setting' element={<GroupSetting />}></Route>
+      <Route path='/Group/Update' element={<GroupUpdate />}></Route>
       <Route path='/Friend/List' element={<FriendList />}></Route>
-      <Route path='/Friend/:friendIdx' element={<FriendDetail />}></Route>
+      <Route path='/Friend' element={<FriendDetail />}></Route>
       <Route path='/Friend/Add' element={<FriendAdd />}></Route>
       <Route path='/Alarm' element={<AlarmList />}></Route>
       <Route path='/Tuning' element={<Tuning />}></Route>

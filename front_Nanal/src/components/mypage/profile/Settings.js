@@ -1,5 +1,6 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { removeCookie } from '../../../config/Cookie';
+import Swal from 'sweetalert2';
 // import axios_api from './Axios';
 import bookmarksRed from '../../../src_assets/img/bookmarksRed.png';
 import groupYellow from '../../../src_assets/img/groupYellow.png';
@@ -13,8 +14,16 @@ function Settings() {
     const denyToken = removeCookie('accessToken');
     // token 값이 없어졌다면?
     if (denyToken === undefined) {
-      alert('로그아웃 되셨습니다!');
-      window.location.replace('/');
+      Swal.fire({
+        icon: 'success', // Alert 타입
+        text: '로그아웃 했어요!', // Alert 내용
+        width: '35%',
+      }).then(function () {
+        // window.location.replace('/');
+        navigate(`/`, {
+          replace: true,
+        });
+      });
     } else {
       console.log('로그아웃 실패====');
     }
@@ -25,27 +34,27 @@ function Settings() {
       <div className='grid grid-cols-3 gap-6'>
         <Link to='/Group/List' className='grid content-evenly'>
           <img src={bookmarksRed} className='m-auto' />
-          <p className='text-center my-1'>그룹 관리</p>
+          <p className='my-1 text-center'>그룹 관리</p>
         </Link>
         <Link to='/Friend/List' className='grid content-evenly'>
           <img src={groupYellow} className='m-auto' />
-          <p className='text-center my-1'>친구 목록</p>
+          <p className='my-1 text-center'>친구 목록</p>
         </Link>
         <Link to='/RecycleBin' className='grid content-evenly'>
           <img src={recycleBinImg} className='m-auto' />
-          <p className='text-center my-1'>휴지통</p>
+          <p className='my-1 text-center'>휴지통</p>
         </Link>
       </div>
       <br />
       <br />
       <div className='grid grid-cols-2'>
-        <div className='grid content-evenly pl-4' onClick={onLogout}>
+        <div className='grid pl-4 content-evenly' onClick={onLogout}>
           <img src={logOutImg} className='w-10 h-10 m-auto' />
-          <p className='text-center my-1 ml-3'>로그아웃</p>
+          <p className='my-1 ml-3 text-center'>로그아웃</p>
         </div>
         <Link to='/Tuning' className='grid content-evenly pr-10'>
           <img src={settingImg} className='w-10 h-10 m-auto' />
-          <p className='text-center my-1'>설정</p>
+          <p className='my-1 text-center'>설정</p>
         </Link>
       </div>
     </div>

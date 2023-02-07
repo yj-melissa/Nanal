@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import axios_api from '../../config/Axios';
 
 // 친구 등록 = friend
@@ -13,11 +14,10 @@ function AlarmItem({
   requestDiaryIdx,
   requestGroupIdx,
   requestUserIdx,
-  userIdx,
   noticeIdx,
 }) {
   // 새 글이나 댓글은 해당 글로 이동 시켜줘야함.
-  const navigate = useNavigate();
+  let navigate = useNavigate();
 
   // 친구 등록 성공.
   const addFriend = () => {
@@ -28,8 +28,24 @@ function AlarmItem({
       .then(({ data }) => {
         if (data.statusCode === 200) {
           if (data.data.responseMessage === '친구 등록 성공') {
-            alert('친구 등록에 성공하셨습니다.');
-            navigate(`/Friend/List`);
+            checkAlarm();
+            Swal.fire({
+              icon: 'success', // Alert 타입
+              text: '친구 등록에 수락했어요!', // Alert 내용
+              width: '35%',
+            }).then(function () {
+              window.location.reload(true);
+            });
+            // navigate(`/Friend/List`);
+          } else if (data.data.responseMessage === '이미 친구로 등록됨') {
+            checkAlarm();
+            Swal.fire({
+              icon: 'info', // Alert 타입
+              text: '이미 친구에요!', // Alert 내용
+              width: '30%',
+            }).then(function () {
+              window.location.reload(true);
+            });
           }
         } else {
           console.log('친구 등록 오류: ');
@@ -51,8 +67,24 @@ function AlarmItem({
       .then(({ data }) => {
         if (data.statusCode === 200) {
           if (data.data.responseMessage === '그룹 가입 성공') {
-            alert('그룹 가입 등록에 성공하셨습니다.');
-            navigate(`/Group/List`);
+            checkAlarm();
+            Swal.fire({
+              icon: 'success', // Alert 타입
+              text: '그룹 가입에 수락했어요!', // Alert 내용
+              width: '35%',
+            }).then(function () {
+              window.location.reload(true);
+            });
+            // navigate(`/Group/List`);
+          } else if (data.data.responseMessage === '이미 친구로 등록됨') {
+            checkAlarm();
+            Swal.fire({
+              icon: 'info', // Alert 타입
+              text: '이미 처리된 사항이에요!', // Alert 내용
+              width: '35%',
+            }).then(function () {
+              //window.location.reload(true);
+            });
           }
         } else {
           console.log('그룹 가입 오류: ');
@@ -107,70 +139,109 @@ function AlarmItem({
 
   if (noticeType === 0) {
     return (
-      <div>
+      <div className='mb-3'>
+        <hr className='my-1 border-dashed border-stone-800' />
         <div className='flex justify-between'>
-          <p>{content}</p>
-          <button className='grid content-start'>X</button>
-        </div>
-        <div className='flex justify-end'>
-          <button
-            onClick={() => {
-              addFriend();
-              checkAlarm();
-            }}
-          >
-            수락
-          </button>
-          <button onClick={checkAlarm}>거절</button>
+          <div className='flex justify-between my-1'>
+            <p className='text-base'>{content}</p>
+            {/* <button className='grid content-start'>X</button> */}
+          </div>
+          <div className='flex justify-end'>
+            <button
+              onClick={() => {
+                addFriend();
+                // checkAlarm();
+              }}
+              className='bg-cyan-500 text-white px-2.5 py-1 rounded-3xl m-auto mx-3 inline-block'
+            >
+              O
+            </button>
+            <button
+              onClick={checkAlarm}
+              className='bg-rose-500 text-white px-2.5 py-1 rounded-3xl m-auto mx-3 inline-block'
+            >
+              X
+            </button>
+          </div>
         </div>
       </div>
     );
   } else if (noticeType === 1) {
     return (
-      <div>
+      <div className='my-3'>
+        <hr className='my-2 border-dashed border-stone-800' />
         <div className='flex justify-between'>
           <p>{content}</p>
-          <button className='grid content-start'>X</button>
+          {/* <button className='grid content-start'>X</button> */}
         </div>
         <div className='flex justify-end'>
           <button
             onClick={() => {
               addGroup();
-              checkAlarm();
+              // checkAlarm();
             }}
+            className='bg-cyan-500 text-white px-2.5 py-1 rounded-3xl m-auto mx-3 inline-block'
           >
             수락
           </button>
-          <button onClick={checkAlarm}>거절</button>
+          <button
+            onClick={checkAlarm}
+            className='bg-rose-500 text-white px-2.5 py-1 rounded-3xl m-auto mx-3 inline-block'
+          >
+            거절
+          </button>
         </div>
       </div>
     );
   } else if (noticeType === 2) {
     return (
-      <div>
+      <div className='my-3'>
+        <hr className='my-2 border-dashed border-stone-800' />
         <div className='flex justify-between'>
           <p>{content}</p>
-          <button className='grid content-start'>X</button>
         </div>
-        <button onClick={linkedDiary} className='flex justify-end'>
-          바로가기
-        </button>
+        <div className='flex justify-end'>
+          <button
+            onClick={checkAlarm}
+            className='bg-teal-500 text-white px-2.5 py-1 rounded-3xl m-auto mx-3 inline-block'
+          >
+            확인
+          </button>
+          <button
+            onClick={linkedDiary}
+            className='bg-teal-500 text-white px-2.5 py-1 rounded-3xl m-auto mx-3 inline-block'
+          >
+            바로가기
+          </button>
+        </div>
       </div>
     );
   } else if (noticeType === 3) {
     return (
-      <div>
+      <div className='my-3'>
+        <hr className='my-2 border-dashed border-stone-800' />
         <div className='flex justify-between'>
           <p>{content}</p>
-          <button className='grid content-start'>X</button>
+          {/* <button className='grid content-start'>X</button> */}
         </div>
-        <button onClick={linkedDiary} className='flex justify-end'>
-          바로가기
-        </button>
+        <div className='flex justify-end'>
+          <button
+            onClick={checkAlarm}
+            className='bg-teal-500 text-white px-2.5 py-1 rounded-3xl m-auto mx-3 inline-block'
+          >
+            확인
+          </button>
+          <button
+            onClick={linkedDiary}
+            className='bg-teal-500 text-white px-2.5 py-1 rounded-3xl m-auto mx-3 inline-block'
+          >
+            바로가기
+          </button>
+        </div>
       </div>
     );
   } else {
-    return null;
+    return <></>;
   }
 }
 
