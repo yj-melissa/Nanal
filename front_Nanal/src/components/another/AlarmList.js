@@ -21,6 +21,7 @@ function AlarmList() {
           setIsAlarmList(null);
           if (data.data.responseMessage === '알림 조회 성공') {
             setIsAlarmList(data.data.diary);
+            // console.log(data.data.diary);
           }
         } else {
           console.log('알림 리스트 조회 오류: ');
@@ -35,10 +36,9 @@ function AlarmList() {
 
   //알람은 최근 30일 것까지만...
   return (
-    <div className='grid grid-cols-1 '>
-      <p className='m-auto text-xl text-center'>알람 목록</p>
-      <br />
-      <div className='divide-y divide-current divide-dashed'>
+    <div className='grid grid-cols-1'>
+      <p className='m-auto text-xl font-bold text-center'>알람 목록 🔔</p>
+      <div className=''>
         {isAlarmList.map((ar) => (
           <AlarmItem key={ar.noticeIdx} {...ar} />
         ))}
