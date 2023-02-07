@@ -24,8 +24,8 @@ public interface DiaryRepository extends JpaRepository<DiaryEntity, Integer> {
     @Query(nativeQuery = true, value = "select * from diary a where a.user_idx = :userIdx order by a.creation_date desc LIMIT 1")
     DiaryEntity findLatestDiary(@Param("userIdx") int userIdx);
 
-    @Query("select a from DiaryEntity a where a.diaryDate=:date and a.isDeleted=false order by a.diaryIdx desc ")
-    List<DiaryEntity> findDateDiaryList(@Param("date")Date date);
+    @Query("select a from DiaryEntity a where a.diaryDate=:date and a.isDeleted=false and a.user.userIdx=:userIdx order by a.diaryIdx desc ")
+    List<DiaryEntity> findDateDiaryList(@Param("date")Date date, @Param("userIdx") int userIdx);
 //    @Query("select a from DiaryEntity a where function('YEAR', a.creationDate)=:year and function('MONTH',a.creationDate)=:month and function('DAYOFMONTH', a.creationDate)=:date and a.isDeleted=false and a.user.userIdx=:userIdx")
 //    List<DiaryEntity> findDateDiaryList(@Param("year")int year, @Param("month")int month, @Param("date") int date, @Param("userIdx") int userIdx);
 
