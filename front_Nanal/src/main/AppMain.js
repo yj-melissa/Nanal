@@ -4,6 +4,7 @@ import Calendar from '../components/Calendaar.js';
 import BookCase from '../components/BookCase.js';
 import SignIn from '../components/account/SignIn.js';
 import SignUp from '../components/account/SignUp.js';
+import UserUpdate from '../components/account/UserUpdate.js';
 import DiaryCreate from '../components/diary/DiaryCreate';
 import DiaryList from '../components/diary/DiaryList';
 import DiaryUpdate from '../components/diary/DiaryUpdate.js';
@@ -36,6 +37,7 @@ const AppMain = ({ isCalendaar }) => {
       )}
       <Route path='/SignUp' element={<SignUp />}></Route>
       <Route path='/SignIn' element={<SignIn />}></Route>
+      <Route path='/User/Update' element={<UserUpdate />}></Route>
       <Route path='/Diary/Create' element={<DiaryCreate />}></Route>
       <Route path='/Diary/List' element={<DiaryList />}></Route>
       <Route path='/Diary/Edit' element={<DiaryUpdate />}></Route>
