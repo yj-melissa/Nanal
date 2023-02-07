@@ -87,7 +87,6 @@ function Nav({ changeCalendaar }) {
           )}
         </div>
       </nav>
-      <hr className='mb-3 border-slate-500/75' />
     </div>
   );
 }
