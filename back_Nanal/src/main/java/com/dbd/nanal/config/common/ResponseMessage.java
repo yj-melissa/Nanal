@@ -51,6 +51,7 @@ public class ResponseMessage {
     public static final String DIARY_RETURN_SUCCESS="일기 복구 성공";
     public static final String DIARY_RETURN_FAIL="일기 복구 실패";
     public static final String TOKEN_NOT_VALID ="유효하지 않은 토큰";
+    public static final String TOKEN_EXPIRED = "만료된 토큰";
 
 
     public static final String DIARY_BOOKMARK_SAVE_SUCCESS="일기 북마크 저장 성공";
