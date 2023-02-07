@@ -1,13 +1,13 @@
-import { useState, useEffect, useRef } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import axios_api from "../../config/Axios";
-import { onLogin } from "../../config/Login";
-import { BookFilled, BookOutlined } from "@ant-design/icons";
+import { useState, useEffect, useRef } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import axios_api from '../../config/Axios';
+import { onLogin } from '../../config/Login';
+import { BookFilled, BookOutlined } from '@ant-design/icons';
 
 function DiaryDetail() {
   const location = useLocation();
   const [diaryDetail, setDiaryDetail] = useState({});
-  const [group, setGroup] = useState("개인");
+  const [group, setGroup] = useState('개인');
 
   // 삭제 버튼 클릭 시 URL 이동
   const navigate = useNavigate();
@@ -21,7 +21,7 @@ function DiaryDetail() {
   // 수정된 날짜 데이터
   const [localDate, setLocalDate] = useState(location.state.diaryDate);
   // 수정된 일기 데이터
-  const [localContent, setLocalContent] = useState("");
+  const [localContent, setLocalContent] = useState('');
   const localConetRef = useRef();
   // 기존 그룹 리스트 데이터
   const [originGroupList, setOriginGroupList] = useState();
@@ -41,12 +41,12 @@ function DiaryDetail() {
       .get(`diary/${location.state.diaryIdx}`)
       .then(({ data }) => {
         if (data.statusCode === 200) {
-          if (data.data.responseMessage === "일기 조회 성공") {
+          if (data.data.responseMessage === '일기 조회 성공') {
             setDiaryDetail(data.data.diary); // 데이터는 response.data.data 안에 들어있음
             setOriginGroupList(data.data.groupList);
             setCheckedList(data.data.groupList);
             if (data.data.groupList.length !== 0) {
-              setGroup("그룹");
+              setGroup('그룹');
               setShow(true);
             }
 
@@ -79,11 +79,11 @@ function DiaryDetail() {
   useEffect(() => {
     onLogin();
     axios_api
-      .get("group/list")
+      .get('group/list')
       .then(({ data }) => {
         if (data.statusCode === 200) {
           setGroupList(null);
-          if (data.data.responseMessage === "그룹 리스트 조회 성공") {
+          if (data.data.responseMessage === '그룹 리스트 조회 성공') {
             setGroupList(data.data.groupList);
           }
         } else {
@@ -92,7 +92,32 @@ function DiaryDetail() {
         }
       })
       .catch(({ error }) => {
-        console.log("그룹 리스트 불러오기 오류: " + error);
+        console.log('그룹 리스트 불러오기 오류: ' + error);
+      });
+  }, []);
+
+  // 일기 전체 댓글 리스트 조회
+  const [commentList, setCommentList] = useState([]);
+  useEffect(() => {
+    onLogin();
+    axios_api
+      .get(`diary/comment/${location.state.diaryIdx}`)
+      .then(({ data }) => {
+        if (data.statusCode === 200) {
+          setCommentList(null);
+          if (
+            data.data.responseMessage ===
+            '일기 그룹에 해당하는 댓글 리스트 조회 성공'
+          ) {
+            setCommentList(data.data.diaryComment);
+          }
+        } else {
+          console.log(data.statusCode);
+          console.log(data.data.responseMessage);
+        }
+      })
+      .catch(({ error }) => {
+        console.log('일기 그룹에 해당하는 댓글 리스트 불러오기 오류: ' + error);
       });
   }, []);
 
@@ -101,7 +126,7 @@ function DiaryDetail() {
 
   return (
     <div>
-      <div className="flex justify-between">
+      <div className='flex justify-between'>
         <span>그림 들어갈 자리</span>
         {isBook ? (
           <>
@@ -112,7 +137,7 @@ function DiaryDetail() {
                   .then(({ data }) => {
                     if (data.statusCode === 200) {
                       if (
-                        data.data.responseMessage === "일기 북마크 삭제 성공"
+                        data.data.responseMessage === '일기 북마크 삭제 성공'
                       ) {
                         setIsBook(!isBook);
                       }
@@ -133,7 +158,7 @@ function DiaryDetail() {
                   .then(({ data }) => {
                     if (data.statusCode === 200) {
                       if (
-                        data.data.responseMessage === "일기 북마크 저장 성공"
+                        data.data.responseMessage === '일기 북마크 저장 성공'
                       ) {
                         setIsBook(!isBook);
                       }
@@ -152,13 +177,13 @@ function DiaryDetail() {
       <div>
         {isEdit ? (
           <>
-            <button className="border-rose-500" onClick={handleQuitEdit}>
+            <button className='border-rose-500' onClick={handleQuitEdit}>
               수정 취소
             </button>
             <button
               onClick={() => {
                 axios_api
-                  .put("diary", {
+                  .put('diary', {
                     userIdx: diaryDetail.userIdx,
                     diaryIdx: diaryDetail.diaryIdx,
                     content: localContent,
@@ -189,9 +214,9 @@ function DiaryDetail() {
                     .delete(`diary/${location.state.diaryIdx}`)
                     .then(({ data }) => {
                       if (data.statusCode === 200) {
-                        if (data.data.responseMessage === "일기 삭제 성공") {
+                        if (data.data.responseMessage === '일기 삭제 성공') {
                           setDiaryDetail(data.data.diary);
-                          navigate("/", { replace: true });
+                          navigate('/', { replace: true });
                         }
                       } else {
                         console.log(data.statusCode);
@@ -215,14 +240,14 @@ function DiaryDetail() {
               <input
                 value={localDate}
                 onChange={(e) => setLocalDate(e.target.value)}
-                type="date"
+                type='date'
               />
             </div>
             {/* 일기 내용 작성란 */}
             <div>
               <textarea
-                className="mb-10 w-full h-min"
-                name="content"
+                className='mb-10 w-full h-min'
+                name='content'
                 ref={localConetRef}
                 value={localContent}
                 onChange={(e) => {
@@ -233,17 +258,20 @@ function DiaryDetail() {
             {/* 그룹 여부 선택란 */}
             <div>
               <input
-                type="radio"
-                value="개인"
-                checked={group === "개인"}
+                type='radio'
+                value='개인'
+                checked={group === '개인'}
                 onChange={(e) => setGroup(e.target.value)}
-                onClick={() => setShow(false)}
+                onClick={() => {
+                  setShow(false);
+                  setCheckedList([]);
+                }}
               />
               <label>개인</label>
               <input
-                type="radio"
-                value="그룹"
-                checked={group === "그룹"}
+                type='radio'
+                value='그룹'
+                checked={group === '그룹'}
                 onChange={(e) => setGroup(e.target.value)}
                 onClick={() => setShow(true)}
               />
@@ -254,13 +282,13 @@ function DiaryDetail() {
                     return (
                       <div
                         key={idx}
-                        className="bg-[#F7F7F7] border-2 border-solid border-slate-400 rounded-lg m-1 mb-3 p-2"
+                        className='bg-[#F7F7F7] border-2 border-solid border-slate-400 rounded-lg m-1 mb-3 p-2'
                       >
                         <label htmlFor={groupItem.groupDetail.groupIdx}>
                           {groupItem.groupDetail.groupName}
                         </label>
                         <input
-                          type="checkbox"
+                          type='checkbox'
                           id={groupItem.groupDetail.groupIdx}
                           checked={
                             checkedList.includes(groupItem.groupDetail.groupIdx)
@@ -285,10 +313,20 @@ function DiaryDetail() {
           </>
         ) : (
           <>
-            <div className="text-sm">{diaryDetail.diaryDate}</div>
+            <div className='text-sm'>{diaryDetail.diaryDate}</div>
             {diaryDetail.content}
           </>
         )}
+      </div>
+      {/* 댓글 보여주는 곳 */}
+      <div>
+        {commentList.map((comment, idx) => {
+          return (
+            <div key={idx}>
+              {comment.nickname} : {comment.content}
+            </div>
+          );
+        })}
       </div>
     </div>
   );

@@ -3,7 +3,7 @@ import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
 import CommentDetail from './CommentDetail';
 
-function Comment({ diaryIdx, groupIdx }) {
+function CommentList({ diaryIdx, groupIdx }) {
   // 댓글 내용
   const [content, setContent] = useState('');
   const onChange = (e) => setContent(e.target.value);
@@ -104,4 +104,4 @@ function Comment({ diaryIdx, groupIdx }) {
   );
 }
 
-export default Comment;
+export default CommentList;
