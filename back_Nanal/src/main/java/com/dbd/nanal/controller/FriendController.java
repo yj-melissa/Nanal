@@ -4,7 +4,6 @@ package com.dbd.nanal.controller;
 import com.dbd.nanal.config.common.DefaultRes;
 import com.dbd.nanal.config.common.ResponseMessage;
 import com.dbd.nanal.dto.FriendDetailResponseDTO;
-import com.dbd.nanal.dto.UserResponseDTO;
 import com.dbd.nanal.model.UserEntity;
 import com.dbd.nanal.service.FriendService;
 import io.swagger.annotations.Api;
@@ -45,8 +44,8 @@ public class FriendController {
                 responseDTO.put("responseMessage", ResponseMessage.FRIEND_SAVE_SUCCESS);
                 return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
             } else {
-                responseDTO.put("responseMessage", ResponseMessage.FRIEND_SAVE_FAIL);
-                return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
+                responseDTO.put("responseMessage", ResponseMessage.FRIEND_FIND_SUCCESS2);
+                return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
             }
         }
         catch (Exception e) {
