@@ -88,11 +88,11 @@ function DiaryCreate() {
   return (
     <div>
       <div className='h-auto min-h-full pb-5'>
-        <h2 className='text-center my-5 font-bold text-lg'>일기 작성</h2>
+        <h2 className='my-5 text-lg font-bold text-center'>일기 작성</h2>
         {/* 날짜 선택란 */}
         <div>
           <input
-            className='cursor-pointer bg-slate-300/50 rounded-lg p-2'
+            className='p-2 rounded-lg cursor-pointer bg-slate-300/50'
             value={date}
             onChange={(e) => setDate(e.target.value)}
             type='date'
@@ -100,7 +100,7 @@ function DiaryCreate() {
           {/* 일기 내용 작성란 */}
           <div>
             <textarea
-              className='my-2 w-full h-auto bg-slate-300/50 rounded-lg px-2 py-2'
+              className='w-full h-auto px-2 py-2 my-2 rounded-lg bg-slate-300/50'
               placeholder='오늘의 하루는 어땠나요?'
               name='content'
               ref={contentRef}
@@ -113,7 +113,7 @@ function DiaryCreate() {
         </div>
         {/* 그룹 여부 선택란 */}
         <div className='mt-2'>
-          <h4 className='font-bold text-lg my-2'>공개 범위 설정</h4>
+          <h4 className='my-2 text-lg font-bold'>공개 범위 설정</h4>
           <input
             className='cursor-pointer'
             id='private'
@@ -123,7 +123,7 @@ function DiaryCreate() {
             onChange={(e) => setGroup(e.target.value)}
             onClick={() => setShow(false)}
           />
-          <label className='mr-4 ml-2 cursor-pointer' for='private'>
+          <label className='ml-2 mr-4 cursor-pointer' htmlFor='private'>
             개인
           </label>
           <input
@@ -135,7 +135,7 @@ function DiaryCreate() {
             onChange={(e) => setGroup(e.target.value)}
             onClick={() => setShow(true)}
           />
-          <label className='ml-2 cursor-pointer' for='group'>
+          <label className='ml-2 cursor-pointer' htmlFor='group'>
             그룹
           </label>
           {isShow ? (
@@ -177,9 +177,9 @@ function DiaryCreate() {
           )}
         </div>
         {/* 작성 취소 및 완료 버튼 */}
-        <footer className='flex justify-between px-1 pb-5 relative translate-y-full'>
+        <footer className='relative flex justify-between px-1 pb-5 translate-y-full'>
           <button
-            className='hover:bg-slate-300 bg-slate-300/50 rounded-lg p-2'
+            className='hover:bg-slate-300 bg-slate-300/50 rounded-xl px-2.5 py-1 block'
             onClick={() => navigate(-1)}
           >
             작성 취소

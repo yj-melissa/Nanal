@@ -6,6 +6,7 @@ import SignIn from '../components/account/SignIn.js';
 import SignUp from '../components/account/SignUp.js';
 import DiaryCreate from '../components/diary/DiaryCreate';
 import DiaryList from '../components/diary/DiaryList';
+import DiaryUpdate from '../components/diary/DiaryUpdate.js';
 import DiaryDetail from '../components/diary/DiaryDetail';
 import DiaryTotalList from '../components/diary/DiaryTotalList';
 import BookmarkList from '../components/diary/BookmarkList';
@@ -37,9 +38,10 @@ const AppMain = ({ isCalendaar }) => {
       <Route path='/SignIn' element={<SignIn />}></Route>
       <Route path='/Diary/Create' element={<DiaryCreate />}></Route>
       <Route path='/Diary/List' element={<DiaryList />}></Route>
+      <Route path='/Diary/Edit' element={<DiaryUpdate />}></Route>
       <Route path='/Diary/Total/List' element={<DiaryTotalList />}></Route>
       <Route path='/Diary/Bookmark/List' element={<BookmarkList />}></Route>
-      <Route path='/Diary/:diaryIdx' element={<DiaryDetail />}></Route>
+      <Route path='/Diary/Detail' element={<DiaryDetail />}></Route>
       <Route path='/Group/Create' element={<GroupCreate />}></Route>
       <Route path='/Group/List' element={<GroupList />}></Route>
       <Route path='/Group/:groupIdx' element={<GroupDetail />}></Route>
