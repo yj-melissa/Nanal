@@ -26,6 +26,7 @@ import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -310,7 +311,7 @@ public class UserController {
                 "[Back] \n" +
                 "OK(200) \n\n")
     @DeleteMapping("/profile")
-    public ResponseEntity<?> deleteUser(@AuthenticationPrincipal UserEntity userInfo) {
+    public ResponseEntity<?> deleteUser(@AuthenticationPrincipal @NotNull UserEntity userInfo) {
         userService.deleteByUserIdx(userInfo.getUserIdx());
         HashMap<String, Object> responseDTO = new HashMap<>();
         responseDTO.put("responseMessage", ResponseMessage.USER_DELETE_SUCCESS);
