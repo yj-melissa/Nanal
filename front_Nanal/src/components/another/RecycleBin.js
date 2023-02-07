@@ -19,13 +19,13 @@ function RecycleBin() {
         console.log(data.data.responseMessage);
       }
     });
-  }, [trashDiary]);
+  }, []);
 
   return (
     <div>
-      <h4>휴지통에 {trashDiary.length}개가 있습니다.</h4>
-      <div>
+      <div className='flex justify-center my-2'>
         <button
+          className='px-2 py-1 text-white bg-rose-600 rounded-xl'
           onClick={() => {
             axios_api.delete('diary/trashbin').then(({ data }) => {
               if (data.statusCode === 200) {
@@ -42,7 +42,10 @@ function RecycleBin() {
           전체 삭제
         </button>
       </div>
-      <div>
+      <h4 className='py-2 font-bold text-center'>
+        휴지통에 일기가 {trashDiary.length}개 있습니다.
+      </h4>
+      <div className='mt-5'>
         {trashDiary.map((diary, idx) => (
           <TrashItem key={idx} {...diary} />
         ))}

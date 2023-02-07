@@ -3,6 +3,7 @@ import { useLocation, useNavigate, Link } from 'react-router-dom';
 import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
 import { BookFilled, BookOutlined } from '@ant-design/icons';
+import emo_joy from '../../src_assets/img/emo_joy.png';
 
 function DiaryDetail() {
   const location = useLocation();
@@ -63,8 +64,8 @@ function DiaryDetail() {
 
   return (
     <div>
-      <div className='flex justify-between'>
-        <span>그림 들어갈 자리</span>
+      <div className='flex justify-between my-2'>
+        <div className='text-sm'>{diaryDetail.diaryDate} 일기</div>
         {isBook ? (
           <>
             <BookFilled
@@ -109,9 +110,11 @@ function DiaryDetail() {
           </>
         )}
       </div>
-      <div>작성자 프로필 사진 </div>
+      <div className='flex items-center justify-center my-5'>
+        <img src={emo_joy} alt='DALL:E2' />
+      </div>
       {/* <span>{diaryDetail.nickname}</span> */}
-      <div>
+      <div className='flex items-center justify-end'>
         <Link
           to={'/Diary/Edit'}
           state={{
@@ -119,7 +122,7 @@ function DiaryDetail() {
             originGroupList: originGroupList,
           }}
         >
-          <button>수정</button>
+          <button className='mr-2'>수정</button>
         </Link>
         <button
           onClick={() => {
@@ -147,15 +150,12 @@ function DiaryDetail() {
           삭제
         </button>
       </div>
-      <div>
-        <div className='text-sm'>{diaryDetail.diaryDate}</div>
-        {diaryDetail.content}
-      </div>
+      <div className='my-5 text-xl text-center'>{diaryDetail.content}</div>
       {/* 댓글 보여주는 곳 */}
-      <div>
+      <div className='my-5'>
         {commentList.map((comment, idx) => {
           return (
-            <div key={idx}>
+            <div key={idx} className='my-2'>
               {comment.nickname} : {comment.content}
             </div>
           );
