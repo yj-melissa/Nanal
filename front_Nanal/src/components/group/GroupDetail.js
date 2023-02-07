@@ -9,7 +9,7 @@ import settingIcon from '../../src_assets/img/setting_icon.png';
 function GroupDetail() {
   const { state } = useLocation();
 
-  const [groupDetail, setGroupName] = useState('');
+  const [groupDetail, setGroupDetail] = useState('');
   const [groupTag, setGroupTag] = useState([]);
 
   const [diaryList, setDiaryList] = useState([]);
@@ -20,10 +20,10 @@ function GroupDetail() {
       .get(`/group/${state.groupIdx}`)
       .then(({ data }) => {
         if (data.statusCode === 200) {
-          setGroupName(null);
+          setGroupDetail(null);
           setGroupTag(null);
           if (data.data.responseMessage === '그룹 조회 성공') {
-            setGroupName(data.data.groupDetail);
+            setGroupDetail(data.data.groupDetail);
             setGroupTag(data.data.tags);
             const groupidx = data.data.groupDetail.groupIdx;
 
@@ -59,7 +59,7 @@ function GroupDetail() {
   return (
     <div>
       <Link
-        to={`/Group/Setting/${groupDetail.groupIdx}`}
+        to={`/Group/Setting`}
         state={{ groupIdx: groupDetail.groupIdx }}
         className='inline-block float-right'
       >

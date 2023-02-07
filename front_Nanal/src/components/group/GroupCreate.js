@@ -150,8 +150,9 @@ function GroupCreate() {
                 })
               );
 
-              console.log(formData.get('multipartFile'));
-              console.log(formData.get('value'));
+              if (formData.get('multipartFile') === null) {
+                formData.append('multipartFile', e.target.files[0]);
+              }
 
               // 이미지 업로드
               axios_api
