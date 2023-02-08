@@ -57,7 +57,7 @@ function GroupDetail() {
   }, []);
 
   return (
-    <div>
+    <div className='text-center'>
       <Link
         to={`/Group/Setting`}
         state={{ groupIdx: groupDetail.groupIdx }}

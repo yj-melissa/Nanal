@@ -29,7 +29,7 @@ function GroupSetting() {
       cancelButtonColor: '#e11d48',
       confirmButtonText: '확인',
       cancelButtonText: '취소',
-      width: '35%',
+      width: '70%',
     }).then((result) => {
       if (result.isConfirmed) {
         // 확인(예) 버튼 클릭 시 이벤트
@@ -98,10 +98,10 @@ function GroupSetting() {
   }, []);
 
   return (
-    <div>
+    <div className='justify-center text-center'>
       {/* <h1 className='text-center'>그룹 상세 페이지</h1> */}
 
-      <div className='w-full my-2'>
+      <div className='justify-center w-full my-2 text-center'>
         <div className='my-3'>
           <img
             src={groupDetail.imgUrl}
@@ -123,25 +123,25 @@ function GroupSetting() {
             );
           })}
         </div>
-      </div>
-      <div>
-        <Link
-          to={`/Group/Update`}
-          state={{ groupDetail: groupDetail.groupIdx }}
-        >
-          <button className='bg-cyan-600 text-white px-2.5 py-1 rounded-3xl m-auto mx-10 inline-block'>
-            수정하기
+        <div>
+          <Link
+            to={`/Group/Update`}
+            state={{ groupDetail: groupDetail.groupIdx }}
+          >
+            <button className='bg-cyan-600 text-white px-2.5 py-1 rounded-3xl m-auto mx-10 inline-block'>
+              수정하기
+            </button>
+          </Link>
+          <button
+            type='button'
+            className='bg-rose-600 text-white px-2.5 py-1 rounded-3xl m-auto mx-10 inline-block'
+            onClick={deleteGroup}
+          >
+            탈퇴하기
           </button>
-        </Link>
-        <button
-          type='button'
-          className='bg-rose-600 text-white px-2.5 py-1 rounded-3xl m-auto mx-10 inline-block'
-          onClick={deleteGroup}
-        >
-          탈퇴하기
-        </button>
+        </div>
+        <hr className='mx-auto my-5 border-solid border-1 border-slate-800 w-80' />
       </div>
-      <hr className='my-5 border-solid border-1 border-slate-800 w-80' />
 
       {/* {friendList.map((friendItem, idx) => {
         return (
