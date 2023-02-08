@@ -30,27 +30,37 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull FilterChain filterChain) throws ServletException, IOException {
-        String token = parseBearerToken(request);
-        int isValidate = jwtTokenProvider.isValidateToken(token);
+        String path = request.getServletPath();
+        if(path.startsWith("/user/login") || path.startsWith("/user/signup") || path.startsWith("/user/refresh")) {
+            filterChain.doFilter(request, response);
+        } else {
+            String token = parseBearerToken(request);
+            int isValidate = jwtTokenProvider.isValidateToken(token);
 
-        if (token != null && isValidate == 0) {
-            Authentication authentication = jwtTokenProvider.getAuthentication(token);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-        } else if (isValidate == 1) {           // 토큰이 만료된 경우
-            response.setStatus(HttpServletResponse.SC_OK);
-            response.setContentType(APPLICATION_JSON_VALUE);
-            response.setCharacterEncoding("utf-8");
 
-            HashMap<String, Object> responseDTO = new HashMap<>();
-            responseDTO.put("statusCode", 500);
-            HashMap<String, Object> data = new HashMap<>();
-            data.put("responseMessage", ResponseMessage.TOKEN_EXPIRED);
-            responseDTO.put("data", data);
+            if (isValidate == 1) {           // 토큰이 만료된 경우
+                response.setStatus(HttpServletResponse.SC_OK);
+                response.setContentType(APPLICATION_JSON_VALUE);
+                response.setCharacterEncoding("utf-8");
 
-            new ObjectMapper().writeValue(response.getWriter(), responseDTO);
+                HashMap<String, Object> responseDTO = new HashMap<>();
+                responseDTO.put("statusCode", 500);
+                HashMap<String, Object> data = new HashMap<>();
+                data.put("responseMessage", ResponseMessage.TOKEN_EXPIRED);
+                responseDTO.put("data", data);
+
+                new ObjectMapper().writeValue(response.getWriter(), responseDTO);
+                response.getWriter().flush();
+            } else {
+                if (token != null && isValidate == 0) {
+                    Authentication authentication = jwtTokenProvider.getAuthentication(token);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);}
+
+                filterChain.doFilter(request, response);
+            }
         }
-        filterChain.doFilter(request, response);
     }
+
 
     private String parseBearerToken(HttpServletRequest request) {
         // Http 요청의 헤더를 파싱해 Bearer 토큰을 리턴함
