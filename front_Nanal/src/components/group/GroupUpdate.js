@@ -35,15 +35,16 @@ function GroupUpdate() {
     // );
   };
 
+  // 그룹 이미지 upload
+  let inputRef = useRef();
+  const formData = new FormData();
+
   // 그룹 이미지 기본으로 되돌리기
   const onUploadBaseImage = (e) => {
     e.preventDefault();
     setIsImgChecked(true);
+    formData.delete('multipartFile');
   };
-
-  // 그룹 이미지 upload
-  let inputRef = useRef();
-  const formData = new FormData();
 
   const onUploadImage = (e) => {
     // e.preventDefault();
@@ -53,8 +54,10 @@ function GroupUpdate() {
       return;
     }
 
-    // console.log(e.target.files[0]);
+    console.log(e.target.files[0]);
     formData.append('multipartFile', e.target.files[0]);
+
+    console.log(formData.get('multipartFile'));
   };
 
   // const currentFriend = useRef([{}]);
@@ -117,21 +120,31 @@ function GroupUpdate() {
               // console.log(data.data.tags);
               const groupidx = data.data.groupDetail.groupIdx;
 
+              console.log('hohioljhlhkkl');
+              console.log(formData.get('multipartFile'));
+              console.log('hohioljhlhkkl');
+
               if (isImgChecked === true) {
                 // 이미지를 변경하는 경우
                 const dataSet = {
                   groupIdx: groupidx,
-                  groupImgIdx: groupImgIdx,
+                  // groupImgIdx: groupImgIdx,
                 };
+
                 formData.append(
                   'value',
                   new Blob([JSON.stringify(dataSet)], {
                     type: 'application/json',
                   })
                 );
+
                 if (formData.get('multipartFile') === null) {
                   formData.append('multipartFile', null);
                 }
+
+                console.log(formData.get('value'));
+                console.log(formData.get('multipartFile'));
+
                 // 이미지 업로드
                 axios_api
                   .put('file/s3', formData, {
@@ -208,13 +221,13 @@ function GroupUpdate() {
               }
             }
           } else {
-            console.log('그룹 수정 오류: ');
+            console.log('그룹 수정 오류 : ');
             console.log(data.statusCode);
             console.log(data.data.responseMessage);
           }
         })
         .catch(({ error }) => {
-          console.log('그룹 수정 성공: ' + error);
+          console.log('그룹 수정 오류 : ' + error);
         });
     }
   };

@@ -9,7 +9,7 @@ import logOutImg from '../../../src_assets/img/log-out.svg';
 import settingImg from '../../../src_assets/img/cog.svg';
 
 function Settings() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const onLogout = () => {
     const denyToken = removeCookie('accessToken');
@@ -18,7 +18,7 @@ function Settings() {
       Swal.fire({
         icon: 'success', // Alert 타입
         text: '로그아웃 했어요!', // Alert 내용
-        width: '35%',
+        width: '50%',
       }).then(function () {
         // window.location.replace('/');
         navigate(`/`, {
@@ -53,9 +53,14 @@ function Settings() {
           <img src={logOutImg} className='w-10 h-10 m-auto' />
           <p className='my-1 ml-3 text-center'>로그아웃</p>
         </div>
-        <Link to='/Tuning' className='grid content-evenly pr-10'>
+        <Link to='/Tuning' className='grid pr-10 content-evenly'>
           <img src={settingImg} className='w-10 h-10 m-auto' />
           <p className='my-1 text-center'>설정</p>
+        </Link>
+
+        <Link to='/User/Update' className='grid pr-10 content-evenly'>
+          <img src={settingImg} className='w-10 h-10 m-auto' />
+          <p className='my-1 text-center'>프로필</p>
         </Link>
       </div>
     </div>

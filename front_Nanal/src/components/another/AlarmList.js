@@ -20,8 +20,7 @@ function AlarmList() {
         if (data.statusCode === 200) {
           setIsAlarmList(null);
           if (data.data.responseMessage === '알림 조회 성공') {
-            setIsAlarmList(data.data.diary);
-            // console.log(data.data.diary);
+            setIsAlarmList(data.data.notice);
           }
         } else {
           console.log('알림 리스트 조회 오류: ');
@@ -36,13 +35,19 @@ function AlarmList() {
 
   //알람은 최근 30일 것까지만...
   return (
-    <div className='grid grid-cols-1'>
+    <div className='grid justify-center grid-cols-1 text-center'>
       <p className='m-auto text-xl font-bold text-center'>알람 목록 🔔</p>
-      <div className=''>
-        {isAlarmList.map((ar) => (
-          <AlarmItem key={ar.noticeIdx} {...ar} />
-        ))}
-      </div>
+      {isAlarmList.length === 0 ? (
+        <div className='my-4 text-lg'>
+          <p>도착한 알림이 없어요!</p>
+        </div>
+      ) : (
+        <div className=''>
+          {isAlarmList.map((ar) => (
+            <AlarmItem key={ar.noticeIdx} {...ar} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
