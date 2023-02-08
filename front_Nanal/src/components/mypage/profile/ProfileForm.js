@@ -130,7 +130,6 @@ function ProfileForm() {
           <p className='my-auto text-2xl font-bold p-1'>
             {userProfile.nickname} 님의 일기장
           </p>
-
         </div>
       </div>
       <div className='box-border my-3 mx-auto w-76 h-32 border-1 '>
@@ -144,14 +143,14 @@ function ProfileForm() {
       </div>
       <div className='flex justify-around box-border h-24 w-80 p-4 bg-slate-300/50 rounded-lg'>
         <div
-          className='grid content-evenly'
+          className='grid content-evenly cursor-pointer'
           onClick={() => navigate('/Diary/Total/List')}
         >
           <p className='text-center'>총 작성한 일기</p>
           <p className='text-center font-bold'>{pStatus.dCount}</p>
         </div>
         <div
-          className='grid content-evenly'
+          className='grid content-evenly cursor-pointer'
           onClick={() => navigate('/Diary/Bookmark/List')}
         >
           <p className='text-center'>좋아하는 일기</p>
