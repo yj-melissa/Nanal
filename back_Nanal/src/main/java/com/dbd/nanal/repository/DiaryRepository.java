@@ -35,9 +35,8 @@ public interface DiaryRepository extends JpaRepository<DiaryEntity, Integer> {
     @Query("select a from DiaryEntity a where a.user.userIdx=:userIdx and a.isDeleted=false order by a.diaryDate desc , a.diaryIdx desc ")
     List<DiaryEntity> findByUserIdxList(@Param("userIdx") int userIdx);
 
-//    List<DiaryEntity> findByUserOrderByDiaryDateDescDiaryIdxDesc(UserEntity user);
-
-    Long countByUser(UserEntity user);
+    @Query("select count(a) from DiaryEntity a where a.user.userIdx=:userIdx and a.isDeleted=false")
+    int countUserDiary(@Param("userIdx") int userIdx);
 
     @Query("select a from DiaryEntity a where a.content like concat('%', :content, '%') and a.diaryIdx in (select g.diary.diaryIdx from GroupDiaryRelationEntity g where g.groupDetail.groupIdx IN (select u.groupDetail.groupIdx from  GroupUserRelationEntity u where u.user.userIdx=:userIdx) )")
     List<DiaryEntity> searchDiary(@Param("content") String content, @Param("userIdx") int userIdx);
