@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
 import axios_api from '../../../config/Axios';
+import { onLogin } from '../../../config/Login';
 import emptyProfile from '../../../src_assets/img/emptyProfile.png';
 // import DiaryTotalList from '../../diary/DiaryTotalList';
 
@@ -54,6 +55,7 @@ function ProfileForm() {
 
   // Mount 됐을 때 user
   useEffect(() => {
+    onLogin();
     axios_api
       .get('user/profile')
       .then(({ data }) => {
@@ -108,11 +110,11 @@ function ProfileForm() {
 
   return (
     <div>
-      <div className='flex justify-evenly mt-5'>
+      <div className='flex mt-5 justify-evenly'>
         <img
           // src={Image}
           src={userProfile.img}
-          className='w-28 h-28 p-1 rounded-full'
+          className='p-1 rounded-full w-28 h-28'
           onClick={() => {
             fileInput.current.click();
           }}
@@ -127,34 +129,41 @@ function ProfileForm() {
           ref={fileInput}
         />
         <div className='my-auto'>
-          <p className='my-auto text-2xl font-bold p-1'>
+          <p className='p-1 my-auto text-2xl font-bold'>
             {userProfile.nickname} 님의 일기장
           </p>
         </div>
       </div>
-      <div className='box-border my-3 mx-auto w-76 h-32 border-1 '>
-        <p>유저 프로필 들어가면 없어져야함.</p>
-        <p>{userProfile.introduction}</p>
+      <div className='box-border mx-auto my-3 w-76 h-28 border-1'>
+        {userProfile.introduction === null ? (
+          <p>
+            안녕하세요. 나날입니다.
+            <br />
+            프로필 소개글을 등록해주세요!ㅎㅎ
+          </p>
+        ) : (
+          <p>{userProfile.introduction}</p>
+        )}
       </div>
       <div className='flex justify-between'>
         <p className='my-3 font-semibold'>
           나날과 함께한 {userProfile.days}일째 나날입니다.
         </p>
       </div>
-      <div className='flex justify-around box-border h-24 w-80 p-4 bg-slate-300/50 rounded-lg'>
+      <div className='box-border flex justify-around h-24 p-4 rounded-lg w-80 bg-slate-300/50'>
         <div
-          className='grid content-evenly cursor-pointer'
+          className='grid cursor-pointer content-evenly'
           onClick={() => navigate('/Diary/Total/List')}
         >
           <p className='text-center'>총 작성한 일기</p>
-          <p className='text-center font-bold'>{pStatus.dCount}</p>
+          <p className='font-bold text-center'>{pStatus.dCount}</p>
         </div>
         <div
-          className='grid content-evenly cursor-pointer'
+          className='grid cursor-pointer content-evenly'
           onClick={() => navigate('/Diary/Bookmark/List')}
         >
           <p className='text-center'>좋아하는 일기</p>
-          <p className='text-center font-bold'>{pStatus.likeCount}</p>
+          <p className='font-bold text-center'>{pStatus.likeCount}</p>
         </div>
       </div>
     </div>
