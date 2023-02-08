@@ -2,7 +2,6 @@ import { Link } from 'react-router-dom';
 import emo_joy from '../../src_assets/img/emo_joy.png';
 
 function GroupDiaryItem({ item, groupIdx }) {
-  console.log(item);
   return (
     <div>
       <Link

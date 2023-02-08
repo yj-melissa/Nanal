@@ -5,6 +5,7 @@ import { onLogin } from '../../config/Login';
 import emo_joy from '../../src_assets/img/emo_joy.png';
 import bookmark from '../../src_assets/img/bookmark.png';
 import bookmark_filled from '../../src_assets/img/bookmark_fill.png';
+import Swal from 'sweetalert2';
 
 function DiaryDetail() {
   const location = useLocation();
@@ -136,25 +137,33 @@ function DiaryDetail() {
         <button
           className='bg-rose-600 text-white px-2.5 py-1 rounded-3xl mx-2 inline-block'
           onClick={() => {
-            if (
-              window.confirm(
-                `${diaryDetail.diaryIdx}번째 일기를 정말 삭제하시겠습니까?`
-              )
-            ) {
-              axios_api
-                .delete(`diary/${location.state.diaryIdx}`)
-                .then(({ data }) => {
-                  if (data.statusCode === 200) {
-                    if (data.data.responseMessage === '일기 삭제 성공') {
-                      setDiaryDetail(data.data.diary);
-                      navigate('/', { replace: true });
+            Swal.fire({
+              title: `일기를 정말 삭제하시겠습니까?`,
+              text: '삭제한 일기는 휴지통에서 확인 가능합니다.',
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              confirmButtonText: '삭제',
+              cancelButtonText: '취소',
+            }).then((result) => {
+              if (result.isConfirmed) {
+                axios_api
+                  .delete(`diary/${location.state.diaryIdx}`)
+                  .then(({ data }) => {
+                    if (data.statusCode === 200) {
+                      if (data.data.responseMessage === '일기 삭제 성공') {
+                        setDiaryDetail(data.data.diary);
+                        navigate('/', { replace: true });
+                      }
+                    } else {
+                      console.log(data.statusCode);
+                      console.log(data.data.responseMessage);
                     }
-                  } else {
-                    console.log(data.statusCode);
-                    console.log(data.data.responseMessage);
-                  }
-                });
-            }
+                  })
+                  .catch((err) => console.log(err));
+              }
+            });
           }}
         >
           삭제
