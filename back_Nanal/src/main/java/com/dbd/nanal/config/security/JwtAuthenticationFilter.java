@@ -6,6 +6,7 @@ import com.dbd.nanal.config.common.ResponseMessage;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -30,8 +31,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull FilterChain filterChain) throws ServletException, IOException {
+
+        String[] noCheckUri = {
+            "/user/login",
+            "/user/signup",
+            "/user/check",
+            "/login/oauth2"
+        };
+
         String path = request.getServletPath();
-        if(path.startsWith("/user/login") || path.startsWith("/user/signup") || path.startsWith("/user/refresh")) {
+
+        if (Arrays.stream(noCheckUri).anyMatch(uri -> path.startsWith(uri) )) {
+
             filterChain.doFilter(request, response);
         } else {
             String token = parseBearerToken(request);
@@ -60,7 +71,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         }
     }
-
 
     private String parseBearerToken(HttpServletRequest request) {
         // Http 요청의 헤더를 파싱해 Bearer 토큰을 리턴함
