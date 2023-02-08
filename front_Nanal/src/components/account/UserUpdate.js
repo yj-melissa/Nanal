@@ -8,17 +8,20 @@ function UserUpdate() {
   const { state } = useLocation();
   const navigate = useNavigate();
 
-  // 사용자 이미지 upload
-  let inputRef = useRef();
-  const formData = new FormData();
-  const [isImgChecked, setIsImgChecked] = useState(false);
-
+  const [profile, setProfile] = useState({});
   let currentName = useRef('');
+  let currentInfo = useRef('');
+
+  // 사용자 이미지 upload
+  const formData = new FormData();
+  const [imageFile, setImageFile] = useState(null);
+  const [isImgChecked, setIsImgChecked] = useState(false);
 
   // 사용자 이미지 기본으로 되돌리기
   const onUploadBaseImage = (e) => {
     e.preventDefault();
     setIsImgChecked(true);
+    setImageFile(null);
   };
 
   const onUploadImage = (e) => {
@@ -29,12 +32,33 @@ function UserUpdate() {
       return;
     }
 
-    // console.log(e.target.files[0]);
-    formData.append('multipartFile', e.target.files[0]);
+    setImageFile(e.target.files[0]);
+  };
+
+  const userUpdate = (e) => {
+    e.preventDefault();
   };
 
   useEffect(() => {
     onLogin();
+    axios_api
+      .get('user/profile')
+      .then(({ data }) => {
+        if (data.statusCode === 200) {
+          if (data.data.responseMessage === '회원 정보 조회 성공') {
+            setProfile(data.data.profile);
+            currentName.current = data.data.profile.nickname;
+            currentInfo.current = data.data.profile.introduction;
+          } else {
+            console.log('회원 정보 조회 오류: ');
+            console.log(data.statusCode);
+            console.log(data.data.responseMessage);
+          }
+        }
+      })
+      .catch((error) => {
+        console.log('회원 정보 조회 오류: ' + error);
+      });
   }, []);
 
   return (
@@ -45,10 +69,10 @@ function UserUpdate() {
       <div>
         <form onSubmit={UserUpdate}>
           {/* <p className='my-2 text-center'>✨ 프로필 ✨</p> */}
-          <div id='user-name-div'>
+          {/* <div id='user-name-div'>
             <label htmlFor='user-name'>💙 아이디 : </label>
             <span className='font-bold m-0.5'>사용자 아이디</span>
-          </div>
+          </div> */}
           <div id='user-nickname-div'>
             <label htmlFor='user-nickname'>💙 닉네임 : </label>
             <input
@@ -82,7 +106,7 @@ function UserUpdate() {
             <p>💙 프로필 이미지 </p>
             <div className='flex'>
               <img
-                src={emo_joy}
+                src={profile.img}
                 className='inline-block w-24 h-24 p-1 mr-3 rounded-md'
               ></img>
               <div className='flex'>
@@ -90,7 +114,6 @@ function UserUpdate() {
                   <input
                     type='file'
                     accept='image/*'
-                    ref={inputRef}
                     onChange={onUploadImage}
                     className='inline-block w-full text-base text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-100 file:text-violet-700 hover:file:bg-violet-200'
                   />
@@ -112,14 +135,15 @@ function UserUpdate() {
               type='text'
               id='user-name'
               className='font-medium m-0.5 w-full h-28 rounded-md'
-              defaultValue={currentName.current || ''}
-              onChange={(e) => (currentName.current = e.target.value)}
+              defaultValue={currentInfo.current || ''}
+              onChange={(e) => (currentInfo.current = e.target.value)}
             ></textarea>
           </div>
 
           <button
             type='submit'
             className='hover:bg-sky-700 bg-cyan-600 text-white px-2.5 py-1 rounded-3xl m-auto block'
+            onClick={userUpdate}
           >
             수정하기
           </button>

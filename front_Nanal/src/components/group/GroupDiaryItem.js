@@ -22,10 +22,13 @@ function GroupDiaryItem({ item, groupIdx }) {
               alt='DALL:E2'
               className='w-16 h-16 p-1 rounded-lg'
             />
-            <div className='px-1 m-1 text-sm justify-evenly max-w-160'>
-              {/* 작성자 추가 필요 */}
-              <span></span>
-              <p className='truncate ...'>{item.content}</p>
+            <div className='px-1 m-1 text-sm'>
+              <div className='text-right'>{item.diaryDate}</div>
+              <p className='justify-between'>
+                <span>{item.nickname}</span>
+                <span>{item.emo}</span>
+              </p>
+              <strong className='truncate w-[156px]'>{item.content}</strong>
             </div>
           </div>
         </div>

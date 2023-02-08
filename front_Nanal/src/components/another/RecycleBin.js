@@ -1,12 +1,15 @@
 import { useEffect, useState } from 'react';
 import axios_api from '../../config/Axios';
+import { onLogin } from '../../config/Login';
 import TrashItem from './TrashItem';
+import Swal from 'sweetalert2';
 
 function RecycleBin() {
   // 휴지통 내 일기 데이터 받기
   const [trashDiary, setTrashDiary] = useState([]);
 
   useEffect(() => {
+    onLogin();
     axios_api.get('diary/trashbin').then(({ data }) => {
       if (data.statusCode === 200) {
         // 초기화 필요!
@@ -27,14 +30,27 @@ function RecycleBin() {
         <button
           className='px-2 py-1 text-white bg-rose-600 rounded-xl'
           onClick={() => {
-            axios_api.delete('diary/trashbin').then(({ data }) => {
-              if (data.statusCode === 200) {
-                if (data.data.responseMessage === '일기 삭제 성공') {
-                  return;
-                }
-              } else {
-                console.log(data.statusCode);
-                console.log(data.data.responseMessage);
+            Swal.fire({
+              title: `휴지통을 정말 비우시겠습니까?`,
+              text: '삭제하면 다시는 복구할 수 없습니다.',
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              confirmButtonText: '삭제',
+              cancelButtonText: '취소',
+            }).then((result) => {
+              if (result.isConfirmed) {
+                axios_api.delete('diary/trashbin').then(({ data }) => {
+                  if (data.statusCode === 200) {
+                    if (data.data.responseMessage === '일기 삭제 성공') {
+                      window.location.reload();
+                    }
+                  } else {
+                    console.log(data.statusCode);
+                    console.log(data.data.responseMessage);
+                  }
+                });
               }
             });
           }}

@@ -1,9 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
-import { Link } from 'react-router-dom';
 import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
-import emo_joy from '../../src_assets/img/emo_joy.png';
 
 function GroupUpdate() {
   const { state } = useLocation();
@@ -14,6 +12,7 @@ function GroupUpdate() {
   const [groupTag, setGroupTag] = useState([]);
   const [groupImg, setGroupImg] = useState('');
   const [groupImgIdx, setGroupImgIdx] = useState(0);
+  const [imageFile, setImageFile] = useState(null);
   const [isImgChecked, setIsImgChecked] = useState(false);
 
   let currentName = useRef('');
@@ -35,15 +34,18 @@ function GroupUpdate() {
     // );
   };
 
+  // 그룹 이미지 upload
+  // let inputRef = useRef();
+  const formData = new FormData();
+
   // 그룹 이미지 기본으로 되돌리기
   const onUploadBaseImage = (e) => {
     e.preventDefault();
     setIsImgChecked(true);
-  };
 
-  // 그룹 이미지 upload
-  let inputRef = useRef();
-  const formData = new FormData();
+    // formData.delete('multipartFile');
+    setImageFile(null);
+  };
 
   const onUploadImage = (e) => {
     // e.preventDefault();
@@ -53,8 +55,8 @@ function GroupUpdate() {
       return;
     }
 
-    // console.log(e.target.files[0]);
-    formData.append('multipartFile', e.target.files[0]);
+    // formData.append('multipartFile', e.target.files[0]);
+    setImageFile(e.target.files[0]);
   };
 
   // const currentFriend = useRef([{}]);
@@ -121,17 +123,22 @@ function GroupUpdate() {
                 // 이미지를 변경하는 경우
                 const dataSet = {
                   groupIdx: groupidx,
-                  groupImgIdx: groupImgIdx,
+                  // groupImgIdx: groupImgIdx,
                 };
+
                 formData.append(
                   'value',
                   new Blob([JSON.stringify(dataSet)], {
                     type: 'application/json',
                   })
                 );
-                if (formData.get('multipartFile') === null) {
+
+                if (imageFile === null) {
                   formData.append('multipartFile', null);
+                } else {
+                  formData.append('multipartFile', imageFile);
                 }
+
                 // 이미지 업로드
                 axios_api
                   .put('file/s3', formData, {
@@ -208,13 +215,13 @@ function GroupUpdate() {
               }
             }
           } else {
-            console.log('그룹 수정 오류: ');
+            console.log('그룹 수정 오류 : ');
             console.log(data.statusCode);
             console.log(data.data.responseMessage);
           }
         })
         .catch(({ error }) => {
-          console.log('그룹 수정 성공: ' + error);
+          console.log('그룹 수정 오류 : ' + error);
         });
     }
   };
@@ -365,7 +372,7 @@ function GroupUpdate() {
                 <input
                   type='file'
                   accept='image/*'
-                  ref={inputRef}
+                  // ref={inputRef}
                   onChange={onUploadImage}
                   className='inline-block w-full text-base text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-100 file:text-violet-700 hover:file:bg-violet-200'
                 />

@@ -2,8 +2,10 @@ import { useState, useEffect } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
-import { BookFilled, BookOutlined } from '@ant-design/icons';
 import emo_joy from '../../src_assets/img/emo_joy.png';
+import bookmark from '../../src_assets/img/bookmark.png';
+import bookmark_filled from '../../src_assets/img/bookmark_fill.png';
+import Swal from 'sweetalert2';
 
 function DiaryDetail() {
   const location = useLocation();
@@ -65,10 +67,14 @@ function DiaryDetail() {
   return (
     <div>
       <div className='flex justify-between my-2'>
-        <div className='text-sm'>{diaryDetail.diaryDate} 일기</div>
+        <strong>{diaryDetail.diaryDate}일</strong>
+        {/* 감정 넣는 곳 */}
+        <span>{diaryDetail.emo}</span>
         {isBook ? (
           <>
-            <BookFilled
+            <img
+              src={bookmark_filled}
+              alt='bookmark_filled'
               onClick={() =>
                 axios_api
                   .delete(`diary/bookmark/${location.state.diaryIdx}`)
@@ -89,7 +95,9 @@ function DiaryDetail() {
           </>
         ) : (
           <>
-            <BookOutlined
+            <img
+              src={bookmark}
+              alt='bookmark'
               onClick={() =>
                 axios_api
                   .get(`diary/bookmark/${location.state.diaryIdx}`)
@@ -114,7 +122,7 @@ function DiaryDetail() {
         <img src={emo_joy} alt='DALL:E2' />
       </div>
       {/* <span>{diaryDetail.nickname}</span> */}
-      <div className='flex items-center justify-end'>
+      <div className='flex items-center justify-end my-10'>
         <Link
           to={'/Diary/Edit'}
           state={{
@@ -122,35 +130,48 @@ function DiaryDetail() {
             originGroupList: originGroupList,
           }}
         >
-          <button className='mr-2'>수정</button>
+          <button className='hover:bg-sky-700 bg-cyan-600 text-white px-2.5 py-1 rounded-3xl m-auto block'>
+            수정
+          </button>
         </Link>
         <button
+          className='bg-rose-600 text-white px-2.5 py-1 rounded-3xl mx-2 inline-block'
           onClick={() => {
-            if (
-              window.confirm(
-                `${diaryDetail.diaryIdx}번째 일기를 정말 삭제하시겠습니까?`
-              )
-            ) {
-              axios_api
-                .delete(`diary/${location.state.diaryIdx}`)
-                .then(({ data }) => {
-                  if (data.statusCode === 200) {
-                    if (data.data.responseMessage === '일기 삭제 성공') {
-                      setDiaryDetail(data.data.diary);
-                      navigate('/', { replace: true });
+            Swal.fire({
+              title: `일기를 정말 삭제하시겠습니까?`,
+              text: '삭제한 일기는 휴지통에서 확인 가능합니다.',
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              confirmButtonText: '삭제',
+              cancelButtonText: '취소',
+            }).then((result) => {
+              if (result.isConfirmed) {
+                axios_api
+                  .delete(`diary/${location.state.diaryIdx}`)
+                  .then(({ data }) => {
+                    if (data.statusCode === 200) {
+                      if (data.data.responseMessage === '일기 삭제 성공') {
+                        setDiaryDetail(data.data.diary);
+                        navigate('/', { replace: true });
+                      }
+                    } else {
+                      console.log(data.statusCode);
+                      console.log(data.data.responseMessage);
                     }
-                  } else {
-                    console.log(data.statusCode);
-                    console.log(data.data.responseMessage);
-                  }
-                });
-            }
+                  })
+                  .catch((err) => console.log(err));
+              }
+            });
           }}
         >
           삭제
         </button>
       </div>
-      <div className='my-5 text-xl text-center'>{diaryDetail.content}</div>
+      <div className='my-10 text-xl text-left underline underline-offset-8'>
+        {diaryDetail.content}
+      </div>
       {/* 댓글 보여주는 곳 */}
       <div className='my-5'>
         {commentList.map((comment, idx) => {

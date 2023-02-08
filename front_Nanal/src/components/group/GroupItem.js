@@ -31,7 +31,7 @@ function GroupItem({ item }) {
             <p className='font-bold text-lg mb-0.5'>
               {item.groupDetail.groupName}
             </p>
-            <div className=''>
+            <div>
               {item.tags.map((tagging, idx) => {
                 if (tagging.tag)
                   return (

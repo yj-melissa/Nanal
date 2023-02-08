@@ -71,7 +71,7 @@ function GroupCreate() {
   };
 
   // 그룹 이미지 upload
-  const inputRef = useRef();
+  // const inputRef = useRef();
   const formData = new FormData();
 
   const onUploadImage = (e) => {
@@ -304,7 +304,7 @@ function GroupCreate() {
           <input
             type='file'
             accept='image/*'
-            ref={inputRef}
+            // ref={inputRef}
             onChange={onUploadImage}
             className='block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-100 file:text-violet-700 hover:file:bg-violet-200'
           />

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
+import Swal from 'sweetalert2';
 
 const getStringDate = (date) => {
   return date.toISOString().slice(0, 10);
@@ -11,7 +12,7 @@ function DiaryCreate() {
   // 날짜, 일기, 그룹여부 데이터 받기
   const [date, setDate] = useState(getStringDate(new Date()));
   const [content, setContent] = useState('');
-  const [group, setGroup] = useState('private');
+  const [group, setGroup] = useState('개인');
 
   // 포커싱 기능
   const contentRef = useRef();
@@ -34,7 +35,12 @@ function DiaryCreate() {
         content: content,
       })
       .then((response) => {
-        alert('저장 성공');
+        Swal.fire({
+          icon: 'success', // Alert 타입
+          title: '일기 저장 완료', // Alert 제목
+          text: '작성하신 일기가 작성 완료됐습니다.', // Alert 내용
+        });
+        // alert('저장 성공');
         // 일기 생성 후 홈으로 보내기
         navigate('/', { replace: true });
       })
