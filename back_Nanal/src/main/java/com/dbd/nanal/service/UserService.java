@@ -140,13 +140,20 @@ public class UserService {
 
     // 회원 탈퇴
     public void deleteByUserIdx(int userIdx) {
-        UserEntity user = userRepository.findByUserIdx(userIdx);
-        if (user != null) {
-            userRepository.delete(user);
-        }
-        else {
-            throw new NullPointerException();
-        }
+        log.info("deleteByUserIdx 실행");
+//        UserEntity user = userRepository.findByUserIdx(userIdx);
+//        if (user != null) {
+//            log.info("삭제 시도");
+//            userRepository.delete(user);
+//            log.info("삭제 성공");
+//        }
+//        else {
+//            log.info("유저 정보 없음");
+//            throw new NullPointerException();
+//        }
+        log.info("삭제 시도");
+        userRepository.deleteById(userIdx);
+        log.info("삭제 성공");
     }
 
     // 비밀번호 확인용

@@ -310,7 +310,10 @@ public class UserController {
                 "{} \n\n")
     @DeleteMapping("/profile")
     public ResponseEntity<?> deleteUser(@AuthenticationPrincipal UserEntity userInfo) {
-        userService.deleteByUserIdx(userInfo.getUserIdx());
+        log.info("deleteUser 실행");
+        int userIdx = userInfo.getUserIdx();
+        userService.deleteByUserIdx(userIdx);
+        jwtTokenProvider.deleteRefreshToken(userIdx);
         HashMap<String, Object> responseDTO = new HashMap<>();
         responseDTO.put("responseMessage", ResponseMessage.USER_DELETE_SUCCESS);
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
