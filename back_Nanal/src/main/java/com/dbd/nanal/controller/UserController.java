@@ -294,10 +294,11 @@ public class UserController {
             throw new NullPointerException(ResponseMessage.EMPTY);
         }
 
-        userService.updateProfile(userInfo.getUserIdx(), userRequest);
+        HashMap<String, Object> profile = userService.updateProfile(userInfo.getUserIdx(), userRequest);
 
         HashMap<String, Object> responseDTO = new HashMap<>();
         responseDTO.put("responseMessage", ResponseMessage.USER_UPDATE_SUCCESS);
+        responseDTO.put("profile", profile);
 
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
