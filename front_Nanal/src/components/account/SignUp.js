@@ -51,7 +51,7 @@ function SignUp() {
             Swal.fire({
               icon: 'warning', // Alert 타입
               text: '이미 가입한 이메일 입니다', // Alert 내용
-              width: '30%',
+              width: '60%',
             }).then(function () {});
             window.location.replace('/SignIn');
           } else {
@@ -59,7 +59,7 @@ function SignUp() {
             Swal.fire({
               icon: 'warning',
               text: '이메일을 확인하고 다시 입력해주세요',
-              width: '30%',
+              width: '60%',
             }).then(function () {});
           }
         }
@@ -83,7 +83,7 @@ function SignUp() {
         Swal.fire({
           icon: 'warning',
           text: '이메일 인증 코드를 다시 확인해주세요!',
-          width: '30%',
+          width: '60%',
         }).then(function () {});
       }
     }
@@ -197,35 +197,35 @@ function SignUp() {
       Swal.fire({
         icon: 'warning',
         text: '이메일 인증을 확인해주세요.',
-        width: '30%',
+        width: '60%',
       }).then(function () {});
     } else if (isId !== true) {
       // alert('아이디를 확인해주세요.');
       Swal.fire({
         icon: 'warning',
         text: '아이디를 확인해주세요.',
-        width: '30%',
+        width: '60%',
       }).then(function () {});
     } else if (isPassword !== true) {
       // alert('비밀번호를 확인해주세요.');
       Swal.fire({
         icon: 'warning',
         text: '비밀번호를 확인해주세요.',
-        width: '30%',
+        width: '60%',
       }).then(function () {});
     } else if (isPasswordConfirm !== true) {
       // alert('비밀번호를 맞게 입력했는지 확인해주세요.');
       Swal.fire({
         icon: 'warning',
         text: '비밀번호를 맞게 입력했는지 확인해주세요.',
-        width: '30%',
+        width: '60%',
       }).then(function () {});
     } else if (isNickName !== true) {
       // alert('닉네임을 확인해주세요.');
       Swal.fire({
         icon: 'warning',
         text: '닉네임을 확인해주세요.',
-        width: '30%',
+        width: '60%',
       }).then(function () {});
     } else {
       axios_api
@@ -246,7 +246,7 @@ function SignUp() {
               Swal.fire({
                 icon: 'success',
                 text: '회원 가입 성공!!!',
-                width: '30%',
+                width: '60%',
               }).then(function () {});
               navigate(`/SignIn`, {
                 replace: true,
@@ -259,7 +259,7 @@ function SignUp() {
             Swal.fire({
               icon: 'warning',
               text: '이미 가입된 이메일입니다!',
-              width: '30%',
+              width: '60%',
             }).then(function () {
               setEmail('');
               setId('');

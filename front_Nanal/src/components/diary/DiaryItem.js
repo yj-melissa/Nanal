@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom';
 import emo_joy from '../../src_assets/img/emo_joy.png';
 
 function DiaryItem({ nickname, diaryIdx, diaryDate, content }) {
+  const diarydate = diaryDate.split('-');
+
   return (
     <Link
       to={`/Diary/Detail`}
@@ -18,7 +20,9 @@ function DiaryItem({ nickname, diaryIdx, diaryDate, content }) {
         <div className='px-1 m-1 text-sm text-right'>
           <p>
             <span className='mr-2'>감정</span>
-            <span className='text-sm'>{diaryDate}</span>
+            <span className='text-sm'>
+              {diarydate[1]}-{diarydate[2]}
+            </span>
           </p>
           <p className='truncate block w-[156px] font-bold'>{content}</p>
         </div>

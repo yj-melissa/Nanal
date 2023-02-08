@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
 import emo_joy from '../../src_assets/img/emo_joy.png';
 import bookmark from '../../src_assets/img/bookmark.png';
 import bookmark_filled from '../../src_assets/img/bookmark_fill.png';
-import Swal from 'sweetalert2';
 
 function DiaryDetail() {
   const location = useLocation();
@@ -91,6 +91,7 @@ function DiaryDetail() {
                     }
                   })
               }
+              className='w-1/12'
             />
           </>
         ) : (
@@ -114,6 +115,7 @@ function DiaryDetail() {
                     }
                   })
               }
+              className='w-1/12'
             />
           </>
         )}

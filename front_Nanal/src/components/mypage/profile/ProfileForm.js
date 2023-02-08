@@ -27,32 +27,6 @@ function ProfileForm() {
     });
   };
 
-  //이미지 useState 삼항연산자 써서 axios로 받아오면 그게 기본 값으로 들어가게 해놨는데 왜 안 되는지 잘 몰겠음.
-  // const [Image, setImage] = useState(
-  //   userProfile.img === null ? emptyProfile : Image
-  // );
-  const [Image, setImage] = useState();
-  const fileInput = useRef(null);
-
-  //이미지 수정 폼. 여기서 setImage로 바꾸면 Image에 저장된거 put으로 올려주기만하면 됨.
-  const onChange = (e) => {
-    if (e.target.files[0]) {
-      setImage(e.target.files[0]);
-    } else {
-      //업로드 취소할 시
-      setImage(Image);
-      return;
-    }
-    //화면에 프로필 사진 표시
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (reader.readyState === 2) {
-        setImage(reader.result);
-      }
-    };
-    reader.readAsDataURL(e.target.files[0]);
-  };
-
   // Mount 됐을 때 user
   useEffect(() => {
     onLogin();
@@ -115,18 +89,6 @@ function ProfileForm() {
           // src={Image}
           src={userProfile.img}
           className='p-1 rounded-full w-28 h-28'
-          onClick={() => {
-            fileInput.current.click();
-          }}
-        />
-        <input
-          type='file'
-          style={{ display: 'none' }}
-          // accept='image/jpg,impge/png,image/jpeg'
-          accept='image/*'
-          name='profile_img'
-          onChange={onChange}
-          ref={fileInput}
         />
         <div className='my-auto'>
           <p className='p-1 my-auto text-2xl font-bold'>

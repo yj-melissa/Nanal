@@ -82,7 +82,7 @@ function DiaryUpdate() {
           {/* 일기 내용 작성란 */}
           <div>
             <textarea
-              className='w-full h-auto px-2 py-2 my-2 rounded-lg bg-slate-300/50'
+              className='w-full h-40 px-2 py-2 my-2 rounded-lg bg-slate-300/50'
               name='content'
               ref={localConetRef}
               value={localContent}
@@ -122,43 +122,45 @@ function DiaryUpdate() {
           <label className='ml-2 cursor-pointer' htmlFor='group'>
             그룹
           </label>
-          {isShow ? (
-            <>
-              {groupList.map((groupItem, idx) => {
-                return (
-                  <div
-                    key={idx}
-                    className='bg-[#F7F7F7] border-2 border-solid border-slate-400 rounded-lg m-1 mb-3 p-2'
-                  >
-                    <label
-                      htmlFor={groupItem.groupDetail.groupIdx}
-                      className='cursor-pointer'
+          <div className='flex flex-wrap justify-between'>
+            {isShow ? (
+              <>
+                {groupList.map((groupItem, idx) => {
+                  return (
+                    <div
+                      key={idx}
+                      className='bg-[#F7F7F7] border-2 border-solid border-slate-400 rounded-lg m-1 mb-3 p-2 w-[47%]'
                     >
-                      {groupItem.groupDetail.groupName}
-                    </label>
-                    <input
-                      className='cursor-pointer'
-                      type='checkbox'
-                      id={groupItem.groupDetail.groupIdx}
-                      checked={
-                        checkedList.includes(groupItem.groupDetail.groupIdx)
-                          ? true
-                          : false
-                      }
-                      onChange={(e) => {
-                        onChecked(
-                          e.target.checked,
-                          groupItem.groupDetail.groupIdx
-                        );
-                      }}
-                    />
-                  </div>
-                );
-              })}
-            </>
-          ) : (
-            <></>
-          )}
+                      <label
+                        htmlFor={groupItem.groupDetail.groupIdx}
+                        className='mr-2 cursor-pointer'
+                      >
+                        {groupItem.groupDetail.groupName}
+                      </label>
+                      <input
+                        className='cursor-pointer'
+                        type='checkbox'
+                        id={groupItem.groupDetail.groupIdx}
+                        checked={
+                          checkedList.includes(groupItem.groupDetail.groupIdx)
+                            ? true
+                            : false
+                        }
+                        onChange={(e) => {
+                          onChecked(
+                            e.target.checked,
+                            groupItem.groupDetail.groupIdx
+                          );
+                        }}
+                      />
+                    </div>
+                  );
+                })}
+              </>
+            ) : (
+              <></>
+            )}
+          </div>
         </div>
         {/* 수정 취소 및 수정 완료 버튼 */}
         <footer className='relative flex justify-between px-1 pb-5 translate-y-full'>

@@ -1,5 +1,5 @@
 import { useLocation } from 'react-router-dom';
-import CommentList from './CommentList';
+import CommentList from '../diary/CommentList';
 
 // 댓글 불러오기
 function GroupDiaryDetail() {

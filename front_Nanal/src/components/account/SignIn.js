@@ -53,7 +53,7 @@ function SignIn() {
             Swal.fire({
               icon: 'warning',
               text: '아이디 또는 비밀번호를 다시 확인해주세요.',
-              width: '30%',
+              width: '60%',
             }).then(function () {
               setUserId('');
               setPw('');
@@ -63,7 +63,7 @@ function SignIn() {
             Swal.fire({
               icon: 'warning',
               text: '회원이 아닙니다. 회원 가입을 해주세요.',
-              width: '30%',
+              width: '60%',
             }).then(function () {
               setUserId('');
               setPw('');
