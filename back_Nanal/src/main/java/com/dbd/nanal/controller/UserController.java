@@ -26,7 +26,6 @@ import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import org.jetbrains.annotations.NotNull;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -287,14 +286,15 @@ public class UserController {
             "[Back] \n" +
                 "{} \n\n")
     @PutMapping("/profile")
-    public ResponseEntity<?> updateProfile(@ApiParam(value = "userIdx") @AuthenticationPrincipal UserEntity userInfo, @RequestBody @Valid UserRequestDTO userRequest) {
+    public ResponseEntity<?> updateProfile(@AuthenticationPrincipal UserEntity userInfo, @RequestBody UserRequestDTO userRequest) {
+        log.info("updateProfile 실행 : {}", userInfo.getUserProfile().getNickname());
 
         if (userRequest == null) {
+            log.info("updateProfile : userRequest == null");
             throw new NullPointerException(ResponseMessage.EMPTY);
         }
 
         userService.updateProfile(userInfo.getUserIdx(), userRequest);
-        jwtTokenProvider.deleteRefreshToken(userInfo.getUserIdx());
 
         HashMap<String, Object> responseDTO = new HashMap<>();
         responseDTO.put("responseMessage", ResponseMessage.USER_UPDATE_SUCCESS);
@@ -309,7 +309,7 @@ public class UserController {
                 "[Back] \n" +
                 "{} \n\n")
     @DeleteMapping("/profile")
-    public ResponseEntity<?> deleteUser(@AuthenticationPrincipal @NotNull UserEntity userInfo) {
+    public ResponseEntity<?> deleteUser(@AuthenticationPrincipal UserEntity userInfo) {
         userService.deleteByUserIdx(userInfo.getUserIdx());
         HashMap<String, Object> responseDTO = new HashMap<>();
         responseDTO.put("responseMessage", ResponseMessage.USER_DELETE_SUCCESS);
