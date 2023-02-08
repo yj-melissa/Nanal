@@ -1,6 +1,6 @@
 import { useEffect } from "react"
 import { onLogin } from '../../../config/Login';
-import downArrow from '../../../src_assets/img/arrow_drop_down.png'
+import ThemeSetting from './ThemeSetting'
 import TuningProfile from './TuningProfile'
 import TuningUserInfo from './TuningUserInfo'
 import TuningPassword from './TuningPassword'
@@ -25,10 +25,7 @@ const tuningStyle = 'flex justify-between box-border border rounded-lg h-12 bord
     {/* 비밀번호 수정 해야함 */}
     <TuningPassword />
     {/* 테마설정 미구현 */}
-    <div className={tuningStyle} > 
-      <div className="self-center">테마 설정</div>
-      <img src={downArrow} className='self-center'/>
-    </div>
+    <ThemeSetting />
     <hr className='my-4 w-80 border-slate-500/75' />
     {/* 회원 탈퇴 구현 완료*/}
     <Withdrawal />
