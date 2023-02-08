@@ -26,17 +26,77 @@ function UserUpdate() {
 
   const onUploadImage = (e) => {
     // e.preventDefault();
-    setIsImgChecked(true);
 
     if (!e.target.files) {
       return;
     }
 
+    setIsImgChecked(true);
     setImageFile(e.target.files[0]);
+    console.log(e.target.files[0]);
   };
 
   const userUpdate = (e) => {
     e.preventDefault();
+
+    axios_api
+      .put('user/profile', {
+        nickname: currentName.current,
+        introduction: currentInfo.current,
+        img: profile.img,
+      })
+      .then(({ data }) => {
+        if (data.statusCode === 200) {
+          if (data.data.responseMessage === '회원 정보 수정 성공') {
+            // 이미지를 변경하는 경우
+            if (isImgChecked === true) {
+              // formData.append('value', null);
+
+              if (imageFile === null) {
+                formData.append('multipartFile', null);
+              } else {
+                formData.append('multipartFile', imageFile);
+              }
+
+              // 이미지 업로드
+              axios_api
+                .put('file/s3', formData, {
+                  headers: {
+                    'Content-Type': 'multipart/form-data',
+                  },
+                })
+                .then(({ data }) => {
+                  if (data.statusCode === 200) {
+                    if (data.data.responseMessage === '그림 저장 성공') {
+                      navigate(`/MyPage`, {
+                        replace: true,
+                      });
+                    }
+                  } else {
+                    console.log('그림 저장 오류 : ');
+                    console.log(data.statusCode);
+                    console.log(data.data.responseMessage);
+                  }
+                })
+                .catch(({ error }) => {
+                  console.log('그림 저장 오류 : ' + error);
+                });
+            } else {
+              // 이미지를 변경하지 않는 경우
+              navigate(`/MyPage`, {
+                replace: true,
+              });
+            }
+          }
+        } else {
+          console.log('회원 정보 수정 오류: ');
+          console.log(data.statusCode);
+          console.log(data.data.responseMessage);
+        }
+      })
+      .catch((error) => {
+        console.log('회원 정보 수정 오류: ' + error);
+      });
   };
 
   useEffect(() => {
@@ -67,7 +127,7 @@ function UserUpdate() {
         ✨ 프로필 수정 ✨
       </h2>
       <div>
-        <form onSubmit={UserUpdate}>
+        <form>
           {/* <p className='my-2 text-center'>✨ 프로필 ✨</p> */}
           {/* <div id='user-name-div'>
             <label htmlFor='user-name'>💙 아이디 : </label>
@@ -141,7 +201,6 @@ function UserUpdate() {
           </div>
 
           <button
-            type='submit'
             className='hover:bg-sky-700 bg-cyan-600 text-white px-2.5 py-1 rounded-3xl m-auto block'
             onClick={userUpdate}
           >
