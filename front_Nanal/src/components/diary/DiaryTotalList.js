@@ -22,7 +22,9 @@ function DiaryTotalList() {
 
   return (
     <div>
-      <h4>내가 쓴 일기 개수는 총 {totalDiary.length}개 입니다.</h4>
+      <h4 className='text-center font-bold my-5'>
+        내가 쓴 일기 개수는 총 {totalDiary.length}개 입니다.
+      </h4>
       <div>
         {totalDiary.map((diary, idx) => (
           <DiaryTotalItem key={idx} {...diary} />

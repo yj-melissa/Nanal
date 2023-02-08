@@ -30,7 +30,9 @@ function DiaryList({ curDate }) {
 
   return (
     <div className='DiaryList'>
-      <h4 className='text-center'>{diaryList.length}개의 일기가 있습니다.</h4>
+      <h4 className='text-center font-bold'>
+        {diaryList.length}개의 일기가 있습니다.
+      </h4>
       <div>
         {diaryList.map((diary) => (
           <DiaryItem key={diary.diaryIdx} {...diary} />
