@@ -35,7 +35,7 @@ public class JwtTokenProvider {
 
     // Access Token 기한 = 10분
 //    private final Date accessTokenExpiryDate = Date.from(
-//        Instant.now().plus(10, ChronoUnit.MINUTES)
+//        Instant.now().plus(1, ChronoUnit.MINUTES)
 //    );
 
     private final Date accessTokenExpiryDate = Date.from(
@@ -224,5 +224,9 @@ public class JwtTokenProvider {
 
     public void deleteRefreshToken(int userIdx) {
         jwtTokenRepository.delete(jwtTokenRepository.findByUserIdx(userIdx));
+    }
+
+    public void deleteRefreshToken(String userId) {
+        jwtTokenRepository.delete(jwtTokenRepository.findByUserId(userId));
     }
 }
