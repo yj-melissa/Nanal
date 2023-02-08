@@ -22,14 +22,11 @@ public class NoticeService {
 
     //save friend notice
     public void saveFriendNotice(NotificationRequestDTO notice){
-        String nickname=userProfileRepository.getReferenceById(notice.getRequest_user_idx()).getNickname();
-        String str="[친구 초대] "+ nickname+"님으로부터의 친구 등록 요청입니다.";
-
         for(int userIdx: notice.getUserIdx()) {
             NoticeEntity noticeEntity = NoticeEntity.builder()
                     .user(UserEntity.builder().userIdx(userIdx).build())
                     .requestUserIdx(notice.getRequest_user_idx())
-                    .content(str)
+                    .content(userProfileRepository.getReferenceById(notice.getRequest_user_idx()).getNickname())
                     .build();
             noticeRepository.save(noticeEntity);
         }
@@ -40,8 +37,7 @@ public class NoticeService {
         String nickname=userProfileRepository.getReferenceById(notice.getRequest_user_idx()).getNickname();
         String groupName=groupRepository.getReferenceById(notice.getRequest_group_idx()).getGroupName();
 
-        String str="[그룹 초대] "+nickname+"님이 "+groupName+" 그룹 일기에 초대했습니다.";
-
+        String str=nickname+","+groupName;
         for(int userIdx: notice.getUserIdx()){
             NoticeEntity noticeEntity=NoticeEntity.builder()
                     .user(UserEntity.builder().userIdx(userIdx).build())
@@ -61,8 +57,7 @@ public class NoticeService {
         String userName=userProfileRepository.getReferenceById(diaryEntity.getUser().getUserIdx()).getNickname();
         String nickname=userProfileRepository.getReferenceById(notice.getRequest_user_idx()).getNickname();
 
-        String str="[댓글] "+ userName +"님의 일기에 "+ nickname+"님이 댓글을 작성하셨습니다.";
-
+        String str=userName +","+nickname;
         NoticeEntity noticeEntity=NoticeEntity.builder()
                 .user(UserEntity.builder().userIdx(diaryEntity.getUser().getUserIdx()).build())
                 .requestUserIdx(notice.getRequest_user_idx())
@@ -79,7 +74,7 @@ public class NoticeService {
         String groupName=groupRepository.getReferenceById(notice.getRequest_group_idx()).getGroupName();
         List<GroupUserRelationEntity> groupUserRelationEntityList=groupUserRelationRepository.findByGroupDetail(GroupDetailEntity.builder().groupIdx(notice.getRequest_group_idx()).build());
 
-        String str="[새글] "+nickname+"님이 "+groupName+" 그룹에 새 글을 등록하였습니다.";
+        String str=nickname+","+groupName;
         for(GroupUserRelationEntity groupUser: groupUserRelationEntityList){
             NoticeEntity noticeEntity=NoticeEntity.builder()
                     .user(UserEntity.builder().userIdx(groupUser.getUser().getUserIdx()).build())
