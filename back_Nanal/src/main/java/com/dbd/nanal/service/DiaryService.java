@@ -127,8 +127,8 @@ public class DiaryService {
     }
 
     // return diary count
-    public Long getDiaryCount(int userIdx){
-        return diaryRepository.countByUser(UserEntity.builder().userIdx(userIdx).build());
+    public int getDiaryCount(int userIdx){
+        return diaryRepository.countUserDiary(userIdx);
     }
 
     // save diary comment
