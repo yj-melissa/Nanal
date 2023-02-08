@@ -5,6 +5,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 import com.dbd.nanal.config.oauth.OAuthFailureHandler;
 import com.dbd.nanal.config.oauth.OAuthSuccessHandler;
 import com.dbd.nanal.config.security.CustomAuthenticationEntryPoint;
+import com.dbd.nanal.config.security.CustomLogoutSuccessHandler;
 import com.dbd.nanal.config.security.JwtAuthenticationFilter;
 import com.dbd.nanal.config.security.JwtTokenProvider;
 import com.dbd.nanal.config.oauth.CustomOAuthUserService;
@@ -39,6 +40,7 @@ public class SecurityConfig{
     @Autowired private OAuthFailureHandler oAuthFailureHandler;
     @Autowired private TokenAccessDeniedHandler tokenAccessDeniedHandler;
     @Autowired private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+    @Autowired private CustomLogoutSuccessHandler customLogoutSuccessHandler;
 
 
     @Bean
@@ -76,6 +78,12 @@ public class SecurityConfig{
                     "/sign-api/exception/**"
                 ).permitAll()
             .antMatchers("/**").hasRole("USER")
+            .and()
+            .logout()
+            .logoutUrl("/user/logout")
+            .logoutSuccessUrl("/")
+            .deleteCookies("JSSESSIONID", "refreshToken")
+            .logoutSuccessHandler(customLogoutSuccessHandler)
             .and()
             .exceptionHandling()
             .accessDeniedHandler(tokenAccessDeniedHandler)
