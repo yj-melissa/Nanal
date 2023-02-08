@@ -206,15 +206,16 @@ public class UserController {
     }
 
     @ApiOperation(value = "로그아웃")
-    @DeleteMapping("/logout")
-    public ResponseEntity<?> logout(@AuthenticationPrincipal UserEntity userInfo) {
-
-        jwtTokenProvider.deleteRefreshToken(userInfo.getUserIdx());
-
-        HashMap<String, Object> responseDTO = new HashMap<>();
-        responseDTO.put("responseMessage", ResponseMessage.LOGOUT_SUCCESS);
-        return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-    }
+    @PostMapping("/logout")
+    public void logout() {}
+//    public ResponseEntity<?> logout(@AuthenticationPrincipal UserEntity userInfo) {
+//
+//        jwtTokenProvider.deleteRefreshToken(userInfo.getUserIdx());
+//
+//        HashMap<String, Object> responseDTO = new HashMap<>();
+//        responseDTO.put("responseMessage", ResponseMessage.LOGOUT_SUCCESS);
+//        return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+//    }
 
 
     @ApiOperation(value = "Access Token 재발급",  notes =
