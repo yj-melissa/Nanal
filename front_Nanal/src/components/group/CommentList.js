@@ -90,15 +90,21 @@ function CommentList({ diaryIdx, groupIdx }) {
           <CommentDetail key={idx} item={comment} />
         ))}
       </div>
-      <form className='comment-wrap' onSubmit={handleSubmit}>
+      <form className='flex justify-end my-3' onSubmit={handleSubmit}>
         <input
+          className='p-2'
           type='text'
           ref={commentRef}
           placeholder='댓글을 입력하세요'
           value={content}
           onChange={onChange}
         />
-        <button type='submit'>등록</button>
+        <button
+          type='submit'
+          className='hover:bg-sky-700 bg-cyan-600 text-white px-2.5 py-1 ml-3 rounded-3xl'
+        >
+          등록
+        </button>
       </form>
     </div>
   );

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios_api from '../../config/Axios';
+import { onLogin } from '../../config/Login';
 import BookmarkItem from './BookmarkItem';
 
 function FavoriteList() {
@@ -7,6 +8,7 @@ function FavoriteList() {
   const [favoriteDiary, setFavoriteDiary] = useState([]);
 
   useEffect(() => {
+    onLogin();
     axios_api
       .get('diary/bookmark/list')
       .then(({ data }) => {

@@ -1,6 +1,7 @@
 // import { useState } from 'react';
 import axios_api from '../../config/Axios';
 import emo_joy from '../../src_assets/img/emo_joy.png';
+import Swal from 'sweetalert2';
 
 function TrashItem({ diaryIdx, diaryDate, content }) {
   return (
@@ -18,19 +19,34 @@ function TrashItem({ diaryIdx, diaryDate, content }) {
               <button
                 className='bg-cyan-600 text-white px-2.5 py-1 rounded-xl mx-2'
                 onClick={() => {
-                  axios_api
-                    .put(`diary/trashbin/${diaryIdx}`)
-                    .then(({ data }) => {
-                      if (data.statusCode === 200) {
-                        if (data.data.responseMessage === '일기 복구 성공') {
-                          return;
-                        }
-                      } else {
-                        console.log('일기 복구 실패 : ');
-                        console.log(data.statusCode);
-                        console.log(data.data.responseMessage);
-                      }
-                    });
+                  Swal.fire({
+                    title: `일기를 정말 복구하시겠습니까?`,
+                    text: '복구한 일기는 리스트에서 확인 가능합니다.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: '복구',
+                    cancelButtonText: '취소',
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      axios_api
+                        .put(`diary/trashbin/${diaryIdx}`)
+                        .then(({ data }) => {
+                          if (data.statusCode === 200) {
+                            if (
+                              data.data.responseMessage === '일기 복구 성공'
+                            ) {
+                              window.location.reload();
+                            }
+                          } else {
+                            console.log('일기 복구 실패 : ');
+                            console.log(data.statusCode);
+                            console.log(data.data.responseMessage);
+                          }
+                        });
+                    }
+                  });
                 }}
               >
                 복구
