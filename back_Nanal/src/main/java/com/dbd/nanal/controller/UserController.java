@@ -204,7 +204,12 @@ public class UserController {
         }
     }
 
-    @ApiOperation(value = "로그아웃")
+    @ApiOperation(value = "로그아웃", notes =
+        "로그아웃을 진행합니다. \n" +
+        "[Front] \n" +
+            "{} \n" +
+        "[Back] \n" +
+        "{responseMessage(String)} \n")
     @PostMapping("/logout")
     public void logout() {}
 //    public ResponseEntity<?> logout(@AuthenticationPrincipal UserEntity userInfo) {
@@ -244,6 +249,7 @@ public class UserController {
     @ApiOperation(value = "내 프로필 조회", notes =
         "내 프로필을 조회합니다.\n"+
             "[Front] \n" +
+            "{} \n"+
             "[Back] \n" +
                 "{img(String), nickname(String), introduction(String), days(long)} \n\n")
     @GetMapping("/profile")
@@ -282,9 +288,9 @@ public class UserController {
     @ApiOperation(value = "회원 정보 수정", notes =
         "회원 정보를 수정합니다.\n"+
             "[Front] \n" +
-                "{img(String), nickname(String), introduction(String)} \n\n" +
+                "{nickname(String), introduction(String)} \n\n" +
             "[Back] \n" +
-                "{} \n\n")
+                "{img(String), nickname(String), days(int), introduction(String)} \n\n")
     @PutMapping("/profile")
     public ResponseEntity<?> updateProfile(@AuthenticationPrincipal UserEntity userInfo, @RequestBody UserRequestDTO userRequest) {
         log.info("updateProfile 실행 : {}", userInfo.getUserProfile().getNickname());
@@ -308,7 +314,7 @@ public class UserController {
             "[Front] \n" +
                 "{} \n\n" +
                 "[Back] \n" +
-                "{} \n\n")
+                "{responseMessage(String)} \n\n")
     @DeleteMapping("/profile")
     public ResponseEntity<?> deleteUser(@AuthenticationPrincipal UserEntity userInfo) {
         log.info("deleteUser 실행");
@@ -339,7 +345,7 @@ public class UserController {
             "[Front] \n" +
                 "{password(String)} \n\n" +
             "[Back] \n" +
-                "{}\n\n")
+                "{responseMessage(String)}\n\n")
     @PostMapping("/password")
     public ResponseEntity<?> checkPassword(@AuthenticationPrincipal UserEntity userInfo, @RequestBody @Valid UserRequestDTO userRequestDTO) {
         String password = userRequestDTO.getPassword();
@@ -362,10 +368,11 @@ public class UserController {
     }
 
     @ApiOperation(value = "비밀번호 수정", notes =
+            "비밀번호를 수정합니다. \n" +
             "[Front] \n" +
                 "{password(String)} \n\n" +
             "[Back] \n" +
-                "{} \n\n")
+                "{responseMessage(String)} \n\n")
     @PutMapping("/password")
     public ResponseEntity<?> updatePassword(@ApiParam(value = "userIdx") @AuthenticationPrincipal UserEntity userInfo, @RequestBody UserRequestDTO userRequestDTO) {
 
@@ -383,7 +390,12 @@ public class UserController {
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "유저 목록 반환")
+    @ApiOperation(value = "유저 목록 반환", notes =
+        "유저 목록을 반환합니다. \n" +
+        "[Front] \n" +
+            "{} \n\n" +
+            "[Back] \n" +
+            "{userIdx(int), name(String), creationDate(LocalDateTime), lastAccessDate(LocalDateTime), email(String), userId(String), socialCode(int), roles(List), userProfile} \n\n")
     @GetMapping("/userlist")
     public ResponseEntity<?> getUserList() {
         List<UserEntity> userList = userService.getUserList();
@@ -398,7 +410,7 @@ public class UserController {
             "[Front] \n" +
                 "{userId(String)} \n\n" +
             "[Back] \n" +
-                "{}")
+                "{responseMessage(String)}")
     @GetMapping("/check/id/{userId}")
     public ResponseEntity<?> checkUserId(@PathVariable String userId) {
         userService.checkUserId(userId);
@@ -411,7 +423,7 @@ public class UserController {
             "[Front] \n" +
                 "{nickname(String)} \n\n" +
             "[Back] \n" +
-                "{}")
+                "{responseMessage(String)}")
     @GetMapping("/check/nickname/{nickname}")
     public ResponseEntity<?> checkNickname(@PathVariable String nickname) {
         userService.checkNickname(nickname);
@@ -424,7 +436,7 @@ public class UserController {
             "[Front] \n" +
                 "{email(String)} \n\n" +
             "[Back] \n" +
-                "{}")
+                "{responseMessage(String)}")
     @GetMapping("/check/Email/{email}")
     public ResponseEntity<?> checkEmail(@PathVariable String email) {
         userService.checkEmail(email);
