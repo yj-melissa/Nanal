@@ -90,13 +90,15 @@ function ProfileForm() {
           src={userProfile.img}
           className='p-1 rounded-full w-28 h-28'
         />
-        <div className='my-auto'>
-          <p className='p-1 my-auto text-2xl font-bold'>
-            {userProfile.nickname} 님의 일기장
+        <div className='mx-auto my-auto break-words w-65'>
+          <p className='p-1 my-auto text-2xl font-bold break-all'>
+            {userProfile.nickname}
+            <br />
+            님의 일기장
           </p>
         </div>
       </div>
-      <div className='box-border mx-auto my-3 w-76 h-28 border-1'>
+      <div className='box-border mx-auto my-3 break-words max-h-20 w-65 border-1'>
         {userProfile.introduction === null ? (
           <p>
             안녕하세요. 나날입니다.
@@ -104,7 +106,7 @@ function ProfileForm() {
             프로필 소개글을 등록해주세요!ㅎㅎ
           </p>
         ) : (
-          <p>{userProfile.introduction}</p>
+          <p className='break-all'>{userProfile.introduction}</p>
         )}
       </div>
       <div className='flex justify-between'>
@@ -115,7 +117,13 @@ function ProfileForm() {
       <div className='box-border flex justify-around h-24 p-4 rounded-lg w-80 bg-slate-300/50'>
         <div
           className='grid cursor-pointer content-evenly'
-          onClick={() => navigate('/Diary/Total/List')}
+          onClick={() =>
+            navigate('/Diary/List', {
+              state: {
+                isToggle: 1,
+              },
+            })
+          }
         >
           <p className='text-center'>총 작성한 일기</p>
           <p className='font-bold text-center'>{pStatus.dCount}</p>

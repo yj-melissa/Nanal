@@ -5,6 +5,7 @@ import { onLogin } from '../../config/Login';
 import Swal from 'sweetalert2';
 
 const getStringDate = (date) => {
+  // console.log(date);
   return date.toISOString().slice(0, 10);
 };
 

@@ -3,24 +3,91 @@ import { useLocation, useNavigate, Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
+import CommentList from './CommentList';
 import emo_joy from '../../src_assets/img/emo_joy.png';
 import bookmark from '../../src_assets/img/bookmark.png';
 import bookmark_filled from '../../src_assets/img/bookmark_fill.png';
 
 function DiaryDetail() {
-  const location = useLocation();
+  // const location = useLocation();
+  const { state } = useLocation();
+  const navigate = useNavigate();
+  const diaryIdx = state.diaryIdx;
+  const isToggle = state.isToggle;
+  const groupIdx = state.groupIdx;
+
   const [diaryDetail, setDiaryDetail] = useState({});
   const [originGroupList, setOriginGroupList] = useState();
 
-  const navigate = useNavigate();
   // 북마크 여부 데이터
   const [isBook, setIsBook] = useState(false);
+
+  // 북마크 저장 함수
+  const bookmarkSave = () => {
+    axios_api
+      .get(`diary/bookmark/${diaryIdx}`)
+      .then(({ data }) => {
+        if (data.statusCode === 200) {
+          if (data.data.responseMessage === '일기 북마크 저장 성공') {
+            setIsBook(!isBook);
+          }
+        } else {
+          console.log('일기 북마크 저장 오류: ');
+          console.log(data.statusCode);
+          console.log(data.data.responseMessage);
+        }
+      })
+      .catch(({ error }) => {
+        console.log('일기 북마크 저장 오류: ' + error);
+      });
+  };
+
+  // 북마크 삭제 함수
+  const bookmarkDelete = () => {
+    axios_api
+      .delete(`diary/bookmark/${diaryIdx}`)
+      .then(({ data }) => {
+        if (data.statusCode === 200) {
+          if (data.data.responseMessage === '일기 북마크 삭제 성공') {
+            setIsBook(!isBook);
+          }
+        } else {
+          console.log('일기 북마크 삭제 오류: ');
+          console.log(data.statusCode);
+          console.log(data.data.responseMessage);
+        }
+      })
+      .catch(({ error }) => {
+        console.log('일기 북마크 삭제 오류: ' + error);
+      });
+  };
+
+  // 일기 삭제 함수
+  const diaryDelete = () => {
+    axios_api
+      .delete(`diary/${diaryIdx}`)
+      .then(({ data }) => {
+        if (data.statusCode === 200) {
+          if (data.data.responseMessage === '일기 삭제 성공') {
+            setDiaryDetail(data.data.diary);
+            navigate('/', { replace: true });
+          }
+        } else {
+          console.log('일기 삭제 오류: ');
+          console.log(data.statusCode);
+          console.log(data.data.responseMessage);
+        }
+      })
+      .catch(({ error }) => {
+        console.log('일기 삭제 오류: ' + error);
+      });
+  };
 
   // 일기 상세 페이지 불러오기
   useEffect(() => {
     onLogin();
     axios_api
-      .get(`diary/${location.state.diaryIdx}`)
+      .get(`diary/${diaryIdx}`)
       .then(({ data }) => {
         if (data.statusCode === 200) {
           if (data.data.responseMessage === '일기 조회 성공') {
@@ -32,35 +99,13 @@ function DiaryDetail() {
             }
           }
         } else {
-          console.log(data.statusCode);
-          console.log(data.data.responseMessage);
-        }
-      })
-      .catch((err) => console.log(err));
-  }, []);
-
-  // 일기 전체 댓글 리스트 조회
-  const [commentList, setCommentList] = useState([]);
-  useEffect(() => {
-    onLogin();
-    axios_api
-      .get(`diary/comment/${location.state.diaryIdx}`)
-      .then(({ data }) => {
-        if (data.statusCode === 200) {
-          setCommentList(null);
-          if (
-            data.data.responseMessage ===
-            '일기 그룹에 해당하는 댓글 리스트 조회 성공'
-          ) {
-            setCommentList(data.data.diaryComment);
-          }
-        } else {
+          console.log('일기 조회 오류: ');
           console.log(data.statusCode);
           console.log(data.data.responseMessage);
         }
       })
       .catch(({ error }) => {
-        console.log('일기 그룹에 해당하는 댓글 리스트 불러오기 오류: ' + error);
+        console.log('일기 조회 오류: ' + error);
       });
   }, []);
 
@@ -71,53 +116,19 @@ function DiaryDetail() {
         {/* 감정 넣는 곳 */}
         <span>{diaryDetail.emo}</span>
         {isBook ? (
-          <>
-            <img
-              src={bookmark_filled}
-              alt='bookmark_filled'
-              onClick={() =>
-                axios_api
-                  .delete(`diary/bookmark/${location.state.diaryIdx}`)
-                  .then(({ data }) => {
-                    if (data.statusCode === 200) {
-                      if (
-                        data.data.responseMessage === '일기 북마크 삭제 성공'
-                      ) {
-                        setIsBook(!isBook);
-                      }
-                    } else {
-                      console.log(data.statusCode);
-                      console.log(data.data.responseMessage);
-                    }
-                  })
-              }
-              className='w-1/12'
-            />
-          </>
+          <img
+            src={bookmark_filled}
+            alt='bookmark_filled'
+            onClick={bookmarkDelete}
+            className='w-1/12'
+          />
         ) : (
-          <>
-            <img
-              src={bookmark}
-              alt='bookmark'
-              onClick={() =>
-                axios_api
-                  .get(`diary/bookmark/${location.state.diaryIdx}`)
-                  .then(({ data }) => {
-                    if (data.statusCode === 200) {
-                      if (
-                        data.data.responseMessage === '일기 북마크 저장 성공'
-                      ) {
-                        setIsBook(!isBook);
-                      }
-                    } else {
-                      console.log(data.statusCode);
-                      console.log(data.data.responseMessage);
-                    }
-                  })
-              }
-              className='w-1/12'
-            />
-          </>
+          <img
+            src={bookmark}
+            alt='bookmark'
+            onClick={() => bookmarkSave}
+            className='w-1/12'
+          />
         )}
       </div>
       <div className='flex items-center justify-center my-5'>
@@ -150,20 +161,7 @@ function DiaryDetail() {
               cancelButtonText: '취소',
             }).then((result) => {
               if (result.isConfirmed) {
-                axios_api
-                  .delete(`diary/${location.state.diaryIdx}`)
-                  .then(({ data }) => {
-                    if (data.statusCode === 200) {
-                      if (data.data.responseMessage === '일기 삭제 성공') {
-                        setDiaryDetail(data.data.diary);
-                        navigate('/', { replace: true });
-                      }
-                    } else {
-                      console.log(data.statusCode);
-                      console.log(data.data.responseMessage);
-                    }
-                  })
-                  .catch((err) => console.log(err));
+                diaryDelete();
               }
             });
           }}
@@ -175,7 +173,7 @@ function DiaryDetail() {
         {diaryDetail.content}
       </div>
       {/* 댓글 보여주는 곳 */}
-      <div className='my-5'>
+      {/* <div className='my-5'>
         {commentList.map((comment, idx) => {
           return (
             <div key={idx} className='my-2'>
@@ -183,6 +181,13 @@ function DiaryDetail() {
             </div>
           );
         })}
+      </div> */}
+      <div className='my-5'>
+        <CommentList
+          diaryIdx={diaryIdx}
+          isToggle={isToggle}
+          groupIdx={groupIdx}
+        />
       </div>
     </div>
   );
