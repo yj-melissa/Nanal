@@ -45,15 +45,14 @@ function Calendaar() {
       {/* 일기쓰러가기 버튼 */}
       <div className='flex justify-center'>
         <button
-          className='bg-violet-100 text-violet-700 rounded-lg cursor-pointer p-2 whitespace-nowrap font-bold'
+          className='p-2 font-bold rounded-lg cursor-pointer bg-violet-100 text-violet-700 whitespace-nowrap'
           onClick={() => navigate('/Diary/Create')}
         >
-          {' '}
-          일기 쓰기 🖊{' '}
+          일기 쓰기 🖊
         </button>
       </div>
       {/* 일기 리스트 */}
-      <DiaryList curDate={toStringByFormatting(value)} />
+      <DiaryList isToggle={0} curDate={toStringByFormatting(value)} />
     </div>
   );
 }

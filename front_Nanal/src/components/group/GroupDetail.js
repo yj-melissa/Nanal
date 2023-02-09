@@ -3,7 +3,7 @@ import { useLocation } from 'react-router';
 import { Link } from 'react-router-dom';
 import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
-import GroupDiaryItem from './GroupDiaryItem';
+import DiaryList from '../diary/DiaryList';
 import settingIcon from '../../src_assets/img/setting_icon.png';
 
 function GroupDetail() {
@@ -11,8 +11,6 @@ function GroupDetail() {
 
   const [groupDetail, setGroupDetail] = useState('');
   const [groupTag, setGroupTag] = useState([]);
-
-  const [diaryList, setDiaryList] = useState([]);
 
   useEffect(() => {
     onLogin();
@@ -25,26 +23,6 @@ function GroupDetail() {
           if (data.data.responseMessage === '그룹 조회 성공') {
             setGroupDetail(data.data.groupDetail);
             setGroupTag(data.data.tags);
-            const groupidx = data.data.groupDetail.groupIdx;
-
-            axios_api
-              .get(`diary/list/${groupidx}`)
-              .then(({ data }) => {
-                if (data.statusCode === 200) {
-                  // 초기화 필요!
-                  setDiaryList(null);
-                  if (data.data.responseMessage === '일기 리스트 조회 성공') {
-                    setDiaryList(data.data.diary);
-                  }
-                } else {
-                  console.log('일기 리스트 불러오기 오류: ');
-                  console.log(data.statusCode);
-                  console.log(data.data.responseMessage);
-                }
-              })
-              .catch(({ err }) => {
-                console.log('일기 리스트 불러오기 오류: ', err);
-              });
           }
         } else {
           console.log(data.statusCode);
@@ -82,13 +60,8 @@ function GroupDetail() {
       </div>
       {/* <hr className='mx-5 my-5 text-center border-solid w-72 border-1 border-slate-600' /> */}
 
-      {diaryList.map((diary) => (
-        <GroupDiaryItem
-          key={diary.diaryIdx}
-          item={diary}
-          groupIdx={state.groupIdx}
-        />
-      ))}
+      {/* 일기 리스트 */}
+      <DiaryList isToggle={state.isToggle} groupIdx={state.groupIdx} />
     </div>
   );
 }

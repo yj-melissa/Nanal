@@ -13,6 +13,7 @@ function Settings() {
 
   const onLogout = () => {
     const denyToken = removeCookie('accessToken');
+
     // token 값이 없어졌다면?
     if (denyToken === undefined) {
       Swal.fire({
@@ -32,7 +33,7 @@ function Settings() {
 
   return (
     <div>
-      <div className='grid grid-cols-3 gap-6'>
+      <div className='grid grid-cols-3 gap-6 mb-4'>
         <Link to='/Group/List' className='grid content-evenly'>
           <img src={bookmarksRed} className='m-auto' />
           <p className='my-1 text-center'>그룹 관리</p>
@@ -46,8 +47,6 @@ function Settings() {
           <p className='my-1 text-center'>휴지통</p>
         </Link>
       </div>
-      <br />
-      <br />
       <div className='grid grid-cols-2'>
         <div className='grid pl-4 content-evenly' onClick={onLogout}>
           <img src={logOutImg} className='w-10 h-10 m-auto' />
@@ -56,11 +55,6 @@ function Settings() {
         <Link to='/Tuning' className='grid pr-10 content-evenly'>
           <img src={settingImg} className='w-10 h-10 m-auto' />
           <p className='my-1 text-center'>설정</p>
-        </Link>
-
-        <Link to='/User/Update' className='grid pr-10 content-evenly'>
-          <img src={settingImg} className='w-10 h-10 m-auto' />
-          <p className='my-1 text-center'>프로필</p>
         </Link>
       </div>
     </div>

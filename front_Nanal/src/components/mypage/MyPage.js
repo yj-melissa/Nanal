@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import ProfileForm from './profile/ProfileForm';
-import Settings from './profile/Settings.js';
+import Settings from './setting/Settings.js';
 import { onLogin } from '../../config/Login';
 
 function MyPage() {
@@ -11,7 +11,7 @@ function MyPage() {
   return (
     <div>
       <ProfileForm />
-      <hr className='border-slate-500/75 w-80 my-5' />
+      <hr className='my-5 border-slate-500/75 w-80' />
       <Settings />
     </div>
   );

@@ -7,7 +7,7 @@ function GroupItem({ item }) {
     <div>
       <Link
         to={`/Group/Detail`}
-        state={{ groupIdx: item.groupDetail.groupIdx }}
+        state={{ groupIdx: item.groupDetail.groupIdx, isToggle: 2 }}
       >
         <div className='flex bg-[#F7F7F7] border-2 border-solid border-slate-400 rounded-lg m-1 mb-3 p-2'>
           {/* {item.groupDetail.imgUrl !== null ? (

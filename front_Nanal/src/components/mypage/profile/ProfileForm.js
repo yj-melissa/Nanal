@@ -27,32 +27,6 @@ function ProfileForm() {
     });
   };
 
-  //이미지 useState 삼항연산자 써서 axios로 받아오면 그게 기본 값으로 들어가게 해놨는데 왜 안 되는지 잘 몰겠음.
-  // const [Image, setImage] = useState(
-  //   userProfile.img === null ? emptyProfile : Image
-  // );
-  const [Image, setImage] = useState();
-  const fileInput = useRef(null);
-
-  //이미지 수정 폼. 여기서 setImage로 바꾸면 Image에 저장된거 put으로 올려주기만하면 됨.
-  const onChange = (e) => {
-    if (e.target.files[0]) {
-      setImage(e.target.files[0]);
-    } else {
-      //업로드 취소할 시
-      setImage(Image);
-      return;
-    }
-    //화면에 프로필 사진 표시
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (reader.readyState === 2) {
-        setImage(reader.result);
-      }
-    };
-    reader.readAsDataURL(e.target.files[0]);
-  };
-
   // Mount 됐을 때 user
   useEffect(() => {
     onLogin();
@@ -115,26 +89,16 @@ function ProfileForm() {
           // src={Image}
           src={userProfile.img}
           className='p-1 rounded-full w-28 h-28'
-          onClick={() => {
-            fileInput.current.click();
-          }}
         />
-        <input
-          type='file'
-          style={{ display: 'none' }}
-          // accept='image/jpg,impge/png,image/jpeg'
-          accept='image/*'
-          name='profile_img'
-          onChange={onChange}
-          ref={fileInput}
-        />
-        <div className='my-auto'>
-          <p className='p-1 my-auto text-2xl font-bold'>
-            {userProfile.nickname} 님의 일기장
+        <div className='mx-auto my-auto break-words w-65'>
+          <p className='p-1 my-auto text-2xl font-bold break-all'>
+            {userProfile.nickname}
+            <br />
+            님의 일기장
           </p>
         </div>
       </div>
-      <div className='box-border mx-auto my-3 w-76 h-28 border-1'>
+      <div className='box-border mx-auto my-3 break-words max-h-20 w-65 border-1'>
         {userProfile.introduction === null ? (
           <p>
             안녕하세요. 나날입니다.
@@ -142,7 +106,7 @@ function ProfileForm() {
             프로필 소개글을 등록해주세요!ㅎㅎ
           </p>
         ) : (
-          <p>{userProfile.introduction}</p>
+          <p className='break-all'>{userProfile.introduction}</p>
         )}
       </div>
       <div className='flex justify-between'>
@@ -153,7 +117,13 @@ function ProfileForm() {
       <div className='box-border flex justify-around h-24 p-4 rounded-lg w-80 bg-slate-300/50'>
         <div
           className='grid cursor-pointer content-evenly'
-          onClick={() => navigate('/Diary/Total/List')}
+          onClick={() =>
+            navigate('/Diary/List', {
+              state: {
+                isToggle: 1,
+              },
+            })
+          }
         >
           <p className='text-center'>총 작성한 일기</p>
           <p className='font-bold text-center'>{pStatus.dCount}</p>
