@@ -75,7 +75,7 @@ public class DiaryEntity {
     @Builder
     public DiaryEntity(int diaryIdx, UserEntity user, LocalDateTime creationDate, Date diaryDate,
                        String content, PaintingEntity painting, MusicEntity music, boolean isDeleted,
-                       Date deleteDate, Date expireDate, String emo) {
+                       Date deleteDate, Date expireDate, String emo, String imgUrl) {
         this.diaryIdx=diaryIdx;
         this.user=user;
         this.creationDate=creationDate;
@@ -87,6 +87,7 @@ public class DiaryEntity {
         this.deleteDate=deleteDate;
         this.expireDate=expireDate;
         this.emo=emo;
+        this.imgUrl=imgUrl;
     }
 
 }
