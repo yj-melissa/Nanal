@@ -96,7 +96,7 @@ public class UserService {
 
     // 유저 프로필 조회
     public HashMap<String, Object> getByUserIdx(final int userIdx) {
-        log.info("userService getByUserIdx", userIdx);
+        log.info("userService getByUserIdx"+userIdx);
         final UserProfileEntity userProfile = userProfileRepository.findByProfileId(userIdx);
         LocalDate createDate = userProfile.getUser().getCreationDate().toLocalDate();
         long days = (LocalDate.now().until(createDate, ChronoUnit.DAYS) * -1) + 1;
@@ -114,7 +114,7 @@ public class UserService {
     }
 
     // 회원 정보 수정
-    public void updateProfile(final int userIdx, final UserRequestDTO userRequest) {
+    public HashMap<String, Object> updateProfile(final int userIdx, final UserRequestDTO userRequest) {
 
         if (userRequest == null) {
             throw new NullPointerException("");
@@ -126,7 +126,19 @@ public class UserService {
         profile.setIntroduction(userRequest.getIntroduction());
 //        profile.setIsPrivate(userForm.getIsPrivate());
 
-        userProfileRepository.save(profile);
+        LocalDate createDate = profile.getUser().getCreationDate().toLocalDate();
+        long days = (LocalDate.now().until(createDate, ChronoUnit.DAYS) * -1) + 1;
+
+        if (profile != null) {
+            HashMap<String, Object> newProfile = new HashMap<>();
+            newProfile.put("img", profile.getImg());
+            newProfile.put("nickname", profile.getNickname());
+            newProfile.put("introduction", profile.getIntroduction());
+            newProfile.put("days", days);
+
+            return newProfile;
+        }
+        return null;
     }
 
     // 비밀번호 수정
@@ -143,13 +155,20 @@ public class UserService {
 
     // 회원 탈퇴
     public void deleteByUserIdx(int userIdx) {
-        UserEntity user = userRepository.findByUserIdx(userIdx);
-        if (user != null) {
-            userRepository.delete(user);
-        }
-        else {
-            throw new NullPointerException();
-        }
+        log.info("deleteByUserIdx 실행");
+//        UserEntity user = userRepository.findByUserIdx(userIdx);
+//        if (user != null) {
+//            log.info("삭제 시도");
+//            userRepository.delete(user);
+//            log.info("삭제 성공");
+//        }
+//        else {
+//            log.info("유저 정보 없음");
+//            throw new NullPointerException();
+//        }
+        log.info("삭제 시도");
+        userRepository.deleteById(userIdx);
+        log.info("삭제 성공");
     }
 
     // 비밀번호 확인용
