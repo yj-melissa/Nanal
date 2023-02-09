@@ -18,4 +18,5 @@ public class PaintingResponseDTO {
         this.pictureTitle = paintingEntity.getPictureTitle();
         this.imgUrl = paintingEntity.getImgUrl();
     }
+
 }

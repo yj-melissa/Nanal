@@ -1,10 +1,7 @@
 package com.dbd.nanal.dto;
 
 import com.dbd.nanal.model.DiaryEntity;
-import com.dbd.nanal.model.MusicEntity;
 import com.dbd.nanal.model.PaintingEntity;
-import com.dbd.nanal.model.UserEntity;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,11 +17,11 @@ public class DiaryRequestDTO {
     private LocalDateTime creationDate;
     private Date diaryDate;
     private String content;
-    private int picture;
+    private PaintingEntity painting;
     private int music;
     private String emo;
-
     private List<Integer> groupIdxList;
+    private String imgUrl;
 
 //    @Builder
 //    public DiaryRequestDTO(int diaryIdx, UserEntity user, Timestamp creationDate, String content, PaintingEntity picture, MusicEntity music, boolean isDeleted, Timestamp deleteDate, Timestamp expireDate, String emo) {
@@ -40,14 +37,15 @@ public class DiaryRequestDTO {
 //        this.emo = emo;
 //    }
 
-    public DiaryEntity toEntity(){
+    public DiaryEntity toEntity() {
         return DiaryEntity.builder()
                 .diaryDate(diaryDate)
                 .diaryIdx(diaryIdx)
                 .content(content)
-//                .painting(picture)
+                .painting(painting)
 //                .music(music)
                 .emo(emo)
+                .imgUrl(imgUrl)
                 .build();
     }
 }
