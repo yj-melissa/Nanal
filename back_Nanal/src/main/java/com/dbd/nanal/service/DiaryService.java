@@ -31,7 +31,9 @@ public class DiaryService {
                 .user(user)
                 .diaryDate(diary.getDiaryDate())
                 .content(diary.getContent())
-                .emo(diary.getEmo()).build();
+                .emo(diary.getEmo())
+                .imgUrl(diary.getImgUrl())
+                .build();
         return new DiaryResponseDTO(diaryRepository.save(diaryEntity));
     }
 
