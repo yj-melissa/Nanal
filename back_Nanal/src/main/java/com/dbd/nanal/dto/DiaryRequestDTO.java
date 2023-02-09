@@ -1,6 +1,7 @@
 package com.dbd.nanal.dto;
 
 import com.dbd.nanal.model.DiaryEntity;
+import com.dbd.nanal.model.PaintingEntity;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,7 +17,7 @@ public class DiaryRequestDTO {
     private LocalDateTime creationDate;
     private Date diaryDate;
     private String content;
-    private int picture;
+    private PaintingEntity painting;
     private int music;
     private String emo;
     private List<Integer> groupIdxList;
@@ -41,7 +42,7 @@ public class DiaryRequestDTO {
                 .diaryDate(diaryDate)
                 .diaryIdx(diaryIdx)
                 .content(content)
-//                .painting(picture)
+                .painting(painting)
 //                .music(music)
                 .emo(emo)
                 .imgUrl(imgUrl)
