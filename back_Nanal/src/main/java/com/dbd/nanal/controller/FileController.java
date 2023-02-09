@@ -114,11 +114,9 @@ public class FileController {
             if (painting != null) {
                 responseDTO.put("responseMessage", ResponseMessage.PAINTING_SAVE_SUCCESS);
                 responseDTO.put("pictureInfo", painting);
-                System.out.println("여기기ㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣ");
                 return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
             } else {
                 responseDTO.put("responseMessage", ResponseMessage.PAINTING_SAVE_FAIL);
-                System.out.println("여기2");
                 return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
             }
         }
