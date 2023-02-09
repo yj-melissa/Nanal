@@ -78,19 +78,9 @@ function GroupCreate() {
     if (!e.target.files) {
       return;
     }
-
     // console.log(e.target.files[0]);
     formData.append('multipartFile', e.target.files[0]);
   };
-
-  // const onUploadImageButtonClick = (e) => {
-  //   e.preventDefault();
-  //   if (!inputRef.current) {
-  //     return;
-  //   }
-  //   inputRef.current.click();
-  //   console.log(inputRef.current);
-  // };
 
   // 초대할 사용자 추가
   const addFriend = (idx) => {

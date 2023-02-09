@@ -11,7 +11,7 @@ function MyPage() {
   return (
     <div>
       <ProfileForm />
-      <hr className='my-5 border-slate-500/75 w-80' />
+      <hr className='my-6 border-slate-500/75 w-80' />
       <Settings />
     </div>
   );

@@ -17,9 +17,9 @@ function Settings() {
     // token 값이 없어졌다면?
     if (denyToken === undefined) {
       Swal.fire({
-        icon: 'success', // Alert 타입
-        text: '로그아웃 했어요!', // Alert 내용
-        width: '50%',
+        icon: 'success',
+        text: '로그아웃 했어요!',
+        width: '80%',
       }).then(function () {
         // window.location.replace('/');
         navigate(`/`, {
@@ -33,7 +33,7 @@ function Settings() {
 
   return (
     <div>
-      <div className='grid grid-cols-3 gap-6 mb-4'>
+      <div className='grid grid-cols-3 gap-6 mb-5'>
         <Link to='/Group/List' className='grid content-evenly'>
           <img src={bookmarksRed} className='m-auto' />
           <p className='my-1 text-center'>그룹 관리</p>

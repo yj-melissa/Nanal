@@ -20,7 +20,6 @@ import FriendAdd from '../components/friend/FriendAdd';
 import AlarmList from '../components/another/AlarmList.js';
 // import AlarmItem from '../components/another/AlarmItem.js';
 import MyPage from '../components/mypage/MyPage.js';
-import UserUpdate from '../components/mypage/profile/UserUpdate';
 import Tuning from '../components/mypage/setting/Tuning';
 import RecycleBin from '../components/another/RecycleBin';
 import NotFound from '../components/another/NotFound.js';
@@ -36,7 +35,6 @@ const AppMain = ({ isCalendaar }) => {
       )}
       <Route path='/SignUp' element={<SignUp />}></Route>
       <Route path='/SignIn' element={<SignIn />}></Route>
-      <Route path='/User/Update' element={<UserUpdate />}></Route>
       <Route path='/Diary/Create' element={<DiaryCreate />}></Route>
       <Route path='/Diary/List' element={<DiaryList />}></Route>
       <Route path='/Diary/Edit' element={<DiaryUpdate />}></Route>

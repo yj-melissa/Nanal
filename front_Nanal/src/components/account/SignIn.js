@@ -53,7 +53,7 @@ function SignIn() {
             Swal.fire({
               icon: 'warning',
               text: '아이디 또는 비밀번호를 다시 확인해주세요.',
-              width: '60%',
+              width: '75%',
             }).then(function () {
               setUserId('');
               setPw('');
@@ -63,7 +63,7 @@ function SignIn() {
             Swal.fire({
               icon: 'warning',
               text: '회원이 아닙니다. 회원 가입을 해주세요.',
-              width: '60%',
+              width: '75%',
             }).then(function () {
               setUserId('');
               setPw('');
@@ -84,10 +84,10 @@ function SignIn() {
     <div className='flex justify-center'>
       <div className='box-border p-4 w-80 border-[1px] border-gray-500 border-solid'>
         <img src={nanal} className='place-self-center' />
-        <h1 className='flex items-center justify-center m-3 font-bold tracking-wider'>
+        <h1 className='flex justify-center m-3 font-bold tracking-wider text-center'>
           SignIn to 나날🤗
         </h1>
-        <div id='sign-in-form' className='m-0'>
+        <div id='sign-in-form' className='justify-between text-center'>
           <form action='' onSubmit={SignIn}>
             <div className='m-1'>
               <label htmlFor='user-id'>ID &nbsp;&nbsp;: </label>
@@ -112,16 +112,16 @@ function SignIn() {
                 className='max-w-full p-0.5 mb-2 rounded-lg'
               />
             </div>
-            <div className='m-1'>
+            <div className='justify-between m-1 mt-2 text-center'>
               <button
                 type='submit'
-                className='bg-teal-500 text-white px-2.5 py-1 rounded-3xl m-auto mx-3 inline-block'
+                className='bg-teal-500 text-white px-2.5 py-1 mx-3 rounded-3xl inline-block'
               >
                 Sign In
               </button>
               <Link
                 to='/SignUp'
-                className='bg-teal-500 text-white px-2.5 py-1 rounded-3xl m-auto mx-3 inline-block'
+                className='bg-teal-500 text-white px-2.5 py-1 mx-3 rounded-3xl inline-block'
               >
                 SignUp
               </Link>
