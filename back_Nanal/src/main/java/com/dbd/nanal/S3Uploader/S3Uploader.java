@@ -38,22 +38,26 @@ public class S3Uploader {
     public String upload(File uploadFile, String dirName) {
         System.out.println("업로드 함수!!"+uploadFile);
         String fileName = dirName + "/" + uploadFile.getName();
+        System.out.println("파일 이름 : "+fileName);
         String uploadImageUrl = putS3(uploadFile, fileName);
         System.out.println("uploadImageUrl "+uploadImageUrl);
         removeNewFile(uploadFile);  // 로컬에 생성된 File 삭제 (MultipartFile -> File 전환 하며 로컬에 파일 생성됨)
-
+        System.out.println("upload함수에서 상제 완료");
         return uploadImageUrl;      // 업로드된 파일의 S3 URL 주소 반환
     }
 
     private String putS3(File uploadFile, String fileName) {
+        System.out.println("ddddddddddddddddddddd");
         amazonS3Client.putObject(
                 new PutObjectRequest(bucket, fileName, uploadFile)
                         .withCannedAcl(CannedAccessControlList.PublicRead)	// PublicRead 권한으로 업로드 됨
         );
+        System.out.println("sssssssssssssssssssssssss");
         return amazonS3Client.getUrl(bucket, fileName).toString();
     }
 
     private void removeNewFile(File targetFile) {
+        System.out.println("삭제");
         if(targetFile.delete()) {
             System.out.println("삭제되었습니다.");
             log.info("파일이 삭제되었습니다.");
