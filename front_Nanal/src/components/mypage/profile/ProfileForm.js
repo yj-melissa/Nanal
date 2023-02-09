@@ -6,7 +6,6 @@ import emptyProfile from '../../../src_assets/img/emptyProfile.png';
 // import DiaryTotalList from '../../diary/DiaryTotalList';
 
 // username, userMassage, profile 받아와야함
-// 수정 시 파일 전송까지 ㅇㅇ
 function ProfileForm() {
   const navigate = useNavigate();
 
@@ -93,12 +92,11 @@ function ProfileForm() {
         <div className='mx-auto my-auto break-words w-65'>
           <p className='p-1 my-auto text-2xl font-bold break-all'>
             {userProfile.nickname}
-            <br />
-            님의 일기장
           </p>
+          <p>님의 일기장</p>
         </div>
       </div>
-      <div className='box-border mx-auto my-3 break-words max-h-20 w-65 border-1'>
+      <div className='box-border mx-auto mt-1 mb-6 break-words max-h-20 w-65 border-1'>
         {userProfile.introduction === null ? (
           <p>
             안녕하세요. 나날입니다.

@@ -143,23 +143,6 @@ function GroupSetting() {
         <hr className='mx-auto my-5 border-solid border-1 border-slate-800 w-80' />
       </div>
 
-      {/* {friendList.map((friendItem, idx) => {
-        return (
-          <Link
-            key={idx}
-            to={`/Friend/${friendItem.userIdx}`}
-            state={{ friendIdx: friendItem.userIdx }}
-          >
-            <div>
-              {friendItem.img}
-              <br />
-              {friendItem.nickName}
-              <br />
-              {friendItem.introduction}
-            </div>
-          </Link>
-        );
-      })} */}
       {friendList[0] === '아직은 친구가 없습니다.' ? (
         <p>아직은 그룹에 친구가 없습니다.</p>
       ) : (

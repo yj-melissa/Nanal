@@ -35,7 +35,6 @@ function GroupUpdate() {
   };
 
   // 그룹 이미지 upload
-  // let inputRef = useRef();
   const formData = new FormData();
 
   // 그룹 이미지 기본으로 되돌리기
