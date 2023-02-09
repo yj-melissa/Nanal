@@ -76,7 +76,6 @@ public class FileHandler {
         // 파일 만들기
         String absolutePath = new File("").getAbsolutePath() + File.separator + File.separator;
 
-
         // [폴더 생성] 프로젝트 폴더 내에 "painting" 폴더 생성 후 그 안에 현재 날자로 파일 생성
         String path = "painting" + File.separator + currentDate;
         File file = new File(path);
@@ -103,12 +102,9 @@ public class FileHandler {
         paintingRequestDTO.setPictureTitle(multipartFile.getOriginalFilename());
 
         file = new File(absolutePath + path + File.separator + newFileName);
-        System.out.println("file : " + file);
         multipartFile.transferTo(file);
-        System.out.println("transfoer해줘");
         file.setWritable(true);
         file.setReadable(true);
-        System.out.println("여기");
         paintingRequestDTO.setFile(file);
 
         return paintingRequestDTO;
@@ -128,33 +124,23 @@ public class FileHandler {
         if (!file.exists()) {
             file.mkdirs();
         }
-        System.out.println("폴더 생성 끝");
 
         // [URL 파일로 변환]
         URL url = new URL(dalleResult);
-        String extension = dalleResult.substring(dalleResult.indexOf('.') + 1); // 확장자 가져오기
+        String extension = ".png";
         BufferedImage image = ImageIO.read(url);
-        String absolutePath = new File("").getAbsolutePath() + File.separator +File.separator;
-//
-        System.out.println("변환 준비");
-//        String path = "painting" + File.separator + currentDate;
-//        File newFfile = new File(path);
-        String filePath = "painting" + File.separator + currentDate;
+
+        String absolutePath = new File("").getAbsolutePath() + File.separator;
+        String filePath = "painting" + File.separator + currentDate + File.separator;
         String newFileName = System.nanoTime() + extension;
-        file = new File(absolutePath + filePath + File.separator + newFileName);
 
-        System.out.println("파일 만들기 전");
-        ImageIO.write(image, extension, file);
-        System.out.println("파일 만들기 끝");
-
-//        String originalFileExtension = "/.png";
+        file = new File(absolutePath + filePath + newFileName);
+        file.setWritable(true);
+        file.setReadable(true);
+        ImageIO.write(image, "png", file);
 
         // 파일 만들기
 
-        System.out.println(file);
-
         return file;
-
     }
-
 }
