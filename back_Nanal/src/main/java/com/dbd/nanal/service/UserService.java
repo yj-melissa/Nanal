@@ -121,13 +121,16 @@ public class UserService {
         }
 
         UserProfileEntity profile = userProfileRepository.findByProfileId(userIdx);
+
         profile.setNickname(userRequest.getNickname());
-        profile.setImg(userRequest.getImg());
+//        profile.setImg(userRequest.getImg());
         profile.setIntroduction(userRequest.getIntroduction());
 //        profile.setIsPrivate(userForm.getIsPrivate());
 
         LocalDate createDate = profile.getUser().getCreationDate().toLocalDate();
         long days = (LocalDate.now().until(createDate, ChronoUnit.DAYS) * -1) + 1;
+
+        profile = userProfileRepository.save(profile);
 
         if (profile != null) {
             HashMap<String, Object> newProfile = new HashMap<>();
