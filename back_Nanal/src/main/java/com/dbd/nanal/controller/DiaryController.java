@@ -5,6 +5,7 @@ import com.dbd.nanal.config.common.DefaultRes;
 import com.dbd.nanal.config.common.ResponseMessage;
 import com.dbd.nanal.dto.*;
 import com.dbd.nanal.handler.FileHandler;
+import com.dbd.nanal.model.PaintingEntity;
 import com.dbd.nanal.model.UserEntity;
 import com.dbd.nanal.service.DiaryService;
 import com.dbd.nanal.service.FileService;
@@ -90,8 +91,10 @@ public class DiaryController {
             String dalleURL = fileService.saveToS3(file);
 
             // [DB에 저장]
-            fileService.paintingSave(new PaintingRequestDTO("Dalle", dalleURL));
+            PaintingRequestDTO paintingRequestDTO = new PaintingRequestDTO("Dalle", dalleURL);
+            PaintingResponseDTO paintingResponseDTO = fileService.paintingSave(new PaintingRequestDTO("Dalle", dalleURL));
 
+            diary.setPainting(PaintingEntity.builder().pictureIdx(paintingResponseDTO.getPictureIdx()).pictureTitle(paintingResponseDTO.getPictureTitle()).imgUrl(paintingResponseDTO.getImgUrl()).build());
             diary.setImgUrl(dalleURL);
 
             /////////////////////////////////////////////////////////////////
