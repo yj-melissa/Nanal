@@ -67,10 +67,19 @@ public class FileController {
                 // DB - painting Entity에 반영
                 painting = fileService.paintingSave(paintingRequestDTO);
                 // DB - group Entity에 반영
-                groupService.updateGroupImg(paintingRequestDTO.getGroupIdx(), painting.getPictureIdx(), paintingRequestDTO.getImgUrl());
+
+                if (paintingRequestDTO.getGroupIdx() != 0) {
+                    // group idx를 받았으면 group 인덱스의 이미지 idx를 변경한다.
+                    System.out.println("그룹 이미지 수정 idx : : " + paintingRequestDTO.getGroupIdx());
+                    groupService.updateGroupImg(paintingRequestDTO.getGroupIdx(), painting.getPictureIdx(), paintingRequestDTO.getImgUrl());
+                } else {
+                    // group idx를 받지 않았으면 user 인덱스의 이미지 idx를 변경한다.
+                    System.out.println("기본 이미지 개인 프로필 이미지 수정 idx : : " + userInfo.getUserIdx());
+                    userService.updateUserImg(userInfo.getUserIdx(), painting.getPictureIdx(), paintingRequestDTO.getImgUrl());
+                }
             } else {
                 // [2] 새로운 이미지 설정 - 사용자 선택
-
+                System.out.println("groupidx : " + paintingRequestDTO.getGroupIdx());
                 // (1) multipartfile을 file로 변환
                 FileHandler handler = new FileHandler();
                 // (1.1) requestDTO에 multipartfile 담기
@@ -86,30 +95,30 @@ public class FileController {
                 // (2) DB - painting Entity에 반영
                 // (2.1)
                 painting = fileService.paintingSave(paintingRequestDTO);
+
                 // (2.2) painting 
 //                painting.setImgUrl(paintingRequestDTO.getImgUrl());
 //                painting = fileService.paintingUpdate(paintingRequestDTO); // painting table update
-                groupService.updateGroupImg(paintingRequestDTO.getGroupIdx(), painting.getPictureIdx(), imgUrl);
 
+                if (paintingRequestDTO.getGroupIdx() != 0) {
+                    // group idx를 받았으면 group 인덱스의 이미지 idx를 변경한다.
+                    System.out.println("그룹 이미지 수정 idx : : " + paintingRequestDTO.getGroupIdx());
+                    groupService.updateGroupImg(paintingRequestDTO.getGroupIdx(), painting.getPictureIdx(), imgUrl);
+                } else {
+                    // group idx를 받지 않았으면 user 인덱스의 이미지 idx를 변경한다.
+                    System.out.println("개인 프로필 이미지 수정 idx : : " + userInfo.getUserIdx());
+                    userService.updateUserImg(userInfo.getUserIdx(), painting.getPictureIdx(), imgUrl);
+                }
             }
-
-//            if (paintingRequestDTO.getGroupIdx() != 0) {
-//                // group idx를 받았으면 group 인덱스의 이미지 idx를 변경한다.
-//                System.out.println("그룹 이미지 수정 idx : : " + paintingRequestDTO.getGroupIdx());
-//                groupService.updateGroupImg(paintingRequestDTO.getGroupIdx(), painting.getPictureIdx(), imgUrl);
-//            } else {
-//                // group idx를 받지 않았으면 user 인덱스의 이미지 idx를 변경한다.
-//                System.out.println("개인 프로필 이미지 수정 idx : : " + userInfo.getUserIdx());
-//                userService.updateUserImg(userInfo.getUserIdx(), painting.getPictureIdx(), imgUrl);
-//            }
-
 
             if (painting != null) {
                 responseDTO.put("responseMessage", ResponseMessage.PAINTING_SAVE_SUCCESS);
                 responseDTO.put("pictureInfo", painting);
+                System.out.println("여기기ㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣ");
                 return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
             } else {
                 responseDTO.put("responseMessage", ResponseMessage.PAINTING_SAVE_FAIL);
+                System.out.println("여기2");
                 return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
             }
         }
@@ -132,8 +141,10 @@ public class FileController {
                     "{String imgUrl} ")
     @Transactional
     @PutMapping(value = "/s3", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<?> updateImg(@ApiParam(value = "사용자 등록 이미지") @RequestPart(value = "multipartFile", required = false) MultipartFile multipartFile, @ApiParam(value = "{\"groupImgIdx\"}", required = false) @RequestPart(name = "value")
+    public ResponseEntity<?> updateImg(@ApiParam(value = "사용자 등록 이미지") @RequestPart(value = "multipartFile", required = false) MultipartFile multipartFile, @ApiParam(value = "{\"groupImgIdx\"}", required = false) @RequestPart(name = "value", required = false)
     PaintingRequestDTO paintingRequestDTO, @AuthenticationPrincipal UserEntity userInfo) throws IOException {
+
+        System.out.println("들어와!!!!!!!!!!!1");
         HashMap<String, Object> responseDTO = new HashMap<>();
         PaintingResponseDTO painting;
 
@@ -145,17 +156,44 @@ public class FileController {
                 paintingRequestDTO.setGroupImgIdx(0); // 기본 이미지 idx로 변경
                 painting = fileService.paintingSave(paintingRequestDTO);
 
-                groupService.updateGroupImg(paintingRequestDTO.getGroupIdx(), painting.getPictureIdx(), paintingRequestDTO.getImgUrl());
+                // 그룹 or 사용자
+                if (paintingRequestDTO.getGroupIdx() != 0) {
+                    // group idx를 받았으면 group 인덱스의 이미지 idx를 변경한다.
+                    System.out.println("그룹 이미지 수정 idx : : " + paintingRequestDTO.getGroupIdx());
+                    groupService.updateGroupImg(paintingRequestDTO.getGroupIdx(), painting.getPictureIdx(), paintingRequestDTO.getImgUrl());
+                } else {
+                    // group idx를 받지 않았으면 user 인덱스의 이미지 idx를 변경한다.
+                    System.out.println("기본 이미지 개인 프로필 이미지 수정 idx : : " + userInfo.getUserIdx());
+                    userService.updateUserImg(userInfo.getUserIdx(), painting.getPictureIdx(), paintingRequestDTO.getImgUrl());
+                }
             } else {
                 // new 이미지 저장
+                System.out.println("new image");
                 FileHandler handler = new FileHandler();
 
                 paintingRequestDTO.setMultipartFile(multipartFile); // input data dto에 합치기
+
+//                System.out.println("getgroupidx : " + paintingRequestDTO.getGroupIdx());
+
                 paintingRequestDTO = handler.parseFile(paintingRequestDTO);// file로 변환해서 dto에 넣기
+                System.out.println("변환완료");
                 String imgUrl = fileService.saveToS3(paintingRequestDTO.getFile());// file s3에 저장하고 링크 반환
+
+                System.out.println("imgurl : " + imgUrl);
                 paintingRequestDTO.setImgUrl(imgUrl); // dto에 imgUrl 저장
                 painting = fileService.paintingSave(paintingRequestDTO); // painting table update
-                groupService.updateGroupImg(paintingRequestDTO.getGroupIdx(), painting.getPictureIdx(), imgUrl); // groupDetail table update
+
+
+                // 그룹 or 사용자
+                if (paintingRequestDTO.getGroupIdx() != 0) {
+                    // group idx를 받았으면 group 인덱스의 이미지 idx를 변경한다.
+                    System.out.println("그룹 이미지 수정 idx : : " + paintingRequestDTO.getGroupIdx());
+                    groupService.updateGroupImg(paintingRequestDTO.getGroupIdx(), painting.getPictureIdx(), imgUrl); // groupDetail table update
+                } else {
+                    // group idx를 받지 않았으면 user 인덱스의 이미지 idx를 변경한다.
+                    System.out.println("개인 프로필 이미지 수정 idx : : " + userInfo.getUserIdx());
+                    userService.updateUserImg(userInfo.getUserIdx(), painting.getPictureIdx(), imgUrl);
+                }
             }
 
             // 리턴

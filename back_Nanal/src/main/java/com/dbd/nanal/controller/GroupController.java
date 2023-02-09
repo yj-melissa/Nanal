@@ -212,6 +212,8 @@ public class GroupController {
         try {
             HashMap<String, Object> groupDTO = groupService.updateGroupDetail(groupDetailRequestDTO);
 
+            System.out.println("그룹디테일 업데이트");
+            
             if (groupDTO != null) {
                 responseDTO.put("groupDetail", groupDTO.get("groupDetail"));
                 responseDTO.put("tags", groupDTO.get("tags"));
