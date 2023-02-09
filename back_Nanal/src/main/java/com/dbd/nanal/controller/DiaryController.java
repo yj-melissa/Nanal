@@ -1,10 +1,13 @@
 package com.dbd.nanal.controller;
 
+import com.dbd.nanal.PapagoAPI.ApiTranslateNmt;
 import com.dbd.nanal.config.common.DefaultRes;
 import com.dbd.nanal.config.common.ResponseMessage;
 import com.dbd.nanal.dto.*;
+import com.dbd.nanal.handler.FileHandler;
 import com.dbd.nanal.model.UserEntity;
 import com.dbd.nanal.service.DiaryService;
+import com.dbd.nanal.service.FileService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nimbusds.jose.shaded.json.JSONObject;
 import com.nimbusds.jose.shaded.json.parser.JSONParser;
@@ -13,12 +16,17 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.*;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 @Api(tags = {"Diary 관련 API"})
 @CrossOrigin
@@ -28,6 +36,13 @@ import java.util.*;
 public class DiaryController {
 
     private final DiaryService diaryService;
+    @Autowired
+    private final ApiTranslateNmt api;
+    private final FileService fileService;
+    private final FileHandler fileHandler;
+
+    @Value("${Dalle-API-Key}")
+    private String key;
 
     @ApiOperation(value = "일기 생성", notes =
             "일기를 생성합니다.\n" +
@@ -36,40 +51,67 @@ public class DiaryController {
                     "[Back] \n" +
                     "{diaryIdx(int), userIdx(int), nickname(String), diaryDate(Date), content(String), picture(String), emo(String)} ")
     @PostMapping("")
-    public ResponseEntity<?> writeDiary(@ApiParam(value = "일기 정보")@RequestBody DiaryRequestDTO diary, @AuthenticationPrincipal UserEntity userInfo) {
+    public ResponseEntity<?> writeDiary(@ApiParam(value = "일기 정보") @RequestBody DiaryRequestDTO diary, @AuthenticationPrincipal UserEntity userInfo) {
         HashMap<String, Object> responseDTO = new HashMap<>();
-        try{
+        try {
+
             //diary keyword analyze
-            List<String> keywordList=new ArrayList<>();
+            List<String> keywordList = new ArrayList<>();
             //picture
             //music
 
             diary.setUserIdx(userInfo.getUserIdx());
             //save diary
-            // 감정 분석
-            String emotion = requestToFlask(diary.getContent());
-            System.out.println("emotion : "+emotion);
+            // [감정 분석]
+            String emotion = requestToEmotionFlask(diary.getContent());
+            System.out.println("emotion : " + emotion);
             diary.setEmo(emotion);
-            DiaryResponseDTO diaryResponseDTO=diaryService.save(diary);
-            int diaryIdx=diaryResponseDTO.getDiaryIdx();
+
+            DiaryResponseDTO diaryResponseDTO = diaryService.save(diary);
+            int diaryIdx = diaryResponseDTO.getDiaryIdx();
 
             //save diary-group
-            for(int i=0; i<diary.getGroupIdxList().size(); i++){
-                GroupDiaryRelationDTO groupDiaryRelationDTO=new GroupDiaryRelationDTO(diaryIdx, diary.getGroupIdxList().get(i));
+            for (int i = 0; i < diary.getGroupIdxList().size(); i++) {
+                GroupDiaryRelationDTO groupDiaryRelationDTO = new GroupDiaryRelationDTO(diaryIdx, diary.getGroupIdxList().get(i));
                 diaryService.saveDiaryGroup(groupDiaryRelationDTO);
             }
 
             //save keyword
             diaryService.saveKeyword(diaryResponseDTO.getDiaryIdx(), keywordList);
 
+            // [번역할 일기 내용]
+            api.setContent(diary.getContent());
+
+            // [번역하기]
+            String en = api.transfer();
+            JSONObject jsonObj = (JSONObject) new JSONParser().parse(en);
+            JSONObject message = (JSONObject) jsonObj.get("message");
+            JSONObject result = (JSONObject) message.get("result");
+            String eng = (String) result.get("translatedText");
+
+            // [번역된 일기]
+            System.out.println("[번역된 일기] : " + eng);
+
+            // [달리 그림 만들기]
+            String dalleResult = requestToDalleFlask(eng);
+            System.out.println("[달리 결과] : " + dalleResult);
+
+            // [그림 저장하기]
+            File file = fileHandler.urlToFile(dalleResult);
+
+            String resultt = fileService.saveToS3(file);
+            System.out.println("resutlt : "+resultt);
+
+
             responseDTO.put("responseMessage", ResponseMessage.DIARY_SAVE_SUCCESS);
             responseDTO.put("diary", diaryResponseDTO);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-        }catch (Exception e){
+        } catch (Exception e) {
             responseDTO.put("responseMessage", ResponseMessage.DIARY_SAVE_FAIL);
             return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
         }
     }
+
 
     @ApiOperation(value = "diaryIdx로 일기 내용 조회", notes =
             "일기 내용을 조회합니다.\n" +
@@ -79,21 +121,21 @@ public class DiaryController {
                     "{diaryIdx(int), userIdx(int), nickname(String), diaryDate(Date), content(String), picture(String), emo(String)} ")
     @GetMapping("/{diaryIdx}")
     // 일기 리턴
-    public ResponseEntity<?> getDiary(@ApiParam(value = "일기 id")@PathVariable("diaryIdx") int diaryIdx, @AuthenticationPrincipal UserEntity userInfo){
+    public ResponseEntity<?> getDiary(@ApiParam(value = "일기 id") @PathVariable("diaryIdx") int diaryIdx, @AuthenticationPrincipal UserEntity userInfo) {
         HashMap<String, Object> responseDTO = new HashMap<>();
-        try{
-            DiaryResponseDTO diaryResponseDTO=diaryService.getDiary(diaryIdx);
-            if(diaryResponseDTO!=null) {
+        try {
+            DiaryResponseDTO diaryResponseDTO = diaryService.getDiary(diaryIdx);
+            if (diaryResponseDTO != null) {
                 responseDTO.put("responseMessage", ResponseMessage.DIARY_GET_SUCCESS);
                 responseDTO.put("diary", diaryResponseDTO);
                 responseDTO.put("isBookmark", diaryService.isBookmark(diaryIdx, userInfo.getUserIdx()));
                 responseDTO.put("groupList", diaryService.getGroupList(diaryIdx));
                 return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-            }else{
+            } else {
                 responseDTO.put("responseMessage", ResponseMessage.DIARY_GET_FAIL);
                 return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             responseDTO.put("responseMessage", ResponseMessage.DIARY_GET_FAIL);
             return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
         }
@@ -106,26 +148,26 @@ public class DiaryController {
                     "[Back] \n" +
                     "{diaryIdx(int), userIdx(int), nickname(String), diaryDate(Date), content(String), picture(String), emo(String)")
     @PutMapping("")
-    public ResponseEntity<?> updateDiary(@ApiParam(value = "일기 수정 정보")@RequestBody DiaryRequestDTO diary, @AuthenticationPrincipal UserEntity userInfo) {
+    public ResponseEntity<?> updateDiary(@ApiParam(value = "일기 수정 정보") @RequestBody DiaryRequestDTO diary, @AuthenticationPrincipal UserEntity userInfo) {
         HashMap<String, Object> responseDTO = new HashMap<>();
-        try{
+        try {
             diary.setUserIdx(userInfo.getUserIdx());
 
             //diary keyword analyze
-            List<String> keywordList=new ArrayList<>();
+            List<String> keywordList = new ArrayList<>();
 
             //picture
             //music
-            DiaryResponseDTO diaryResponseDTO=diaryService.updateDiary(diary.toEntity());
+            DiaryResponseDTO diaryResponseDTO = diaryService.updateDiary(diary.toEntity());
 
-            int diaryIdx=diary.getDiaryIdx();
+            int diaryIdx = diary.getDiaryIdx();
 
             //delete diary-group
             diaryService.deleteDiaryGroup(diaryIdx);
 
             //save diary-group
-            for(int i=0; i<diary.getGroupIdxList().size(); i++){
-                GroupDiaryRelationDTO groupDiaryRelationDTO=new GroupDiaryRelationDTO(diaryIdx, diary.getGroupIdxList().get(i));
+            for (int i = 0; i < diary.getGroupIdxList().size(); i++) {
+                GroupDiaryRelationDTO groupDiaryRelationDTO = new GroupDiaryRelationDTO(diaryIdx, diary.getGroupIdxList().get(i));
                 diaryService.saveDiaryGroup(groupDiaryRelationDTO);
             }
 
@@ -135,7 +177,7 @@ public class DiaryController {
             responseDTO.put("responseMessage", ResponseMessage.DIARY_UPDATE_SUCCESS);
             responseDTO.put("diary", diaryResponseDTO);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-        }catch (Exception e){
+        } catch (Exception e) {
             responseDTO.put("responseMessage", ResponseMessage.DIARY_UPDATE_FAIL);
             return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
         }
@@ -148,13 +190,13 @@ public class DiaryController {
                     "[Back] \n" +
                     "ok(200)")
     @DeleteMapping("/{diaryIdx}")
-    public ResponseEntity<?> deleteDiary(@ApiParam(value="일기 id") @PathVariable("diaryIdx") int diaryIdx){
+    public ResponseEntity<?> deleteDiary(@ApiParam(value = "일기 id") @PathVariable("diaryIdx") int diaryIdx) {
         HashMap<String, Object> responseDTO = new HashMap<>();
-        try{
+        try {
             diaryService.deleteDiary(diaryIdx);
             responseDTO.put("responseMessage", ResponseMessage.DIARY_DELETE_SUCCESS);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-        }catch (Exception e){
+        } catch (Exception e) {
             responseDTO.put("responseMessage", ResponseMessage.DIARY_DELETE_FAIL);
             return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
         }
@@ -167,14 +209,14 @@ public class DiaryController {
                     "[Back] \n" +
                     "[{diaryIdx(int), userIdx(int), nickname(String), diaryDate(Date), content(String), picture(String), emo(String)}]")
     @GetMapping("/list/{groupIdx}")
-    public ResponseEntity<?> DiaryList(@PathVariable("groupIdx") int groupIdx){
+    public ResponseEntity<?> DiaryList(@PathVariable("groupIdx") int groupIdx) {
         HashMap<String, Object> responseDTO = new HashMap<>();
-        try{
-            List<DiaryResponseDTO> diaryResponseDTOList=diaryService.diaryList(groupIdx);
+        try {
+            List<DiaryResponseDTO> diaryResponseDTOList = diaryService.diaryList(groupIdx);
             responseDTO.put("responseMessage", ResponseMessage.DIARY_LIST_FIND_SUCCESS);
             responseDTO.put("diary", diaryResponseDTOList);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-        }catch (Exception e){
+        } catch (Exception e) {
             responseDTO.put("responseMessage", ResponseMessage.DIARY_LIST_FIND_FAIL);
             return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
         }
@@ -187,25 +229,25 @@ public class DiaryController {
                     "[Back] \n" +
                     "[{diaryIdx(int), userIdx(int), nickname(String), diaryDate(Date), content(String), picture(String), emo(String)}]")
     @GetMapping("/list/date/{date}")
-    public ResponseEntity<?> DiaryList(@PathVariable("date") String date, @AuthenticationPrincipal UserEntity userInfo){
+    public ResponseEntity<?> DiaryList(@PathVariable("date") String date, @AuthenticationPrincipal UserEntity userInfo) {
         HashMap<String, Object> responseDTO = new HashMap<>();
-        try{
+        try {
             List<DiaryResponseDTO> diaryResponseDTOList;
             // yyyy-mm-00
-            if((date.split("-")[2]).equals("00")) {
-                String findDate=date.substring(0,7);
+            if ((date.split("-")[2]).equals("00")) {
+                String findDate = date.substring(0, 7);
                 diaryResponseDTOList = diaryService.getMonthDiaryList(findDate, userInfo.getUserIdx());
             }
             // yyyy-mm-dd
             else {
-                java.sql.Date findDate=java.sql.Date.valueOf(date);
+                java.sql.Date findDate = java.sql.Date.valueOf(date);
 //                diaryResponseDTOList = diaryService.getDateDiaryList(findDate);
                 diaryResponseDTOList = diaryService.getDateDiaryList(findDate, userInfo.getUserIdx());
             }
             responseDTO.put("responseMessage", ResponseMessage.DIARY_LIST_FIND_SUCCESS);
             responseDTO.put("diary", diaryResponseDTOList);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-        }catch (Exception e){
+        } catch (Exception e) {
             responseDTO.put("responseMessage", ResponseMessage.DIARY_LIST_FIND_FAIL);
             return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
         }
@@ -220,14 +262,14 @@ public class DiaryController {
 //    @GetMapping("/list/user/{userIdx}")
     @GetMapping("/list/user")
 //    public ResponseEntity<?> userDiaryList(@PathVariable("userIdx") int userIdx){
-    public ResponseEntity<?> userDiaryList(@ApiParam("유저 idx") @AuthenticationPrincipal UserEntity userInfo){
+    public ResponseEntity<?> userDiaryList(@ApiParam("유저 idx") @AuthenticationPrincipal UserEntity userInfo) {
         HashMap<String, Object> responseDTO = new HashMap<>();
-        try{
-            List<DiaryResponseDTO> diaryResponseDTOList=diaryService.userDiaryList(userInfo.getUserIdx());
+        try {
+            List<DiaryResponseDTO> diaryResponseDTOList = diaryService.userDiaryList(userInfo.getUserIdx());
             responseDTO.put("responseMessage", ResponseMessage.DIARY_LIST_FIND_SUCCESS);
             responseDTO.put("diary", diaryResponseDTOList);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-        }catch (Exception e){
+        } catch (Exception e) {
             responseDTO.put("responseMessage", ResponseMessage.DIARY_LIST_FIND_FAIL);
             return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
         }
@@ -241,13 +283,13 @@ public class DiaryController {
                     "{diaryCount(int)} ")
     @GetMapping("")
     // 일기 리턴
-    public ResponseEntity<?> getDiaryCount(@ApiParam(value = "user 정보") @AuthenticationPrincipal UserEntity userInfo){
+    public ResponseEntity<?> getDiaryCount(@ApiParam(value = "user 정보") @AuthenticationPrincipal UserEntity userInfo) {
         HashMap<String, Object> responseDTO = new HashMap<>();
-        try{
+        try {
             responseDTO.put("responseMessage", ResponseMessage.DIARY_COUNT_SUCCESS);
             responseDTO.put("diaryCount", diaryService.getDiaryCount(userInfo.getUserIdx()));
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-        }catch (Exception e){
+        } catch (Exception e) {
             responseDTO.put("responseMessage", ResponseMessage.DIARY_COUNT_FAIL);
             return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
         }
@@ -262,13 +304,13 @@ public class DiaryController {
     @PostMapping("/comment")
     public ResponseEntity<?> writeComment(@ApiParam(value = "댓글 정보") @RequestBody DiaryCommentRequestDTO diaryCommentRequestDTO, @AuthenticationPrincipal UserEntity userInfo) {
         HashMap<String, Object> responseDTO = new HashMap<>();
-        try{
+        try {
             diaryCommentRequestDTO.setUserIdx(userInfo.getUserIdx());
-            DiaryCommentResponseDTO diaryCommentResponseDTO=diaryService.saveComment(diaryCommentRequestDTO);
+            DiaryCommentResponseDTO diaryCommentResponseDTO = diaryService.saveComment(diaryCommentRequestDTO);
             responseDTO.put("responseMessage", ResponseMessage.DIARY_COMMENT_SAVE_SUCCESS);
             responseDTO.put("diaryComment", diaryCommentResponseDTO);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-        }catch (Exception e){
+        } catch (Exception e) {
             responseDTO.put("responseMessage", ResponseMessage.DIARY_COMMENT_SAVE_FAIL);
             return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
         }
@@ -281,14 +323,14 @@ public class DiaryController {
                     "[Back] \n" +
                     "{commentIdx(int), content(String), creationDate(date), userIdx(int), nickname(String)}")
     @PutMapping("/comment")
-    public ResponseEntity<?> updateComment(@ApiParam(value="댓글 수정 정보") @RequestBody DiaryCommentRequestDTO diaryCommentRequestDTO){
+    public ResponseEntity<?> updateComment(@ApiParam(value = "댓글 수정 정보") @RequestBody DiaryCommentRequestDTO diaryCommentRequestDTO) {
         HashMap<String, Object> responseDTO = new HashMap<>();
-        try{
-            DiaryCommentResponseDTO diaryCommentResponseDTO=diaryService.updateComment(diaryCommentRequestDTO);
+        try {
+            DiaryCommentResponseDTO diaryCommentResponseDTO = diaryService.updateComment(diaryCommentRequestDTO);
             responseDTO.put("responseMessage", ResponseMessage.DIARY_COMMENT_UPDATE_SUCCESS);
             responseDTO.put("diaryComment", diaryCommentResponseDTO);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-        }catch (Exception e){
+        } catch (Exception e) {
             responseDTO.put("responseMessage", ResponseMessage.DIARY_COMMENT_UPDATE_FAIL);
             return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
         }
@@ -301,14 +343,14 @@ public class DiaryController {
                     "[Back] \n" +
                     "[{commentIdx(int), content(String), creationDate(date), userIdx(int), nickname(String)}]")
     @GetMapping("/comment/{groupIdx}/{diaryIdx}")
-    public ResponseEntity<?> getCommentList(@ApiParam(value="댓글 리스트 조회 정보")@PathVariable("diaryIdx") int diaryIdx,@PathVariable("groupIdx") int groupIdx){
+    public ResponseEntity<?> getCommentList(@ApiParam(value = "댓글 리스트 조회 정보") @PathVariable("diaryIdx") int diaryIdx, @PathVariable("groupIdx") int groupIdx) {
         HashMap<String, Object> responseDTO = new HashMap<>();
-        try{
-            List<DiaryCommentResponseDTO> diaryCommentList=diaryService.getDiaryCommentList(groupIdx, diaryIdx);
+        try {
+            List<DiaryCommentResponseDTO> diaryCommentList = diaryService.getDiaryCommentList(groupIdx, diaryIdx);
             responseDTO.put("responseMessage", ResponseMessage.DIARY_COMMENT_LIST_FIND_SUCCESS);
             responseDTO.put("diaryComment", diaryCommentList);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-        }catch (Exception e){
+        } catch (Exception e) {
             responseDTO.put("responseMessage", ResponseMessage.DIARY_COMMENT_LIST_FIND_FAIL);
             return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
         }
@@ -321,14 +363,14 @@ public class DiaryController {
                     "[Back] \n" +
                     "[{commentIdx(int), content(String), creationDate(date), userIdx(int), nickname(String)}]")
     @GetMapping("/comment/{diaryIdx}")
-    public ResponseEntity<?> getCommentListAll(@ApiParam(value="댓글 리스트 조회 정보")@PathVariable("diaryIdx") int diaryIdx){
+    public ResponseEntity<?> getCommentListAll(@ApiParam(value = "댓글 리스트 조회 정보") @PathVariable("diaryIdx") int diaryIdx) {
         HashMap<String, Object> responseDTO = new HashMap<>();
-        try{
-            List<DiaryCommentResponseDTO> diaryCommentList=diaryService.getDiaryCommentListAll(diaryIdx);
+        try {
+            List<DiaryCommentResponseDTO> diaryCommentList = diaryService.getDiaryCommentListAll(diaryIdx);
             responseDTO.put("responseMessage", ResponseMessage.DIARY_COMMENT_LIST_FIND_SUCCESS);
             responseDTO.put("diaryComment", diaryCommentList);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-        }catch (Exception e){
+        } catch (Exception e) {
             responseDTO.put("responseMessage", ResponseMessage.DIARY_COMMENT_LIST_FIND_FAIL);
             return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
         }
@@ -341,13 +383,13 @@ public class DiaryController {
                     "[Back] \n" +
                     "ok(200)")
     @DeleteMapping("/comment/{commentIdx}")
-    public ResponseEntity<?> deleteDiaryComment(@ApiParam(value="댓글 id") @PathVariable("commentIdx") int commentIdx){
+    public ResponseEntity<?> deleteDiaryComment(@ApiParam(value = "댓글 id") @PathVariable("commentIdx") int commentIdx) {
         HashMap<String, Object> responseDTO = new HashMap<>();
-        try{
+        try {
             diaryService.deleteDiaryComment(commentIdx);
             responseDTO.put("responseMessage", ResponseMessage.DIARY_COMMENT_DELETE_SUCCESS);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-        }catch (Exception e){
+        } catch (Exception e) {
             responseDTO.put("responseMessage", ResponseMessage.DIARY_COMMENT_DELETE_FAIL);
             return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
         }
@@ -363,14 +405,14 @@ public class DiaryController {
 //    @GetMapping("/trashbin/{userIdx}")
     @GetMapping("/trashbin")
 //    public ResponseEntity<?> getTrashBinDiaryList(@PathVariable("userIdx") int userIdx){
-    public ResponseEntity<?> getTrashBinDiaryList(@AuthenticationPrincipal UserEntity userInfo){
+    public ResponseEntity<?> getTrashBinDiaryList(@AuthenticationPrincipal UserEntity userInfo) {
         HashMap<String, Object> responseDTO = new HashMap<>();
-        try{
-            List<DiaryResponseDTO> diaryResponseDTOList=diaryService.getTrashDiary(userInfo.getUserIdx());
+        try {
+            List<DiaryResponseDTO> diaryResponseDTOList = diaryService.getTrashDiary(userInfo.getUserIdx());
             responseDTO.put("responseMessage", ResponseMessage.DIARY_LIST_FIND_SUCCESS);
             responseDTO.put("diary", diaryResponseDTOList);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-        }catch (Exception e){
+        } catch (Exception e) {
             responseDTO.put("responseMessage", ResponseMessage.DIARY_LIST_FIND_FAIL);
             return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
         }
@@ -385,13 +427,13 @@ public class DiaryController {
 //    @DeleteMapping("/trashbin/{userIdx}")
     @DeleteMapping("/trashbin")
 //    public ResponseEntity<?> deleteTrashBin(@ApiParam(value="user id") @PathVariable("userIdx") int userIdx){
-    public ResponseEntity<?> deleteTrashBin(@ApiParam(value="user id") @AuthenticationPrincipal UserEntity userInfo){
+    public ResponseEntity<?> deleteTrashBin(@ApiParam(value = "user id") @AuthenticationPrincipal UserEntity userInfo) {
         HashMap<String, Object> responseDTO = new HashMap<>();
-        try{
+        try {
             diaryService.deleteTrashBin(userInfo.getUserIdx());
             responseDTO.put("responseMessage", ResponseMessage.DIARY_DELETE_SUCCESS);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-        }catch (Exception e){
+        } catch (Exception e) {
             responseDTO.put("responseMessage", ResponseMessage.DIARY_DELETE_FAIL);
             return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
         }
@@ -404,14 +446,14 @@ public class DiaryController {
                     "[Back] \n" +
                     "{diaryIdx(int), userIdx(int), diaryDate(Date), content(String), picture(String), music(int), emo(String)}")
     @PutMapping("/trashbin/{diaryIdx}")
-    public ResponseEntity<?> reDiary(@ApiParam(value="일기 번호") @PathVariable("diaryIdx") int diaryIdx){
+    public ResponseEntity<?> reDiary(@ApiParam(value = "일기 번호") @PathVariable("diaryIdx") int diaryIdx) {
         HashMap<String, Object> responseDTO = new HashMap<>();
-        try{
-            DiaryResponseDTO diaryResponseDTO=diaryService.reDiary(diaryIdx);
+        try {
+            DiaryResponseDTO diaryResponseDTO = diaryService.reDiary(diaryIdx);
             responseDTO.put("responseMessage", ResponseMessage.DIARY_RETURN_SUCCESS);
             responseDTO.put("diaryComment", diaryResponseDTO);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-        }catch (Exception e){
+        } catch (Exception e) {
             responseDTO.put("responseMessage", ResponseMessage.DIARY_RETURN_FAIL);
             return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
         }
@@ -431,7 +473,7 @@ public class DiaryController {
             diaryService.saveBookmark(diaryIdx, userInfo.getUserIdx());
             responseDTO.put("responseMessage", ResponseMessage.DIARY_BOOKMARK_SAVE_SUCCESS);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-        }catch (Exception e){
+        } catch (Exception e) {
             responseDTO.put("responseMessage", ResponseMessage.DIARY_BOOKMARK_SAVE_FAIL);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }
@@ -448,12 +490,12 @@ public class DiaryController {
 //    public ResponseEntity<?> getBookmarkList(@ApiParam(value = "유저 정보")@PathVariable("userIdx") int userIdx) {
     public ResponseEntity<?> getBookmarkList(@ApiParam(value = "유저 정보") @AuthenticationPrincipal UserEntity userInfo) {
         HashMap<String, Object> responseDTO = new HashMap<>();
-        try{
-            List<BookmarkResponseDTO> bookmarkList= diaryService.getBookmarkList(userInfo.getUserIdx());
+        try {
+            List<BookmarkResponseDTO> bookmarkList = diaryService.getBookmarkList(userInfo.getUserIdx());
             responseDTO.put("responseMessage", ResponseMessage.DIARY_BOOKMARK_LIST_SUCCESS);
             responseDTO.put("BookmarkList", bookmarkList);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-        }catch (Exception e){
+        } catch (Exception e) {
             responseDTO.put("responseMessage", ResponseMessage.DIARY_BOOKMARK_LIST_FAIL);
             return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
         }
@@ -466,13 +508,13 @@ public class DiaryController {
                     "[Back] \n" +
                     "ok(200)")
     @DeleteMapping("/bookmark/{diaryIdx}")
-    public ResponseEntity<?> deleteBookmark(@ApiParam(value="일기 스크랩 id")@PathVariable("diaryIdx") int diaryIdx, @AuthenticationPrincipal UserEntity userInfo){
+    public ResponseEntity<?> deleteBookmark(@ApiParam(value = "일기 스크랩 id") @PathVariable("diaryIdx") int diaryIdx, @AuthenticationPrincipal UserEntity userInfo) {
         HashMap<String, Object> responseDTO = new HashMap<>();
-        try{
+        try {
             diaryService.deleteBookmark(diaryIdx, userInfo.getUserIdx());
             responseDTO.put("responseMessage", ResponseMessage.DIARY_BOOKMARK_DELETE_SUCCESS);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-        }catch (Exception e){
+        } catch (Exception e) {
             responseDTO.put("responseMessage", ResponseMessage.DIARY_BOOKMARK_DELETE_FAIL);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }
@@ -486,22 +528,24 @@ public class DiaryController {
                     "{bookmarkCount(int)} ")
     @GetMapping("/bookmark")
     // 일기 리턴
-    public ResponseEntity<?> getBookCount(@ApiParam(value = "user 정보") @AuthenticationPrincipal UserEntity userInfo){
+    public ResponseEntity<?> getBookCount(@ApiParam(value = "user 정보") @AuthenticationPrincipal UserEntity userInfo) {
         HashMap<String, Object> responseDTO = new HashMap<>();
-        try{
+        try {
             responseDTO.put("responseMessage", ResponseMessage.DIARY_BOOKMARK_COUNT_SUCCESS);
             responseDTO.put("bookCount", diaryService.getBookCount(userInfo.getUserIdx()));
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-        }catch (Exception e){
+        } catch (Exception e) {
             responseDTO.put("responseMessage", ResponseMessage.DIARY_BOOKMARK_COUNT_FAIL);
             return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
         }
     }
-    private String requestToFlask(String content) throws JsonProcessingException, ParseException {
+
+    private String requestToEmotionFlask(String content) throws JsonProcessingException, ParseException {
 
         RestTemplate restTemplate = new RestTemplate();
         // url
         String url = "http://i8d110.p.ssafy.io:5000/predict";
+//        String url = "http://127.0.0.1:5000/predict";
 
         // Header set
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -515,16 +559,56 @@ public class DiaryController {
         ResponseEntity<String> response = restTemplate.postForEntity(url, requestMessage, String.class);
 
         // 요청 후 응답 확인
-//        System.out.println(response.getStatusCode());
-//        System.out.println(response.getBody());
+        System.out.println(response.getStatusCode());
+        System.out.println(response.getBody());
 
         JSONObject jsonObj = (JSONObject) new JSONParser().parse(response.getBody().toString());
 
         return (String) jsonObj.get("result");
     }
 
-    static class EmotionDTO{
+    private String requestToDalleFlask(String content) throws JsonProcessingException, ParseException {
+
+
+        RestTemplate restTemplate = new RestTemplate();
+        // url
+//        String url = "http://i8d110.p.ssafy.io:5000/dalle";
+        String url = "http://127.0.0.1:5000/dalle";
+
+        // Header set
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        // Body set
+        DalleDTO body = new DalleDTO(content, key);
+
+        // Message
+        HttpEntity<?> requestMessage = new HttpEntity<>(body, httpHeaders);
+        // Request
+        ResponseEntity<String> response = restTemplate.postForEntity(url, requestMessage, String.class);
+
+        // 요청 후 응답 확인
+        System.out.println(response.getStatusCode());
+        System.out.println(response.getBody());
+
+        // 1번
+//        JSONObject jsonObj = (JSONObject) new JSONParser().parse(response.getBody().toString());
+//        JSONObject data = (JSONObject) ((ArrayList) jsonObj.get("data")).get(0);
+//        String result = (String) data.get("url");
+
+        // 2번
+        String temp = "{\"created\":1675833528,\"data\":[{\"url\":\"https://oaidalleapiprodscus.blob.core.windows.net/private/org-BJ7f0EbOfocEuJwNQiwWsHBi/user-p369N0fqD6rk2VTlLjGVDNmf/img-I4wQEimg16zmFRaDAfgwE0j8.png?st=2023-02-08T04%3A18%3A48Z&se=2023-02-08T06%3A18%3A48Z&sp=r&sv=2021-08-06&sr=b&rscd=inline&rsct=image/png&skoid=6aaadede-4fb3-4698-a8f6-684d7786b067&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2023-02-07T21%3A32%3A44Z&ske=2023-02-08T21%3A32%3A44Z&sks=b&skv=2021-08-06&sig=m1HHDFfExRzzn%2BpXZqz0CzEN%2BTeZ1UtGM6AFzASaeOI%3D\"}]}";
+        JSONObject jsonObj = (JSONObject) new JSONParser().parse(temp);
+        JSONObject data = (JSONObject) ((ArrayList) jsonObj.get("data")).get(0);
+        String result = (String) data.get("url");
+
+        System.out.println("result : " + result);
+
+        return result;
+    }
+
+    static class EmotionDTO {
         String content;
+
         public EmotionDTO(String content) {
             this.content = content;
         }
@@ -534,7 +618,8 @@ public class DiaryController {
         }
 
     }
-    static class ResultDTO{
+
+    static class ResultDTO {
         String result;
 
         public ResultDTO(String result) {

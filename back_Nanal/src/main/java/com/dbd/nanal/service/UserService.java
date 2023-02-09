@@ -1,8 +1,10 @@
 package com.dbd.nanal.service;
 
 import com.dbd.nanal.dto.UserRequestDTO;
+import com.dbd.nanal.model.PaintingEntity;
 import com.dbd.nanal.model.UserEntity;
 import com.dbd.nanal.model.UserProfileEntity;
+import com.dbd.nanal.repository.PaintingRepository;
 import com.dbd.nanal.repository.UserProfileRepository;
 import com.dbd.nanal.repository.UserRepository;
 
@@ -28,6 +30,7 @@ public class UserService {
     private final UserRepository userRepository;
     //    @Autowired
     private final UserProfileRepository userProfileRepository;
+    private final PaintingRepository paintingRepository;
 
     // 회원 가입
     public UserEntity join(final UserEntity userEntity, final UserProfileEntity userProfileEntity) {
@@ -184,6 +187,9 @@ public class UserService {
         UserProfileEntity userProfileEntity = userProfileRepository.getReferenceById(userIdx);
         System.out.println("userIdx : "+userIdx+" 변경 전 img idx : "+userProfileEntity.getImg()+" 변경 후 img idx : "+newImgUrl);
         userProfileEntity.setImg(newImgUrl);
+
+        PaintingEntity painting = paintingRepository.getReferenceById(pictureIdx);
+        userProfileEntity.setPainting(painting);
     }
 }
 
