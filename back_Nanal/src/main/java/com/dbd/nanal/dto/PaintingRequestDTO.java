@@ -31,13 +31,21 @@ public class PaintingRequestDTO {
     // user
 //    private int use
 
+
+    public PaintingRequestDTO(String pictureTitle, String imgUrl) {
+        this.pictureTitle = pictureTitle;
+        this.imgUrl = imgUrl;
+    }
+
     public PaintingEntity toEntity(){
-        return PaintingEntity.builder().pictureTitle(pictureTitle).fileSize(fileSize).imgUrl(imgUrl).build();
+        return PaintingEntity.builder().pictureTitle(pictureTitle).imgUrl(imgUrl).build();
+//        return PaintingEntity.builder().pictureTitle(pictureTitle).fileSize(fileSize).imgUrl(imgUrl).build();
     }
 
     public void init() {
         this.groupImgIdx = 0;
-        this.imgUrl = "https://nanal-dbd.s3.ap-northeast-2.amazonaws.com/dalle/emo_sad.png";
+        this.imgUrl = "https://nanal-dbd.s3.ap-northeast-2.amazonaws.com/dalle/mungee_sohui.png";
+//        this.imgUrl = "https://nanal-dbd.s3.ap-northeast-2.amazonaws.com/dalle/emo_ner.png";
 //        this.imgUrl = "https://nanal-dbd.s3.ap-northeast-2.amazonaws.com/dalle/emo_sad.png";
 //        this.imgUrl = "https://nanal-dbd.s3.ap-northeast-2.amazonaws.com/dalle/emo_joy.png";
 
