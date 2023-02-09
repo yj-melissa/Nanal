@@ -61,11 +61,12 @@ public class FriendService {
 
             DiaryEntity diary = diaryRepository.findLatestDiary(friend.getUser_idx2().getUserIdx());
             // 일기 하나도 없을 때
-            if (diary == null) {
-                friendDetailResponseDTOS.add(new FriendDetailResponseDTO(friend.getUser_idx2().getUserProfile(), friend.getUser_idx2().getUserIdx(), ""));
-            } else {
-                friendDetailResponseDTOS.add(new FriendDetailResponseDTO(friend.getUser_idx2().getUserProfile(), friend.getUser_idx2().getUserIdx(), diary.getContent()));
-            }
+//            if (diary == null) {
+//                friendDetailResponseDTOS.add(new FriendDetailResponseDTO(friend.getUser_idx2().getUserProfile(), friend.getUser_idx2().getUserIdx(), ""));
+//            } else {
+            friendDetailResponseDTOS.add(new FriendDetailResponseDTO(friend.getUser_idx2().getUserProfile(), friend.getUser_idx2().getUserIdx()));
+//            friendDetailResponseDTOS.add(new FriendDetailResponseDTO(friend.getUser_idx2().getUserProfile(), friend.getUser_idx2().getUserIdx(), diary.getContent()));
+//            }
         }
         return friendDetailResponseDTOS;
     }
