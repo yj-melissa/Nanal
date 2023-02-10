@@ -24,8 +24,12 @@ function App() {
       {/* 브라우저인 경우 */}
       <BrowserView>
         <div className='justify-center App'>
-          <WebNav />
-          <hr className='mb-3 border-slate-500/75' />
+          {accessToken !== undefined ? (
+            <div>
+              <WebNav />
+              <hr className='mb-3 border-slate-500/75' />
+            </div>
+          ) : null}
           <WebMain />
         </div>
       </BrowserView>

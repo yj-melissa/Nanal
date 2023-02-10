@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
+import { getCookie } from '../config/Cookie';
 import MyDiary from '../webComponents/MyDiary';
 import GroupDiary from '../webComponents/GroupDiary';
 import FriendList from '../webComponents/FriendList';
@@ -21,6 +22,7 @@ import bmkBB from '../src_assets/img/bookmark/bookmark-blue-blue.svg';
 import bmkBW from '../src_assets/img/bookmark/bookmark-blue-white.svg';
 
 const AppMain = () => {
+  const accessToken = getCookie('accessToken');
   const [homeState, setHomeState] = useState([
     true,
     false,
@@ -58,13 +60,13 @@ const AppMain = () => {
         ) : homeState[4] === true ? (
           <Route path='/' element={<SettingsNanal />}></Route>
         ) : null}
-
         <Route path='/SignIn' element={<SignIn />}></Route>
         <Route path='/SignUp' element={<SignUp />}></Route>
         <Route path='/Diary/Detail' element={<DiaryDetail />}></Route>
         <Route path='*' element={<NotFound />}></Route>
       </Routes>
-      <div className='w-[1440px]'>
+      {accessToken !== undefined ? (
+        <div className='w-[1440px]'>
         {homeState[0] === true ? (
           <img src={bmkRR} className='absolute z-0 right-[158px] top-20' />
         ) : (
@@ -104,6 +106,8 @@ const AppMain = () => {
           </div>
         )}
       </div>
+      ) : null}
+      
     </div>
   );
 };
