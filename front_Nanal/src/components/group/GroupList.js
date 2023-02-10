@@ -11,7 +11,7 @@ function GroupList() {
   useEffect(() => {
     onLogin();
     axios_api
-      .get('group/list')
+      .get('group/list/0')
       .then(({ data }) => {
         if (data.statusCode === 200) {
           setGroupList(null);
