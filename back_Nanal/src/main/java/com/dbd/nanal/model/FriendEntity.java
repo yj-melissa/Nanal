@@ -1,7 +1,6 @@
 package com.dbd.nanal.model;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,11 +19,11 @@ public class FriendEntity {
     private int friend_idx;
 
     @ManyToOne
-    @JoinColumn(name="user_idx")
+    @JoinColumn(name = "user_idx")
     private UserEntity user_idx1;
 
     @ManyToOne
-    @JoinColumn(name="user_idx2")
+    @JoinColumn(name = "user_idx2")
     private UserEntity user_idx2;
 
     @Builder
@@ -33,4 +32,5 @@ public class FriendEntity {
         this.user_idx1 = user_idx1;
         this.user_idx2 = user_idx2;
     }
+
 }

@@ -31,7 +31,6 @@ public class FriendService {
         this.diaryRepository = diaryRepository;
     }
 
-    // 친구 등록
     @Transactional
     public boolean save(HashMap<String, Integer> map) {
 
@@ -39,7 +38,6 @@ public class FriendService {
 
         if (check != null) {
             // 이미 등록된 친구면 false 리턴
-            System.out.println("이미 들");
             return false;
         }
         UserEntity user = userRepository.findByUserIdx(map.get("userIdx"));
@@ -49,6 +47,7 @@ public class FriendService {
         friendRepository.save(FriendEntity.builder().user_idx1(friend).user_idx2(user).build());
 
         return true;
+
     }
 
     // 친구 리스트
@@ -59,14 +58,7 @@ public class FriendService {
         List<FriendDetailResponseDTO> friendDetailResponseDTOS = new ArrayList<>();
         for (FriendEntity friend : friends) {
 
-            DiaryEntity diary = diaryRepository.findLatestDiary(friend.getUser_idx2().getUserIdx());
-            // 일기 하나도 없을 때
-//            if (diary == null) {
-//                friendDetailResponseDTOS.add(new FriendDetailResponseDTO(friend.getUser_idx2().getUserProfile(), friend.getUser_idx2().getUserIdx(), ""));
-//            } else {
             friendDetailResponseDTOS.add(new FriendDetailResponseDTO(friend.getUser_idx2().getUserProfile(), friend.getUser_idx2().getUserIdx()));
-//            friendDetailResponseDTOS.add(new FriendDetailResponseDTO(friend.getUser_idx2().getUserProfile(), friend.getUser_idx2().getUserIdx(), diary.getContent()));
-//            }
         }
         return friendDetailResponseDTOS;
     }
@@ -81,13 +73,14 @@ public class FriendService {
             HashMap<String, Object> responseDto = new HashMap<>();
             responseDto.put("userIdx", friend.getUser_idx1().getUserIdx());
             responseDto.put("nickName", friend.getUser_idx1().getUserProfile().getNickname());
-            responseDto.put("img", "넣을예정");
+            responseDto.put("img", friend.getUser_idx1().getUserProfile().getImg());
+            responseDto.put("introduction", friend.getUser_idx1().getUserProfile().getIntroduction());
 
             friendDetailResponseDTOS.add(responseDto);
         }
         return friendDetailResponseDTOS;
-    }
 
+    }
 
     // 친구 조회
     public FriendDetailResponseDTO findFriend(int userIdx) {
@@ -95,13 +88,13 @@ public class FriendService {
         UserProfileEntity userProfile = userProfileRepository.findFriend(userIdx);
         return new FriendDetailResponseDTO(userProfile, userIdx);
 
-
     }
 
     // 친구 일기 조회
-    public List<HashMap<String,Object>> findFriendDiary(int friendIdx){
+    public List<HashMap<String, Object>> findFriendDiary(int friendIdx) {
+
         List<HashMap<String, Object>> findFriendDiaryList = new ArrayList<>();
-        List<DiaryEntity> diaryEntityList=diaryRepository.findByUserIdxList(friendIdx);
+        List<DiaryEntity> diaryEntityList = diaryRepository.findByUserIdxList(friendIdx);
 
         for (DiaryEntity diary : diaryEntityList) {
 
@@ -112,5 +105,7 @@ public class FriendService {
             findFriendDiaryList.add(responseDto);
         }
         return findFriendDiaryList;
+
     }
+
 }

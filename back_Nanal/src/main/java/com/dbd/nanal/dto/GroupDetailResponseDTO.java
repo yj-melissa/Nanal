@@ -15,7 +15,6 @@ public class GroupDetailResponseDTO {
     private boolean isPrivate;
     private int groupImgIdx;
     private Date creationTime;
-
     private String imgUrl;
 
     public GroupDetailResponseDTO(GroupDetailEntity groupEntity) {

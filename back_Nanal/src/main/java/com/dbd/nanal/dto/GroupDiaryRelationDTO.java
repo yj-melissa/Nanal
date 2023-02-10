@@ -4,7 +4,6 @@ import lombok.Getter;
 
 @Getter
 public class GroupDiaryRelationDTO {
-    private int groupDiaryIdx;
     private int diaryIdx;
     private int groupIdx;
 

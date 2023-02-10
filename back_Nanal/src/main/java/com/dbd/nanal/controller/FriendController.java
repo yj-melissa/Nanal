@@ -52,6 +52,7 @@ public class FriendController {
             responseDTO.put("responseMessage", ResponseMessage.EXCEPTION);
             return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
         }
+
     }
 
     @ApiOperation(value = "친구 프로필 조회", notes =
@@ -61,7 +62,6 @@ public class FriendController {
                     "[Back] \n" +
                     "friendList : [{userIdx(int), nickname(String), img(String), introduction(String)}, {..}] \n"+
                     "diary: [{diaryIdx(int), imgUrl}]")
-//    @GetMapping
     @GetMapping("/{friendIdx}")
     public ResponseEntity<?> getFriend(@ApiParam(value = "친구 idx", required = true) @PathVariable("friendIdx") int friendIdx) {
 
@@ -93,9 +93,7 @@ public class FriendController {
                     "[Back] \n" +
                     "friendList : [{userIdx(int), nickname(String), img(String), introduction(String)}, {..}] ")
     @GetMapping("list")
-//    public ResponseEntity<?> getFriendList(@ApiParam(value = "사용자 idx", required = true) @PathVariable int userIdx) {
     public ResponseEntity<?> getFriendList(@ApiParam(value = "유저 idx", required = true) @AuthenticationPrincipal UserEntity userInfo) {
-        System.out.println("[친구 리스트] 유저 : idx " + userInfo.getUserIdx() + " name " + userInfo.getUsername());
 
         HashMap<String, Object> responseDTO = new HashMap<>();
         try {
@@ -111,7 +109,6 @@ public class FriendController {
                 return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
             }
         }
-        // Exception 발생
         catch (Exception e) {
             responseDTO.put("responseMessage", ResponseMessage.EXCEPTION);
             return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
@@ -141,15 +138,11 @@ public class FriendController {
                 return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
             }
         }
-        // Exception 발생
         catch (Exception e) {
             responseDTO.put("responseMessage", ResponseMessage.EXCEPTION);
             return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
         }
 
     }
-
-
-
 
 }

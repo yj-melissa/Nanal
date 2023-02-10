@@ -25,8 +25,8 @@ public class GroupDetailRequestDTO {
     private LocalDateTime creationDate;
     private List<String> tags;
 
-
     public GroupDetailEntity toEntity() {
         return GroupDetailEntity.builder().groupName(groupName).groupImgIdx(groupImgIdx).isPrivate(isPrivate).groupIdx(groupIdx).build();
     }
+
 }
