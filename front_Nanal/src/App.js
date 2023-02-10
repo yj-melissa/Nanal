@@ -23,6 +23,14 @@ function App() {
     <div>
       {/* 브라우저인 경우 */}
       <BrowserView>
+        <div className='justify-center App'>
+          <WebNav />
+          <hr className='mb-3 border-slate-500/75' />
+          <WebMain />
+        </div>
+      </BrowserView>
+      {/* 모바일인 경우 */}
+      <MobileView>
         <div className='justify-center max-w-sm App'>
           {/*만약 주소가 sign in, sign up, /이라면 nav가 안 보이게*/}
           {accessToken !== undefined ? (
@@ -32,14 +40,6 @@ function App() {
             </div>
           ) : null}
           <MobileMain isCalendaar={isCalendaar} />
-        </div>
-      </BrowserView>
-      {/* 모바일인 경우 */}
-      <MobileView>
-        <div className='justify-center App'>
-          <WebNav />
-          <hr className='mb-3 border-slate-500/75' />
-          <WebMain />
         </div>
       </MobileView>
     </div>
