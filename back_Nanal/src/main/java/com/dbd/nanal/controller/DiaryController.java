@@ -90,6 +90,7 @@ public class DiaryController {
             // [달리 s3 올리기]
             String dalleURL = fileService.saveToS3(file);
 
+            System.out.println("xxxxxxxxxxxxxxxxx");
             // [DB에 저장]
             PaintingRequestDTO paintingRequestDTO = new PaintingRequestDTO("Dalle", dalleURL);
             PaintingResponseDTO paintingResponseDTO = fileService.paintingSave(new PaintingRequestDTO("Dalle", dalleURL));
@@ -103,12 +104,13 @@ public class DiaryController {
             DiaryResponseDTO diaryResponseDTO = diaryService.save(diary);
             int diaryIdx = diaryResponseDTO.getDiaryIdx();
 
+            System.out.println("save diary-htoup");
             //save diary-group
             for (int i = 0; i < diary.getGroupIdxList().size(); i++) {
                 GroupDiaryRelationDTO groupDiaryRelationDTO = new GroupDiaryRelationDTO(diaryIdx, diary.getGroupIdxList().get(i));
                 diaryService.saveDiaryGroup(groupDiaryRelationDTO);
             }
-
+            System.out.println("sae diaiy-htoup");
             //save keyword
             diaryService.saveKeyword(diaryResponseDTO.getDiaryIdx(), keywordList);
 

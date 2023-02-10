@@ -87,6 +87,8 @@ public class FileController {
                 paintingRequestDTO.setMultipartFile(multipartFile);
                 // (1.2) requestDTO에 multipartfile -> file로 변환해서 file 담기
                 paintingRequestDTO = handler.parseFile(paintingRequestDTO);
+                System.out.println("쟈쟁ㄴ");
+                        
                 // (1.3) file s3에 저장하고 URL 반환받기
                 imgUrl = fileService.saveToS3(paintingRequestDTO.getFile());
                 // (1.4) requestDTD에 URL 저장하기
