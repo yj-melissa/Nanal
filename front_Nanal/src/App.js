@@ -20,7 +20,7 @@ function App() {
     setIsCalendaar(e);
   };
   return (
-    <div>
+    <div id='App'>
       {/* 브라우저인 경우 */}
       <BrowserView>
         <div className='justify-center App'>
