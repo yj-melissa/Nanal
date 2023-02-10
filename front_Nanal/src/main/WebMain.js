@@ -56,10 +56,10 @@ const AppMain = () => {
           <Route path='/' element={<GroupDiary />}></Route>
         ) : homeState[2] === true ? (
           <Route path='/' element={<FriendList />}></Route>
-        ) : homeState[3] === true ? (
-          <Route path='/' element={<RecycleBin />}></Route>
-        ) : homeState[4] === true ? (
+          ) : homeState[3] === true ? (
           <Route path='/' element={<SettingsNanal />}></Route>
+          ) : homeState[4] === true ? (
+          <Route path='/' element={<RecycleBin />}></Route>
         ) : null}
         <Route path='/SignIn' element={<SignIn />}></Route>
         <Route path='/SignUp' element={<SignUp />}></Route>
