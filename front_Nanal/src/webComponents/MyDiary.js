@@ -1,7 +1,8 @@
+import React, { useCallback, useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import nmr from '../src_assets/img/bookmark-name/name-mark-red.svg';
 import diaryImgRed from '../src_assets/img/diary-img-red.svg';
 import Calendar from 'react-calendar';
-import React, { useState } from 'react';
 import DiaryCreate from '../webComponents/diary/DiaryCreate';
 import DiaryList from '../webComponents/diary/DiaryList';
 import '../src_assets/css/Calendar.css';
@@ -20,10 +21,11 @@ const toStringByFormatting = (value, delimeter = '-') => {
 
   return [year, month, date].join(delimeter);
 };
-const curDate = toStringByFormatting(new Date());
 
 const MyDiary = () => {
   const [value, onChange] = useState(new Date());
+  const checkedDate = toStringByFormatting(value);
+  const diarydate = checkedDate.split('-');
 
   return (
     <div className='relative w-[1440px] mx-auto'>
@@ -40,12 +42,14 @@ const MyDiary = () => {
       <p className='absolute z-30 left-[330px] inset-y-28'>내 일기</p>
       <img src={nmr} className='absolute z-20 left-60 inset-y-20' />
       <img src={diaryImgRed} className='absolute w-[1440px] z-10' />
-      <div className='absolute z-20 w-1/3 inset-y-16 right-48'>
-        {/* <DiaryCreate curDate={curDate} /> */}
+
+      <div className='absolute z-20 w-1/3 inset-y-20 right-48'>
+        <DiaryList isToggle={0} curDate={checkedDate} diarydate={diarydate} />
       </div>
-      <div className='absolute z-20 w-1/3 inset-y-16 right-48'>
-        <DiaryList isToggle={0} curDate={curDate} />
-      </div>
+
+      {/* <div className='absolute z-20 w-1/3 inset-y-16 right-48'>
+        <DiaryCreate curDate={checkedDate} />
+      </div> */}
     </div>
   );
 };

@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import axios_api from '../../config/Axios';
 import { setCookie } from '../../config/Cookie';
 import nanal from '../../src_assets/img/나날1.jpeg';
+import kakao from '../../src_assets/img/kakao_login.png';
 
 function SignIn() {
   const [userId, setUserId] = useState('');
@@ -78,6 +79,8 @@ function SignIn() {
       });
   };
 
+  const kakaoLogin = 'https://i8d110.p.ssafy.io/nanal/user/oauth2/kakao';
+
   return (
     <div className='grid mt-20 place-items-center h-96'>
       <div className='box-border p-4 w-auto border-[1px] border-gray-500 border-solid flex items-center justify-center'>
@@ -134,19 +137,26 @@ function SignIn() {
                   <span className='text-sm'>회원가입</span>
                 </Link>
               </div>
-              <div className='grid grid-cols-1 mt-2 just'>
-                <button
-                  type='submit'
-                  className='inline-block px-20 py-1.5 mx-auto my-2 text-sm font-bold text-white whitespace-normal bg-rose-300 hover:bg-rose-400 rounded-lg'
-                >
-                  Sign In
-                </button>
-
-                <Link>
-                  <button className='className=inline-block px-16 py-1.5 mx-auto my-2 text-sm font-bold text-white whitespace-normal bg-yellow-300 hover:bg-yellow-400 rounded-lg'>
-                    카카오 로그인
+              <div className='grid grid-cols-1 mt-2'>
+                <Link to='/'>
+                  <button
+                    type='submit'
+                    className='inline-block h-[45px] w-full mx-auto my-2 font-bold text-white whitespace-normal bg-rose-300 hover:bg-rose-400 rounded-lg'
+                  >
+                    Sign In
                   </button>
                 </Link>
+                <button
+                  onClick={() => {
+                    window.open(kakaoLogin);
+                  }}
+                >
+                  <img
+                    src={kakao}
+                    alt='카카오 로그인'
+                    className='w-full h-[45px]'
+                  />
+                </button>
               </div>
             </form>
           </div>

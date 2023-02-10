@@ -20,6 +20,7 @@ import bmkGG from '../src_assets/img/bookmark/bookmark-green-green.svg';
 import bmkGW from '../src_assets/img/bookmark/bookmark-green-white.svg';
 import bmkBB from '../src_assets/img/bookmark/bookmark-blue-blue.svg';
 import bmkBW from '../src_assets/img/bookmark/bookmark-blue-white.svg';
+import DiaryCreate from '../webComponents/diary/DiaryCreate';
 
 const AppMain = () => {
   const accessToken = getCookie('accessToken');
@@ -62,6 +63,7 @@ const AppMain = () => {
         ) : null}
         <Route path='/SignIn' element={<SignIn />}></Route>
         <Route path='/SignUp' element={<SignUp />}></Route>
+        <Route path='/Diary/Create' element={<DiaryCreate />}></Route>
         <Route path='/Diary/Detail' element={<DiaryDetail />}></Route>
         <Route path='*' element={<NotFound />}></Route>
       </Routes>
