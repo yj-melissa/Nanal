@@ -276,7 +276,7 @@ function SignUp() {
   };
 
   return (
-    <div className='flex justify-center'>
+    <div className='flex justify-center mt-10'>
       <div className='box-border p-4 w-80 border-[1px] border-gray-500 border-solid'>
         <h1 className='p-3 text-lg font-bold text-center'>
           나날에 회원가입하기
