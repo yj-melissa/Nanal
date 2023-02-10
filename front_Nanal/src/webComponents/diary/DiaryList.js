@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import axios_api from '../../config/Axios';
-import { onWebLogin } from '../../config/Login';
+import { onLogin } from '../../config/Login';
 import DiaryItem from './DiaryItem';
 
 function DiaryList({ isToggle, curDate, groupIdx }) {
@@ -21,7 +21,7 @@ function DiaryList({ isToggle, curDate, groupIdx }) {
   const [diaryList, setDiaryList] = useState([]);
 
   useEffect(() => {
-    onWebLogin();
+    onLogin();
     axios_api
       .get(arrAxios[isToggle])
       .then(({ data }) => {

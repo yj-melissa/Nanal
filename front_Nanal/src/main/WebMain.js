@@ -48,20 +48,20 @@ const AppMain = () => {
     <div>
       <Routes>
         {homeState[0] === true ? (
-          <Route path='/w' element={<MyDiary />}></Route>
+          <Route path='/' element={<MyDiary />}></Route>
         ) : homeState[1] === true ? (
-          <Route path='/w' element={<GroupDiary />}></Route>
+          <Route path='/' element={<GroupDiary />}></Route>
         ) : homeState[2] === true ? (
-          <Route path='/w' element={<FriendList />}></Route>
+          <Route path='/' element={<FriendList />}></Route>
         ) : homeState[3] === true ? (
-          <Route path='/w' element={<RecycleBin />}></Route>
+          <Route path='/' element={<RecycleBin />}></Route>
         ) : homeState[4] === true ? (
-          <Route path='/w' element={<SettingsNanal />}></Route>
+          <Route path='/' element={<SettingsNanal />}></Route>
         ) : null}
 
-        <Route path='/w/SignIn' element={<SignIn />}></Route>
-        <Route path='/w/SignUp' element={<SignUp />}></Route>
-        <Route path='/w/Diary/Detail' element={<DiaryDetail />}></Route>
+        <Route path='/SignIn' element={<SignIn />}></Route>
+        <Route path='/SignUp' element={<SignUp />}></Route>
+        <Route path='/Diary/Detail' element={<DiaryDetail />}></Route>
         <Route path='*' element={<NotFound />}></Route>
       </Routes>
       <div className='w-[1440px]'>

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import axios_api from '../../config/Axios';
-import { onWebLogin } from '../../config/Login';
+import { onLogin } from '../../config/Login';
 // import CommentList from './CommentList';
 import emo_joy from '../../src_assets/img/emotion/emo_joy.png';
 import bookmark from '../../src_assets/img/bookmark.png';
@@ -85,7 +85,7 @@ function DiaryDetail() {
 
   // 일기 상세 페이지 불러오기
   useEffect(() => {
-    onWebLogin();
+    onLogin();
     axios_api
       .get(`diary/${diaryIdx}`)
       .then(({ data }) => {
