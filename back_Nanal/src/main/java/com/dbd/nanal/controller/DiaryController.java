@@ -104,7 +104,7 @@ public class DiaryController {
             DiaryResponseDTO diaryResponseDTO = diaryService.save(diary);
             int diaryIdx = diaryResponseDTO.getDiaryIdx();
 
-            System.out.println("save diary-htoup");
+            System.out.println("save diary-htoup "+diary.getGroupIdxList().size());
             //save diary-group
             for (int i = 0; i < diary.getGroupIdxList().size(); i++) {
                 GroupDiaryRelationDTO groupDiaryRelationDTO = new GroupDiaryRelationDTO(diaryIdx, diary.getGroupIdxList().get(i));
@@ -587,24 +587,24 @@ public class DiaryController {
         String url = "http://127.0.0.1:5000/dalle";
 
 //         Header set
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+//        HttpHeaders httpHeaders = new HttpHeaders();
+//        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
 //         Body set
-        DalleDTO body = new DalleDTO(content, key);
+//        DalleDTO body = new DalleDTO(content, key);
 
 //         Message
-        HttpEntity<?> requestMessage = new HttpEntity<>(body, httpHeaders);
+//        HttpEntity<?> requestMessage = new HttpEntity<>(body, httpHeaders);
         // Request
-        ResponseEntity<String> response = restTemplate.postForEntity(url, requestMessage, String.class);
+//        ResponseEntity<String> response = restTemplate.postForEntity(url, requestMessage, String.class);
 
         // 요청 후 응답 확인
 //        System.out.println(response.getStatusCode());
 //        System.out.println(response.getBody());
 
         // 1번
-        JSONObject jsonObj = (JSONObject) new JSONParser().parse(response.getBody().toString());
-        JSONObject data = (JSONObject) ((ArrayList) jsonObj.get("data")).get(0);
-        String result = (String) data.get("url");
+//        JSONObject jsonObj = (JSONObject) new JSONParser().parse(response.getBody().toString());
+//        JSONObject data = (JSONObject) ((ArrayList) jsonObj.get("data")).get(0);
+//        String result = (String) data.get("url");
 
         // 2번
 //        String temp = "{\"created\":1675906960,\"data\":[{\"url\":\"https://oaidalleapiprodscus.blob.core.windows.net/private/org-BJ7f0EbOfocEuJwNQiwWsHBi/user-p369N0fqD6rk2VTlLjGVDNmf/img-3toevsaLSHr1DdmjQzoT1Vrd.png?st=2023-02-09T00%3A42%3A40Z&se=2023-02-09T02%3A42%3A40Z&sp=r&sv=2021-08-06&sr=b&rscd=inline&rsct=image/png&skoid=6aaadede-4fb3-4698-a8f6-684d7786b067&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2023-02-08T21%3A57%3A10Z&ske=2023-02-09T21%3A57%3A10Z&sks=b&skv=2021-08-06&sig=V%2BlTfdHmVPIia3ZosdTIP12pmBvLJwRwqOZ/gOkX0kY%3D\"}]}";
@@ -612,6 +612,7 @@ public class DiaryController {
 //        JSONObject data = (JSONObject) ((ArrayList) jsonObj.get("data")).get(0);
 //        String result = (String) data.get("url");
 //        String result = "https://oaidalleapiprodscus.blob.core.windows.net/private/org-BJ7f0EbOfocEuJwNQiwWsHBi/user-p369N0fqD6rk2VTlLjGVDNmf/img-nki9A2o01hcs2BoB3KFCK93w.png?st=2023-02-09T02%3A37%3A37Z&se=2023-02-09T04%3A37%3A37Z&sp=r&sv=2021-08-06&sr=b&rscd=inline&rsct=image/png&skoid=6aaadede-4fb3-4698-a8f6-684d7786b067&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2023-02-08T22%3A02%3A23Z&ske=2023-02-09T22%3A02%3A23Z&sks=b&skv=2021-08-06&sig=LugR3kVvl6B4M/293aqKhcdMxLgrgszYt68Xv1zl9HM%3D";
+        String result = "https://oaidalleapiprodscus.blob.core.windows.net/private/org-BJ7f0EbOfocEuJwNQiwWsHBi/user-p369N0fqD6rk2VTlLjGVDNmf/img-aLCWRCYcVYeBAnQ9puGSyoJT.png?st=2023-02-10T16%3A03%3A36Z&se=2023-02-10T18%3A03%3A36Z&sp=r&sv=2021-08-06&sr=b&rscd=inline&rsct=image/png&skoid=6aaadede-4fb3-4698-a8f6-684d7786b067&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2023-02-09T21%3A37%3A21Z&ske=2023-02-10T21%3A37%3A21Z&sks=b&skv=2021-08-06&sig=CgnZjqrqM4QCBo0zQcyedEBhw9HNzkq3bo1E13ca4B4%3D";
         System.out.println("result : " + result);
 
         return result;
