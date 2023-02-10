@@ -126,7 +126,7 @@ function DiaryDetail() {
           <img
             src={bookmark}
             alt='bookmark'
-            onClick={() => bookmarkSave}
+            onClick={bookmarkSave}
             className='w-1/12'
           />
         )}

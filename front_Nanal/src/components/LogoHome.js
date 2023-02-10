@@ -18,7 +18,7 @@ const LogoHome = () => {
   }, []);
 
   return (
-    <div className='grid content-center'>
+    <div className='h-[500px] grid content-center'>
       <img src={nanal} className='w-60 h-60 place-self-center' />
       <Link
         to='/SignIn'

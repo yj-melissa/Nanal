@@ -81,7 +81,7 @@ function SignIn() {
   };
 
   return (
-    <div className='flex justify-center'>
+    <div className='flex justify-center mt-10'>
       <div className='box-border p-4 w-80 border-[1px] border-gray-500 border-solid'>
         <img src={nanal} className='place-self-center' />
         <h1 className='flex justify-center m-3 font-bold tracking-wider text-center'>
