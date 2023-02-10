@@ -384,7 +384,7 @@ function SignUp() {
           <div className='mt-3 text-center'>
             <button
               type='submit'
-              className='bg-teal-500 text-white px-2.5 py-1 rounded-3xl m-auto '
+              className='bg-teal-500 text-white px-2.5 py-1 rounded-3xl mt-5'
             >
               SignUp
             </button>
