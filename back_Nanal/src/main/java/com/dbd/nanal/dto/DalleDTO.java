@@ -13,4 +13,5 @@ public class DalleDTO {
         this.content = content;
         this.key = key;
     }
+
 }

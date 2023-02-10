@@ -25,11 +25,6 @@ public class PaintingEntity {
     private String pictureTitle;
     private long fileSize;
 
-
-//    @OneToOne(mappedBy = "painting")
-//    @JsonIgnore
-//    private DiaryEntity diary;
-
     @Builder
     public PaintingEntity(int pictureIdx, String imgUrl, String pictureTitle, long fileSize, Date creationDate) {
         this.pictureIdx = pictureIdx;
@@ -38,4 +33,5 @@ public class PaintingEntity {
         this.fileSize = fileSize;
         this.creationDate = creationDate;
     }
+
 }

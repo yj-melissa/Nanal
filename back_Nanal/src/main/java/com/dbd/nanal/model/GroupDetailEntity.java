@@ -6,9 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -30,7 +27,6 @@ public class GroupDetailEntity {
     @Column(name = "group_name", length = 30)
     private String groupName;
 
-    // 확장 - 불특정 다수에게 설정
     @Column(name = "is_private")
     private boolean isPrivate;
 
@@ -42,7 +38,6 @@ public class GroupDetailEntity {
     private Date creationDate;
 
 
-    // 태그 검색할 때 사용
     @OneToMany(mappedBy = "groupDetail") // 읽기만 가능
     @JsonIgnore
     private List<GroupTagEntity> groupTags = new ArrayList<>();
@@ -59,14 +54,6 @@ public class GroupDetailEntity {
     @JsonIgnore
     private List<DiaryCommentEntity> diaryComments = new ArrayList<>();
 
-//    @Builder
-//    public GroupMemberEntity(int groupIdx, String groupName, boolean isPrivate, String groupImg, Date creationDate) {
-//        this.groupIdx = groupIdx;
-//        this.groupName = groupName;
-//        this.isPrivate = isPrivate;
-//        this.groupImg = groupImg;
-//        this.creationDate = creationDate;
-//    }
 
     @Builder
     public GroupDetailEntity(int groupIdx, String groupName, boolean isPrivate, int groupImgIdx, Date creationDate, List<GroupTagEntity> groupTags, List<GroupUserRelationEntity> groupUserRelations, List<GroupDiaryRelationEntity> groupDiaries, List<DiaryCommentEntity> diaryComments, String imgUrl) {
@@ -81,7 +68,6 @@ public class GroupDetailEntity {
         this.diaryComments = diaryComments;
         this.imgUrl = imgUrl;
     }
-
 
     public boolean getIsPrivate() {
         return isPrivate;

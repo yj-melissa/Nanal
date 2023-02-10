@@ -19,8 +19,4 @@ public class PaintingService {
         return paintingRepository.save(paintingEntity);
     }
 
-
-    public Optional<PaintingEntity> findById(int paintingIdx) {
-        return paintingRepository.findById(paintingIdx);
-    }
 }

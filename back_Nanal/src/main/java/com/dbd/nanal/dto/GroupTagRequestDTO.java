@@ -18,4 +18,5 @@ public class GroupTagRequestDTO {
     public GroupTagEntity toEntity() {
         return GroupTagEntity.builder().groupDetail(groupDetail).tagIdx(tagIdx).tag(tag).build();
     }
+
 }
