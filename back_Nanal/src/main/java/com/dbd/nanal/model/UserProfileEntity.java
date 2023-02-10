@@ -1,7 +1,6 @@
 package com.dbd.nanal.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import java.util.Collections;
 import javax.persistence.*;
 
 import lombok.AllArgsConstructor;
@@ -35,6 +34,7 @@ public class UserProfileEntity {
 
     @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     @JoinColumn(name="pictureIdx")
+    @JsonIgnore
     private PaintingEntity painting;
 
     private String introduction;
