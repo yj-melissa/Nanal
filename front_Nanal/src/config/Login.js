@@ -32,6 +32,34 @@ export function onLogin() {
   // setTimeout(onSilentRefresh, JWT_EXPIRY_TIME - 60000);
 }
 
+export function onWebLogin() {
+  // const navigate = useNavigate();
+
+  const accessToken = getCookie('accessToken');
+
+  if (accessToken !== undefined) {
+    // accessToken header로 설정
+    axios_api.defaults.headers.common[
+      'Authorization'
+    ] = `Bearer ${accessToken}`;
+  } else {
+    // alert('로그인 후 접근 가능해요!');
+    Swal.fire({
+      icon: 'warning',
+      text: '로그인 후 접근 가능해요!',
+      width: '80%',
+    }).then(function () {
+      // navigate(`/SignIn`, {
+      //   replace: true,
+      // });
+      window.location.replace('/w/SignIn');
+    });
+  }
+
+  // accessToken 만료하기 1분 전에 로그인 연장
+  // setTimeout(onSilentRefresh, JWT_EXPIRY_TIME - 60000);
+}
+
 // const onSilentRefresh = () => {
 //   axios_api
 //     .post('/silent-refresh')

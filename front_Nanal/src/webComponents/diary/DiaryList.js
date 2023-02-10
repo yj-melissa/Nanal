@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import axios_api from '../../config/Axios';
-import { onLogin } from '../../config/Login';
+import { onWebLogin } from '../../config/Login';
 import DiaryItem from './DiaryItem';
 
 function DiaryList({ isToggle, curDate, groupIdx }) {
@@ -21,7 +21,7 @@ function DiaryList({ isToggle, curDate, groupIdx }) {
   const [diaryList, setDiaryList] = useState([]);
 
   useEffect(() => {
-    onLogin();
+    onWebLogin();
     axios_api
       .get(arrAxios[isToggle])
       .then(({ data }) => {
@@ -29,6 +29,7 @@ function DiaryList({ isToggle, curDate, groupIdx }) {
           // 초기화 필요!
           setDiaryList(null);
           if (data.data.responseMessage === '일기 리스트 조회 성공') {
+            console.log(data.data.diary);
             setDiaryList(data.data.diary);
           }
         } else {
@@ -43,19 +44,19 @@ function DiaryList({ isToggle, curDate, groupIdx }) {
   }, [curDate]);
 
   return (
-    <div className='p-5 w-80'>
+    <div className='DiaryList'>
       {isToggle === 0 ? (
-        <h4 className='font-bold text-center'>
+        <p className='text-2xl font-bold text-center'>
           {diaryList.length}개의 일기가 있습니다.
-        </h4>
+        </p>
       ) : isToggle === 1 ? (
-        <h4 className='my-5 font-bold text-center'>
+        <p className='my-5 text-2xl font-bold text-center'>
           내가 쓴 일기 개수는 총 {diaryList.length}개 입니다.
-        </h4>
+        </p>
       ) : (
         <></>
       )}
-      <div>
+      <div className='my-5'>
         {diaryList.map((diary) => (
           <DiaryItem
             key={diary.diaryIdx}

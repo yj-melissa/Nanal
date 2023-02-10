@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import axios_api from '../../config/Axios';
-import emo_joy from '../../src_assets/img/emotion/emo_joy.png';
+import emo_joy from '../../src_assets/img/emo_joy.png';
 import Swal from 'sweetalert2';
 
 function CommentDetail({ item }) {
