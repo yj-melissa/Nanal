@@ -18,19 +18,21 @@ const LogoHome = () => {
   }, []);
 
   return (
-    <div className='h-[500px] grid content-center'>
-      <img src={nanal} className='w-60 h-60 place-self-center' />
-      <Link
-        to='/SignIn'
-        className='absolute bottom-44 px-4 py-2 mx-4 text-base font-semibold border-0 rounded-full place-self-center bg-violet-100 text-violet-700 hover:bg-violet-200'
-      >
-        로그인하러 가기
+    <div className='grid grid-cols-1 place-items-center mt-20'>
+      <img src={nanal} alt='logo' className='w-60 h-60' />
+      <Link to='/SignIn'>
+        <div>
+          <button className='px-4 py-2 mt-20 text-base font-semibold border-0 rounded-full bg-violet-100 text-violet-500 hover:bg-violet-200'>
+            로그인
+          </button>
+        </div>
       </Link>
-      <Link
-        to='/SignUp'
-        className='absolute bottom-28 px-4 py-2 my-2 text-base font-semibold border-0 rounded-full place-self-center bg-violet-100 text-violet-500 hover:bg-violet-200'
-      >
-        회원가입하러 가기
+      <Link to='/SignUp'>
+        <div>
+          <button className='px-4 py-2 my-2 text-base font-semibold border-0 rounded-full bg-violet-100 text-violet-500 hover:bg-violet-200'>
+            회원가입
+          </button>
+        </div>
       </Link>
     </div>
   );
