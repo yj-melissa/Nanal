@@ -9,4 +9,5 @@ import java.util.List;
 public interface GroupDiaryRelationRepository extends JpaRepository<GroupDiaryRelationEntity, Integer> {
 
     List<GroupDiaryRelationEntity> findByDiary(DiaryEntity diary);
+
 }
