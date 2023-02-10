@@ -20,7 +20,6 @@ import java.util.List;
 @Service
 public class GroupService {
 
-    //    @Autowired
     private final GroupRepository groupRepository;
     private final GroupTagRepository groupTagRepository;
     private final GroupUserRelationRepository groupUserRelationRepository;
@@ -31,34 +30,33 @@ public class GroupService {
         this.groupTagRepository = groupTagRepository;
         this.userRepository = userRepository;
         this.groupUserRelationRepository = groupUserRelationRepository;
+
     }
 
-    // save Group
     public GroupDetailResponseDTO saveGroup(GroupDetailRequestDTO groupDetailRequestDTO) {
+
         return new GroupDetailResponseDTO(groupRepository.save(groupDetailRequestDTO.toEntity()));
+
     }
 
-    // save Group Tags
     @Transactional
     public List<GroupTagResponseDTO> saveGroupTags(GroupDetailRequestDTO groupDetailRequestDTO) {
+
         List<String> groupTagRequestDTOs = groupDetailRequestDTO.getTags();
         List<GroupTagResponseDTO> groupTagResponseDTOS = new ArrayList<>();
 
         for (String tag : groupTagRequestDTOs) {
-            // 저장할 태그 DTO
             GroupTagRequestDTO groupTagRequestDTO = new GroupTagRequestDTO();
 
-            // 태그 정보 세팅
             groupTagRequestDTO.setTag(tag);
             groupTagRequestDTO.setGroupDetail(groupDetailRequestDTO.toEntity());
 
-            // 리스트에 추가
             groupTagResponseDTOS.add(new GroupTagResponseDTO(groupTagRepository.save(groupTagRequestDTO.toEntity())));
         }
         return groupTagResponseDTOS;
+
     }
 
-    // get Group
     public HashMap<String, Object> findGroupById(int groupIdx) {
 
         GroupDetailEntity groupEntity = groupRepository.getReferenceById(groupIdx);
@@ -71,33 +69,65 @@ public class GroupService {
         responseDTO.put("tags", tags);
         responseDTO.put("groupDetail", new GroupDetailResponseDTO(groupEntity));
         return responseDTO;
+
     }
 
-    // get Group List
-    public List<HashMap<String, Object>> getGroupList(int userIdx) {
+    public List<HashMap<String, Object>> getGroupList(int userIdx, int opt) {
 
         List<HashMap<String, Object>> result = new ArrayList<>();
-        List<GroupDetailEntity> groupDetailEntities = groupUserRelationRepository.findGroupList(userIdx);
 
-        for (GroupDetailEntity groupDetailEntity : groupDetailEntities) {
-            HashMap<String, Object> responseDTO = new HashMap<>();
-            responseDTO.put("groupDetail", new GroupDetailResponseDTO(groupDetailEntity));
+        if (opt == 0) { // 이름순 정렬
+            List<GroupDetailEntity> groupDetailEntities = groupUserRelationRepository.findGroupListByName(userIdx);
+            for (GroupDetailEntity groupDetailEntity : groupDetailEntities) {
+                HashMap<String, Object> responseDTO = new HashMap<>();
+                responseDTO.put("groupDetail", new GroupDetailResponseDTO(groupDetailEntity));
 
-            List<GroupTagResponseDTO> tags = new ArrayList<>();
-            for (int i = 0; i < 5; i++) {
-                tags.add(new GroupTagResponseDTO(groupDetailEntity.getGroupTags().get(i)));
+                List<GroupTagResponseDTO> tags = new ArrayList<>();
+                for (int i = 0; i < 5; i++) {
+                    tags.add(new GroupTagResponseDTO(groupDetailEntity.getGroupTags().get(i)));
+                }
+                responseDTO.put("tags", tags);
+                result.add(responseDTO);
             }
-            responseDTO.put("tags", tags);
-            result.add(responseDTO);
-        }
 
+        } else { // 최신일기 작성 시간순 정렬
+            List<Object[]> groupList = groupUserRelationRepository.findGroupListByTime(userIdx);
+            int size = groupList.size() / 5;
+
+            int idx = 0;
+            for (int i = 0; i < size; i++) {
+                // group 정보
+                HashMap<String, Object> responseDTO = new HashMap<>();
+
+                Object[] groupListNativeDTO = groupList.get(idx++);
+                responseDTO.put("groupIdx", groupListNativeDTO[0]);
+                responseDTO.put("imgUrl", groupListNativeDTO[1]);
+                responseDTO.put("groupName", groupListNativeDTO[2]);
+
+                List<HashMap<String, Object>> tags = new ArrayList<>();
+                HashMap<String, Object> tag = new HashMap<>();
+                tag.put("tagIdx", groupListNativeDTO[3]);
+                tag.put("tag", groupListNativeDTO[4]);
+                tags.add(tag);
+
+                for (int j = 1; j < 5; j++) {
+                    groupListNativeDTO = groupList.get(idx++);
+                    tag = new HashMap<>();
+                    tag.put("tagIdx", groupListNativeDTO[3]);
+                    tag.put("tag", groupListNativeDTO[4]);
+                    tags.add(tag);
+                }
+                responseDTO.put("tags", tags);
+                result.add(responseDTO);
+            }
+        }
         return result;
+
     }
 
     // save group - user relation (그룹 생성 시 유저 초대 -> 수락 시 발생)
     @Transactional
     public GroupUserRelationResponseDTO saveGroupUserRelation(GroupUserRelationRequestDTO groupUserRelationRequestDTO) {
-
 
         // 이미 가입했는지 확인하기
         GroupUserRelationEntity groupUserRelationEntity = groupUserRelationRepository.findByUserIdGroupID(groupUserRelationRequestDTO.getUserIdx(), groupUserRelationRequestDTO.getGroupIdx());
@@ -112,16 +142,13 @@ public class GroupService {
 
             // 엔티티로 변환해서 저장
             groupUserRelationEntity = groupUserRelationRepository.save(groupUserRelationRequestDTO.toEntity());
-            System.out.println("가입 성공");
 
             return new GroupUserRelationResponseDTO(groupUserRelationEntity);
         }
-        System.out.println("이미 가입");
         return null;
+
     }
 
-
-    // update group detail
     @Transactional
     public HashMap<String, Object> updateGroupDetail(GroupDetailRequestDTO groupDetailRequestDTO) {
 
@@ -135,7 +162,6 @@ public class GroupService {
         // group tag 수정
         List<GroupTagEntity> groupTagEntities = groupDetailEntity.getGroupTags();
 
-        // 리턴
         List<GroupTagResponseDTO> tags = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
             // DB 반영
@@ -149,12 +175,14 @@ public class GroupService {
         responseDTO.put("groupDetail", new GroupDetailResponseDTO(groupDetailEntity));
 
         return responseDTO;
+
     }
 
     public void deleteGroupUser(int userIdx, int groupIdx) {
 
         GroupUserRelationEntity groupUserRelationEntity = groupUserRelationRepository.findByUserIdGroupID(userIdx, groupIdx);
         groupUserRelationRepository.delete(groupUserRelationEntity);
+
     }
 
     public List<HashMap<String, Object>> findGroupUser(int userIdx, int groupIdx) {
@@ -172,8 +200,8 @@ public class GroupService {
         }
 
         return friendDetailResponseDTOS;
-    }
 
+    }
 
     @Transactional
     public void updateGroupImg(int groupIdx, int groupImgIdx, String imgUrl) {

@@ -5,7 +5,6 @@ import com.dbd.nanal.model.PaintingEntity;
 import lombok.Getter;
 import lombok.Setter;
 
-
 @Getter
 @Setter
 public class PaintingResponseDTO {

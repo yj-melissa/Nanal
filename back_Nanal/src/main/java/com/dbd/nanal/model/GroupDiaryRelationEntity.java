@@ -19,7 +19,6 @@ public class GroupDiaryRelationEntity {
     @Column(columnDefinition = "INT UNSIGNED")
     private int groupDiaryIdx;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "diary_idx")
     @JsonIgnore
@@ -33,8 +32,8 @@ public class GroupDiaryRelationEntity {
 
     @Builder
     public GroupDiaryRelationEntity(DiaryEntity diary, GroupDetailEntity groupDetail) {
-//        this.group_diary_idx = group_diary_idx;
         this.diary = diary;
         this.groupDetail = groupDetail;
     }
+
 }

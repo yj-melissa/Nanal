@@ -21,7 +21,6 @@ public class GroupTagEntity {
     @Column(columnDefinition = "INT UNSIGNED")
     private int tagIdx;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "group_idx")
     @JsonIgnore
@@ -34,10 +33,6 @@ public class GroupTagEntity {
     public GroupTagEntity(int tagIdx, GroupDetailEntity groupDetail, String tag) {
         this.tagIdx = tagIdx;
         this.groupDetail = groupDetail;
-        this.tag = tag;
-    }
-
-    public void tagUpdate(String tag){
         this.tag = tag;
     }
 

@@ -19,28 +19,34 @@ public class FileService {
     private final S3Uploader s3Uploader;
 
     public FileService(PaintingRepository paintingRepository, S3Uploader s3Uploader) {
+
         this.paintingRepository = paintingRepository;
         this.s3Uploader = s3Uploader;
+
     }
 
     @Transactional
     public PaintingResponseDTO paintingSave(PaintingRequestDTO paintingRequestDTO) {
 
         return new PaintingResponseDTO(paintingRepository.save(paintingRequestDTO.toEntity()));
+
     }
 
     public String saveToS3(File file) throws IOException {
+
         return s3Uploader.upload(file, "dalle");
+
     }
 
 
     @Transactional
     public PaintingResponseDTO paintingUpdate(PaintingRequestDTO paintingRequestDTO) {
-        // painting table update
+
         PaintingEntity painting = paintingRepository.getReferenceById(paintingRequestDTO.getGroupImgIdx());
         painting.setImgUrl(paintingRequestDTO.getImgUrl());
 
         return new PaintingResponseDTO(painting);
 
     }
+
 }

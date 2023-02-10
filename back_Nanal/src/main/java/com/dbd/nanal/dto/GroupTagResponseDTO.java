@@ -14,5 +14,4 @@ public class GroupTagResponseDTO {
         this.tag = groupTagEntity.getTag();
     }
 
-
 }
