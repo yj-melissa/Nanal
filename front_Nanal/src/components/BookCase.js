@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import shelf from '../src_assets/img/shelf.png';
-import ang from '../src_assets/img/emo_ang.png';
-import calm from '../src_assets/img/emo_calm.png';
-import emb from '../src_assets/img/emo_emb.png';
-import joy from '../src_assets/img/emo_joy.png';
-import nerv from '../src_assets/img/emo_nerv.png';
-import sad from '../src_assets/img/emo_sad.png';
+import ang from '../src_assets/img/emotion/emo_ang.png';
+import calm from '../src_assets/img/emotion/emo_calm.png';
+import emb from '../src_assets/img/emotion/emo_emb.png';
+import joy from '../src_assets/img/emotion/emo_joy.png';
+import nerv from '../src_assets/img/emotion/emo_nerv.png';
+import sad from '../src_assets/img/emotion/emo_sad.png';
 import addIcon from '../src_assets/img/file_add_icon.png';
 import { Link } from 'react-router-dom';
 
@@ -48,40 +48,40 @@ function BookCase() {
       {/* bookshelf 마진처리 해야함!!! */}
       <br />
       <div>
-        <div className='text-center h-20 w-60 p-4 relative top-5 left-10 flex justify-evenly'>
-          <div className='grid items-center h-16 w-16 relative box-border border-black text-center border-2'>
+        <div className='relative flex h-20 p-4 text-center w-60 top-5 left-10 justify-evenly'>
+          <div className='box-border relative grid items-center w-16 h-16 text-center border-2 border-black'>
             개인
           </div>
-          <div className='grid items-center h-16 w-16 relative box-border border-black text-center border-2'>
+          <div className='box-border relative grid items-center w-16 h-16 text-center border-2 border-black'>
             그룹1
           </div>
         </div>
         {/* 책장 */}
-        <img src={shelf} className='mx-auto py-3 w-60' />
-        <div className='text-center h-20 w-60 p-4 relative top-5 left-10 flex justify-evenly'>
-          <div className='grid items-center h-16 w-16 relative box-border border-black text-center border-2'>
+        <img src={shelf} className='py-3 mx-auto w-60' />
+        <div className='relative flex h-20 p-4 text-center w-60 top-5 left-10 justify-evenly'>
+          <div className='box-border relative grid items-center w-16 h-16 text-center border-2 border-black'>
             그룹2
           </div>
-          <div className='grid items-center h-16 w-16 relative box-border border-black text-center border-2'>
+          <div className='box-border relative grid items-center w-16 h-16 text-center border-2 border-black'>
             그룹3
           </div>
         </div>
         {/* 책장 */}
-        <img src={shelf} className='mx-auto py-3 w-60' />
-        <div className='text-center h-20 w-60 p-4 relative top-5 left-10 flex justify-evenly'>
-          <div className='grid items-center h-16 w-16 relative box-border border-black text-center border-2'>
+        <img src={shelf} className='py-3 mx-auto w-60' />
+        <div className='relative flex h-20 p-4 text-center w-60 top-5 left-10 justify-evenly'>
+          <div className='box-border relative grid items-center w-16 h-16 text-center border-2 border-black'>
             그룹4
           </div>
 
           <Link
             to='/Group/List'
-            className='grid items-center h-12 w-10 relative text-center'
+            className='relative grid items-center w-10 h-12 text-center'
           >
             <img src={addIcon} className='m-auto mt-2' />
           </Link>
         </div>
         {/* 책장 */}
-        <img src={shelf} className='mx-auto py-3 w-60' />
+        <img src={shelf} className='py-3 mx-auto w-60' />
       </div>
       <div className='flex justify-center'>
         <img src={sad} className={`${emoCss} ${sadCss}`} />
