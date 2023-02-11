@@ -5,8 +5,10 @@ import { onLogin } from '../../config/Login';
 import Swal from 'sweetalert2';
 
 const getStringDate = (date) => {
-  // console.log(date);
-  return date.toISOString().slice(0, 10);
+  // 대한민국의 offset을 수동으로 추가한 뒤 날짜 전달
+  const offset = date.getTimezoneOffset() * 60000;
+  const dateOffset = new Date(date.getTime() - offset);
+  return dateOffset.toISOString().slice(0, 10);
 };
 
 function DiaryCreate() {
