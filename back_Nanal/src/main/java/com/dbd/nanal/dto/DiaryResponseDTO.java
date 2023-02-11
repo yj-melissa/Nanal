@@ -12,7 +12,7 @@ public class DiaryResponseDTO {
     private Date diaryDate;
     private String content;
     private String nickname;
-//    private String picture;
+    private String picture;
 //    private int music;
 //    private boolean isDeleted;
 //    private Date deleteDate;
@@ -24,7 +24,7 @@ public class DiaryResponseDTO {
         this.userIdx=diary.getUser().getUserIdx();
         this.diaryDate = diary.getDiaryDate();
         this.content = diary.getContent();
-//        this.picture = diary.getPainting().getPicturePath();
+        this.picture = diary.getPainting().getImgUrl();
 //        this.music = diary.getMusic().getMusicIdx();
         this.emo = diary.getEmo();
         this.nickname=diary.getUser().getUserProfile().getNickname();
