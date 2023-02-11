@@ -15,9 +15,9 @@ import WebMain from './main/WebMain.js';
 function App() {
   const accessToken = getCookie('accessToken');
 
-  const [isCalendaar, setIsCalendaar] = useState(true);
-  const changeCalendaar = (e) => {
-    setIsCalendaar(e);
+  const [isBookCase, setIsBookCase] = useState(true);
+  const changeBookCase = (e) => {
+    setIsBookCase(e);
   };
   return (
     <div id='App'>
@@ -39,11 +39,11 @@ function App() {
           {/*만약 주소가 sign in, sign up, /이라면 nav가 안 보이게*/}
           {accessToken !== undefined ? (
             <div>
-              <MobileNav changeCalendaar={changeCalendaar} />
+              <MobileNav changeIsBookCase={changeBookCase} />
               <hr className='mb-3 border-slate-500/75' />
             </div>
           ) : null}
-          <MobileMain isCalendaar={isCalendaar} />
+          <MobileMain isBookCase={isBookCase} />
         </div>
       </MobileView>
     </div>
