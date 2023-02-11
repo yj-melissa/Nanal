@@ -1,9 +1,14 @@
 import { useState, useRef, useEffect } from 'react';
+import jwt_decode from 'jwt-decode';
 import axios_api from '../../config/Axios';
+import { getCookie } from '../../config/Cookie';
 import { onLogin } from '../../config/Login';
 import CommentDetail from './CommentDetail';
 
 function CommentList({ diaryIdx, isToggle, groupIdx }) {
+  const token = getCookie('accessToken');
+  const userIdx = jwt_decode(token).userIdx;
+
   // 댓글 내용
   const [content, setContent] = useState('');
   // const onChange = (e) => setContent(e.target.value);
@@ -117,7 +122,7 @@ function CommentList({ diaryIdx, isToggle, groupIdx }) {
       )}
       <div className='comments-body'>
         {commentList.map((comment, idx) => (
-          <CommentDetail key={idx} item={comment} />
+          <CommentDetail key={idx} item={comment} userIdx={userIdx} />
         ))}
       </div>
     </div>

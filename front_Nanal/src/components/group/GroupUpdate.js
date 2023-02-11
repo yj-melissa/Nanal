@@ -259,7 +259,7 @@ function GroupUpdate() {
                   } else if (data.data.responseMessage === '데이터 없음') {
                     const item = [
                       {
-                        nickName: '아직은 친구가 없습니다.',
+                        nickname: '아직은 친구가 없습니다.',
                       },
                     ];
                     setGroupFriendList(item);
@@ -282,12 +282,7 @@ function GroupUpdate() {
                   if (data.data.responseMessage === '친구 리스트 조회 성공') {
                     setGroupNotFriendList(data.data.friendList);
                   } else if (data.data.responseMessage === '데이터 없음') {
-                    const item = [
-                      {
-                        nickName: '모든 친구에 그룹에 속해있습니다.',
-                      },
-                    ];
-                    setGroupNotFriendList(item);
+                    setGroupNotFriendList(data.data.friendList);
                   }
                 } else {
                   console.log('그룹에 속하지 않은 친구 리스트 조회 오류: ');
@@ -390,7 +385,7 @@ function GroupUpdate() {
             {groupFriendList.map((friendItem, idx) => {
               return (
                 <span key={idx} className='mr-2'>
-                  {friendItem.nickName}
+                  {friendItem.nickname}
                 </span>
               );
             })}
@@ -409,7 +404,7 @@ function GroupUpdate() {
                   }}
                   className='items-center inline-block px-2 mx-12 my-1 rounded-lg bg-slate-100 hover:bg-blue-200'
                 >
-                  {friendItem.nickName}
+                  {friendItem.nickname}
                 </button>
               );
             })}
@@ -428,21 +423,26 @@ function GroupUpdate() {
         <hr className='my-5 border-solid border-1 border-slate-800 w-80' />
 
         <p className='mb-0.5'>🤗 내 친구 목록 --------------------</p>
-
-        {groupNotFriendList.map((friendItem, idx) => {
-          return (
-            <button
-              type='button'
-              key={idx}
-              onClick={() => {
-                addFriend(idx);
-              }}
-              className='items-center inline-block px-2 mx-12 my-1 rounded-lg bg-slate-100 hover:bg-blue-200'
-            >
-              {friendItem.nickName}
-            </button>
-          );
-        })}
+        {groupNotFriendList.length >= 0 ? (
+          groupNotFriendList.map((friendItem, idx) => {
+            return (
+              <button
+                type='button'
+                key={idx}
+                onClick={() => {
+                  addFriend(idx);
+                }}
+                className='items-center inline-block px-2 mx-12 my-1 rounded-lg bg-slate-100 hover:bg-blue-200'
+              >
+                {friendItem.nickname}
+              </button>
+            );
+          })
+        ) : (
+          <p className='my-2 text-center'>
+            모든 친구가 이미 그룹에 속해있습니다.
+          </p>
+        )}
       </div>
     </div>
   );

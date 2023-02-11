@@ -35,19 +35,25 @@ function DiaryCreate() {
         groupIdxList: checkedList,
         content: content,
       })
-      .then((response) => {
-        Swal.fire({
-          icon: 'success', // Alert 타입
-          title: '일기 저장 완료', // Alert 제목
-          text: '작성하신 일기가 작성 완료됐습니다.', // Alert 내용
-          width: '90%',
-        });
-        // alert('저장 성공');
-        // 일기 생성 후 홈으로 보내기
-        navigate('/', { replace: true });
+      .then(({ data }) => {
+        if (data.statusCode === 200) {
+          if (data.data.responseMessage === '일기 생성 성공') {
+            Swal.fire({
+              icon: 'success', // Alert 타입
+              title: '일기 저장 완료', // Alert 제목
+              text: '작성하신 일기가 작성 완료됐습니다.', // Alert 내용
+              width: '90%',
+            });
+            navigate('/', { replace: true });
+          }
+        } else {
+          console.log('일기 생성 오류: ');
+          console.log(data.statusCode);
+          console.log(data.data.responseMessage);
+        }
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(({ error }) => {
+        console.log('일기 생성 오류: ' + error);
       });
 
     // 저장 후 일기 데이터 초기화
@@ -81,6 +87,7 @@ function DiaryCreate() {
             setGroupList(data.data.groupList);
           }
         } else {
+          console.log('그룹 리스트 불러오기 오류: ');
           console.log(data.statusCode);
           console.log(data.data.responseMessage);
         }

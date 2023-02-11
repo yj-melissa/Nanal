@@ -76,7 +76,7 @@ function AlarmItem({
               window.location.reload(true);
             });
             // navigate(`/Group/List`);
-          } else if (data.data.responseMessage === '이미 친구로 등록됨') {
+          } else if (data.data.responseMessage === '이미 가입한 그룹') {
             checkAlarm();
             Swal.fire({
               icon: 'info', // Alert 타입
@@ -191,7 +191,7 @@ function AlarmItem({
             <span className='mr-2 rounded-md bg-gradient-to-t from-green-100'>
               {content_text[1]}
             </span>
-            <span className='mr-2'>그룹 일기에</span>
+            <span className='mr-2'>그룹 일기장에</span>
             <span className='mr-2'>초대했어요.</span>
           </p>
           {/* <button className='grid content-start'>X</button> */}

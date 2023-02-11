@@ -1,12 +1,13 @@
 import { Link } from 'react-router-dom';
-import emo_joy from '../../src_assets/img/emotion/emo_joy.png';
 
 function DiaryItem({
   isToggle,
   groupIdx,
-  nickname,
   diaryIdx,
   diaryDate,
+  nickname,
+  emo,
+  picture,
   content,
 }) {
   const diarydate = diaryDate.split('-');
@@ -22,14 +23,10 @@ function DiaryItem({
     >
       <div className='flex items-center p-2 m-1 mb-3'>
         {isToggle !== 0 ? (
-          <img
-            src={emo_joy}
-            alt='DALL:E2'
-            className='w-16 h-16 p-1 rounded-lg'
-          />
+          <img src={emo} alt='DALL:E2' className='w-16 h-16 p-1 rounded-lg' />
         ) : (
           <img
-            src={emo_joy}
+            src={emo}
             alt='DALL:E2'
             className='w-16 h-16 p-1 rounded-lg hover:translate-y-2'
           />

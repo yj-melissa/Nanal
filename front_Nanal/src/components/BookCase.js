@@ -30,7 +30,7 @@ function BookCase() {
       : 'animate-pulse';
   const nervCss =
     Collocate === true
-      ? 'animate-bounce hover:animate-none top-80 left-24'
+      ? 'animate-bounce hover:animate-none top-72 left-20'
       : 'animate-pulse';
   const angCss =
     Collocate === true
@@ -70,144 +70,127 @@ function BookCase() {
   return (
     <div>
       {/* bookshelf 마진처리 해야함!!! */}
-      <br />
+
       <div>
-        <div className='relative flex h-20 p-4 text-center w-60 top-5 left-10 justify-evenly'>
-          <div className='box-border relative grid items-center w-16 h-16 overflow-hidden text-center border border-zinc-400'>
+        {/* 첫번째 단 */}
+        <div className='my-12'>
+          {/* 사진 */}
+          <div className='relative flex h-20 p-4 text-center w-60 top-5 left-10 justify-evenly'>
+            {/* 내 전체 일기장 */}
+            <div className='box-border relative grid items-center w-16 h-16 overflow-hidden text-center border border-zinc-400'>
+              <Link
+                to={'/Diary/List'}
+                state={{
+                  isToggle: 1,
+                }}
+              >
+                <img src={nanalImg} className='object-cover'></img>
+              </Link>
+            </div>
+            {/* 일기 최신순 0번째 그룹 */}
+            <div>
+              {groupList && groupList.length > 0 && (
+                <Link
+                  to={`/Group/Detail`}
+                  state={{
+                    groupIdx: groupList[0].groupDetail.groupIdx,
+                    isToggle: 2,
+                  }}
+                  className='box-border relative grid items-center w-16 h-16 overflow-hidden text-center border border-zinc-400'
+                >
+                  <img
+                    src={groupList[0].groupDetail.imgUrl}
+                    className='object-cover'
+                  ></img>
+                </Link>
+              )}
+            </div>
+          </div>
+          {/* 책장 */}
+          <img src={shelf} className='w-64 py-3 mx-auto' />
+        </div>
+
+        {/* 두번째 단 */}
+        <div className='my-12'>
+          {/* 사진 */}
+          <div className='relative flex h-20 p-4 text-center w-60 top-5 left-10 justify-evenly'>
+            {/* 일기 최신순 1번째 그룹 */}
+            <div>
+              {groupList && groupList.length > 1 && (
+                <Link
+                  to={`/Group/Detail`}
+                  state={{
+                    groupIdx: groupList[1].groupDetail.groupIdx,
+                    isToggle: 2,
+                  }}
+                  className='box-border relative grid items-center w-16 h-16 overflow-hidden text-center border border-zinc-400'
+                >
+                  <img
+                    src={groupList[1].groupDetail.imgUrl}
+                    className='object-cover'
+                  ></img>
+                </Link>
+              )}
+            </div>
+            {/* 일기 최신순 2번째 그룹 */}
+            <div>
+              {groupList && groupList.length > 2 && (
+                <Link
+                  to={`/Group/Detail`}
+                  state={{
+                    groupIdx: groupList[2].groupDetail.groupIdx,
+                    isToggle: 2,
+                  }}
+                  className='box-border relative grid items-center w-16 h-16 overflow-hidden text-center border border-zinc-400'
+                >
+                  <img
+                    src={groupList[2].groupDetail.imgUrl}
+                    className='object-cover'
+                  ></img>
+                </Link>
+              )}
+            </div>
+          </div>
+          {/* 책장 */}
+          <img src={shelf} className='w-64 py-3 mx-auto' />
+        </div>
+
+        {/* 세번째 단 */}
+        <div className='my-12'>
+          {/* 사진 */}
+          <div className='relative flex h-20 p-4 text-center w-60 top-5 left-10 justify-evenly'>
+            {/* 일기 최신순 3번째 그룹 */}
+            <div className=''>
+              {groupList && groupList.length > 3 && (
+                <Link
+                  to={`/Group/Detail`}
+                  state={{
+                    groupIdx: groupList[3].groupDetail.groupIdx,
+                    isToggle: 2,
+                  }}
+                  className='box-border relative grid items-center w-16 h-16 overflow-hidden text-center border border-zinc-400'
+                >
+                  <img
+                    src={groupList[3].groupDetail.imgUrl}
+                    className='object-cover'
+                  ></img>
+                </Link>
+              )}
+            </div>
+            {/* 그룹 리스트로 이동 */}
             <Link
-              to={'/Diary/List'}
-              state={{
-                isToggle: 1,
-              }}
+              to='/Group/List'
+              className='relative grid items-center w-12 h-12 text-center'
             >
-              <img src={nanalImg} className='object-cover'></img>
+              <img src={addIcon} className='m-auto mt-2' />
             </Link>
           </div>
-          <div>
-            {groupList && groupList.length > 0 && (
-              <Link
-                to={`/Group/Detail`}
-                state={{
-                  groupIdx: groupList[0].groupDetail.groupIdx,
-                  isToggle: 2,
-                }}
-                className='box-border relative grid items-center w-16 h-16 overflow-hidden text-center border border-zinc-400'
-              >
-                <img
-                  src={groupList[0].groupDetail.imgUrl}
-                  className='object-cover'
-                ></img>
-              </Link>
-            )}
-          </div>
+          {/* 책장 */}
+          <img src={shelf} className='w-64 py-3 mx-auto' />
         </div>
-        {/* 책장 */}
-        <img src={shelf} className='py-3 mx-auto w-60' />
-        <div className='relative flex h-20 p-4 text-center w-60 top-5 left-10 justify-evenly'>
-          <div>
-            {groupList && groupList.length > 1 && (
-              <Link
-                to={`/Group/Detail`}
-                state={{
-                  groupIdx: groupList[1].groupDetail.groupIdx,
-                  isToggle: 2,
-                }}
-                className='box-border relative grid items-center w-16 h-16 overflow-hidden text-center border border-zinc-400'
-              >
-                <img
-                  src={groupList[1].groupDetail.imgUrl}
-                  className='object-cover'
-                ></img>
-              </Link>
-            )}
-          </div>
-          <div>
-            {groupList && groupList.length > 2 && (
-              <Link
-                to={`/Group/Detail`}
-                state={{
-                  groupIdx: groupList[2].groupDetail.groupIdx,
-                  isToggle: 2,
-                }}
-                className='box-border relative grid items-center w-16 h-16 overflow-hidden text-center border border-zinc-400'
-              >
-                <img
-                  src={groupList[2].groupDetail.imgUrl}
-                  className='object-cover'
-                ></img>
-              </Link>
-            )}
-          </div>
-        </div>
-        {/* 책장 */}
-        <img src={shelf} className='py-3 mx-auto w-60' />
-        <div className='relative flex h-20 p-4 text-center w-60 top-5 left-10 justify-evenly'>
-          <div>
-            {groupList && groupList.length > 3 && (
-              <Link
-                to={`/Group/Detail`}
-                state={{
-                  groupIdx: groupList[3].groupDetail.groupIdx,
-                  isToggle: 2,
-                }}
-                className='box-border relative grid items-center w-16 h-16 overflow-hidden text-center border border-zinc-400'
-              >
-                <img
-                  src={groupList[3].groupDetail.imgUrl}
-                  className='object-cover'
-                ></img>
-              </Link>
-            )}
-          </div>
-          <div>
-            {groupList && groupList.length > 4 && (
-              <Link
-                to={`/Group/Detail`}
-                state={{
-                  groupIdx: groupList[4].groupDetail.groupIdx,
-                  isToggle: 2,
-                }}
-                className='box-border relative grid items-center w-16 h-16 overflow-hidden text-center border border-zinc-400'
-              >
-                <img
-                  src={groupList[4].groupDetail.imgUrl}
-                  className='object-cover'
-                ></img>
-              </Link>
-            )}
-          </div>
-        </div>
-        {/* 책장 */}
-        <img src={shelf} className='py-3 mx-auto w-60' />
-        <div className='relative flex h-20 p-4 text-center w-60 top-5 left-10 justify-evenly'>
-          <div className=''>
-            {groupList && groupList.length > 5 && (
-              <Link
-                to={`/Group/Detail`}
-                state={{
-                  groupIdx: groupList[5].groupDetail.groupIdx,
-                  isToggle: 2,
-                }}
-                className='box-border relative grid items-center w-16 h-16 overflow-hidden text-center border border-zinc-400'
-              >
-                <img
-                  src={groupList[5].groupDetail.imgUrl}
-                  className='object-cover'
-                ></img>
-              </Link>
-            )}
-          </div>
-          {/* 그룹 리스트로 이동 */}
-          <Link
-            to='/Group/List'
-            className='relative grid items-center w-10 h-12 text-center'
-          >
-            <img src={addIcon} className='m-auto mt-2' />
-          </Link>
-        </div>
-        {/* 책장 */}
-        <img src={shelf} className='py-3 mx-auto w-60' />
       </div>
+
+      {/* 먼지 이미지 */}
       <div className='flex justify-center my-7 '>
         <img src={sad} className={`${emoCss} ${sadCss}`} />
         <img src={nerv} className={`${emoCss} ${nervCss}`} />

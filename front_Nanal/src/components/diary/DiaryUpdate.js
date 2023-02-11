@@ -24,9 +24,39 @@ function DiaryUpdate() {
 
   // 수정 취소 버튼 클릭 시 실행되는 함수
   const handleQuitEdit = () => {
-    setLocalDate(location.state.diaryDate);
-    setLocalContent(location.state.diaryDetail.content);
+    // setLocalDate(location.state.diaryDate);
+    // setLocalContent(location.state.diaryDetail.content);
     navigate(-1);
+  };
+
+  // 삭제 버튼 클릭 시 실행되는 함수
+  const updateDiary = () => {
+    axios_api
+      .put('diary', {
+        diaryIdx: location.state.diaryDetail.diaryIdx,
+        content: localContent,
+        diaryDate: localDate,
+        groupIdxList: checkedList,
+      })
+      .then(({ data }) => {
+        if (data.statusCode === 200) {
+          if (data.data.responseMessage === '일기 수정 성공') {
+            navigate('/Diary/Detail', {
+              state: {
+                diaryIdx: location.state.diaryDetail.diaryIdx,
+              },
+              replace: true,
+            });
+          }
+        } else {
+          console.log('일기 수정 오류: ');
+          console.log(data.statusCode);
+          console.log(data.data.responseMessage);
+        }
+      })
+      .catch(({ error }) => {
+        console.log('일기 수정 오류: ' + error);
+      });
   };
 
   // input 태그가 체크된 경우 실행되는 함수 = 다중 선택 가능
@@ -43,7 +73,7 @@ function DiaryUpdate() {
   useEffect(() => {
     onLogin();
     axios_api
-      .get('group/list')
+      .get('group/list/0')
       .then(({ data }) => {
         if (data.statusCode === 200) {
           setGroupList(null);
@@ -55,6 +85,7 @@ function DiaryUpdate() {
             }
           }
         } else {
+          console.log('그룹 리스트 불러오기 오류: ');
           console.log(data.statusCode);
           console.log(data.data.responseMessage);
         }
@@ -172,25 +203,7 @@ function DiaryUpdate() {
           </button>
           <button
             className='hover:bg-sky-700 bg-cyan-600 text-white px-2.5 py-1 rounded-xl block'
-            onClick={() => {
-              axios_api
-                .put('diary', {
-                  userIdx: location.state.diaryDetail.userIdx,
-                  diaryIdx: location.state.diaryDetail.diaryIdx,
-                  content: localContent,
-                  diaryDate: localDate,
-                  groupIdxList: checkedList,
-                })
-                .then(({ data }) => {
-                  navigate('/Diary/Detail', {
-                    state: {
-                      diaryIdx: location.state.diaryDetail.diaryIdx,
-                    },
-                    replace: true,
-                  });
-                })
-                .catch((err) => console.log(err));
-            }}
+            onClick={updateDiary}
           >
             수정 완료
           </button>

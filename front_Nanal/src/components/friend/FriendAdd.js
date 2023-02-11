@@ -8,10 +8,10 @@ function FriendAdd() {
 
   const searchFriend = (e) => {
     e.preventDefault();
-    const userIdx = e.target.searchId.value;
+    const userId = e.target.searchId.value;
 
     axios_api
-      .get(`search/user/${userIdx}`)
+      .get(`search/user/${userId}`)
       .then(({ data }) => {
         if (data.statusCode === 200) {
           if (data.data.responseMessage === '친구 조회 성공') {

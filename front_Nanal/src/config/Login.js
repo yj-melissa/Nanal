@@ -19,7 +19,7 @@ export function onLogin() {
     Swal.fire({
       icon: 'warning',
       text: '로그인 후 접근 가능해요!',
-      width: '25%',
+      width: '80%',
     }).then(function () {
       // navigate(`/SignIn`, {
       //   replace: true,

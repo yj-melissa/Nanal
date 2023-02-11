@@ -2,9 +2,10 @@ import { useState, useEffect } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import axios_api from '../../config/Axios';
+import jwt_decode from 'jwt-decode';
+import { getCookie } from '../../config/Cookie';
 import { onLogin } from '../../config/Login';
 import CommentList from './CommentList';
-import emo_joy from '../../src_assets/img/emotion/emo_joy.png';
 import bookmark from '../../src_assets/img/bookmark.png';
 import bookmark_filled from '../../src_assets/img/bookmark_fill.png';
 
@@ -12,6 +13,10 @@ function DiaryDetail() {
   // const location = useLocation();
   const { state } = useLocation();
   const navigate = useNavigate();
+
+  const token = getCookie('accessToken');
+  const userIdx = jwt_decode(token).userIdx;
+
   const diaryIdx = state.diaryIdx;
   const isToggle = state.isToggle;
   const groupIdx = state.groupIdx;
@@ -86,6 +91,7 @@ function DiaryDetail() {
   // 일기 상세 페이지 불러오기
   useEffect(() => {
     onLogin();
+
     axios_api
       .get(`diary/${diaryIdx}`)
       .then(({ data }) => {
@@ -93,7 +99,6 @@ function DiaryDetail() {
           if (data.data.responseMessage === '일기 조회 성공') {
             setDiaryDetail(data.data.diary);
             setOriginGroupList(data.data.groupList);
-
             if (data.data.isBookmark === true) {
               setIsBook(!isBook);
             }
@@ -114,7 +119,8 @@ function DiaryDetail() {
       <div className='flex justify-between my-2'>
         <strong>{diaryDetail.diaryDate}일</strong>
         {/* 감정 넣는 곳 */}
-        <span>{diaryDetail.emo}</span>
+        <span>오늘의 감정 : </span>
+        <img src={diaryDetail.emo} alt='Emotion' className='w-8 h-8'></img>
         {isBook ? (
           <img
             src={bookmark_filled}
@@ -131,47 +137,57 @@ function DiaryDetail() {
           />
         )}
       </div>
-      <div className='flex items-center justify-center my-5'>
-        <img src={emo_joy} alt='DALL:E2' />
+      <div className='relative flex items-center justify-center my-12'>
+        <img
+          src={diaryDetail.picture}
+          alt='DALL:E2'
+          className='absolute rounded-md opacity-25'
+        />
+        <img
+          src={diaryDetail.picture}
+          alt='DALL:E2'
+          className='z-0 w-48 rounded-lg'
+        />
       </div>
       {/* <span>{diaryDetail.nickname}</span> */}
-      <div className='flex items-center justify-end my-10'>
-        <Link
-          to={'/Diary/Edit'}
-          state={{
-            diaryDetail: diaryDetail,
-            originGroupList: originGroupList,
-          }}
-        >
-          <button className='hover:bg-sky-700 bg-cyan-600 text-white px-2.5 py-1 rounded-3xl m-auto block'>
-            수정
+      {userIdx === diaryDetail.userIdx ? (
+        <div className='flex items-center justify-end my-6'>
+          <Link
+            to={'/Diary/Edit'}
+            state={{
+              diaryDetail: diaryDetail,
+              originGroupList: originGroupList,
+            }}
+          >
+            <button className='hover:bg-sky-700 bg-cyan-600 text-white px-2.5 py-1 rounded-3xl m-auto block'>
+              수정
+            </button>
+          </Link>
+          <button
+            className='bg-rose-600 text-white px-2.5 py-1 rounded-3xl mx-2 inline-block'
+            onClick={() => {
+              Swal.fire({
+                text: '일기를 정말 삭제하실 건가요?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: '삭제',
+                cancelButtonText: '취소',
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  diaryDelete();
+                }
+              });
+            }}
+          >
+            삭제
           </button>
-        </Link>
-        <button
-          className='bg-rose-600 text-white px-2.5 py-1 rounded-3xl mx-2 inline-block'
-          onClick={() => {
-            Swal.fire({
-              title: `일기를 정말 삭제하시겠습니까?`,
-              text: '삭제한 일기는 휴지통에서 확인 가능합니다.',
-              icon: 'warning',
-              showCancelButton: true,
-              confirmButtonColor: '#3085d6',
-              cancelButtonColor: '#d33',
-              confirmButtonText: '삭제',
-              cancelButtonText: '취소',
-            }).then((result) => {
-              if (result.isConfirmed) {
-                diaryDelete();
-              }
-            });
-          }}
-        >
-          삭제
-        </button>
-      </div>
-      <div className='my-10 text-xl text-left underline underline-offset-8'>
-        {diaryDetail.content}
-      </div>
+        </div>
+      ) : null}
+
+      {/* <div className='my-10 text-lg text-left underline underline-offset-8'> */}
+      <div className='mt-6 mb-8 text-lg text-left '>{diaryDetail.content}</div>
       {/* 댓글 보여주는 곳 */}
       {/* <div className='my-5'>
         {commentList.map((comment, idx) => {
