@@ -37,7 +37,7 @@ public class PaintingRequestDTO {
     public void init() {
         this.groupImgIdx = 0;
         this.setFileSize(256 * 256);
-        Double random = Math.random() * 60; // 0.0~1.0
+        Double random = Math.random() * 6; // 0.0~1.0
 
         System.out.println("random : " + random);
 
@@ -56,4 +56,5 @@ public class PaintingRequestDTO {
         }
 
     }
+
 }
