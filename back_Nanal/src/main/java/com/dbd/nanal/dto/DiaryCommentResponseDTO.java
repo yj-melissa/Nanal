@@ -13,6 +13,7 @@ public class DiaryCommentResponseDTO {
     private LocalDateTime creationDate;
     private int userIdx;
     private String nickname;
+    private String img;
 
     public DiaryCommentResponseDTO(DiaryCommentEntity diaryCommentEntity) {
         this.commentIdx=diaryCommentEntity.getCommentIdx();
@@ -20,5 +21,6 @@ public class DiaryCommentResponseDTO {
         this.creationDate=diaryCommentEntity.getCreationDate();
         this.userIdx=diaryCommentEntity.getUser().getUserIdx();
         this.nickname=diaryCommentEntity.getUser().getUserProfile().getNickname();
+        this.img=diaryCommentEntity.getUser().getUserProfile().getImg();
     }
 }
