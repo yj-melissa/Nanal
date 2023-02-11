@@ -96,7 +96,6 @@ public class DiaryController {
 
             diary.setPainting(PaintingEntity.builder().pictureIdx(paintingResponseDTO.getPictureIdx()).pictureTitle(paintingResponseDTO.getPictureTitle()).imgUrl(paintingResponseDTO.getImgUrl()).build());
             diary.setImgUrl(dalleURL);
-
             /////////////////////////////////////////////////////////////////
             /////////////////////////////////////////////////////////////////
 
