@@ -3,15 +3,15 @@ import { useLocation } from 'react-router-dom';
 import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
 
-function FriendDetail() {
-  const { state } = useLocation();
-
+function FriendDetail(userIdx) {
+  // const { state } = useLocation();
+  // console.log(userIdx)
   const [friend, setFriend] = useState([]);
 
   useEffect(() => {
     onLogin();
     axios_api
-      .get(`/friend/${state.friendIdx}`)
+      .get(`/friend/${userIdx.userIdx}`)
       .then(({ data }) => {
         if (data.statusCode === 200) {
           setFriend(null);
@@ -27,7 +27,11 @@ function FriendDetail() {
       .catch(({ error }) => {
         console.log('친구 상세 보기 오류: ' + error);
       });
-  }, []);
+  }, [userIdx]);
+
+  // useEffect(() => {
+    
+  // }, [userIdx])
 
   return (
     <div>

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
 import FriendItem from './FriendItem';
@@ -18,7 +17,7 @@ const Div = styled.div`
     border-radius: 6px;
   }`;
 
-function FriendList({ setFriendAdd }) {
+function FriendList({ setFriendAdd, setUserIdx }) {
   // console.log(setFriendCompo)
   const [friendList, setFriendList] = useState([]);
 
@@ -55,7 +54,7 @@ function FriendList({ setFriendAdd }) {
       </div>
       {friendList.length !== 0 ? (
         friendList.map((friendItem) => (
-          <FriendItem key={friendItem.userIdx} item={friendItem} />
+          <FriendItem key={friendItem.userIdx} item={friendItem} setFriendAdd={setFriendAdd} setUserIdx={setUserIdx} />
         ))
       ) : (
         <p>아직은 친구가 없습니다.</p>

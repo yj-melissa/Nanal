@@ -1,5 +1,5 @@
 import nmb from '../src_assets/img/bookmark-name/name-mark-blue.svg'
-import diaryImgBlue from '../src_assets/img/diary-img-blue.svg'
+import diaryImgBlue from '../src_assets/img/diary-img/diary-img-blue.svg'
 import React, { useState } from 'react';
 
 const RecycleBin = () => {

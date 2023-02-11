@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import axios_api from '../../../config/Axios';
 import { onLogin } from '../../../config/Login';
-import emptyProfile from '../../../src_assets/img/emptyProfile.png';
+// import emptyProfile from '../../../src_assets/img/emptyProfile.png';
 // import DiaryTotalList from '../../diary/DiaryTotalList';
 
 // username, userMassage, profile 받아와야함

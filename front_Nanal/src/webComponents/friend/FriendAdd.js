@@ -60,7 +60,7 @@ function FriendAdd() {
     onLogin();
   }, []);
   return (
-    <div>
+    <div className="w-84 h-[430px] overflow-auto">
       <p className='box-border flex justify-around h-20 p-4 w-70'>
         찾고자 하는 친구의 아이디를 <br />
         입력 후 검색해주세요
