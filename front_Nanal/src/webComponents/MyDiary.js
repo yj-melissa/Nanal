@@ -1,7 +1,6 @@
-import React, { useCallback, useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useCallback, useState } from 'react';
 import nmr from '../src_assets/img/bookmark-name/name-mark-red.svg';
-import diaryImgRed from '../src_assets/img/diary-img-red.svg';
+import diaryImgRed from '../src_assets/img/diary-img/diary-img-red.svg';
 import Calendar from 'react-calendar';
 import DiaryCreate from '../webComponents/diary/DiaryCreate';
 import DiaryList from '../webComponents/diary/DiaryList';
