@@ -7,6 +7,7 @@ import { onLogin } from '../../config/Login';
 import emo_joy from '../../src_assets/img/emotion/emo_joy.png';
 import bookmark from '../../src_assets/img/bookmark.png';
 import bookmark_filled from '../../src_assets/img/bookmark_fill.png';
+import diaryImgRed from '../../src_assets/img/diary-img/diary-img-red.svg';
 
 function DiaryDetail() {
   // const location = useLocation();
@@ -113,90 +114,79 @@ function DiaryDetail() {
   }, []);
 
   return (
-    <div className='grid justify-items-center'>
-      <div className='w-[720px]'>
-        <div className='flex justify-between mt-5'>
-          <p className='text-2xl font-bold'>
-            {diarydate[0]}년 {diarydate[1]}월 {diarydate[2]}일
-          </p>
-          {/* 감정 넣는 곳 */}
-          <p className='text-2xl font-bold'>{diaryDetail.emo}</p>
-          {isBook ? (
-            <div>
-              <img
-                src={bookmark_filled}
-                alt='bookmark_filled'
-                onClick={bookmarkDelete}
-              />
+    <div className='relative w-[1440px] mx-auto'>
+      <img src={diaryImgRed} className='absolute w-[1280px] z-10 left-12' />
+
+      <div className='grid justify-items-center'>
+        <div className='w-[720px]'>
+          <div className='flex justify-between mt-5 absolute z-20 w-[720px] inset-y-8'>
+            <p className='text-2xl font-bold'>
+              {diarydate[0]}년 {diarydate[1]}월 {diarydate[2]}일
+            </p>
+            {/* 감정 넣는 곳 */}
+            <p className='text-2xl font-bold'>{diaryDetail.emo}</p>
+            {isBook ? (
+              <div>
+                <img
+                  src={bookmark_filled}
+                  alt='bookmark_filled'
+                  onClick={bookmarkDelete}
+                />
+              </div>
+            ) : (
+              <div>
+                <img src={bookmark} alt='bookmark' onClick={bookmarkSave} />
+              </div>
+            )}
+          </div>
+          <div className='flex items-center justify-center mt-0'>
+            <img
+              src={emo_joy}
+              alt='DALL:E2'
+              className='absolute z-20 my-10 inset-y-32 w-[256px] h-[256px] mt-2'
+            />
+          </div>
+          <div className='absolute z-20 my-10 right-96 inset-y-80'>
+            <div className='flex justify-end'>
+              <Link
+                to={'/Diary/Edit'}
+                state={{
+                  diaryDetail: diaryDetail,
+                  originGroupList: originGroupList,
+                }}
+              >
+                <button className='font-bold hover:bg-cyan-500 bg-cyan-400 text-white px-2.5 py-1 rounded-3xl m-auto block text-2xl'>
+                  수정
+                </button>
+              </Link>
+              <button
+                className='font-bold bg-rose-400 hover:bg-rose-500 text-white px-2.5 py-1 rounded-3xl mx-4 inline-block text-2xl'
+                onClick={() => {
+                  Swal.fire({
+                    title: `일기를 정말 삭제하시겠습니까?`,
+                    text: '삭제한 일기는 휴지통에서 확인 가능합니다.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: '삭제',
+                    cancelButtonText: '취소',
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      diaryDelete();
+                    }
+                  });
+                }}
+              >
+                삭제
+              </button>
             </div>
-          ) : (
-            <div>
-              <img src={bookmark} alt='bookmark' onClick={bookmarkSave} />
-            </div>
-          )}
-        </div>
-        <div className='flex items-center justify-center my-5'>
-          <img
-            src={emo_joy}
-            alt='DALL:E2'
-            className='w-[256px] h-[256px] mt-5'
-          />
-        </div>
-        <div className='flex justify-end my-10'>
-          <Link
-            to={'/Diary/Edit'}
-            state={{
-              diaryDetail: diaryDetail,
-              originGroupList: originGroupList,
-            }}
-          >
-            <button className='hover:bg-sky-700 bg-cyan-600 text-white px-2.5 py-1 rounded-3xl m-auto block text-2xl'>
-              수정
-            </button>
-          </Link>
-          <button
-            className='bg-rose-600 text-white px-2.5 py-1 rounded-3xl mx-4 inline-block text-2xl'
-            onClick={() => {
-              Swal.fire({
-                title: `일기를 정말 삭제하시겠습니까?`,
-                text: '삭제한 일기는 휴지통에서 확인 가능합니다.',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: '삭제',
-                cancelButtonText: '취소',
-              }).then((result) => {
-                if (result.isConfirmed) {
-                  diaryDelete();
-                }
-              });
-            }}
-          >
-            삭제
-          </button>
-        </div>
-        <div className='my-10 text-3xl text-left underline underline-offset-8'>
-          {diaryDetail.content}
+          </div>
+          <div className='absolute z-20 my-10 w-[720px] text-3xl text-left underline inset-y-96 underline-offset-8'>
+            {diaryDetail.content}
+          </div>
         </div>
       </div>
-      {/* 댓글 보여주는 곳 */}
-      {/* <div className='my-5'>
-        {commentList.map((comment, idx) => {
-          return (
-            <div key={idx} className='my-2'>
-              {comment.nickname} : {comment.content}
-            </div>
-          );
-        })}
-      </div> */}
-      {/* <div className='my-5'>
-        <CommentList
-          diaryIdx={diaryIdx}
-          isToggle={isToggle}
-          groupIdx={groupIdx}
-        />
-      </div> */}
     </div>
   );
 }

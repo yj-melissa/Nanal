@@ -27,6 +27,12 @@ function DiaryCreate() {
     if (content.length < 2) {
       contentRef.current.focus();
       return;
+    } else if (content.length > 300) {
+      Swal.fire({
+        icon: 'error', // Alert 타입
+        title: '일기 저장 실패', // Alert 제목
+        text: '일기는 300자 이하로 작성해주세요.', // Alert 내용
+      });
     }
     onLogin();
     axios_api

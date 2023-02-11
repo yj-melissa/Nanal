@@ -35,7 +35,7 @@ function DiaryItem({
             className='w-20 h-20 p-1 rounded-lg hover:translate-y-2'
           />
         )}
-        <div className='w-full px-1 m-1 text-lg text-right'>
+        <div className='w-3/4 px-1 m-1 text-lg text-right'>
           <p>
             <span className='mr-2'>감정</span>
             {isToggle === 1 ? (
