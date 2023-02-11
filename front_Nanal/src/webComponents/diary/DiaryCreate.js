@@ -34,6 +34,13 @@ function DiaryCreate({ curDate }) {
       contentRef.current.focus();
       return;
     }
+    console.log({
+      // 날짜 데이터도 전달하기
+      diaryDate: date,
+      // 선택한 그룹은 배열 형태로 전달해야 함
+      groupIdxList: checkedList,
+      content: content,
+    });
     // onLogin();
     axios_api
       .post('diary', {
@@ -44,6 +51,7 @@ function DiaryCreate({ curDate }) {
         content: content,
       })
       .then(({ data }) => {
+        console.log(data);
         if (data.statusCode === 200) {
           if (data.data.responseMessage === '일기 생성 성공') {
             Swal.fire({
