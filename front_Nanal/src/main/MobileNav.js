@@ -8,7 +8,7 @@ import close from '../src_assets/img/close.svg';
 import downarrow from '../src_assets/img/arrow_drop_down.png';
 import uparrow from '../src_assets/img/arrow_drop_up.png';
 
-function Nav({ changeCalendaar }) {
+function Nav({ changeIsBookCase }) {
   // useNavigate == 뒤로가기나 앞으로가기를 위한 react 내장 객체
   const navigate = useNavigate();
   // Home 의 정보를 알려줄 로케이션 변수 정의.
@@ -19,16 +19,16 @@ function Nav({ changeCalendaar }) {
   const toggleMenu = () => {
     setToggle((isToggle) => !isToggle);
   };
-  const changeCalendar = (e) => {
-    changeCalendaar(e);
+  const changeBookCase = (e) => {
+    changeIsBookCase(e);
   };
   return (
     <div>
-      <nav className='flex w-80 justify-between space-x-4 m-auto'>
+      <nav className='flex justify-between m-auto space-x-4 w-80'>
         <div className='flex items-center'>
           <Link
             to='/home'
-            className='rounded-lg w-8 h-8 pr-1 py-1 my-1 text-slate-700 font-medium hover:bg-slate-100 hover:text-slate-900'
+            className='w-8 h-8 py-1 pr-1 my-1 font-medium rounded-lg text-slate-700 hover:bg-slate-100 hover:text-slate-900'
           >
             <img src={logo} />
           </Link>
@@ -43,21 +43,21 @@ function Nav({ changeCalendaar }) {
                   <div className='w-6 h-6 pt-[5px]'>
                     <img src={uparrow} onClick={() => toggleMenu()} />
                   </div>
-                  <div className='grid grid-cols-1 h-20 w-24 content-center absolute'>
+                  <div className='absolute z-0 grid content-center w-24 h-20 grid-cols-1'>
                     <button
-                      className='bg-slate-500 text-white p-1'
+                      className='p-1 text-white bg-slate-500 '
                       onClick={() => {
                         toggleMenu();
-                        changeCalendar(true);
+                        changeBookCase(false);
                       }}
                     >
                       캘린더
                     </button>
                     <button
-                      className='bg-sky-700 text-white p-1'
+                      className='p-1 text-white bg-sky-700 '
                       onClick={() => {
                         toggleMenu();
-                        changeCalendar(false);
+                        changeBookCase(true);
                       }}
                     >
                       책장
@@ -79,7 +79,7 @@ function Nav({ changeCalendaar }) {
           ) : (
             <img
               src={close}
-              className='w-9 h-9 ml-5'
+              className='ml-5 w-9 h-9'
               onClick={() => {
                 navigate(-1);
               }}

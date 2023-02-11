@@ -24,14 +24,14 @@ import Tuning from '../components/mypage/setting/Tuning';
 import RecycleBin from '../components/another/RecycleBin';
 import NotFound from '../components/another/NotFound.js';
 
-const AppMain = ({ isCalendaar }) => {
+const AppMain = ({ isBookCase }) => {
   return (
     <Routes>
       <Route path='/' element={<LogoHome />}></Route>
-      {isCalendaar ? (
-        <Route path='/home' element={<Calendar />}></Route>
-      ) : (
+      {isBookCase ? (
         <Route path='/home' element={<BookCase />}></Route>
+      ) : (
+        <Route path='/home' element={<Calendar />}></Route>
       )}
       <Route path='/SignUp' element={<SignUp />}></Route>
       <Route path='/SignIn' element={<SignIn />}></Route>

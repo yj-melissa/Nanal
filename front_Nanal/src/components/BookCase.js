@@ -13,7 +13,7 @@ import addIcon from '../src_assets/img/file_add_icon.png';
 import nanalImg from '../src_assets/img/나날2.png';
 
 function BookCase() {
-  const [Collocate, setCollocate] = useState(false);
+  const [Collocate, setCollocate] = useState(true);
   const changeCollocate = () => {
     setCollocate((Collocate) => !Collocate);
   };
@@ -21,29 +21,29 @@ function BookCase() {
   // img태그가 갖는 공통 css 속성
   const emoCss = 'w-12 h-12 absolute'; // standart top-100, left-26
   const joyCss =
-    Collocate === false
-      ? 'animate-pulse'
-      : 'animate-bounce hover:animate-none top-24 left-12';
+    Collocate === true
+      ? 'animate-bounce hover:animate-none top-24 right-12'
+      : 'animate-pulse';
   const calmCss =
-    Collocate === false
-      ? 'animate-pulse'
-      : 'animate-bounce hover:animate-none top-28 right-12';
+    Collocate === true
+      ? 'animate-bounce hover:animate-none top-28 left-12'
+      : 'animate-pulse';
   const nervCss =
-    Collocate === false
-      ? 'animate-pulse'
-      : 'animate-bounce hover:animate-none top-64 right-8';
+    Collocate === true
+      ? 'animate-bounce hover:animate-none top-80 left-24'
+      : 'animate-pulse';
   const angCss =
-    Collocate === false
-      ? 'animate-pulse'
-      : 'animate-bounce hover:animate-none top-80 left-24';
+    Collocate === true
+      ? 'animate-bounce hover:animate-none top-1/2 right-8'
+      : 'animate-pulse';
   const embCss =
-    Collocate === false
-      ? 'animate-pulse'
-      : 'animate-bounce hover:animate-none top-88 left-24';
+    Collocate === true
+      ? 'animate-bounce hover:animate-none top-3/4 right-20'
+      : 'animate-pulse';
   const sadCss =
-    Collocate === false
-      ? 'animate-pulse'
-      : 'animate-bounce hover:animate-none top-88 right-24';
+    Collocate === true
+      ? 'animate-bounce hover:animate-none top-88 left-20'
+      : 'animate-pulse';
 
   const [groupList, setGroupList] = useState([]);
 
@@ -87,10 +87,16 @@ function BookCase() {
             {groupList && groupList.length > 0 && (
               <Link
                 to={`/Group/Detail`}
-                state={{ groupIdx: groupList[0].groupIdx, isToggle: 2 }}
+                state={{
+                  groupIdx: groupList[0].groupDetail.groupIdx,
+                  isToggle: 2,
+                }}
                 className='box-border relative grid items-center w-16 h-16 overflow-hidden text-center border border-zinc-400'
               >
-                <img src={groupList[0].imgUrl} className='object-cover'></img>
+                <img
+                  src={groupList[0].groupDetail.imgUrl}
+                  className='object-cover'
+                ></img>
               </Link>
             )}
           </div>
@@ -102,10 +108,16 @@ function BookCase() {
             {groupList && groupList.length > 1 && (
               <Link
                 to={`/Group/Detail`}
-                state={{ groupIdx: groupList[1].groupIdx, isToggle: 2 }}
+                state={{
+                  groupIdx: groupList[1].groupDetail.groupIdx,
+                  isToggle: 2,
+                }}
                 className='box-border relative grid items-center w-16 h-16 overflow-hidden text-center border border-zinc-400'
               >
-                <img src={groupList[1].imgUrl} className='object-cover'></img>
+                <img
+                  src={groupList[1].groupDetail.imgUrl}
+                  className='object-cover'
+                ></img>
               </Link>
             )}
           </div>
@@ -113,10 +125,54 @@ function BookCase() {
             {groupList && groupList.length > 2 && (
               <Link
                 to={`/Group/Detail`}
-                state={{ groupIdx: groupList[2].groupIdx, isToggle: 2 }}
+                state={{
+                  groupIdx: groupList[2].groupDetail.groupIdx,
+                  isToggle: 2,
+                }}
                 className='box-border relative grid items-center w-16 h-16 overflow-hidden text-center border border-zinc-400'
               >
-                <img src={groupList[2].imgUrl} className='object-cover'></img>
+                <img
+                  src={groupList[2].groupDetail.imgUrl}
+                  className='object-cover'
+                ></img>
+              </Link>
+            )}
+          </div>
+        </div>
+        {/* 책장 */}
+        <img src={shelf} className='py-3 mx-auto w-60' />
+        <div className='relative flex h-20 p-4 text-center w-60 top-5 left-10 justify-evenly'>
+          <div>
+            {groupList && groupList.length > 3 && (
+              <Link
+                to={`/Group/Detail`}
+                state={{
+                  groupIdx: groupList[3].groupDetail.groupIdx,
+                  isToggle: 2,
+                }}
+                className='box-border relative grid items-center w-16 h-16 overflow-hidden text-center border border-zinc-400'
+              >
+                <img
+                  src={groupList[3].groupDetail.imgUrl}
+                  className='object-cover'
+                ></img>
+              </Link>
+            )}
+          </div>
+          <div>
+            {groupList && groupList.length > 4 && (
+              <Link
+                to={`/Group/Detail`}
+                state={{
+                  groupIdx: groupList[4].groupDetail.groupIdx,
+                  isToggle: 2,
+                }}
+                className='box-border relative grid items-center w-16 h-16 overflow-hidden text-center border border-zinc-400'
+              >
+                <img
+                  src={groupList[4].groupDetail.imgUrl}
+                  className='object-cover'
+                ></img>
               </Link>
             )}
           </div>
@@ -125,13 +181,19 @@ function BookCase() {
         <img src={shelf} className='py-3 mx-auto w-60' />
         <div className='relative flex h-20 p-4 text-center w-60 top-5 left-10 justify-evenly'>
           <div className=''>
-            {groupList && groupList.length > 3 && (
+            {groupList && groupList.length > 5 && (
               <Link
                 to={`/Group/Detail`}
-                state={{ groupIdx: groupList[3].groupIdx, isToggle: 2 }}
+                state={{
+                  groupIdx: groupList[5].groupDetail.groupIdx,
+                  isToggle: 2,
+                }}
                 className='box-border relative grid items-center w-16 h-16 overflow-hidden text-center border border-zinc-400'
               >
-                <img src={groupList[3].imgUrl} className='object-cover'></img>
+                <img
+                  src={groupList[5].groupDetail.imgUrl}
+                  className='object-cover'
+                ></img>
               </Link>
             )}
           </div>
@@ -146,7 +208,7 @@ function BookCase() {
         {/* 책장 */}
         <img src={shelf} className='py-3 mx-auto w-60' />
       </div>
-      <div className='flex justify-center'>
+      <div className='flex justify-center my-7 '>
         <img src={sad} className={`${emoCss} ${sadCss}`} />
         <img src={nerv} className={`${emoCss} ${nervCss}`} />
         <img src={emb} className={`${emoCss} ${embCss}`} />
@@ -158,7 +220,7 @@ function BookCase() {
           onClick={changeCollocate}
         >
           <p>
-            {Collocate === false ? '감정 정령들 보기' : '감정 정령들 되돌리기'}
+            {Collocate === true ? '감정 정령들 되돌리기' : '감정 정령들 보기'}
           </p>
         </button>
       </div>
