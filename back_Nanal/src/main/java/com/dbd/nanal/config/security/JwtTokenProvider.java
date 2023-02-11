@@ -150,6 +150,7 @@ public class JwtTokenProvider {
         Claims claims = Jwts.claims()
             .setSubject(user.getUserId());
         claims.put("roles", user.getRoles());
+        claims.put("userIdx", userIdx);
 
         String token = Jwts.builder()
             .signWith(SignatureAlgorithm.HS512, secretKey)
