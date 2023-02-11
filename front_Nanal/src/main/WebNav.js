@@ -1,25 +1,37 @@
-import * as React from 'react';
-import { useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import axios_api from '../config/Axios';
 import bell from '../src_assets/img/bell.svg';
 import logo from '../src_assets/img/home-alt.svg';
-// import downarrow from '../src_assets/img/arrow_drop_down.png';
-// import uparrow from '../src_assets/img/arrow_drop_up.png';
 
-function Nav({ changeCalendaar }) {
-  // useNavigate == 뒤로가기나 앞으로가기를 위한 react 내장 객체
-  // const navigate = useNavigate();
-  // Home 의 정보를 알려줄 로케이션 변수 정의.
-  // location.pathname === '/' 이 경우 현재 위치가 홈이다.
-  // const location = useLocation();
-  // Home 옆의 화살표 토글
-  const [isToggle, setToggle] = useState(true);
-  const toggleMenu = () => {
-    setToggle((isToggle) => !isToggle);
-  };
-  const changeCalendar = (e) => {
-    changeCalendaar(e);
-  };
+function Nav() {
+  const [userProfile, setUserProfile] = useState({
+    days: 1,
+    img: null,
+    introduction: null,
+    nickname: '',
+  });
+
+  useEffect(() => {
+    axios_api
+      .get('user/profile')
+      .then(({ data }) => {
+        if (data.statusCode === 200) {
+          if (data.data.responseMessage === '회원 정보 조회 성공') {
+            // console.log(data.data.profile);
+            setUserProfile(data.data.profile);
+          }
+        } else {
+          console.log('회원 정보 오류: ');
+          console.log(data.statusCode);
+          console.log(data.data.responseMessage);
+        }
+      })
+      .catch(({ error }) => {
+        console.log('회원 정보 조회: ' + error);
+      });
+  }, [])
+
   return (
     <div>
       <nav className='flex justify-between space-x-4 m-auto'>
@@ -35,8 +47,8 @@ function Nav({ changeCalendaar }) {
           <Link to='/Alarm'>
             <img src={bell} className='w-6 h-6 my-3' />
           </Link>
-          <div className="rounded-full w-6 h-6 ml-5">
-            <img src={bell} />
+          <div className="rounded-full w-8 h-8 ml-5 overflow-auto">
+            <img src={userProfile.img}/>
           </div>
         </div>
       </nav>

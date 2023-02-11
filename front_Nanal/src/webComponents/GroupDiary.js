@@ -1,5 +1,5 @@
 import nmo from '../src_assets/img/bookmark-name/name-mark-orange.svg'
-import diaryImgOrange from '../src_assets/img/diary-img-orange.svg'
+import diaryImgOrange from '../src_assets/img/diary-img/diary-img-orange.svg'
 import React, { useState } from 'react';
 
 const GroupDiary = () => {

@@ -1,5 +1,5 @@
 import nmg from '../src_assets/img/bookmark-name/name-mark-green.svg'
-import diaryImgGreen from '../src_assets/img/diary-img-green.svg'
+import diaryImgGreen from '../src_assets/img/diary-img/diary-img-green.svg'
 import React, { useState } from 'react';
 import Tuning from './setting/Tuning'
 
