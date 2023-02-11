@@ -35,22 +35,20 @@ function DiaryItem({
             className='w-20 h-20 p-1 rounded-lg hover:translate-y-2'
           />
         )}
-        <div className='w-full px-1 m-1 text-lg text-right'>
-          <div>
-            <p>
-              <span className='mr-2'>감정</span>
-              {isToggle === 1 ? (
-                <span>
-                  {diarydate[0]}년 {diarydate[1]}월 {diarydate[2]}일
-                </span>
-              ) : (
-                <span>
-                  {diarydate[0]}년 {diarydate[1]}월 {diarydate[2]}일
-                </span>
-              )}
-            </p>
-            <p>{isToggle === 2 ? <span>{nickname}</span> : <></>}</p>
-          </div>
+        <div className='w-3/4 px-1 m-1 text-lg text-right'>
+          <p>
+            <span className='mr-2'>감정</span>
+            {isToggle === 1 ? (
+              <span>
+                {diarydate[0]}년 {diarydate[1]}월 {diarydate[2]}일
+              </span>
+            ) : (
+              <span>
+                {diarydate[0]}년 {diarydate[1]}월 {diarydate[2]}일
+              </span>
+            )}
+          </p>
+          <p>{isToggle === 2 ? <span>{nickname}</span> : <></>}</p>
           <p className='block font-bold truncate'>{content}</p>
         </div>
       </div>

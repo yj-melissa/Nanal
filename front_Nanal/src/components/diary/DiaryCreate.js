@@ -5,8 +5,10 @@ import { onLogin } from '../../config/Login';
 import Swal from 'sweetalert2';
 
 const getStringDate = (date) => {
-  // console.log(date);
-  return date.toISOString().slice(0, 10);
+  // 대한민국의 offset을 수동으로 추가한 뒤 날짜 전달
+  const offset = date.getTimezoneOffset() * 60000;
+  const dateOffset = new Date(date.getTime() - offset);
+  return dateOffset.toISOString().slice(0, 10);
 };
 
 function DiaryCreate() {
@@ -25,6 +27,12 @@ function DiaryCreate() {
     if (content.length < 2) {
       contentRef.current.focus();
       return;
+    } else if (content.length > 300) {
+      Swal.fire({
+        icon: 'error', // Alert 타입
+        title: '일기 저장 실패', // Alert 제목
+        text: '일기는 300자 이하로 작성해주세요.', // Alert 내용
+      });
     }
     onLogin();
     axios_api
