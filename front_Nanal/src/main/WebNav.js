@@ -3,15 +3,15 @@ import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import bell from '../src_assets/img/bell.svg';
 import logo from '../src_assets/img/home-alt.svg';
-import downarrow from '../src_assets/img/arrow_drop_down.png';
-import uparrow from '../src_assets/img/arrow_drop_up.png';
+// import downarrow from '../src_assets/img/arrow_drop_down.png';
+// import uparrow from '../src_assets/img/arrow_drop_up.png';
 
 function Nav({ changeCalendaar }) {
   // useNavigate == 뒤로가기나 앞으로가기를 위한 react 내장 객체
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   // Home 의 정보를 알려줄 로케이션 변수 정의.
   // location.pathname === '/' 이 경우 현재 위치가 홈이다.
-  const location = useLocation();
+  // const location = useLocation();
   // Home 옆의 화살표 토글
   const [isToggle, setToggle] = useState(true);
   const toggleMenu = () => {

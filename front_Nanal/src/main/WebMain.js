@@ -70,40 +70,40 @@ const AppMain = () => {
       {accessToken !== undefined ? (
         <div className='w-[1440px]'>
         {homeState[0] === true ? (
-          <img src={bmkRR} className='absolute z-0 right-[158px] top-20' />
+          <img src={bmkRR} className='absolute z-0 right-[300px] top-20' />
         ) : (
           <div onClick={changeHomeStateZero}>
-            <img src={bmkRW} className='absolute z-0 right-[158px] top-20' />
+            <img src={bmkRW} className='absolute z-0 right-[300px] top-20' />
           </div>
         )}
         {homeState[1] === true ? (
-          <img src={bmkOO} className='absolute z-0 right-[158px] top-40' />
+          <img src={bmkOO} className='absolute z-0 right-[300px] top-40' />
         ) : (
           <div onClick={changeHomeStateOne}>
-            <img src={bmkOW} className='absolute z-0 right-[158px] top-40' />
+            <img src={bmkOW} className='absolute z-0 right-[300px] top-40' />
           </div>
         )}
         {homeState[2] === true ? (
-          <img src={bmkYY} className='absolute z-0 right-[158px] top-60' />
+          <img src={bmkYY} className='absolute z-0 right-[300px] top-60' />
         ) : (
           <div onClick={changeHomeStateTwo}>
-            <img src={bmkYW} className='absolute z-0 right-[158px] top-60' />
+            <img src={bmkYW} className='absolute z-0 right-[300px] top-60' />
           </div>
         )}
         {homeState[3] === true ? (
-          <img src={bmkGG} className='absolute z-0 right-[158px] top-80' />
+          <img src={bmkGG} className='absolute z-0 right-[300px] top-80' />
         ) : (
           <div onClick={changeHomeStateThree}>
-            <img src={bmkGW} className='absolute z-0 right-[158px] top-80' />
+            <img src={bmkGW} className='absolute z-0 right-[300px] top-80' />
           </div>
         )}
         {homeState[4] === true ? (
-          <img src={bmkBB} className='absolute z-0 right-[158px] top-[400px]' />
+          <img src={bmkBB} className='absolute z-0 right-[300px] top-[400px]' />
         ) : (
           <div onClick={changeHomeStateFour}>
             <img
               src={bmkBW}
-              className='absolute z-0 right-[158px] top-[400px]'
+              className='absolute z-0 right-[300px] top-[400px]'
             />
           </div>
         )}

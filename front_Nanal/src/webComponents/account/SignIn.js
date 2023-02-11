@@ -39,7 +39,7 @@ function SignIn() {
       .then(({ data }) => {
         if (data.statusCode === 200) {
           if (data.data.responseMessage === '로그인 성공') {
-            // console.log(data.data.token);
+            // console.log(data);
             onLoginSuccess(data.data.token);
             window.location.replace('/w/home');
             // navigate(`/home`, {
@@ -138,14 +138,12 @@ function SignIn() {
                 </Link>
               </div>
               <div className='grid grid-cols-1 mt-2'>
-                <Link to='/'>
-                  <button
-                    type='submit'
-                    className='inline-block h-[45px] w-full mx-auto my-2 font-bold text-white whitespace-normal bg-rose-300 hover:bg-rose-400 rounded-lg'
-                  >
-                    Sign In
-                  </button>
-                </Link>
+                <button
+                  type='submit'
+                  className='inline-block h-[45px] w-full mx-auto my-2 font-bold text-white whitespace-normal bg-rose-300 hover:bg-rose-400 rounded-lg'
+                >
+                  Sign In
+                </button>
                 <button
                   onClick={() => {
                     window.open(kakaoLogin);
