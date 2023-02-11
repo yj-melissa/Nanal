@@ -124,7 +124,9 @@ public class SecurityConfig{
             "http://14.46.142.235:3000",
             "http://192.168.45.214:3000",
             "http://192.168.0.9:3000",
-            "http://localhost:3000", "https://i8d110.p.ssafy.io"));
+            "http://localhost:3000",
+            "https://i8d110.p.ssafy.io",
+            "https://3.36.51.212"));
         configuration.setAllowedMethods(Arrays.asList("*"));
 //        configuration.addAllowedOriginPattern("*");
         configuration.setAllowedHeaders(Arrays.asList("Accept", "Accept-Language", "Authorization", "Content-Language", "Content-Type"));
