@@ -103,22 +103,22 @@ function AlarmItem({
       .get(`notification/${noticeIdx}`)
       .then(({ data }) => {
         if (data.statusCode === 200) {
-          if (data.data.responseMessage === '알림 읽음 처리 성공') {
-            Location.reload();
+          if (data.data.responseMessage === '알림 조회 성공') {
+            window.location.reload(true);
           }
         } else {
-          console.log('알림 읽음 처리 오류: ');
+          console.log('알림 조회 오류: ');
           console.log(data.statusCode);
           console.log(data.data.responseMessage);
         }
       })
       .catch(({ error }) => {
-        console.log('알림 읽음 처리 오류: ' + error);
+        console.log('알림 조회 오류: ' + error);
       });
   };
 
   //알람 읽음 처리 후 해당 글로.
-  const linkedDiary = () => {
+  const linkedDiary = (e) => {
     axios_api
       .get(`notification/${noticeIdx}`)
       .then(({ data }) => {
@@ -167,6 +167,7 @@ function AlarmItem({
             수락
           </button>
           <button
+            type='button'
             onClick={checkAlarm}
             className='bg-rose-500 text-white px-2.5 py-1 rounded-3xl m-auto mx-3 inline-block'
           >
@@ -206,6 +207,7 @@ function AlarmItem({
             수락
           </button>
           <button
+            type='button'
             onClick={checkAlarm}
             className='bg-rose-500 text-white px-2.5 py-1 rounded-3xl m-auto mx-3 inline-block'
           >

@@ -56,8 +56,6 @@ function BookCase() {
           setGroupList(null);
           if (data.data.responseMessage === '그룹 리스트 조회 성공') {
             setGroupList(data.data.groupList);
-            console.log(data.data.groupList);
-            console.log(data.data.groupList[0]);
           }
         } else {
           console.log(data.statusCode);
@@ -85,11 +83,12 @@ function BookCase() {
               <img src={nanalImg} className='object-cover'></img>
             </Link>
           </div>
-          <div className='box-border relative grid items-center w-16 h-16 overflow-hidden text-center border border-zinc-400'>
-            {groupList && (
+          <div>
+            {groupList && groupList.length > 0 && (
               <Link
                 to={`/Group/Detail`}
                 state={{ groupIdx: groupList[0].groupIdx, isToggle: 2 }}
+                className='box-border relative grid items-center w-16 h-16 overflow-hidden text-center border border-zinc-400'
               >
                 <img src={groupList[0].imgUrl} className='object-cover'></img>
               </Link>
@@ -99,45 +98,42 @@ function BookCase() {
         {/* 책장 */}
         <img src={shelf} className='py-3 mx-auto w-60' />
         <div className='relative flex h-20 p-4 text-center w-60 top-5 left-10 justify-evenly'>
-          <div className='box-border relative grid items-center w-16 h-16 overflow-hidden text-center border border-zinc-400'>
-            {/* {groupList[0].imgUrl === null ? (
-              <></>
-            ) : (
+          <div>
+            {groupList && groupList.length > 1 && (
               <Link
                 to={`/Group/Detail`}
-                state={{ groupIdx: groupList[0].groupIdx, isToggle: 2 }}
+                state={{ groupIdx: groupList[1].groupIdx, isToggle: 2 }}
+                className='box-border relative grid items-center w-16 h-16 overflow-hidden text-center border border-zinc-400'
               >
-                <img src={groupList[0].imgUrl} className='object-cover'></img>
+                <img src={groupList[1].imgUrl} className='object-cover'></img>
               </Link>
-            )} */}
+            )}
           </div>
-          <div className='box-border relative grid items-center w-16 h-16 overflow-hidden text-center border border-zinc-400'>
-            {/* {groupList[0].imgUrl === null ? (
-              <></>
-            ) : (
+          <div>
+            {groupList && groupList.length > 2 && (
               <Link
                 to={`/Group/Detail`}
-                state={{ groupIdx: groupList[0].groupIdx, isToggle: 2 }}
+                state={{ groupIdx: groupList[2].groupIdx, isToggle: 2 }}
+                className='box-border relative grid items-center w-16 h-16 overflow-hidden text-center border border-zinc-400'
               >
-                <img src={groupList[0].imgUrl} className='object-cover'></img>
+                <img src={groupList[2].imgUrl} className='object-cover'></img>
               </Link>
-            )} */}
+            )}
           </div>
         </div>
         {/* 책장 */}
         <img src={shelf} className='py-3 mx-auto w-60' />
         <div className='relative flex h-20 p-4 text-center w-60 top-5 left-10 justify-evenly'>
-          <div className='box-border relative grid items-center w-16 h-16 overflow-hidden text-center border border-zinc-400'>
-            {/* {groupList[0].imgUrl === null ? (
-              <></>
-            ) : (
+          <div className=''>
+            {groupList && groupList.length > 3 && (
               <Link
                 to={`/Group/Detail`}
-                state={{ groupIdx: groupList[0].groupIdx, isToggle: 2 }}
+                state={{ groupIdx: groupList[3].groupIdx, isToggle: 2 }}
+                className='box-border relative grid items-center w-16 h-16 overflow-hidden text-center border border-zinc-400'
               >
-                <img src={groupList[0].imgUrl} className='object-cover'></img>
+                <img src={groupList[3].imgUrl} className='object-cover'></img>
               </Link>
-            )} */}
+            )}
           </div>
           {/* 그룹 리스트로 이동 */}
           <Link
