@@ -18,9 +18,10 @@ const Tuning = () => {
     // token 값이 없어졌다면?
     if (denyToken === undefined) {
       Swal.fire({
+        title: '로그아웃',
         icon: 'success',
         text: '로그아웃 했어요!',
-        width: '80%',
+        width: '35%',
       }).then(function () {
         // window.location.replace('/');
         navigate(`/`, {

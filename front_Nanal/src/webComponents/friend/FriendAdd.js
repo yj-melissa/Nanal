@@ -38,12 +38,14 @@ function FriendAdd() {
         if (data.statusCode === 200) {
           if (data.data.responseMessage === '알림 저장 성공') {
             Swal.fire({
+              title: '친구 추가',
               icon: 'success', // Alert 타입
-              text: '친구 추가를 요청했어요!', // Alert 내용
+              text: '요청이 완료되었습니다!', // Alert 내용
               width: '35%',
-            }).then(function () {
-              window.location.reload(true);
-            });
+            })
+            //   .then(function () {
+            //   window.location.reload(true);
+            // });
           } else {
             console.log('친구 추가 알림 저장 오류 : ');
             console.log(data.statusCode);

@@ -1,11 +1,9 @@
 import {
   BrowserView,
   MobileView,
-  isBrowser,
-  isMobile,
 } from 'react-device-detect';
 import './App.css';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getCookie } from './config/Cookie';
 import MobileNav from './main/MobileNav';
 import MobileMain from './main/MobileMain.js';
