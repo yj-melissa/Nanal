@@ -1,8 +1,7 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import nmr from '../src_assets/img/bookmark-name/name-mark-red.svg';
 import diaryImgRed from '../src_assets/img/diary-img/diary-img-red.svg';
 import Calendar from 'react-calendar';
-import DiaryCreate from '../webComponents/diary/DiaryCreate';
 import DiaryList from '../webComponents/diary/DiaryList';
 import '../src_assets/css/Calendar.css';
 
@@ -42,7 +41,7 @@ const MyDiary = () => {
       <img src={nmr} className='absolute z-20 left-60 inset-y-20' />
       <img src={diaryImgRed} className='absolute w-[1280px] z-10 left-12' />
 
-      <div className='absolute z-20 w-1/3 inset-y-20 right-48'>
+      <div className='absolute z-20 w-[450px] inset-y-20 right-48'>
         <DiaryList isToggle={0} curDate={checkedDate} diarydate={diarydate} />
       </div>
     </div>

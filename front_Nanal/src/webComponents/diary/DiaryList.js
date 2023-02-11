@@ -7,6 +7,7 @@ import DiaryItem from './DiaryItem';
 import styled from 'styled-components';
 
 const Div = styled.div`
+  overflow: scroll;
   &::-webkit-scrollbar {
     width: 8px;
     height: 8px;
@@ -74,7 +75,7 @@ function DiaryList({ isToggle, curDate, groupIdx, diarydate }) {
             {diaryList.length}개의 일기가 있습니다.
           </p>
         ) : (
-          <div className='absolute z-20 inset-y-40'>
+          <div className='absolute z-20 inset-y-40 right-2'>
             <p className='w-[480px] text-2xl font-bold text-center'>
               {diarydate[0]}년 {diarydate[1]}월 {diarydate[2]}일의 일기는
               없습니다.
@@ -96,8 +97,8 @@ function DiaryList({ isToggle, curDate, groupIdx, diarydate }) {
       ) : (
         <></>
       )}
-      <Div>
-        <div className='my-5'>
+      <div className='my-5'>
+        <Div className='overflow-auto h-96'>
           {diaryList.map((diary) => (
             <DiaryItem
               key={diary.diaryIdx}
@@ -106,8 +107,8 @@ function DiaryList({ isToggle, curDate, groupIdx, diarydate }) {
               {...diary}
             />
           ))}
-        </div>
-      </Div>
+        </Div>
+      </div>
     </div>
   );
 }
