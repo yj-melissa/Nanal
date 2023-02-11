@@ -3,9 +3,10 @@ import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
 import FriendItem from './FriendItem';
 import addIcon from '../../src_assets/img/user_add_icon.png';
-import styled from "styled-components";
+import styled from 'styled-components';
 
 const Div = styled.div`
+  overflow: scroll;
   &::-webkit-scrollbar {
     width: 8px;
     height: 8px;
@@ -15,7 +16,8 @@ const Div = styled.div`
   &::-webkit-scrollbar-thumb {
     background: rgba(0, 0, 0, 0.3);
     border-radius: 6px;
-  }`;
+  }
+`;
 
 function FriendList({ setFriendAdd, setUserIdx }) {
   // console.log(setFriendCompo)
@@ -45,16 +47,24 @@ function FriendList({ setFriendAdd, setUserIdx }) {
   }, []);
 
   return (
-    <Div className="w-80 h-80 overflow-auto">
+    <Div className='overflow-auto w-80 h-80'>
       <div id='friend-list-title' className='mb-2'>
-        <h1 className='inline m-1 font-bold ml-2'>친구 리스트 조회</h1>
-        <div className="inline-block float-right" onClick={()=>setFriendAdd([false, true, false])}>
-          <img src={addIcon} className='w-[20px] h-[20px] mx-1.5'/>
+        <h1 className='inline m-1 ml-2 font-bold'>친구 리스트 조회</h1>
+        <div
+          className='inline-block float-right'
+          onClick={() => setFriendAdd([false, true, false])}
+        >
+          <img src={addIcon} className='w-[20px] h-[20px] mx-1.5' />
         </div>
       </div>
       {friendList.length !== 0 ? (
         friendList.map((friendItem) => (
-          <FriendItem key={friendItem.userIdx} item={friendItem} setFriendAdd={setFriendAdd} setUserIdx={setUserIdx} />
+          <FriendItem
+            key={friendItem.userIdx}
+            item={friendItem}
+            setFriendAdd={setFriendAdd}
+            setUserIdx={setUserIdx}
+          />
         ))
       ) : (
         <p>아직은 친구가 없습니다.</p>
