@@ -8,7 +8,7 @@ const SettingsNanal = () => {
 
     <p className="absolute z-30 left-[330px] inset-y-28">설정</p>
     <img src={nmg} className='absolute z-20 left-60 inset-y-20'/>
-    <img src={diaryImgGreen} className='absolute w-[1440px] z-10' />
+    <img src={diaryImgGreen} className='absolute w-[1280px] z-10 left-12' />
     <div className="absolute z-20 left-[240px] inset-y-48">
       <Tuning />
     </div>

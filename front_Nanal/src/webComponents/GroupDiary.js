@@ -7,7 +7,7 @@ const GroupDiary = () => {
 
     <p className="absolute z-30 left-[330px] inset-y-28">그룹일기</p>
     <img src={nmo} className='absolute z-20 left-60 inset-y-20'/>
-    <img src={diaryImgOrange} className='absolute w-[1440px] z-10' />
+    <img src={diaryImgOrange} className='absolute w-[1280px] z-10 left-12' />
     <div>
       
     </div>

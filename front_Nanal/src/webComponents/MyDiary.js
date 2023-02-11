@@ -41,7 +41,7 @@ const MyDiary = () => {
       </div>
       <p className='absolute z-30 left-[330px] inset-y-28'>내 일기</p>
       <img src={nmr} className='absolute z-20 left-60 inset-y-20' />
-      <img src={diaryImgRed} className='absolute w-[1440px] z-10' />
+      <img src={diaryImgRed} className='absolute w-[1280px] z-10 left-12' />
 
       <div className='absolute z-20 w-1/3 inset-y-20 right-48'>
         <DiaryList isToggle={0} curDate={checkedDate} diarydate={diarydate} />
