@@ -30,6 +30,7 @@ const Tuning = () => {
     } else {
       console.log('로그아웃 실패====');
     }
+    // console.log(denyToken)
   };
 
   return (
