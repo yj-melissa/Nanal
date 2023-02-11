@@ -64,8 +64,22 @@ public class DiaryController {
             diary.setUserIdx(userInfo.getUserIdx());
             //save diary
             // [감정 분석]
-            String emotion = requestToEmotionFlask(diary.getContent());
-            diary.setEmo(emotion);
+            requestToEmotionFlask(diary);
+//            String emotion = requestToEmotionFlask(diary.getContent());
+
+//            if (emotion.equals("분노")) {
+//                diary.setEmo(Emotion.ANG.getImgUrl());
+//            } else if (emotion.equals("중성")) {
+//                diary.setEmo(Emotion.CALM.getImgUrl());
+//            } else if (emotion.equals("당황")) {
+//                diary.setEmo(Emotion.EMB.getImgUrl());
+//            } else if (emotion.equals("기쁨")) {
+//                diary.setEmo(Emotion.JOY.getImgUrl());
+//            } else if (emotion.equals("불안")) {
+//                diary.setEmo(Emotion.NERV.getImgUrl());
+//            } else{
+//                diary.setEmo(Emotion.SAD.getImgUrl());
+//            }
 
             //////////////////////////////////////////////////////////////////
             //////////////////////////////////////////////////////////////////
@@ -96,6 +110,7 @@ public class DiaryController {
 
             diary.setPainting(PaintingEntity.builder().pictureIdx(paintingResponseDTO.getPictureIdx()).pictureTitle(paintingResponseDTO.getPictureTitle()).imgUrl(paintingResponseDTO.getImgUrl()).build());
             diary.setImgUrl(dalleURL);
+
             /////////////////////////////////////////////////////////////////
             /////////////////////////////////////////////////////////////////
 
@@ -547,18 +562,17 @@ public class DiaryController {
         }
     }
 
-    private String requestToEmotionFlask(String content) throws JsonProcessingException, ParseException {
-
+    private void requestToEmotionFlask(DiaryRequestDTO diary) throws JsonProcessingException, ParseException {
+        System.out.println("content : " + diary.getContent());
         RestTemplate restTemplate = new RestTemplate();
         // url
         String url = "http://i8d110.p.ssafy.io:5000/predict";
 //        String url = "http://127.0.0.1:5000/predict";
-
         // Header set
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
         // Body set
-        EmotionDTO body = new EmotionDTO(content);
+        EmotionDTO body = new EmotionDTO(diary.getContent());
 
         // Message
         HttpEntity<?> requestMessage = new HttpEntity<>(body, httpHeaders);
@@ -571,7 +585,28 @@ public class DiaryController {
 
         JSONObject jsonObj = (JSONObject) new JSONParser().parse(response.getBody().toString());
 
-        return (String) jsonObj.get("result");
+        switch ((String) jsonObj.get("result")) {
+            case "분노":
+                diary.setEmo(Emotion.ANG.getImgUrl());
+                break;
+            case "중성":
+                diary.setEmo(Emotion.CALM.getImgUrl());
+                break;
+            case "당황":
+                diary.setEmo(Emotion.EMB.getImgUrl());
+                break;
+            case "기쁨":
+                diary.setEmo(Emotion.JOY.getImgUrl());
+                break;
+            case "불안":
+                diary.setEmo(Emotion.NERV.getImgUrl());
+                break;
+            case "슬픔":
+                diary.setEmo(Emotion.SAD.getImgUrl());
+                break;
+
+        }
+
     }
 
     private String requestToDalleFlask(String content) throws JsonProcessingException, ParseException {
@@ -602,8 +637,6 @@ public class DiaryController {
         JSONObject data = (JSONObject) ((ArrayList) jsonObj.get("data")).get(0);
         String result = (String) data.get("url");
 
-        System.out.println("result : " + result);
-
         return result;
     }
 
@@ -620,19 +653,4 @@ public class DiaryController {
 
     }
 
-    static class ResultDTO {
-        String result;
-
-        public ResultDTO(String result) {
-            this.result = result;
-        }
-
-        public String getResult() {
-            return result;
-        }
-
-        public void setResult(String result) {
-            this.result = result;
-        }
-    }
 }

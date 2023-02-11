@@ -36,10 +36,24 @@ public class PaintingRequestDTO {
 
     public void init() {
         this.groupImgIdx = 0;
-        this.imgUrl = "https://nanal-dbd.s3.ap-northeast-2.amazonaws.com/dalle/mungee_sohui.png";
-//        this.imgUrl = "https://nanal-dbd.s3.ap-northeast-2.amazonaws.com/dalle/emo_ner.png";
-//        this.imgUrl = "https://nanal-dbd.s3.ap-northeast-2.amazonaws.com/dalle/emo_sad.png";
-//        this.imgUrl = "https://nanal-dbd.s3.ap-northeast-2.amazonaws.com/dalle/emo_joy.png";
+        this.setFileSize(256 * 256);
+        Double random = Math.random() * 60; // 0.0~1.0
+
+        System.out.println("random : " + random);
+
+        if (random < 1) {
+            this.imgUrl = Emotion.ANG.getImgUrl();
+        } else if (random < 2) {
+            this.imgUrl = Emotion.CALM.getImgUrl();
+        } else if (random < 3) {
+            this.imgUrl = Emotion.EMB.getImgUrl();
+        } else if (random < 4) {
+            this.imgUrl = Emotion.JOY.getImgUrl();
+        } else if (random < 5) {
+            this.imgUrl = Emotion.NERV.getImgUrl();
+        } else {
+            this.imgUrl = Emotion.SAD.getImgUrl();
+        }
 
     }
 }
