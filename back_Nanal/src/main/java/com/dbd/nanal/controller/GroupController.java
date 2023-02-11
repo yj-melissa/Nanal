@@ -42,6 +42,7 @@ public class GroupController {
         HashMap<String, Object> responseDTO = new HashMap<>();
 
         try {
+//            groupDetailRequestDTO.
             GroupDetailResponseDTO groupDetailResponseDTO = groupService.saveGroup(groupDetailRequestDTO);
 
             if (groupDetailResponseDTO != null) {
