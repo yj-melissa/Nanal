@@ -164,6 +164,7 @@ public class DiaryController {
             List<String> keywordList = new ArrayList<>();
 
 
+            requestToEmotionFlask(diary);
 
             // [번역할 일기 내용]
             api.setContent(diary.getContent());
