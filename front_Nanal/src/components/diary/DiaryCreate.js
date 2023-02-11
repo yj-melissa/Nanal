@@ -94,114 +94,112 @@ function DiaryCreate() {
   const [isShow, setShow] = useState(false);
 
   return (
-    <div>
-      <div className='h-auto min-h-full pb-5'>
-        <h2 className='my-5 text-lg font-bold text-center'>일기 작성</h2>
-        {/* 날짜 선택란 */}
+    <div className='h-auto min-h-full pb-5'>
+      <h2 className='my-5 text-lg font-bold text-center'>일기 작성</h2>
+      {/* 날짜 선택란 */}
+      <div>
+        <input
+          className='p-2 rounded-lg cursor-pointer bg-slate-300/50'
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
+          type='date'
+        />
+        {/* 일기 내용 작성란 */}
         <div>
-          <input
-            className='p-2 rounded-lg cursor-pointer bg-slate-300/50'
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            type='date'
+          <textarea
+            className='w-full h-40 px-2 py-2 my-2 rounded-lg bg-slate-300/50'
+            placeholder='오늘의 하루는 어땠나요?'
+            name='content'
+            ref={contentRef}
+            value={content}
+            onChange={(e) => {
+              setContent(e.target.value);
+            }}
           />
-          {/* 일기 내용 작성란 */}
-          <div>
-            <textarea
-              className='w-full h-40 px-2 py-2 my-2 rounded-lg bg-slate-300/50'
-              placeholder='오늘의 하루는 어땠나요?'
-              name='content'
-              ref={contentRef}
-              value={content}
-              onChange={(e) => {
-                setContent(e.target.value);
-              }}
-            />
-          </div>
         </div>
-        {/* 그룹 여부 선택란 */}
-        <div className='mt-2'>
-          <h4 className='my-2 text-lg font-bold'>공개 범위 설정</h4>
-          <input
-            className='cursor-pointer'
-            id='private'
-            type='radio'
-            value='개인'
-            checked={group === '개인'}
-            onChange={(e) => setGroup(e.target.value)}
-            onClick={() => setShow(false)}
-          />
-          <label className='ml-2 mr-4 cursor-pointer' htmlFor='private'>
-            개인
-          </label>
-          <input
-            className='cursor-pointer'
-            id='group'
-            type='radio'
-            value='그룹'
-            checked={group === '그룹'}
-            onChange={(e) => setGroup(e.target.value)}
-            onClick={() => setShow(true)}
-          />
-          <label className='ml-2 cursor-pointer' htmlFor='group'>
-            그룹
-          </label>
-          <div className='flex flex-wrap justify-between'>
-            {isShow ? (
-              <>
-                {groupList.map((groupItem, idx) => {
-                  return (
-                    <div
-                      key={idx}
-                      className='bg-[#F7F7F7] border-2 border-solid border-slate-400 rounded-lg m-1 mb-3 p-2 w-[47%]'
-                    >
-                      <label
-                        htmlFor={groupItem.groupDetail.groupIdx}
-                        className='mr-2 cursor-pointer'
-                      >
-                        {groupItem.groupDetail.groupName}
-                      </label>
-                      <input
-                        className='cursor-pointer'
-                        type='checkbox'
-                        id={groupItem.groupDetail.groupIdx}
-                        checked={
-                          checkedList.includes(groupItem.groupDetail.groupIdx)
-                            ? true
-                            : false
-                        }
-                        onChange={(e) => {
-                          onChecked(
-                            e.target.checked,
-                            groupItem.groupDetail.groupIdx
-                          );
-                        }}
-                      />
-                    </div>
-                  );
-                })}
-              </>
-            ) : (
-              <></>
-            )}
-          </div>
-        </div>
-        {/* 작성 취소 및 완료 버튼 */}
-        <footer className='relative flex justify-between px-1 pb-5 translate-y-full'>
-          <button
-            className='hover:bg-slate-300 bg-slate-300/50 rounded-xl px-2.5 py-1 block'
-            onClick={() => navigate(-1)}
-          >
-            작성 취소
-          </button>
-          <button
-            className='hover:bg-sky-700 bg-cyan-600 text-white px-2.5 py-1 rounded-xl block'
-            onClick={handleSubmit}
-          >
-            작성 완료
-          </button>
-        </footer>
       </div>
+      {/* 그룹 여부 선택란 */}
+      <div className='mt-2'>
+        <h4 className='my-2 text-lg font-bold'>공개 범위 설정</h4>
+        <input
+          className='cursor-pointer'
+          id='private'
+          type='radio'
+          value='개인'
+          checked={group === '개인'}
+          onChange={(e) => setGroup(e.target.value)}
+          onClick={() => setShow(false)}
+        />
+        <label className='ml-2 mr-4 cursor-pointer' htmlFor='private'>
+          개인
+        </label>
+        <input
+          className='cursor-pointer'
+          id='group'
+          type='radio'
+          value='그룹'
+          checked={group === '그룹'}
+          onChange={(e) => setGroup(e.target.value)}
+          onClick={() => setShow(true)}
+        />
+        <label className='ml-2 cursor-pointer' htmlFor='group'>
+          그룹
+        </label>
+        <div className='flex flex-wrap justify-between'>
+          {isShow ? (
+            <>
+              {groupList.map((groupItem, idx) => {
+                return (
+                  <div
+                    key={idx}
+                    className='bg-[#F7F7F7] border-2 border-solid border-slate-400 rounded-lg m-1 mb-3 p-2 w-[47%]'
+                  >
+                    <label
+                      htmlFor={groupItem.groupDetail.groupIdx}
+                      className='mr-2 cursor-pointer'
+                    >
+                      {groupItem.groupDetail.groupName}
+                    </label>
+                    <input
+                      className='cursor-pointer'
+                      type='checkbox'
+                      id={groupItem.groupDetail.groupIdx}
+                      checked={
+                        checkedList.includes(groupItem.groupDetail.groupIdx)
+                          ? true
+                          : false
+                      }
+                      onChange={(e) => {
+                        onChecked(
+                          e.target.checked,
+                          groupItem.groupDetail.groupIdx
+                        );
+                      }}
+                    />
+                  </div>
+                );
+              })}
+            </>
+          ) : (
+            <></>
+          )}
+        </div>
+      </div>
+      {/* 작성 취소 및 완료 버튼 */}
+      <footer className='relative flex justify-between px-1 pb-5 translate-y-full'>
+        <button
+          className='hover:bg-slate-300 bg-slate-300/50 rounded-xl px-2.5 py-1 block'
+          onClick={() => navigate(-1)}
+        >
+          작성 취소
+        </button>
+        <button
+          className='hover:bg-sky-700 bg-cyan-600 text-white px-2.5 py-1 rounded-xl block'
+          onClick={handleSubmit}
+        >
+          작성 완료
+        </button>
+      </footer>
     </div>
   );
 }
