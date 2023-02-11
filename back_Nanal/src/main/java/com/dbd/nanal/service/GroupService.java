@@ -100,9 +100,12 @@ public class GroupService {
                 HashMap<String, Object> responseDTO = new HashMap<>();
 
                 Object[] groupListNativeDTO = groupList.get(idx++);
-                responseDTO.put("groupIdx", groupListNativeDTO[0]);
-                responseDTO.put("imgUrl", groupListNativeDTO[1]);
-                responseDTO.put("groupName", groupListNativeDTO[2]);
+
+                HashMap<String, Object> groupDetail = new HashMap<>();
+
+                groupDetail.put("groupIdx", groupListNativeDTO[0]);
+                groupDetail.put("imgUrl", groupListNativeDTO[1]);
+                groupDetail.put("groupName", groupListNativeDTO[2]);
 
                 List<HashMap<String, Object>> tags = new ArrayList<>();
                 HashMap<String, Object> tag = new HashMap<>();
@@ -117,6 +120,7 @@ public class GroupService {
                     tag.put("tag", groupListNativeDTO[4]);
                     tags.add(tag);
                 }
+                responseDTO.put("groupDetail", groupDetail);
                 responseDTO.put("tags", tags);
                 result.add(responseDTO);
             }

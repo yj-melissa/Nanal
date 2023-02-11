@@ -12,19 +12,12 @@ public class GroupDetailResponseDTO {
 
     private int groupIdx;
     private String groupName;
-    private boolean isPrivate;
-    private int groupImgIdx;
-    private Date creationTime;
     private String imgUrl;
 
     public GroupDetailResponseDTO(GroupDetailEntity groupEntity) {
         this.groupIdx = groupEntity.getGroupIdx();
         this.groupName = groupEntity.getGroupName();
-        this.isPrivate = groupEntity.getIsPrivate();
-        this.groupImgIdx = groupEntity.getGroupImgIdx();
-        this.creationTime = groupEntity.getCreationDate();
         this.imgUrl = groupEntity.getImgUrl();
     }
-
 
 }
