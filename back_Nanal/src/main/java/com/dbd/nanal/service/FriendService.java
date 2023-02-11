@@ -72,7 +72,7 @@ public class FriendService {
 
             HashMap<String, Object> responseDto = new HashMap<>();
             responseDto.put("userIdx", friend.getUser_idx1().getUserIdx());
-            responseDto.put("nickName", friend.getUser_idx1().getUserProfile().getNickname());
+            responseDto.put("nickname", friend.getUser_idx1().getUserProfile().getNickname());
             responseDto.put("img", friend.getUser_idx1().getUserProfile().getImg());
             responseDto.put("introduction", friend.getUser_idx1().getUserProfile().getIntroduction());
 
