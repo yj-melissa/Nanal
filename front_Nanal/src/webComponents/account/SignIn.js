@@ -7,6 +7,8 @@ import nanal from '../../src_assets/img/나날1.jpeg';
 import kakao from '../../src_assets/img/kakao_login.png';
 
 function SignIn() {
+  const navigate = useNavigate();
+
   const [userId, setUserId] = useState('');
   const [userPw, setPw] = useState('');
 
@@ -39,13 +41,13 @@ function SignIn() {
       .then(({ data }) => {
         if (data.statusCode === 200) {
           if (data.data.responseMessage === '로그인 성공') {
-            console.log('로그인 완료, 토큰 출력');
-            console.log(data.data.token);
+            // console.log('로그인 완료, 토큰 출력');
+            // console.log(data.data.token);
             onLoginSuccess(data.data.token);
-            window.location.replace('/home');
-            // navigate(`/home`, {
-            //   replace: true,
-            // });
+            // window.location.replace('/home');
+            navigate(`/home`, {
+              replace: true,
+            });
           }
         } else if (data.statusCode === 500) {
           if (data.data.responseMessage === '로그인 실패') {
@@ -86,7 +88,9 @@ function SignIn() {
     <div className='grid mt-20 place-items-center h-96'>
       <div className='box-border p-4 w-auto border-[1px] border-gray-500 border-solid flex items-center justify-center'>
         <div className='mr-2 w-80'>
-          <img src={nanal} alt='main_logo' className='h-50' />
+          <Link to='/'>
+            <img src={nanal} alt='main_logo' className='h-50' />
+          </Link>
         </div>
         <div>
           <h1 className='m-3 font-bold tracking-wider text-center'>
@@ -96,10 +100,10 @@ function SignIn() {
             id='sign-in-form'
             className='flex items-center justify-center ml-2'
           >
-            <form action='' onSubmit={SignIn}>
+            <form onSubmit={SignIn}>
               <div className='m-1'>
                 <label htmlFor='user-id' className='font-bold cursor-pointer'>
-                  ID &nbsp;&nbsp;{' '}
+                  ID &nbsp;&nbsp;
                 </label>
                 <input
                   type='text'
@@ -116,7 +120,7 @@ function SignIn() {
                   htmlFor='user-password'
                   className='font-bold cursor-pointer'
                 >
-                  PW{' '}
+                  PW
                 </label>
                 <input
                   type='password'
@@ -134,19 +138,17 @@ function SignIn() {
                 <Link>
                   <span className='text-sm'>PW 찾기 | </span>
                 </Link>
-                <Link to='/signup'>
+                <Link to='/SignUp'>
                   <span className='text-sm'>회원가입</span>
                 </Link>
               </div>
               <div className='grid grid-cols-1 mt-2'>
-                <Link to='/'>
-                  <button
-                    type='submit'
-                    className='inline-block h-[45px] w-full mx-auto my-2 font-bold text-white whitespace-normal bg-rose-300 hover:bg-rose-400 rounded-lg'
-                  >
-                    Sign In
-                  </button>
-                </Link>
+                <button
+                  type='submit'
+                  className='inline-block h-[45px] w-full mx-auto my-2 font-bold text-white whitespace-normal bg-rose-300 hover:bg-rose-400 rounded-lg'
+                >
+                  Sign In
+                </button>
                 <button
                   onClick={() => {
                     window.open(kakaoLogin);
