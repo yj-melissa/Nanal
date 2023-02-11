@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
+import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import axios_api from '../../config/Axios';
 import nanal from '../../src_assets/img/나날1.jpeg';
@@ -25,16 +26,16 @@ function SignUp() {
   const onChangeEmail = (e) => {
     const currentEmail = e.target.value;
     setEmail(currentEmail);
-    // const emailRegExp =
-    //   /^[A-Za-z0-9_]+[A-Za-z0-9]*[@]{1}[A-Za-z0-9]+[A-Za-z0-9]*[.]{1}[A-Za-z]{1,3}$/;
-    // if (!emailRegExp.test(currentEmail)) {
-    //   setEmailMessage("이메일의 형식이 올바르지 않습니다!");
-    //   setIsEmail(false);
-    // } else {
-    //   setEmailMessage("이메일의 형식이 올바릅니다.");
-    //   setIsEmail(true);
-    // }
-    // setIsEmail(true);
+    const emailRegExp =
+      /^[A-Za-z0-9_]+[A-Za-z0-9]*[@]{1}[A-Za-z0-9]+[A-Za-z0-9]*[.]{1}[A-Za-z]{1,3}$/;
+    if (!emailRegExp.test(currentEmail)) {
+      setEmailMessage('이메일의 형식이 올바르지 않습니다!');
+      setIsEmail(false);
+    } else {
+      setEmailMessage('이메일의 형식이 올바릅니다.');
+      setIsEmail(true);
+    }
+    setIsEmail(true);
   };
 
   const sendEmail = (emailstring) => {
@@ -53,8 +54,11 @@ function SignUp() {
               icon: 'warning', // Alert 타입
               text: '이미 가입한 이메일 입니다', // Alert 내용
               width: '30%',
-            }).then(function () {});
-            window.location.replace('/SignIn');
+            }).then(function () {
+              navigate(`/SignIn`, {
+                replace: true,
+              });
+            });
           } else {
             // alert('이메일을 확인하고 다시 입력해주세요.');
             Swal.fire({
@@ -248,9 +252,10 @@ function SignUp() {
                 icon: 'success',
                 text: '회원 가입 성공!!!',
                 width: '30%',
-              }).then(function () {});
-              navigate(`/w/SignIn`, {
-                replace: true,
+              }).then(function () {
+                navigate(`/SignIn`, {
+                  replace: true,
+                });
               });
               // window.location.replace('/SignIn');
             }
@@ -280,7 +285,9 @@ function SignUp() {
     <div className='grid mt-20 place-items-center h-96'>
       <div className='box-border p-4 w-auto border-[1px] border-gray-500 flex items-center justify-center border-solid'>
         <div className='mr-2 w-80'>
-          <img src={nanal} alt='main_logo' className='h-50' />
+          <Link to='/'>
+            <img src={nanal} alt='main_logo' className='h-50' />
+          </Link>
         </div>
         <div>
           <h1 className='p-3 text-lg font-bold text-center'>
@@ -334,13 +341,13 @@ function SignUp() {
                   <></>
                 )}
               </div>
-              {/* <p className='message'>{emailMessage}</p> */}
+              <p className='text-xs text-rose-500'>{emailMessage}</p>
             </div>
             {/* 유저아이디 id */}
             <div className='m-1 '>
               <label htmlFor='id' className='font-bold'>
                 💛 UserId
-              </label>{' '}
+              </label>
               <br />
               <input
                 type='text'

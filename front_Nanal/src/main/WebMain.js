@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { getCookie } from '../config/Cookie';
+import LogoHome from '../webComponents/LogoHome';
 import MyDiary from '../webComponents/MyDiary';
 import GroupDiary from '../webComponents/GroupDiary';
 import FriendList from '../webComponents/FriendList';
@@ -8,6 +9,7 @@ import RecycleBin from '../webComponents/RecycleBin';
 import SettingsNanal from '../webComponents/SettingsNanal';
 import SignUp from '../webComponents/account/SignUp';
 import SignIn from '../webComponents/account/SignIn';
+import DiaryCreate from '../webComponents/diary/DiaryCreate';
 import DiaryDetail from '../webComponents/diary/DiaryDetail';
 import NotFound from '../webComponents/another/NotFound';
 import bmkRR from '../src_assets/img/bookmark/bookmark-red-red.svg';
@@ -20,7 +22,6 @@ import bmkGG from '../src_assets/img/bookmark/bookmark-green-green.svg';
 import bmkGW from '../src_assets/img/bookmark/bookmark-green-white.svg';
 import bmkBB from '../src_assets/img/bookmark/bookmark-blue-blue.svg';
 import bmkBW from '../src_assets/img/bookmark/bookmark-blue-white.svg';
-import DiaryCreate from '../webComponents/diary/DiaryCreate';
 
 const AppMain = () => {
   const accessToken = getCookie('accessToken');
@@ -50,16 +51,17 @@ const AppMain = () => {
   return (
     <div>
       <Routes>
+        <Route path='/' element={<LogoHome />}></Route>
         {homeState[0] === true ? (
-          <Route path='/' element={<MyDiary />}></Route>
+          <Route path='/home' element={<MyDiary />}></Route>
         ) : homeState[1] === true ? (
-          <Route path='/' element={<GroupDiary />}></Route>
+          <Route path='/home' element={<GroupDiary />}></Route>
         ) : homeState[2] === true ? (
-          <Route path='/' element={<FriendList />}></Route>
-          ) : homeState[3] === true ? (
-          <Route path='/' element={<SettingsNanal />}></Route>
-          ) : homeState[4] === true ? (
-          <Route path='/' element={<RecycleBin />}></Route>
+          <Route path='/home' element={<FriendList />}></Route>
+        ) : homeState[3] === true ? (
+          <Route path='/home' element={<SettingsNanal />}></Route>
+        ) : homeState[4] === true ? (
+          <Route path='/home' element={<RecycleBin />}></Route>
         ) : null}
         <Route path='/SignIn' element={<SignIn />}></Route>
         <Route path='/SignUp' element={<SignUp />}></Route>
@@ -105,11 +107,16 @@ const AppMain = () => {
               src={bmkBW}
               className='absolute z-0 right-[300px] top-[400px]'
             />
-          </div>
-        )}
-      </div>
+          ) : (
+            <div onClick={changeHomeStateFour}>
+              <img
+                src={bmkBW}
+                className='absolute z-0 right-[158px] top-[400px]'
+              />
+            </div>
+          )}
+        </div>
       ) : null}
-      
     </div>
   );
 };

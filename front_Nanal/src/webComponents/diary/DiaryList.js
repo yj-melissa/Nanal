@@ -7,6 +7,7 @@ import DiaryItem from './DiaryItem';
 
 function DiaryList({ isToggle, curDate, groupIdx, diarydate }) {
   const { state } = useLocation();
+  const today = curDate;
 
   if (state !== null) {
     isToggle = state.isToggle;
@@ -64,7 +65,7 @@ function DiaryList({ isToggle, curDate, groupIdx, diarydate }) {
               {diarydate[0]}년 {diarydate[1]}월 {diarydate[2]}일의 일기는
               없습니다.
             </p>
-            <Link to={'/Diary/Create'}>
+            <Link to={`/Diary/Create`} state={{ today: today }}>
               <div className='flex items-center justify-center mt-10'>
                 <button className='p-2 text-lg font-bold text-center rounded-lg cursor-pointer bg-violet-100 text-violet-700 whitespace-nowrap'>
                   일기 쓰러 가기

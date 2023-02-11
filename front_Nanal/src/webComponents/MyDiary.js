@@ -46,10 +46,6 @@ const MyDiary = () => {
       <div className='absolute z-20 w-1/3 inset-y-20 right-48'>
         <DiaryList isToggle={0} curDate={checkedDate} diarydate={diarydate} />
       </div>
-
-      {/* <div className='absolute z-20 w-1/3 inset-y-16 right-48'>
-        <DiaryCreate curDate={checkedDate} />
-      </div> */}
     </div>
   );
 };
