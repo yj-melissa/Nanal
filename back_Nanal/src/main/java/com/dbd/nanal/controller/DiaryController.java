@@ -163,12 +163,40 @@ public class DiaryController {
             //diary keyword analyze
             List<String> keywordList = new ArrayList<>();
 
+
+
+            // [번역할 일기 내용]
+            api.setContent(diary.getContent());
+
+            // [번역하기]
+            String en = api.transfer();
+            JSONObject jsonObj = (JSONObject) new JSONParser().parse(en);
+            JSONObject message = (JSONObject) jsonObj.get("message");
+            JSONObject result = (JSONObject) message.get("result");
+            // [번역된 일기]
+            String eng = (String) result.get("translatedText");
+            System.out.println("eng : "+eng);
+            // [달리 그림 만들기]
+            String dalleResult = requestToDalleFlask(eng);
+
+            // [그림 저장하기]
+            File file = fileHandler.urlToFile(dalleResult);
+
+            // [달리 s3 올리기]
+            String dalleURL = fileService.saveToS3(file);
+
+            // [DB에 저장]
+            PaintingResponseDTO paintingResponseDTO = fileService.paintingSave(new PaintingRequestDTO("Dalle", dalleURL));
+
+
+            diary.setPainting(PaintingEntity.builder().pictureIdx(paintingResponseDTO.getPictureIdx()).pictureTitle(paintingResponseDTO.getPictureTitle()).imgUrl(paintingResponseDTO.getImgUrl()).build());
+            diary.setImgUrl(dalleURL);
+
             //picture
             //music
             DiaryResponseDTO diaryResponseDTO = diaryService.updateDiary(diary.toEntity());
 
             int diaryIdx = diary.getDiaryIdx();
-
             //delete diary-group
             diaryService.deleteDiaryGroup(diaryIdx);
 
