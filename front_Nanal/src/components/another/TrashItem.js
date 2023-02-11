@@ -7,8 +7,7 @@ function TrashItem({ diaryIdx, diaryDate, content }) {
   // 일기 복구하기
   const recovery = () => {
     Swal.fire({
-      title: `일기를 정말 복구하시겠습니까?`,
-      text: '복구한 일기는 리스트에서 확인 가능합니다.',
+      text: '일기를 복구하실 건가요?',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',

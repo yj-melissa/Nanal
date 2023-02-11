@@ -33,7 +33,7 @@ function Settings() {
 
   return (
     <div>
-      <div className='grid grid-cols-3 gap-6 mb-5'>
+      <div className='grid grid-cols-3 gap-6 my-14'>
         <Link to='/Group/List' className='grid content-evenly'>
           <img src={bookmarksRed} className='m-auto' />
           <p className='my-1 text-center'>그룹 관리</p>
