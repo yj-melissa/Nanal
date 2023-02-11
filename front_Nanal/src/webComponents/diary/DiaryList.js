@@ -4,6 +4,20 @@ import { useLocation } from 'react-router-dom';
 import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
 import DiaryItem from './DiaryItem';
+import styled from 'styled-components';
+
+const Div = styled.div`
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.4);
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 6px;
+  }
+`;
 
 function DiaryList({ isToggle, curDate, groupIdx, diarydate }) {
   const { state } = useLocation();
@@ -65,6 +79,7 @@ function DiaryList({ isToggle, curDate, groupIdx, diarydate }) {
               {diarydate[0]}년 {diarydate[1]}월 {diarydate[2]}일의 일기는
               없습니다.
             </p>
+
             <Link to={`/Diary/Create`} state={{ today: today }}>
               <div className='flex items-center justify-center mt-10'>
                 <button className='p-2 text-lg font-bold text-center rounded-lg cursor-pointer bg-violet-100 text-violet-700 whitespace-nowrap'>
@@ -81,16 +96,18 @@ function DiaryList({ isToggle, curDate, groupIdx, diarydate }) {
       ) : (
         <></>
       )}
-      <div className='my-5'>
-        {diaryList.map((diary) => (
-          <DiaryItem
-            key={diary.diaryIdx}
-            isToggle={isToggle}
-            groupIdx={groupIdx}
-            {...diary}
-          />
-        ))}
-      </div>
+      <Div>
+        <div className='my-5'>
+          {diaryList.map((diary) => (
+            <DiaryItem
+              key={diary.diaryIdx}
+              isToggle={isToggle}
+              groupIdx={groupIdx}
+              {...diary}
+            />
+          ))}
+        </div>
+      </Div>
     </div>
   );
 }
