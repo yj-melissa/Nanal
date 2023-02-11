@@ -32,7 +32,7 @@ public class UserProfileEntity {
     @Column
     private String img;
 
-    @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name="pictureIdx")
     @JsonIgnore
     private PaintingEntity painting;

@@ -65,21 +65,6 @@ public class DiaryController {
             //save diary
             // [감정 분석]
             requestToEmotionFlask(diary);
-//            String emotion = requestToEmotionFlask(diary.getContent());
-
-//            if (emotion.equals("분노")) {
-//                diary.setEmo(Emotion.ANG.getImgUrl());
-//            } else if (emotion.equals("중성")) {
-//                diary.setEmo(Emotion.CALM.getImgUrl());
-//            } else if (emotion.equals("당황")) {
-//                diary.setEmo(Emotion.EMB.getImgUrl());
-//            } else if (emotion.equals("기쁨")) {
-//                diary.setEmo(Emotion.JOY.getImgUrl());
-//            } else if (emotion.equals("불안")) {
-//                diary.setEmo(Emotion.NERV.getImgUrl());
-//            } else{
-//                diary.setEmo(Emotion.SAD.getImgUrl());
-//            }
 
             //////////////////////////////////////////////////////////////////
             //////////////////////////////////////////////////////////////////
