@@ -20,4 +20,5 @@ public class FriendDetailResponseDTO {
         this.img = profile.getImg();
     }
 
+
 }
