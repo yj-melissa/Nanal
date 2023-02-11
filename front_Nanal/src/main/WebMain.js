@@ -25,13 +25,7 @@ import bmkBW from '../src_assets/img/bookmark/bookmark-blue-white.svg';
 
 const AppMain = () => {
   const accessToken = getCookie('accessToken');
-  const [homeState, setHomeState] = useState([
-    true,
-    false,
-    false,
-    false,
-    false,
-  ]);
+  const [homeState, setHomeState] = useState([true,false,false,false,false]);
   const changeHomeStateZero = () => {
     setHomeState([true, false, false, false, false]);
   };
