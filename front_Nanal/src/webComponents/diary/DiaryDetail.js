@@ -11,10 +11,13 @@ import bookmark_filled from '../../src_assets/img/bookmark_fill.png';
 function DiaryDetail() {
   // const location = useLocation();
   const { state } = useLocation();
+
   const navigate = useNavigate();
   const diaryIdx = state.diaryIdx;
   const isToggle = state.isToggle;
   const groupIdx = state.groupIdx;
+  const diaryDate = state.diaryDate;
+  const diarydate = diaryDate.split('-');
 
   const [diaryDetail, setDiaryDetail] = useState({});
   const [originGroupList, setOriginGroupList] = useState();
@@ -110,67 +113,72 @@ function DiaryDetail() {
   }, []);
 
   return (
-    <div>
-      <div className='flex justify-between my-2'>
-        <strong>{diaryDetail.diaryDate}일</strong>
-        {/* 감정 넣는 곳 */}
-        <span>{diaryDetail.emo}</span>
-        {isBook ? (
+    <div className='grid justify-items-center'>
+      <div className='w-[720px]'>
+        <div className='flex justify-between mt-5'>
+          <p className='text-2xl font-bold'>
+            {diarydate[0]}년 {diarydate[1]}월 {diarydate[2]}일
+          </p>
+          {/* 감정 넣는 곳 */}
+          <p className='text-2xl font-bold'>{diaryDetail.emo}</p>
+          {isBook ? (
+            <div>
+              <img
+                src={bookmark_filled}
+                alt='bookmark_filled'
+                onClick={bookmarkDelete}
+              />
+            </div>
+          ) : (
+            <div>
+              <img src={bookmark} alt='bookmark' onClick={bookmarkSave} />
+            </div>
+          )}
+        </div>
+        <div className='flex items-center justify-center my-5'>
           <img
-            src={bookmark_filled}
-            alt='bookmark_filled'
-            onClick={bookmarkDelete}
-            className='w-1/12'
+            src={emo_joy}
+            alt='DALL:E2'
+            className='w-[256px] h-[256px] mt-5'
           />
-        ) : (
-          <img
-            src={bookmark}
-            alt='bookmark'
-            onClick={() => bookmarkSave}
-            className='w-1/12'
-          />
-        )}
-      </div>
-      <div className='flex items-center justify-center my-5'>
-        <img src={emo_joy} alt='DALL:E2' />
-      </div>
-      {/* <span>{diaryDetail.nickname}</span> */}
-      <div className='flex items-center justify-end my-10'>
-        <Link
-          to={'/Diary/Edit'}
-          state={{
-            diaryDetail: diaryDetail,
-            originGroupList: originGroupList,
-          }}
-        >
-          <button className='hover:bg-sky-700 bg-cyan-600 text-white px-2.5 py-1 rounded-3xl m-auto block'>
-            수정
+        </div>
+        <div className='flex justify-end my-10'>
+          <Link
+            to={'/Diary/Edit'}
+            state={{
+              diaryDetail: diaryDetail,
+              originGroupList: originGroupList,
+            }}
+          >
+            <button className='hover:bg-sky-700 bg-cyan-600 text-white px-2.5 py-1 rounded-3xl m-auto block text-2xl'>
+              수정
+            </button>
+          </Link>
+          <button
+            className='bg-rose-600 text-white px-2.5 py-1 rounded-3xl mx-4 inline-block text-2xl'
+            onClick={() => {
+              Swal.fire({
+                title: `일기를 정말 삭제하시겠습니까?`,
+                text: '삭제한 일기는 휴지통에서 확인 가능합니다.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: '삭제',
+                cancelButtonText: '취소',
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  diaryDelete();
+                }
+              });
+            }}
+          >
+            삭제
           </button>
-        </Link>
-        <button
-          className='bg-rose-600 text-white px-2.5 py-1 rounded-3xl mx-2 inline-block'
-          onClick={() => {
-            Swal.fire({
-              title: `일기를 정말 삭제하시겠습니까?`,
-              text: '삭제한 일기는 휴지통에서 확인 가능합니다.',
-              icon: 'warning',
-              showCancelButton: true,
-              confirmButtonColor: '#3085d6',
-              cancelButtonColor: '#d33',
-              confirmButtonText: '삭제',
-              cancelButtonText: '취소',
-            }).then((result) => {
-              if (result.isConfirmed) {
-                diaryDelete();
-              }
-            });
-          }}
-        >
-          삭제
-        </button>
-      </div>
-      <div className='my-10 text-xl text-left underline underline-offset-8'>
-        {diaryDetail.content}
+        </div>
+        <div className='my-10 text-3xl text-left underline underline-offset-8'>
+          {diaryDetail.content}
+        </div>
       </div>
       {/* 댓글 보여주는 곳 */}
       {/* <div className='my-5'>
