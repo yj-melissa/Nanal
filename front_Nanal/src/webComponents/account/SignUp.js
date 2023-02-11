@@ -249,7 +249,7 @@ function SignUp() {
                 text: '회원 가입 성공!!!',
                 width: '30%',
               }).then(function () {});
-              navigate(`/w/SignIn`, {
+              navigate(`/SignIn`, {
                 replace: true,
               });
               // window.location.replace('/SignIn');

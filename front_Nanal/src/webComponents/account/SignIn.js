@@ -38,9 +38,10 @@ function SignIn() {
       .then(({ data }) => {
         if (data.statusCode === 200) {
           if (data.data.responseMessage === '로그인 성공') {
-            // console.log(data.data.token);
+            console.log('로그인 완료, 토큰 출력');
+            console.log(data.data.token);
             onLoginSuccess(data.data.token);
-            window.location.replace('/w/home');
+            window.location.replace('/home');
             // navigate(`/home`, {
             //   replace: true,
             // });
