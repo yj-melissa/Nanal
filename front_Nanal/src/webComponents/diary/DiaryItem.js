@@ -18,6 +18,7 @@ function DiaryItem({
         diaryIdx: diaryIdx,
         isToggle: isToggle,
         groupIdx: groupIdx,
+        diaryDate: diaryDate,
       }}
     >
       <div className='flex items-center p-2 m-1 mb-3'>
@@ -50,7 +51,7 @@ function DiaryItem({
             </p>
             <p>{isToggle === 2 ? <span>{nickname}</span> : <></>}</p>
           </div>
-          <p className='truncate block font-bold'>{content}</p>
+          <p className='block font-bold truncate'>{content}</p>
         </div>
       </div>
     </Link>
