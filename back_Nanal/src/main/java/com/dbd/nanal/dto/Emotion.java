@@ -7,7 +7,7 @@ public enum Emotion {
     EMB("https://nanal-dbd.s3.ap-northeast-2.amazonaws.com/emotion/emo_emb_s.png"),
     JOY("https://nanal-dbd.s3.ap-northeast-2.amazonaws.com/emotion/emo_joy_s.png"),
     NERV("https://nanal-dbd.s3.ap-northeast-2.amazonaws.com/emotion/emo_nerv_s.png"),
-    SAD("https://nanal-dbd.s3.ap-northeast-2.amazonaws.com/emotion/emo_sad_s.png\n");
+    SAD("https://nanal-dbd.s3.ap-northeast-2.amazonaws.com/emotion/emo_sad_s.png");
 
     private final String imgUrl;
 
