@@ -96,7 +96,7 @@ function ProfileForm() {
           <p>님의 일기장</p>
         </div>
       </div>
-      <div className='box-border mx-auto mt-1 mb-6 break-words max-h-20 w-65 border-1'>
+      <div className='box-border mx-auto mt-1 mb-10 break-words max-h-20 w-65 border-1'>
         {userProfile.introduction === null ? (
           <p>
             안녕하세요. 나날입니다.
