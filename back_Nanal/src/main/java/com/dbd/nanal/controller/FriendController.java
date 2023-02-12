@@ -34,7 +34,7 @@ public class FriendController {
                     "[Back] \n" +
                     "{} ")
     @PostMapping
-    public ResponseEntity<?> saveFriend(@ApiParam(value = "사용자 id", required = true) @RequestBody HashMap<String, Integer> map, @ApiParam(value = "유저 idx", required = true) @AuthenticationPrincipal UserEntity userInfo) {
+    public ResponseEntity<?> saveFriend(@ApiParam(value = "사용자 id", required = true) @RequestBody HashMap<String, Integer> map, @AuthenticationPrincipal UserEntity userInfo) {
 
         HashMap<String, Object> responseDTO = new HashMap<>();
         map.put("userIdx", userInfo.getUserIdx());
@@ -93,7 +93,7 @@ public class FriendController {
                     "[Back] \n" +
                     "friendList : [{userIdx(int), nickname(String), img(String), introduction(String)}, {..}] ")
     @GetMapping("list")
-    public ResponseEntity<?> getFriendList(@ApiParam(value = "유저 idx", required = true) @AuthenticationPrincipal UserEntity userInfo) {
+    public ResponseEntity<?> getFriendList(@AuthenticationPrincipal UserEntity userInfo) {
 
         HashMap<String, Object> responseDTO = new HashMap<>();
         try {
@@ -122,7 +122,7 @@ public class FriendController {
                     "[Back] \n" +
                     "friendList : [{userIdx(int), nickname(String), img(String), introduction(String)}, {..}] ")
     @GetMapping("list/{groupIdx}")
-    public ResponseEntity<?> getFriendListNotInGroup(@ApiParam(value = "그룹 idx", required = true) @PathVariable("groupIdx") int groupIdx, @ApiParam(value = "유저 idx", required = true) @AuthenticationPrincipal UserEntity userInfo) {
+    public ResponseEntity<?> getFriendListNotInGroup(@ApiParam(value = "그룹 idx", required = true) @PathVariable("groupIdx") int groupIdx, @AuthenticationPrincipal UserEntity userInfo) {
 
         HashMap<String, Object> responseDTO = new HashMap<>();
         try {
@@ -146,25 +146,23 @@ public class FriendController {
     }
 
     @ApiOperation(value = "전날 친구들의 감정 통계 조회하기", notes =
-            "user의 친구 리스트를 조회합니다.\n" +
+            "친구들의 전날 감정 통계를 조회합니다.\n" +
                     "[Front] \n" +
                     "[Back] \n" +
-                    "friendList : [{userIdx(int), nickname(String), img(String), introduction(String)}, {..}] ")
+                    "emotions : {calm{\"nickname\" : [String, String], \"cnt\" : int}, joy, sad, nerv, ang, amb}")
     @GetMapping("emo")
-    public ResponseEntity<?> getEmotionList(@ApiParam(value = "유저 idx", required = true) @AuthenticationPrincipal UserEntity userInfo) {
+    public ResponseEntity<?> getEmotionOfLastDay(@AuthenticationPrincipal UserEntity userInfo) {
 
         HashMap<String, Object> responseDTO = new HashMap<>();
         try {
-            List<HashMap<String, Object>> friendList = friendService.findEmotionOfLastDay(userInfo.getUserIdx());
+            HashMap<String, Object> friendList = friendService.findEmotionOfLastDay(userInfo.getUserIdx());
             // 반환 성공
-            if (friendList.size() != 0) {
+            if (friendList != null) {
                 responseDTO.put("responseMessage", ResponseMessage.EMOTION_FRIEND_LIST_FIND_SUCCESS);
-                responseDTO.put("emoFriendList", friendList);
+                responseDTO.put("emotions", friendList);
                 return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
             } else {
-                // 널 이렇게 넣을까??
-                responseDTO.put("friendList", friendList);
-                responseDTO.put("responseMessage", ResponseMessage.EMOTION_FRIEND_LIST_FIND_FAIL);
+                responseDTO.put("responseMessage", ResponseMessage.NONE_DATA);
                 return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
             }
         }
