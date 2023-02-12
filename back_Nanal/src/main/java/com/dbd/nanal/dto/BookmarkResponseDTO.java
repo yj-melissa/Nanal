@@ -13,7 +13,7 @@ public class BookmarkResponseDTO {
 
     //diary
     private int diaryIdx;
-    private LocalDateTime creationDate;
+    private Date diaryDate;
     private String content;
     private String emo;
     private String picture;
@@ -24,7 +24,7 @@ public class BookmarkResponseDTO {
         this.bookmarkIdx=scrapEntity.getScrapIdx();
         this.userIdx=scrapEntity.getUser().getUserIdx();
         this.diaryIdx = scrapEntity.getDiary().getDiaryIdx();
-        this.creationDate = scrapEntity.getDiary().getCreationDate();
+        this.diaryDate = scrapEntity.getDiary().getDiaryDate();
         this.content = scrapEntity.getDiary().getContent();
         this.emo = scrapEntity.getDiary().getEmo();
         this.picture = scrapEntity.getDiary().getImgUrl();
