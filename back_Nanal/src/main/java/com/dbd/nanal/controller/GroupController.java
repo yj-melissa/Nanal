@@ -201,20 +201,19 @@ public class GroupController {
 
     }
 
-    @DeleteMapping
-    public ResponseEntity<?> deleteGroup(@ApiParam(value = "유저 idx", required = true) @AuthenticationPrincipal UserEntity userInfo, @ApiParam(value = "그룹 idx", required = true) @PathVariable int groupIdx) {
+    @ApiOperation(value = "그룹 삭제", notes =
+            "그룹을 삭제합니다.\n" +
+                    "[Front] \n" +
+                    "{groupIdx(int)} \n\n" +
+                    "[Back] \n")
+    @DeleteMapping("group/{groupIdx}")
+    public ResponseEntity<?> deleteGroup(@ApiParam(value = "그룹 idx", required = true) @PathVariable int groupIdx) {
         HashMap<String, Object> responseDTO = new HashMap<>();
 
-        List<HashMap<String, Object>> groupUserList = groupService.findGroupUser(userInfo.getUserIdx(), groupIdx);
+        groupService.deleteGroup(groupIdx);
 
-        if (groupUserList.size() != 0) {
-            responseDTO.put("responseMessage", ResponseMessage.GROUP_USER_FIND_SUCCESS);
-            responseDTO.put("groupUserList", groupUserList);
-            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-        } else {
-            responseDTO.put("responseMessage", ResponseMessage.NONE_DATA);
-            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-        }
+        responseDTO.put("responseMessage", ResponseMessage.GROUP_DELETE_SUCCESS);
+        return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
 
     }
 
