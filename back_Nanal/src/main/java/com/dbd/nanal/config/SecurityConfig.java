@@ -133,6 +133,7 @@ public class SecurityConfig{
         configuration.setAllowCredentials(true);
 //        configuration.addExposedHeader("*");
         configuration.addExposedHeader("Authorㄴization");
+        configuration.addExposedHeader("*");
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
