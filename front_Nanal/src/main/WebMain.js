@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Link } from 'react-router-dom';
 import { getCookie } from '../config/Cookie';
 import LogoHome from '../webComponents/LogoHome';
 import MyDiary from '../webComponents/MyDiary';
@@ -90,30 +90,30 @@ const AppMain = () => {
           {homeState[0] === true ? (
             <img src={bmkRR} className='absolute z-0 right-[270px] top-20' />
           ) : (
-            <div onClick={changeHomeStateZero}>
+            <Link to='/home' onClick={changeHomeStateZero}>
               <img src={bmkRW} className='absolute z-0 right-[270px] top-20' />
-            </div>
+            </Link>
           )}
           {homeState[1] === true ? (
             <img src={bmkOO} className='absolute z-0 right-[270px] top-40' />
           ) : (
-            <div onClick={changeHomeStateOne}>
+            <Link to='/home' onClick={changeHomeStateOne}>
               <img src={bmkOW} className='absolute z-0 right-[270px] top-40' />
-            </div>
+            </Link>
           )}
           {homeState[2] === true ? (
             <img src={bmkYY} className='absolute z-0 right-[270px] top-60' />
           ) : (
-            <div onClick={changeHomeStateTwo}>
+            <Link to='/home' onClick={changeHomeStateTwo}>
               <img src={bmkYW} className='absolute z-0 right-[270px] top-60' />
-            </div>
+            </Link>
           )}
           {homeState[3] === true ? (
             <img src={bmkGG} className='absolute z-0 right-[270px] top-80' />
           ) : (
-            <div onClick={changeHomeStateThree}>
+            <Link to='/home' onClick={changeHomeStateThree}>
               <img src={bmkGW} className='absolute z-0 right-[270px] top-80' />
-            </div>
+            </Link>
           )}
           {homeState[4] === true ? (
             <img
@@ -121,12 +121,12 @@ const AppMain = () => {
               className='absolute z-0 right-[270px] top-[400px]'
             />
           ) : (
-            <div onClick={changeHomeStateFour}>
+            <Link to='/home' onClick={changeHomeStateFour}>
               <img
                 src={bmkBW}
                 className='absolute z-0 right-[270px] top-[400px]'
               />
-            </div>
+            </Link>
           )}
         </div>
       ) : null}

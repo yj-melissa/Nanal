@@ -35,7 +35,7 @@ const Tuning = () => {
   };
 
   return (
-    <div className='grid grid-cols-1 gap-1 w-64 place-content-evenly overflow-auto'>
+    <div className='grid grid-cols-1 gap-1 w-64 place-content-evenly mb-5'>
       <TuningProfile />
       {/* PDF 미구현 */}
       <div className='box-border flex justify-between h-12 font-bold rounded-lg indent-4 bg-lime-400/75 cursor-not-allowed'>

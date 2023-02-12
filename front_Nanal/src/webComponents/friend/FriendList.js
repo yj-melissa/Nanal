@@ -22,6 +22,7 @@ const Div = styled.div`
 function FriendList({ setFriendAdd, setUserIdx }) {
   // console.log(setFriendCompo)
   const [friendList, setFriendList] = useState([]);
+  // console.log(friendList)
 
   useEffect(() => {
     onLogin();
@@ -33,7 +34,7 @@ function FriendList({ setFriendAdd, setUserIdx }) {
           if (data.data.responseMessage === '친구 리스트 조회 성공') {
             setFriendList(data.data.friendList);
           } else if (data.data.responseMessage === '데이터 없음') {
-            setFriendList(['아직은 친구가 없습니다.']);
+            setFriendList([]);
           }
         } else {
           console.log('친구 리스트 조회 오류: ');

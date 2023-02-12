@@ -40,9 +40,9 @@ function Nav() {
             <div className='rounded-full w-40 h-40 overflow-hidden my-5'>
               <img src={userProfile.img} alt='user-profile-img'/>
             </div>
-            <p>{userProfile.nickname} 님의 프로필</p>
-            {userProfile.introduction === null ? <div className='truncate'>아직 작성된 소개글이 없습니다.</div>
-            :<p className='truncate'>{userProfile.introduction}</p>}
+            <p className='justify-self-start indent-[28px]'>닉네임 : {userProfile.nickname}</p>
+            {userProfile.introduction === null ? <div className='truncate justify-self-start indent-[28px] w-60'>아직 작성된 소개글이 없습니다.</div>
+            :<p className='truncate justify-self-start indent-[28px] w-60'>{userProfile.introduction}</p>}
             <Tuning />
           </div>}
         </div>
