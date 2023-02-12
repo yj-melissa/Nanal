@@ -219,4 +219,7 @@ public class GroupService {
 
     }
 
+    public void deleteGroup(int groupIdx) {
+        groupRepository.deleteById(groupIdx);
+    }
 }
