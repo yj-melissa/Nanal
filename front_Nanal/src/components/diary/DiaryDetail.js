@@ -20,7 +20,7 @@ function DiaryDetail() {
   const diaryIdx = state.diaryIdx;
   const isToggle = state.isToggle;
   const groupIdx = state.groupIdx;
-  const diarydate = state.diarydate;
+  const diarydate = state.diaryDate.split('-');
 
   const [diaryDetail, setDiaryDetail] = useState({});
   const [originGroupList, setOriginGroupList] = useState();

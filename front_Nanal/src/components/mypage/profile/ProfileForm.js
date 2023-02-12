@@ -104,7 +104,9 @@ function ProfileForm() {
             프로필 소개글을 등록해주세요!ㅎㅎ
           </p>
         ) : (
-          <p className='break-all whitespace-pre'>{userProfile.introduction}</p>
+          <p className='break-words break-all whitespace-pre'>
+            {userProfile.introduction}
+          </p>
         )}
       </div>
       <div className='flex justify-between'>
