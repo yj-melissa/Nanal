@@ -18,8 +18,8 @@ import lombok.Setter;
 public class UserProfileEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int profileId;
-//    private int profileIdx;
+//    private int profileId;
+    private int profileIdx;
 
 
     @MapsId
