@@ -85,6 +85,7 @@ public class UserController {
                 .introduction(userformDTO.getIntroduction())
                 .isPrivate(userformDTO.getIsPrivate())
                 .painting(paintingRequestDTO.toEntity())
+                .img(paintingRequestDTO.getImgUrl())
                 .build();
 
         UserEntity createdUser = userService.join(user, userProfile);
