@@ -7,7 +7,6 @@ import com.dbd.nanal.config.security.JwtTokenProvider;
 import com.dbd.nanal.dto.PaintingRequestDTO;
 import com.dbd.nanal.dto.UserFormDTO;
 import com.dbd.nanal.dto.UserRequestDTO;
-import com.dbd.nanal.model.PaintingEntity;
 import com.dbd.nanal.model.UserEntity;
 import com.dbd.nanal.model.UserProfileEntity;
 import com.dbd.nanal.service.EmailService;
@@ -167,18 +166,6 @@ public class UserController {
             responseDTO.put("token", token);
             response.setHeader("accessToken", token.get("accessToken"));
 
-            // 쿠키생성
-//            int cookieExpTime = 14 * 24 * 60 * 60;     // 초단위 : 14일로 설정
-//            Cookie accessTokenCookie = new Cookie("accessToken", token.get("accessToken"));
-//            accessTokenCookie.setMaxAge(cookieExpTime);    // 초 단위
-//            accessTokenCookie.setPath("/");     // 모든 경로에서 접근 가능
-
-//            response.addCookie(accessTokenCookie);
-
-//            Cookie refreshTokenCookie = new Cookie("refreshToken", token.get("refreshToken"));
-//            refreshTokenCookie.setMaxAge(cookieExpTime);
-//            refreshTokenCookie.setPath("/");     // 모든 경로에서 접근 가능
-
             Cookie refreshTokenCookie = refreshTokenCookie(token.get("refreshToken"));
 
             response.addCookie(refreshTokenCookie);
@@ -252,13 +239,30 @@ public class UserController {
                     "{img(String), nickname(String), introduction(String), days(long)} \n\n")
     @GetMapping("/profile")
     public ResponseEntity<?> getMyProfile(@AuthenticationPrincipal UserEntity userInfo) {
-        HashMap<String, Object> profile = userService.getByUserIdx(userInfo.getUserIdx());
+        final UserProfileEntity userProfile = userInfo.getUserProfile();
+        HashMap<String, Object> profile = userService.profileDTO(userProfile);
 
         HashMap<String, Object> responseDTO = new HashMap<>();
         responseDTO.put("responseMessage", ResponseMessage.USER_FIND_SUCCESS);
         responseDTO.put("profile", profile);
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
+
+    @ApiOperation(value = "다른 회원 프로필 조회", notes =
+        "유저 인덱스로 다른 회원의 프로필을 조회합니다 .\n\n" +
+            "[Front] \n" +
+            "{userIdx(int)} \n\n" +
+            "[Back] \n" +
+            "{img(String), nickname(String), introduction(String), days(long)} \n\n")
+    @GetMapping("/profile/{userIdx}")
+    public ResponseEntity<?> getUserProfile(@PathVariable int userIdx) {
+        HashMap<String, Object> profile = userService.getProfileByUserIdx(userIdx);
+        HashMap<String, Object> responseDTO = new HashMap<>();
+        responseDTO.put("responseMessage", ResponseMessage.SUCCESS);
+        responseDTO.put("profile", profile);
+        return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+    }
+
 
     // 테스트용 api (Access Token 헤더로 받은 경우)
 //    @GetMapping("/test")
@@ -321,21 +325,6 @@ public class UserController {
         jwtTokenProvider.deleteRefreshToken(userIdx);
         HashMap<String, Object> responseDTO = new HashMap<>();
         responseDTO.put("responseMessage", ResponseMessage.USER_DELETE_SUCCESS);
-        return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-    }
-
-    @ApiOperation(value = "다른 회원 프로필 조회", notes =
-            "유저 인덱스로 다른 회원의 프로필을 조회합니다 .\n\n" +
-                    "[Front] \n" +
-                    "{userIdx(int)} \n\n" +
-                    "[Back] \n" +
-                    "{img(String), nickname(String), introduction(String), days(long)} \n\n")
-    @GetMapping("/profile/{userIdx}")
-    public ResponseEntity<?> getUserProfile(@PathVariable int userIdx) {
-        HashMap<String, Object> profile = userService.getByUserIdx(userIdx);
-        HashMap<String, Object> responseDTO = new HashMap<>();
-        responseDTO.put("responseMessage", ResponseMessage.SUCCESS);
-        responseDTO.put("profile", profile);
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
 
