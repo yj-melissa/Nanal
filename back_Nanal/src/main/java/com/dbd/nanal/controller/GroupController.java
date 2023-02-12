@@ -38,39 +38,30 @@ public class GroupController {
     @PostMapping
     @Transactional
     public ResponseEntity<?> save(@ApiParam(value = "그룹 생성 정보") @RequestBody GroupDetailRequestDTO groupDetailRequestDTO, @AuthenticationPrincipal UserEntity userInfo) {
-
         HashMap<String, Object> responseDTO = new HashMap<>();
 
-        try {
-//            groupDetailRequestDTO.
-            GroupDetailResponseDTO groupDetailResponseDTO = groupService.saveGroup(groupDetailRequestDTO);
+        GroupDetailResponseDTO groupDetailResponseDTO = groupService.saveGroup(groupDetailRequestDTO);
 
-            if (groupDetailResponseDTO != null) {
-                groupDetailRequestDTO.setGroupIdx(groupDetailResponseDTO.getGroupIdx());
+        if (groupDetailResponseDTO != null) {
+            groupDetailRequestDTO.setGroupIdx(groupDetailResponseDTO.getGroupIdx());
 
-                // 사용자부터 그룹에 가입
-                GroupUserRelationRequestDTO groupUserRelationRequestDTO = new GroupUserRelationRequestDTO(userInfo.getUserIdx(), groupDetailRequestDTO.getGroupIdx());
-                groupService.saveGroupUserRelation(groupUserRelationRequestDTO);
+            // 사용자부터 그룹에 가입
+            GroupUserRelationRequestDTO groupUserRelationRequestDTO = new GroupUserRelationRequestDTO(userInfo.getUserIdx(), groupDetailRequestDTO.getGroupIdx());
+            groupService.saveGroupUserRelation(groupUserRelationRequestDTO);
 
-                List<GroupTagResponseDTO> groupTagResponseDTOS = groupService.saveGroupTags(groupDetailRequestDTO);
-                if (groupTagResponseDTOS != null) {
-                    responseDTO.put("responseMessage", ResponseMessage.GROUP_SAVE_SUCCESS);
-                    responseDTO.put("tags", groupTagResponseDTOS);
-                    responseDTO.put("groupDetail", groupDetailResponseDTO);
-                    return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-                } else {
-                    responseDTO.put("responseMessage", ResponseMessage.GROUP_SAVE_FAIL);
-                    return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
-                }
+            List<GroupTagResponseDTO> groupTagResponseDTOS = groupService.saveGroupTags(groupDetailRequestDTO);
+            if (groupTagResponseDTOS != null) {
+                responseDTO.put("responseMessage", ResponseMessage.GROUP_SAVE_SUCCESS);
+                responseDTO.put("tags", groupTagResponseDTOS);
+                responseDTO.put("groupDetail", groupDetailResponseDTO);
+                return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
             } else {
                 responseDTO.put("responseMessage", ResponseMessage.GROUP_SAVE_FAIL);
                 return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
             }
-
-        }
-        catch (Exception e) {
-            responseDTO.put("responseMessage", ResponseMessage.EXCEPTION);
-            return new ResponseEntity<>(DefaultRes.res(500, ResponseMessage.INTERNAL_SERVER_ERROR), HttpStatus.OK);
+        } else {
+            responseDTO.put("responseMessage", ResponseMessage.GROUP_SAVE_FAIL);
+            return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
         }
 
     }
@@ -83,26 +74,20 @@ public class GroupController {
                     "{groupIdx(int), groupImg(String), groupName(String), private(boolean), tags(List(String)), creationDate(String)} ")
     @GetMapping("/{groupIdx}")
     public ResponseEntity<?> getGroupDTO(@ApiParam(value = "그룹 id", required = true) @PathVariable int groupIdx, @AuthenticationPrincipal UserEntity userInfo) {
-
         HashMap<String, Object> responseDTO = new HashMap<>();
-        try {
-            HashMap<String, Object> groupDTO = groupService.findGroupById(groupIdx);
 
-            if (groupDTO != null) {
-                responseDTO.put("responseMessage", ResponseMessage.GROUP_FIND_SUCCESS);
-                responseDTO.put("groupDetail", groupDTO.get("groupDetail"));
-                responseDTO.put("tags", groupDTO.get("tags"));
-                return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-            } else {
-                responseDTO.put("responseMessage", ResponseMessage.GROUP_FIND_FAIL);
-                return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
-            }
-        }
-        // Exception 발생
-        catch (Exception e) {
-            responseDTO.put("responseMessage", ResponseMessage.EXCEPTION);
+        HashMap<String, Object> groupDTO = groupService.findGroupById(groupIdx);
+
+        if (groupDTO != null) {
+            responseDTO.put("responseMessage", ResponseMessage.GROUP_FIND_SUCCESS);
+            responseDTO.put("groupDetail", groupDTO.get("groupDetail"));
+            responseDTO.put("tags", groupDTO.get("tags"));
+            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+        } else {
+            responseDTO.put("responseMessage", ResponseMessage.GROUP_FIND_FAIL);
             return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
         }
+
     }
 
     @ApiOperation(value = "그룹 가입", notes =
@@ -112,26 +97,20 @@ public class GroupController {
                     "[Back] \n")
 
     @PostMapping("/join")
-    public ResponseEntity<?> groupJoin(@ApiParam(value = "유저 idx", required = true) @AuthenticationPrincipal UserEntity userInfo, @ApiParam(value = "그룹 idx", required = true) @RequestBody Map<String, Integer> requestDTO) {
-
+    public ResponseEntity<?> groupJoin(@AuthenticationPrincipal UserEntity userInfo, @ApiParam(value = "그룹 idx", required = true) @RequestBody Map<String, Integer> requestDTO) {
         HashMap<String, Object> responseDTO = new HashMap<>();
-        try {
-            GroupUserRelationRequestDTO groupUserRelationRequestDTO = new GroupUserRelationRequestDTO(userInfo.getUserIdx(), requestDTO.get("groupIdx"));
-            GroupUserRelationResponseDTO groupUserRelationResponseDTO = groupService.saveGroupUserRelation(groupUserRelationRequestDTO);
 
-            if (groupUserRelationResponseDTO != null) {
-                responseDTO.put("responseMessage", ResponseMessage.GROUP_JOIN_SUCCESS);
-                return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-            } else {
-                System.out.println("이미 가입한 그룹");
-                responseDTO.put("responseMessage", ResponseMessage.GROUP_JOIN_FAIL);
-                return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-            }
+        GroupUserRelationRequestDTO groupUserRelationRequestDTO = new GroupUserRelationRequestDTO(userInfo.getUserIdx(), requestDTO.get("groupIdx"));
+        GroupUserRelationResponseDTO groupUserRelationResponseDTO = groupService.saveGroupUserRelation(groupUserRelationRequestDTO);
 
-        } catch (Exception e) {
-            responseDTO.put("responseMessage", ResponseMessage.EXCEPTION);
-            return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.INTERNAL_SERVER_ERROR);
+        if (groupUserRelationResponseDTO != null) {
+            responseDTO.put("responseMessage", ResponseMessage.GROUP_JOIN_SUCCESS);
+            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+        } else {
+            responseDTO.put("responseMessage", ResponseMessage.GROUP_JOIN_FAIL);
+            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }
+
     }
 
     @ApiOperation(value = "그룹 리스트 조회", notes =
@@ -144,20 +123,14 @@ public class GroupController {
     public ResponseEntity<?> getGroupList(@ApiParam(value = "유저 idx", required = true) @AuthenticationPrincipal UserEntity userInfo, @PathVariable("opt") int opt) {
         HashMap<String, Object> responseDTO = new HashMap<>();
 
-        try {
-            List<HashMap<String, Object>> groupDetailResponseDTOS = groupService.getGroupList(userInfo.getUserIdx(), opt);
+        List<HashMap<String, Object>> groupDetailResponseDTOS = groupService.getGroupList(userInfo.getUserIdx(), opt);
 
-            if (groupDetailResponseDTOS != null) {
-                responseDTO.put("groupList", groupDetailResponseDTOS);
-                responseDTO.put("responseMessage", ResponseMessage.GROUP_LIST_FIND_SUCCESS);
-                return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-            } else {
-                responseDTO.put("responseMessage", ResponseMessage.GROUP_LIST_FIND_FAIL);
-                return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
-            }
-
-        } catch (Exception e) {
-            responseDTO.put("responseMessage", ResponseMessage.EXCEPTION);
+        if (groupDetailResponseDTOS != null) {
+            responseDTO.put("groupList", groupDetailResponseDTOS);
+            responseDTO.put("responseMessage", ResponseMessage.GROUP_LIST_FIND_SUCCESS);
+            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+        } else {
+            responseDTO.put("responseMessage", ResponseMessage.GROUP_LIST_FIND_FAIL);
             return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
         }
 
@@ -166,31 +139,25 @@ public class GroupController {
     @ApiOperation(value = "그룹 정보 수정", notes =
             "groupIdx 그룹의 정보를 수정합니다.\n" +
                     "[Front] \n" +
-                    "{groupIdx(int)) groupName(String), tags({}}), image(?)} \n\n" +
+                    "{groupIdx(int)) groupName(String), tags({}}),)} \n\n" +
                     "[Back] \n" +
                     "{GroupDetailResponse}")
     @PutMapping
-    public ResponseEntity<?> updateGroupDetail(@ApiParam(value = "groupIdx, groupName, tags, image", required = true) @RequestBody GroupDetailRequestDTO groupDetailRequestDTO, @AuthenticationPrincipal UserEntity userInfo) {
-
+    public ResponseEntity<?> updateGroupDetail(@ApiParam(value = "groupIdx, groupName, tags, image", required = true) @RequestBody GroupDetailRequestDTO groupDetailRequestDTO) {
         HashMap<String, Object> responseDTO = new HashMap<>();
 
-        try {
-            HashMap<String, Object> groupDTO = groupService.updateGroupDetail(groupDetailRequestDTO);
+        HashMap<String, Object> groupDTO = groupService.updateGroupDetail(groupDetailRequestDTO);
 
-            if (groupDTO != null) {
-                responseDTO.put("groupDetail", groupDTO.get("groupDetail"));
-                responseDTO.put("tags", groupDTO.get("tags"));
-                responseDTO.put("responseMessage", ResponseMessage.GROUP_UPDATE_SUCCESS);
-                return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-            } else {
-                responseDTO.put("responseMessage", ResponseMessage.GROUP_UPDATE_FAIL);
-                return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
-            }
-
-        } catch (Exception e) {
-            responseDTO.put("responseMessage", ResponseMessage.EXCEPTION);
+        if (groupDTO != null) {
+            responseDTO.put("groupDetail", groupDTO.get("groupDetail"));
+            responseDTO.put("tags", groupDTO.get("tags"));
+            responseDTO.put("responseMessage", ResponseMessage.GROUP_UPDATE_SUCCESS);
+            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+        } else {
+            responseDTO.put("responseMessage", ResponseMessage.GROUP_UPDATE_FAIL);
             return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
         }
+
     }
 
     @ApiOperation(value = "그룹 탈퇴", notes =
@@ -208,6 +175,7 @@ public class GroupController {
         groupService.deleteGroupUser(userInfo.getUserIdx(), groupIdx);
         responseDTO.put("responseMessage", ResponseMessage.GROUP_USER_DELETE_SUCCESS);
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+
     }
 
     @ApiOperation(value = "그룹 유저 리스트 조회", notes =
@@ -219,21 +187,16 @@ public class GroupController {
     @GetMapping("user/{groupIdx}")
     public ResponseEntity<?> getGroupUserList(@ApiParam(value = "유저 idx", required = true) @AuthenticationPrincipal UserEntity userInfo, @ApiParam(value = "그룹 idx", required = true) @PathVariable int groupIdx) {
         HashMap<String, Object> responseDTO = new HashMap<>();
-        try {
-            List<HashMap<String, Object>> groupUserList = groupService.findGroupUser(userInfo.getUserIdx(), groupIdx);
 
-            if (groupUserList.size() != 0) {
-                responseDTO.put("responseMessage", ResponseMessage.GROUP_USER_FIND_SUCCESS);
-                responseDTO.put("groupUserList", groupUserList);
-                return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-            } else {
-                responseDTO.put("responseMessage", ResponseMessage.NONE_DATA);
-                return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-            }
-        }
-        catch (Exception e) {
-            responseDTO.put("responseMessage", ResponseMessage.EXCEPTION);
-            return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
+        List<HashMap<String, Object>> groupUserList = groupService.findGroupUser(userInfo.getUserIdx(), groupIdx);
+
+        if (groupUserList.size() != 0) {
+            responseDTO.put("responseMessage", ResponseMessage.GROUP_USER_FIND_SUCCESS);
+            responseDTO.put("groupUserList", groupUserList);
+            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+        } else {
+            responseDTO.put("responseMessage", ResponseMessage.NONE_DATA);
+            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }
 
     }
