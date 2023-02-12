@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import imageCompression from 'browser-image-compression';
+import Swal from 'sweetalert2';
 import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
 
@@ -157,10 +158,16 @@ function GroupUpdate() {
       }
     }
 
-    if (currentName.current.length >= 15) {
-      alert('그룹명은 15글자 이하로 입력해주세요!');
+    if (currentName.current.length >= 15 || currentName.current.length < 2) {
+      Swal.fire({
+        icon: 'warning',
+        text: '그룹명은 2글자 이상, 14글자 이하로 입력해주세요!',
+      });
     } else if (isCurrentGTName === false) {
-      alert('태그명은 10글자 이하로 입력해주세요!');
+      Swal.fire({
+        icon: 'warning',
+        text: '태그명은 10글자 이하로 입력해주세요!',
+      });
     } else {
       // setGroupName(currentName.current);
       // setGroupTag(currentTag.current);

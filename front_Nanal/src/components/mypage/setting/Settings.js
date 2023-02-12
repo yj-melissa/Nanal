@@ -21,10 +21,10 @@ function Settings() {
         text: '로그아웃 했어요!',
         width: '80%',
       }).then(function () {
-        // window.location.replace('/');
-        navigate(`/`, {
-          replace: true,
-        });
+        window.location.replace('/');
+        // navigate(`/`, {
+        //   replace: true,
+        // });
       });
     } else {
       console.log('로그아웃 실패====');

@@ -67,18 +67,24 @@ function FriendAdd() {
       </p>
       <form
         onSubmit={searchFriend}
-        className='flex justify-around p-1 h-18 w-70'
+        className='flex justify-around m-1 h-18 w-70'
       >
-        <input type='text' id='searchId'></input>
-        <button type='submit'>검색하기</button>
+        <input
+          type='text'
+          id='searchId'
+          className='p-1 rounded-lg w-46 h-18'
+        ></input>
+        <button type='submit' className='w-16 h-18'>
+          검색하기
+        </button>
       </form>
-      <hr className='my-5 border-solid border-1 border-slate-800 w-80' />
+      <hr className='mx-auto my-5 text-center border-dashed border-1 border-slate-800 w-80' />
       {friendList.map((friendItem) => (
         <div key={friendItem.userIdx} className='my-2'>
           <p className='font-semibold'>친구의 </p>
           <p>닉네임 : {friendItem.userId}</p>
           <p>이메일 : {friendItem.email}</p>
-          <p className='text-right'>
+          <p className='my-1 text-right'>
             <button
               type='button'
               onClick={(e) => addFriend(e, friendItem.userIdx)}

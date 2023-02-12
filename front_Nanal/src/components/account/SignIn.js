@@ -104,7 +104,7 @@ function SignIn() {
         <h1 className='flex justify-center m-3 font-bold tracking-wider text-center'>
           SignIn to 나날🤗
         </h1>
-        <div id='sign-in-form' className='justify-between text-center'>
+        <div id='sign-in-form' className='justify-between my-2 text-center 1'>
           <form action='' onSubmit={SignIn}>
             <div className='m-1'>
               <label htmlFor='user-id'>ID &nbsp;&nbsp;: </label>
@@ -114,7 +114,7 @@ function SignIn() {
                 placeholder='아이디'
                 onChange={onChangeId}
                 value={userId}
-                className='max-w-full p-0.5 mb-2 rounded-lg'
+                className='w-54 p-0.5 mb-2 rounded-lg'
               />
               <br />
             </div>
@@ -126,7 +126,7 @@ function SignIn() {
                 placeholder='비밀번호'
                 onChange={onChangePw}
                 value={userPw}
-                className='max-w-full p-0.5 mb-2 rounded-lg'
+                className='w-54 p-0.5 mb-2 rounded-lg'
               />
             </div>
             <div className='justify-between m-1 mt-2 text-center'>
