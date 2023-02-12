@@ -1,22 +1,18 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
-import downArrow from '../../src_assets/img/arrow_drop_down.png';
-import upArrow from '../../src_assets/img/arrow_drop_up.png';
+import Modal from '../modal/Modal'
 
 const TuningProfile = () => {
-  const [isClick, setIsClick] = useState(false);
-
-  const changeClickTrue = () => {
-    setIsClick(true);
+  const [modalOpen, setModalOpen] = useState(false);
+  const openModal = () => {
+    setModalOpen(true);
   };
-  const changeClickFalse = () => {
-    setIsClick(false);
+  const closeModal = () => {
+    setModalOpen(false);
   };
-
-  // const { state } = useLocation();
   const navigate = useNavigate();
 
   const [profile, setProfile] = useState({});
@@ -133,7 +129,7 @@ const TuningProfile = () => {
                   .then(({ data }) => {
                     if (data.statusCode === 200) {
                       if (data.data.responseMessage === '그림 저장 성공') {
-                        changeClickFalse();
+                        //okay
                       }
                     } else {
                       console.log('그림 저장 오류 : ');
@@ -190,95 +186,91 @@ const TuningProfile = () => {
         console.log('회원 정보 조회 오류: ' + error);
       });
   }, []);
-
-  if (isClick === false) {
     return (
-      <div
-        className='box-border flex justify-between h-12 font-bold rounded-lg indent-4 bg-lime-200/75'
-        onClick={changeClickTrue}
-      >
-        <div className='self-center'>프로필 수정</div>
-        <img src={downArrow} className='self-center mr-3' />
-      </div>
-    );
-  } else {
-    return (
-      <div>
+      <React.Fragment>
         <div
-          className='box-border flex justify-between h-12 mb-1 rounded-lg indent-4 bg-emerald-200/75'
-          onClick={() => {
-            changeClickFalse();
-          }}
+          className='box-border flex justify-between h-12 font-bold rounded-lg indent-4 bg-lime-400/75 cursor-pointer'
+          onClick={openModal}
         >
-          <div className='self-center font-bold'>프로필 수정</div>
-          <img src={upArrow} className='self-center mr-3' />
+          <div className='self-center'>프로필 수정</div>
         </div>
-        <div id='user-Update mx-1'>
-          <form className='px-4'>
-            <div id='user-nickname-div'>
-              <label htmlFor='user-nickname' className='text-sm'>
-                💙 닉네임 :
-              </label>
-              <input
-                type='text'
-                id='user-nickname'
-                defaultValue={currentName.current || ''}
-                onChange={onChangeNickname}
-                className='font-medium m-0.5 mx-1 px-1 p-0.5 text-sm rounded-lg'
-              ></input>
-              <p className='text-xs'>{nicknameMessage}</p>
-            </div>
-            <div id='user-image' className='my-2'>
-              <p className='text-sm'>💙 프로필 이미지 </p>
-              <div className='flex'>
-                <img
-                  src={profile.img}
-                  className='inline-block w-20 h-20 p-1 mr-3 rounded-md'
-                ></img>
-                <div className='flex'>
-                  <p className='my-2'>
-                    <input
-                      type='file'
-                      accept='image/*'
-                      onChange={onUploadImage}
-                      className='inline-block w-full text-sm text-slate-500 file:text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:font-semibold file:bg-violet-100 file:text-violet-700 hover:file:bg-violet-200'
-                    />
-                    <button
-                      type='button'
-                      className='inline-block px-4 py-2 my-2 text-xs font-semibold border-0 rounded-full bg-violet-100 text-violet-500 hover:bg-violet-200'
-                      onClick={onUploadBaseImage}
-                    >
-                      기본 이미지로 선택하기
-                    </button>
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div id='user-introduction-div'>
-              <label htmlFor='user-name' className='text-sm'>
-                💙 프로필 소개글 :
-              </label>
-              <textarea
-                type='text'
-                id='user-name'
-                defaultValue={currentInfo.current || ''}
-                onChange={onChangeInfo}
-                className='font-medium m-0.5 w-full h-28 rounded-md text-sm'
-              ></textarea>
-              <p className='text-xs'>{infoMessage}</p>
-            </div>
-
-            <button
-              className='hover:bg-sky-700 bg-cyan-600 text-white px-2.5 py-1 rounded-3xl m-auto block text-sm'
-              onClick={userUpdate}
+        <Modal open={modalOpen} close={closeModal} header={<div
+              className='box-border flex justify-between h-12 mb-1 rounded-lg indent-4 bg-emerald-200/75'
             >
-              수정하기
-            </button>
-          </form>
-        </div>
-      </div>
+              <div className='self-center font-bold'>프로필 수정</div>
+            </div>}>
+          <div>
+            
+            <div id='user-Update mx-1'>
+              <form className='px-4'>
+                <div id='user-nickname-div'>
+                  <label htmlFor='user-nickname' className='text-sm'>
+                    💙 닉네임 :
+                  </label>
+                  <input
+                    type='text'
+                    id='user-nickname'
+                    defaultValue={currentName.current || ''}
+                    onChange={onChangeNickname}
+                    className='font-medium m-0.5 mx-1 px-1 p-0.5 text-sm rounded-lg'
+                  ></input>
+                  <p className='text-xs'>{nicknameMessage}</p>
+                </div>
+                <div id='user-image' className='my-2'>
+                  <p className='text-sm'>💙 프로필 이미지 </p>
+                  <div className='flex'>
+                    <img
+                      src={profile.img}
+                      className='inline-block w-20 h-20 p-1 mr-3 rounded-md'
+                    ></img>
+                    <div className='flex'>
+                      <p className='my-2'>
+                        <input
+                          type='file'
+                          accept='image/*'
+                          onChange={onUploadImage}
+                          className='inline-block w-full text-sm text-slate-500 file:text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:font-semibold file:bg-violet-100 file:text-violet-700 hover:file:bg-violet-200'
+                        />
+                        <button
+                          type='button'
+                          className='inline-block px-4 py-2 my-2 text-xs font-semibold border-0 rounded-full bg-violet-100 text-violet-500 hover:bg-violet-200'
+                          onClick={onUploadBaseImage}
+                        >
+                          기본 이미지로 선택하기
+                        </button>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div id='user-introduction-div'>
+                  <label htmlFor='user-name' className='text-sm'>
+                    💙 프로필 소개글 :
+                  </label>
+                  <textarea
+                    type='text'
+                    id='user-name'
+                    defaultValue={currentInfo.current || ''}
+                    onChange={onChangeInfo}
+                    className='font-medium m-0.5 w-full h-28 rounded-md text-sm'
+                  ></textarea>
+                  <p className='text-xs'>{infoMessage}</p>
+                </div>
+
+                <button
+                  className='hover:bg-sky-700 bg-cyan-600 text-white px-2.5 py-1 rounded-3xl m-auto block text-sm'
+                  onClick={userUpdate}
+                >
+                  수정하기
+                </button>
+              </form>
+            </div>
+          </div>
+        </Modal>
+      </React.Fragment>
     );
+    // return (
+      
+    // );
   }
-};
 
 export default TuningProfile;
