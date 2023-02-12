@@ -26,6 +26,7 @@ public class NoticeService {
             NoticeEntity noticeEntity = NoticeEntity.builder()
                     .user(UserEntity.builder().userIdx(userIdx).build())
                     .requestUserIdx(notice.getRequest_user_idx())
+                    .noticeType(notice.getNotice_type())
                     .content(userProfileRepository.getReferenceById(notice.getRequest_user_idx()).getNickname())
                     .build();
             noticeRepository.save(noticeEntity);
@@ -63,6 +64,7 @@ public class NoticeService {
                 .requestUserIdx(notice.getRequest_user_idx())
                 .requestGroupIdx(notice.getRequest_group_idx())
                 .requestDiaryIdx(notice.getRequest_diary_idx())
+                .noticeType(notice.getNotice_type())
                 .content(str)
                 .build();
         noticeRepository.save(noticeEntity);
@@ -76,11 +78,13 @@ public class NoticeService {
 
         String str=nickname+","+groupName;
         for(GroupUserRelationEntity groupUser: groupUserRelationEntityList){
+            if(groupUser.getUser().getUserIdx() == notice.getRequest_user_idx()) continue;
             NoticeEntity noticeEntity=NoticeEntity.builder()
                     .user(UserEntity.builder().userIdx(groupUser.getUser().getUserIdx()).build())
                     .requestUserIdx(notice.getRequest_user_idx())
                     .requestGroupIdx(notice.getRequest_group_idx())
                     .requestDiaryIdx(notice.getRequest_diary_idx())
+                    .noticeType(notice.getNotice_type())
                     .content(str)
                     .build();
             noticeRepository.save(noticeEntity);

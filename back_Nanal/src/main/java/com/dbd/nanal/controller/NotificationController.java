@@ -81,9 +81,12 @@ public class NotificationController {
     public ResponseEntity<?> saveCommentNotice(@ApiParam(value = "알림 정보")@RequestBody NotificationRequestDTO notice, @AuthenticationPrincipal UserEntity userInfo) {
         HashMap<String, Object> responseDTO = new HashMap<>();
         try{
-            notice.setRequest_user_idx(userInfo.getUserIdx());
-            notice.setNotice_type(3);
-            noticeService.saveCommentNotice(notice);
+            System.out.println("notice: "+ userInfo.getUserIdx()+" "+ notice.getRequest_user_idx());
+            if(userInfo.getUserIdx() != notice.getRequest_user_idx()){
+                notice.setRequest_user_idx(userInfo.getUserIdx());
+                notice.setNotice_type(3);
+                noticeService.saveCommentNotice(notice);
+            }
             responseDTO.put("responseMessage", ResponseMessage.NOTICE_SAVE_SUCCESS);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }catch (Exception e){
@@ -120,9 +123,7 @@ public class NotificationController {
                     "{userIdx(int)} \n\n" +
                     "[Back] \n" +
                     "[{requestUserIdx(보낸사람), requestGroupIdx(그룹 번호), requestDiaryIdx(일기 번호), noticeType(알림종류), content(알림 내용, isChecked(읽음여부)}] ")
-//    @GetMapping("/{userIdx}")
     @GetMapping("")
-//    public ResponseEntity<?> getNotice(@ApiParam(value = "유저 id")@PathVariable("userIdx") int userIdx){
     public ResponseEntity<?> getNotice(@ApiParam(value = "유저 id") @AuthenticationPrincipal UserEntity userInfo){
         HashMap<String, Object> responseDTO = new HashMap<>();
         try{
