@@ -24,15 +24,28 @@ function DiaryItem({
         diarydate: diarydate,
       }}
     >
-      <div className='flex items-center p-2 m-1 mb-3 w-[328px]'>
+      <div className='flex items-center p-2 m-0.5 w-[328px]'>
         {isToggle !== 0 ? (
-          <img src={emo} alt='DALL:E2' className='w-20 h-20 p-1 rounded-lg' />
+          <img
+            src={picture}
+            alt='DALL:E2'
+            className='w-20 h-20 p-1 rounded-2xl'
+          />
         ) : (
-          <img src={emo} alt='DALL:E2' className='w-20 h-20 p-1 rounded-lg' />
+          <img
+            src={picture}
+            alt='DALL:E2'
+            className='w-20 h-20 p-1 rounded-2xl'
+          />
         )}
         <div className='w-full px-1 m-1 text-sm text-right truncate'>
           <div>
             <p>
+              <img
+                src={emo}
+                alt='emotion'
+                className='inline-block w-6 h-6 mb-1 mr-2'
+              />
               {isToggle === 1 ? (
                 <span className='text-sm'>
                   {diarydate[0]}년 {diarydate[1]}월 {diarydate[2]}일
@@ -43,9 +56,9 @@ function DiaryItem({
                 </span>
               )}
             </p>
-            <p>{isToggle === 2 ? <span>{nickname}</span> : <></>}</p>
-            <p className='block font-bold truncate'>{content}</p>
           </div>
+          <p>{isToggle === 2 ? <span>{nickname}</span> : <></>}</p>
+          <p className='block font-bold truncate'>{content}</p>
         </div>
       </div>
     </Link>
