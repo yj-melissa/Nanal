@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
 import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
 import nmr from '../../src_assets/img/bookmark-name/name-mark-red.svg';
@@ -188,12 +188,17 @@ function DiaryUpdate() {
 
           {/* 수정 취소 및 수정 완료 버튼 */}
           <div className='relative flex justify-between px-1 pb-5'>
-            <button
-              className='hover:bg-slate-300 bg-slate-300/50 rounded-xl px-2.5 py-1 block font-bold cursor-pointer text-xl mt-4'
-              onClick={handleQuitEdit}
+            <Link
+              to='/Diary/Detail'
+              state={{ diaryIdx: location.state.diaryDetail.diaryIdx }}
             >
-              수정 취소
-            </button>
+              <button
+                className='hover:bg-slate-300 bg-slate-300/50 rounded-xl px-2.5 py-1 block font-bold cursor-pointer text-xl mt-4'
+                onClick={handleQuitEdit}
+              >
+                수정 취소
+              </button>
+            </Link>
             <button
               className='hover:bg-cyan-600 bg-cyan-500 text-white px-2.5 py-1 rounded-xl block font-bold text-xl mt-4'
               onClick={() => {

@@ -17,6 +17,8 @@ function DiaryCreate() {
   const [content, setContent] = useState('');
   const [group, setGroup] = useState('개인');
 
+  // 로딩 체크
+  const [loading, setLoading] = useState(false);
   // 포커싱 기능
   const contentRef = useRef();
 
@@ -24,49 +26,49 @@ function DiaryCreate() {
   const handleSubmit = (e) => {
     e.preventDefault();
     // 유효성 검사 후 포커싱
-    if (content.length < 2) {
+    if (content.length < 2 || content.length > 300) {
       contentRef.current.focus();
-      return;
-    } else if (content.length > 300) {
       Swal.fire({
         icon: 'error', // Alert 타입
         title: '일기 저장 실패', // Alert 제목
-        text: '일기는 300자 이하로 작성해주세요.', // Alert 내용
+        text: '일기는 2자 이상 300자 이하로 작성해주세요.', // Alert 내용
       });
-    }
-    onLogin();
-    axios_api
-      .post('diary', {
-        // 날짜 데이터도 전달하기
-        diaryDate: date,
-        // 선택한 그룹은 배열 형태로 전달해야 함
-        groupIdxList: checkedList,
-        content: content,
-      })
-      .then(({ data }) => {
-        if (data.statusCode === 200) {
-          if (data.data.responseMessage === '일기 생성 성공') {
-            Swal.fire({
-              icon: 'success', // Alert 타입
-              title: '일기 저장 완료', // Alert 제목
-              text: '작성하신 일기가 작성 완료됐습니다.', // Alert 내용
-              width: '90%',
-            });
-            navigate('/', { replace: true });
+      return;
+    } else {
+      onLogin();
+      axios_api
+        .post('diary', {
+          // 날짜 데이터도 전달하기
+          diaryDate: date,
+          // 선택한 그룹은 배열 형태로 전달해야 함
+          groupIdxList: checkedList,
+          content: content,
+        })
+        .then(({ data }) => {
+          if (data.statusCode === 200) {
+            if (data.data.responseMessage === '일기 생성 성공') {
+              Swal.fire({
+                icon: 'success', // Alert 타입
+                title: '일기 저장 완료', // Alert 제목
+                text: '작성하신 일기가 작성 완료됐습니다.', // Alert 내용
+                width: '90%',
+              });
+              navigate('/', { replace: true });
+            }
+          } else {
+            console.log('일기 생성 오류: ');
+            console.log(data.statusCode);
+            console.log(data.data.responseMessage);
           }
-        } else {
-          console.log('일기 생성 오류: ');
-          console.log(data.statusCode);
-          console.log(data.data.responseMessage);
-        }
-      })
-      .catch(({ error }) => {
-        console.log('일기 생성 오류: ' + error);
-      });
+        })
+        .catch(({ error }) => {
+          console.log('일기 생성 오류: ' + error);
+        });
 
-    // 저장 후 일기 데이터 초기화
-    setContent('');
-    setGroup('private');
+      // 저장 후 일기 데이터 초기화
+      setContent('');
+      setGroup('private');
+    }
   };
 
   // 체크된 그룹을 넣어줄 배열
