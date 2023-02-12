@@ -93,4 +93,6 @@ public class ResponseMessage {
     public static final Object PAINTING_SAVE_FAIL = "그림 저장 실패";
     public static final String PAINTING_UPDATE_SUCCESS = "그림 저장 성공";
     public static final String PAINTING_UPDATE_FAIL = "그림 저장 실패";
+    public static final String EMOTION_FRIEND_LIST_FIND_SUCCESS = "감정 조회 성공";
+    public static final String EMOTION_FRIEND_LIST_FIND_FAIL = "감정 조회 실패";
 }
