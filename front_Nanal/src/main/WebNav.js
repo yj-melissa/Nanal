@@ -16,7 +16,7 @@ function Nav() {
   const toggleProfileMenu = () => {
     setIsToggle(isToggle => !isToggle)
   }
-  console.log(isToggle) 
+  // console.log(isToggle) 
 
   return (
     <div>
