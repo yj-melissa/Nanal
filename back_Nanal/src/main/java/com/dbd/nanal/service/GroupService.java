@@ -137,7 +137,8 @@ public class GroupService {
 
         // 이미 가입했는지 확인하기
         GroupUserRelationEntity groupUserRelationEntity = groupUserRelationRepository.findByUserIdGroupID(groupUserRelationRequestDTO.getUserIdx(), groupUserRelationRequestDTO.getGroupIdx());
-
+        System.out.println("이미 가입한 그룹");
+        
         if (groupUserRelationEntity == null) {
 
             // GroupUserRelationRequestDTO의 userEntity 채우기
@@ -151,6 +152,8 @@ public class GroupService {
 
             return new GroupUserRelationResponseDTO(groupUserRelationEntity);
         }
+
+        System.out.println("리턴 널");
         return null;
 
     }
