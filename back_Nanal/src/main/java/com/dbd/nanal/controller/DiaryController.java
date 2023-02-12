@@ -653,7 +653,7 @@ public class DiaryController {
     private String requestToKeySentenceFlask(String content){
         RestTemplate restTemplate = new RestTemplate();
 
-        String url = "http://i8d110.p.ssafy.io:5010/keySentence";
+        String url = "http://i8d110.p.ssafy.io:5000/keySentence";
 
         // Header set
         HttpHeaders httpHeaders = new HttpHeaders();
