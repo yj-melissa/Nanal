@@ -76,7 +76,7 @@ const TuningProfile = () => {
     // 이미지 압축하기
 
     const options = {
-      maxSizeMB: 0.2,
+      maxSizeMB: 1,
       maxWidthOrHeight: 1920,
       useWebWorker: true,
     };

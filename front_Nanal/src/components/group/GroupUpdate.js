@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
+import imageCompression from 'browser-image-compression';
 import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
 
@@ -46,16 +47,76 @@ function GroupUpdate() {
     setImageFile(null);
   };
 
+  // const onUploadImage = (e) => {
+  //   // e.preventDefault();
+  //   setIsImgChecked(true);
+
+  //   if (!e.target.files) {
+  //     return;
+  //   }
+
+  //   // formData.append('multipartFile', e.target.files[0]);
+  //   setImageFile(e.target.files[0]);
+  // };
+
+  const handlingDataForm = async (dataURI) => {
+    const byteString = atob(dataURI.split(',')[1]);
+
+    // Blob 구성 준비
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i += 1) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+    const blob = new Blob([ia], {
+      type: 'image/jpeg',
+    });
+    const file = new File([blob], 'image.jpg');
+    setImageFile(file);
+
+    // formData.append('multipartFile', file);
+
+    // return formData;
+  };
+
+  const actionImgCompress = async (fileSrc) => {
+    // 이미지 압축하기
+
+    const options = {
+      maxSizeMB: 1,
+      maxWidthOrHeight: 1920,
+      useWebWorker: true,
+    };
+    try {
+      // 압축 결과
+      const compressedFile = await imageCompression(fileSrc, options);
+
+      const reader = new FileReader();
+      reader.readAsDataURL(compressedFile);
+      reader.onloadend = () => {
+        const base64data = reader.result;
+        // console.log(compressedFile.type);
+        // console.log(base64data);
+        handlingDataForm(base64data);
+      };
+    } catch (error) {
+      console.log('이미지 압축 실패 : ' + error);
+    }
+  };
+
   const onUploadImage = (e) => {
     // e.preventDefault();
-    setIsImgChecked(true);
 
     if (!e.target.files) {
       return;
     }
 
-    // formData.append('multipartFile', e.target.files[0]);
-    setImageFile(e.target.files[0]);
+    setIsImgChecked(true);
+    actionImgCompress(e.target.files[0]);
+
+    // setIsImgChecked(true);
+    // setImageFile(e.target.files[0]);
+    // console.log(e.target.files[0]);
   };
 
   // const currentFriend = useRef([{}]);
