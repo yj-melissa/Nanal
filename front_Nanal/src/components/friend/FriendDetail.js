@@ -44,21 +44,23 @@ function FriendDetail() {
             <p className='my-0.5'>일기장</p>
           </div>
         </div>
-        <div className='flex justify-between my-3'>
+        <div className='flex justify-between p-1 my-3'>
           <p>{friend.introduction}</p>
         </div>
       </div>
       <hr className='my-2 border-dashed border-slate-400/75 w-65' />
-      {imgList.map((image) => {
-        return (
-          <img
-            src={image.imgUrl}
-            key={image.diaryIdx}
-            alt='FriendDiary'
-            className='inline-block w-24 m-1 my-2 rounded-lg'
-          ></img>
-        );
-      })}
+      <div className=''>
+        {imgList.map((image) => {
+          return (
+            <img
+              src={image.imgUrl}
+              key={image.diaryIdx}
+              alt='FriendDiary'
+              className='inline-block m-1 mx-1.5 rounded-lg w-[102px]'
+            ></img>
+          );
+        })}
+      </div>
     </div>
   );
 }

@@ -453,7 +453,7 @@ function GroupUpdate() {
             {groupFriendList.map((friendItem, idx) => {
               return (
                 <span key={idx} className='mr-2'>
-                  {friendItem.nickname}
+                  {friendItem.nickname},
                 </span>
               );
             })}
@@ -462,20 +462,24 @@ function GroupUpdate() {
           <div>
             <p className='my-2 text-center'>✨ 추가 된 사용자 ✨</p>
 
-            {includeFriend.map((friendItem, idx) => {
-              return (
-                <button
-                  type='button'
-                  key={idx}
-                  onClick={() => {
-                    onChangeFRemove(idx);
-                  }}
-                  className='items-center inline-block px-2 mx-12 my-1 rounded-lg bg-slate-100 hover:bg-blue-200'
-                >
-                  {friendItem.nickname}
-                </button>
-              );
-            })}
+            <div className='items-center justify-between text-center'>
+              {includeFriend.map((friendItem, idx) => {
+                return (
+                  <div className='items-center inline-block my-1 text-center w-36'>
+                    <button
+                      type='button'
+                      key={idx}
+                      onClick={() => {
+                        onChangeFRemove(idx);
+                      }}
+                      className='px-2 rounded-lg bg-slate-200 hover:bg-blue-300'
+                    >
+                      {friendItem.nickname}
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
           </div>
 
           <button
@@ -491,26 +495,30 @@ function GroupUpdate() {
         <hr className='my-5 border-solid border-1 border-slate-800 w-80' />
 
         <p className='mb-0.5'>🤗 내 친구 목록 --------------------</p>
-        {groupNotFriendList.length >= 0 ? (
-          groupNotFriendList.map((friendItem, idx) => {
-            return (
-              <button
-                type='button'
-                key={idx}
-                onClick={() => {
-                  addFriend(idx);
-                }}
-                className='items-center inline-block px-2 mx-12 my-1 rounded-lg bg-slate-100 hover:bg-blue-200'
-              >
-                {friendItem.nickname}
-              </button>
-            );
-          })
-        ) : (
-          <p className='my-2 text-center'>
-            모든 친구가 이미 그룹에 속해있습니다.
-          </p>
-        )}
+        <div className='items-center justify-between text-center'>
+          {groupNotFriendList.length >= 0 ? (
+            groupNotFriendList.map((friendItem, idx) => {
+              return (
+                <div className='items-center inline-block my-1 text-center w-36'>
+                  <button
+                    type='button'
+                    key={idx}
+                    onClick={() => {
+                      addFriend(idx);
+                    }}
+                    className='px-2 rounded-lg bg-slate-200 hover:bg-blue-300'
+                  >
+                    {friendItem.nickname}
+                  </button>
+                </div>
+              );
+            })
+          ) : (
+            <p className='my-2 text-center'>
+              모든 친구가 이미 그룹에 속해있습니다.
+            </p>
+          )}
+        </div>
       </div>
     </div>
   );

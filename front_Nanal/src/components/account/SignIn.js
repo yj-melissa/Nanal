@@ -114,7 +114,7 @@ function SignIn() {
                 placeholder='아이디'
                 onChange={onChangeId}
                 value={userId}
-                className='w-36 p-0.5 mb-2 rounded-lg'
+                className='w-44 p-0.5 mb-2 rounded-lg'
               />
               <br />
             </div>
@@ -126,7 +126,7 @@ function SignIn() {
                 placeholder='비밀번호'
                 onChange={onChangePw}
                 value={userPw}
-                className='w-36 p-0.5 mb-2 rounded-lg'
+                className='w-44 p-0.5 mb-2 rounded-lg'
               />
             </div>
             <div className='justify-between m-1 mt-2 text-center'>

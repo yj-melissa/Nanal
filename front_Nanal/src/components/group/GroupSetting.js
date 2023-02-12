@@ -102,7 +102,7 @@ function GroupSetting() {
       {/* <h1 className='text-center'>그룹 상세 페이지</h1> */}
 
       <div className='justify-center w-full my-2 text-center'>
-        <div className='my-3'>
+        <div className=''>
           <img
             src={groupDetail.imgUrl}
             className='inline-block p-1 rounded-md w-28 h-28'
@@ -113,14 +113,15 @@ function GroupSetting() {
         </div>
         <div className='my-1 mb-2 break-words'>
           {groupTag.map((tagging, idx) => {
-            return (
-              <span
-                key={idx}
-                className='items-center inline-block p-1 mx-2 my-1 text-xs break-all rounded-lg bg-slate-200 hover:bg-blue-300'
-              >
-                #{tagging.tag}
-              </span>
-            );
+            if (tagging.tag)
+              return (
+                <span
+                  key={idx}
+                  className='items-center inline-block p-1 mx-2 my-1 text-xs break-all rounded-lg bg-slate-200 hover:bg-blue-300'
+                >
+                  #{tagging.tag}
+                </span>
+              );
           })}
         </div>
         <div>

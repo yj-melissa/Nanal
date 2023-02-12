@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
 import DiaryList from '../diary/DiaryList';
 import settingIcon from '../../src_assets/img/setting_icon.png';
+import ballpenIcon from '../../src_assets/img/ballpen_icon.png';
 
 function GroupDetail() {
   const { state } = useLocation();
+  const navigate = useNavigate();
 
   const [groupDetail, setGroupDetail] = useState('');
   const [groupTag, setGroupTag] = useState([]);
@@ -47,19 +49,26 @@ function GroupDetail() {
         <p className='mb-1 text-2xl font-bold text-center'>
           {groupDetail.groupName}
         </p>
+
         {groupTag.map((tagging, idx) => {
-          return (
-            <span
-              key={idx}
-              className='inline-block p-1 mx-1 my-1 text-xs break-all rounded-lg bg-stone-200 hover:bg-blue-200'
-            >
-              #{tagging.tag}&nbsp;
-            </span>
-          );
+          if (tagging.tag)
+            return (
+              <span
+                key={idx}
+                className='inline-block p-1 mx-1 my-1 text-xs break-all rounded-lg bg-stone-200 hover:bg-blue-200'
+              >
+                #{tagging.tag}&nbsp;
+              </span>
+            );
         })}
       </div>
-      {/* <hr className='mx-5 my-5 text-center border-solid w-72 border-1 border-slate-600' /> */}
-
+      {/* 일기쓰러가기 버튼 */}
+      <img
+        src={ballpenIcon}
+        onClick={() => navigate('/Diary/Create')}
+        className='fixed z-50 flex w-10 p-1 cursor-pointer bottom-10 right-10'
+      ></img>
+      <hr className='mx-auto mt-5 border-dashed w-80 border-1 border-slate-400' />
       {/* 일기 리스트 */}
       <DiaryList isToggle={state.isToggle} groupIdx={state.groupIdx} />
     </div>
