@@ -4,8 +4,8 @@ import imageCompression from 'browser-image-compression';
 import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
 
-function GroupCreate() {
-  const navigate = useNavigate();
+function GroupCreate({setGroupCompo, setGroupIdx}) {
+  // const navigate = useNavigate();
 
   const [groupName, setGroupName] = useState('');
   const [groupTag, setGroupTag] = useState([]);
@@ -229,10 +229,12 @@ function GroupCreate() {
                               if (
                                 data.data.responseMessage === '알림 저장 성공'
                               ) {
-                                navigate(`/Group/Setting`, {
-                                  state: { groupIdx: groupidx },
-                                  replace: true,
-                                });
+                                setGroupIdx(groupidx)
+                                setGroupCompo([false, false, false, true, false])
+                                // navigate(`/Group/Setting`, {
+                                //   state: { groupIdx: groupidx },
+                                //   replace: true,
+                                // });
                               }
                             } else {
                               console.log('알림 저장 오류 : ');
@@ -244,10 +246,12 @@ function GroupCreate() {
                             console.log('알림 저장 오류 : ' + error);
                           });
                       } else {
-                        navigate(`/Group/Setting`, {
-                          state: { groupIdx: groupidx },
-                          replace: true,
-                        });
+                        setGroupIdx(groupidx)
+                        setGroupCompo([false, false, false, true, false])
+                        // navigate(`/Group/Setting`, {
+                        //   state: { groupIdx: groupidx },
+                        //   replace: true,
+                        // });
                       }
                     }
                   } else {
@@ -330,8 +334,7 @@ function GroupCreate() {
           >
             추가
           </button>
-          <p htmlFor='group-tag'>(5개까지 가능)</p>
-
+          <p htmlFor='group-tag'>(5개까지 가능!)</p>
           <p className='message'>{currentGTMessage}</p>
           {groupTag.map((tagging, idx) => {
             return (
@@ -387,7 +390,7 @@ function GroupCreate() {
         </button>
       </div>
 
-      <div id='group-Friend'>
+      <div id='group-Friend' className="overflow-auto">
         <hr className='my-5 border-solid border-1 border-slate-800 w-80' />
 
         <p className='mb-0.5'>🤗 내 친구 목록 --------------------</p>

@@ -1,13 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
-import { Link } from 'react-router-dom';
 import GroupItem from './GroupItem';
 import addIcon from '../../src_assets/img/group_add_icon.png';
 import downarrow from '../../src_assets/img/arrow_drop_down.png';
 import uparrow from '../../src_assets/img/arrow_drop_up.png';
+import styled from 'styled-components';
 
-function GroupList() {
+const Div = styled.div`
+  overflow: scroll;
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.1);
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 6px;
+  }
+`;
+
+function GroupList({setGroupCompo, setGroupIdx}) {
   const [view, setView] = useState(false);
   const [groupList, setGroupList] = useState([]);
 
@@ -58,9 +72,9 @@ function GroupList() {
   }, []);
 
   return (
-    <div id='group-list'>
-      <div id='group-list-title' className='mb-3'>
-        <h1 className='inline m-1 font-bold'>그룹 리스트</h1>
+    <Div id='group-list' className='overflow-auto w-80 h-80'>
+      <div id='group-list-title' className='mb-2'>
+        <h1 className='inline m-1 ml-2 font-bold'>그룹 리스트</h1>
         <ul
           onClick={() => {
             setView(!view);
@@ -101,17 +115,17 @@ function GroupList() {
             </div>
           )}
         </ul>
-        {/* <Link to='/Group/Create'>
-        <button>그룹 생성하기</button>
-      </Link> */}
-        <Link to='/Group/Create' className='inline-block float-right'>
+        <div
+          className='inline-block float-right ml-5 pl-5'
+          onClick={() => setGroupCompo([false, true, false, false])}
+        >
           <img src={addIcon} className='w-[22px] h-[22px] mx-1.5' />
-        </Link>
+        </div>
       </div>
       {groupList.map((groupItem) => (
-        <GroupItem key={groupItem.groupDetail.groupIdx} item={groupItem} />
+        <GroupItem key={groupItem.groupDetail.groupIdx} item={groupItem} setGroupIdx={setGroupIdx} setGroupCompo={setGroupCompo} />
       ))}
-    </div>
+    </Div>
   );
 }
 
