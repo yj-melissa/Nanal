@@ -73,7 +73,7 @@ public class GroupController {
                     "[Back] \n" +
                     "{groupIdx(int), groupImg(String), groupName(String), private(boolean), tags(List(String)), creationDate(String)} ")
     @GetMapping("/{groupIdx}")
-    public ResponseEntity<?> getGroupDTO(@ApiParam(value = "그룹 id", required = true) @PathVariable int groupIdx, @AuthenticationPrincipal UserEntity userInfo) {
+    public ResponseEntity<?> getGroupDTO(@ApiParam(value = "그룹 id", required = true) @PathVariable int groupIdx) {
         HashMap<String, Object> responseDTO = new HashMap<>();
 
         HashMap<String, Object> groupDTO = groupService.findGroupById(groupIdx);
@@ -120,7 +120,7 @@ public class GroupController {
                     "[Back] \n" +
                     "{List<GroupDetailResponse>}")
     @GetMapping("/list/{opt}")
-    public ResponseEntity<?> getGroupList(@ApiParam(value = "유저 idx", required = true) @AuthenticationPrincipal UserEntity userInfo, @PathVariable("opt") int opt) {
+    public ResponseEntity<?> getGroupList(@AuthenticationPrincipal UserEntity userInfo, @PathVariable("opt") int opt) {
         HashMap<String, Object> responseDTO = new HashMap<>();
 
         List<HashMap<String, Object>> groupDetailResponseDTOS = groupService.getGroupList(userInfo.getUserIdx(), opt);
@@ -168,7 +168,7 @@ public class GroupController {
                     "[Back]\n" +
                     "{}")
     @DeleteMapping("/{groupIdx}")
-    public ResponseEntity<?> withdrawGroup(@ApiParam(value = "유저 idx", required = true) @AuthenticationPrincipal UserEntity userInfo, @ApiParam(value = "그룹 idx") @PathVariable("groupIdx") int groupIdx) {
+    public ResponseEntity<?> withdrawGroup(@AuthenticationPrincipal UserEntity userInfo, @ApiParam(value = "그룹 idx") @PathVariable("groupIdx") int groupIdx) {
 
         HashMap<String, Object> responseDTO = new HashMap<>();
 
@@ -185,7 +185,24 @@ public class GroupController {
                     "[Back] \n" +
                     "groupUserList : [{userIdx(int), nickname(String), img(String)] ")
     @GetMapping("user/{groupIdx}")
-    public ResponseEntity<?> getGroupUserList(@ApiParam(value = "유저 idx", required = true) @AuthenticationPrincipal UserEntity userInfo, @ApiParam(value = "그룹 idx", required = true) @PathVariable int groupIdx) {
+    public ResponseEntity<?> getGroupUserList(@AuthenticationPrincipal UserEntity userInfo, @ApiParam(value = "그룹 idx", required = true) @PathVariable int groupIdx) {
+        HashMap<String, Object> responseDTO = new HashMap<>();
+
+        List<HashMap<String, Object>> groupUserList = groupService.findGroupUser(userInfo.getUserIdx(), groupIdx);
+
+        if (groupUserList.size() != 0) {
+            responseDTO.put("responseMessage", ResponseMessage.GROUP_USER_FIND_SUCCESS);
+            responseDTO.put("groupUserList", groupUserList);
+            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+        } else {
+            responseDTO.put("responseMessage", ResponseMessage.NONE_DATA);
+            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+        }
+
+    }
+
+    @DeleteMapping
+    public ResponseEntity<?> deleteGroup(@ApiParam(value = "유저 idx", required = true) @AuthenticationPrincipal UserEntity userInfo, @ApiParam(value = "그룹 idx", required = true) @PathVariable int groupIdx) {
         HashMap<String, Object> responseDTO = new HashMap<>();
 
         List<HashMap<String, Object>> groupUserList = groupService.findGroupUser(userInfo.getUserIdx(), groupIdx);
