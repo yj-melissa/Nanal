@@ -3,34 +3,15 @@ import { Link } from 'react-router-dom';
 import axios_api from '../config/Axios';
 import bell from '../src_assets/img/bell.svg';
 import logo from '../src_assets/img/home-alt.svg';
+import Tuning from '../webComponents/setting/Tuning'
 
 function Nav() {
-  const [userProfile, setUserProfile] = useState({
-    days: 1,
-    img: null,
-    introduction: null,
-    nickname: '',
-  });
-
-  useEffect(() => {
-    axios_api
-      .get('user/profile')
-      .then(({ data }) => {
-        if (data.statusCode === 200) {
-          if (data.data.responseMessage === '회원 정보 조회 성공') {
-            // console.log(data.data.profile);
-            setUserProfile(data.data.profile);
-          }
-        } else {
-          console.log('회원 정보 오류: ');
-          console.log(data.statusCode);
-          console.log(data.data.responseMessage);
-        }
-      })
-      .catch(({ error }) => {
-        console.log('회원 정보 조회: ' + error);
-      });
-  }, [])
+  const userProfile = {
+    'days' : window.localStorage.getItem('profileDays'),
+    'img': window.localStorage.getItem('profileImg'),
+    'introduction': window.localStorage.getItem('profileIntroduction'),
+    'nickname': window.localStorage.getItem('profileNickname')
+  }
   const [isToggle, setIsToggle] = useState(false)
   const toggleProfileMenu = () => {
     setIsToggle(isToggle => !isToggle)
@@ -45,18 +26,24 @@ function Nav() {
         >
           <img src={logo} alt='logo'/>
         </div>
-        <div>
-          <p>search bar 들어올 자리</p>
+        <div className='m-auto'>
+          <p>나날과 함께한지 {userProfile.days}일 째 되는 날입니다.</p>
         </div>
         <div className='flex items-center m-auto'>
           <Link to='/Alarm'>
             <img src={bell} className='w-6 h-6 my-3' alt='bell'/>
           </Link>
-          <div className="rounded-full w-8 h-8 ml-5 overflow-auto" onClick={toggleProfileMenu}>
+          <div className="rounded-full w-8 h-8 ml-5 overflow-hidden" onClick={toggleProfileMenu}>
             {userProfile.img !== null && <img src={userProfile.img} alt='usere-profile-img'/>}
           </div>
-          {isToggle && <div className='absolute right-20 inset-y-10 box-border border border-black'>
-
+          {isToggle && <div className='absolute right-40 inset-y-[48px] rounded-md box-border border border-black w-72 h-[500px] z-40 bg-slate-100 grid grid-cols-1 justify-items-center'>
+            <div className='rounded-full w-40 h-40 overflow-hidden my-5'>
+              <img src={userProfile.img} alt='user-profile-img'/>
+            </div>
+            <p>{userProfile.nickname} 님의 프로필</p>
+            {userProfile.introduction === null ? <div className='truncate'>아직 작성된 소개글이 없습니다.</div>
+            :<p className='truncate'>{userProfile.introduction}</p>}
+            <Tuning />
           </div>}
         </div>
       </nav>
