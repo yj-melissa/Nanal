@@ -54,7 +54,7 @@ function FriendList({ setFriendAdd, setUserIdx }) {
           className='inline-block float-right'
           onClick={() => setFriendAdd([false, true, false])}
         >
-          <img src={addIcon} className='w-[20px] h-[20px] mx-1.5' />
+          <img src={addIcon} className='w-[20px] h-[20px] mx-1.5' alt='add-icon'/>
         </div>
       </div>
       {friendList.length !== 0 ? (
