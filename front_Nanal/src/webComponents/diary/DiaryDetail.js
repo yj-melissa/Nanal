@@ -8,6 +8,21 @@ import emo_joy from '../../src_assets/img/emotion/emo_joy.png';
 import bookmark from '../../src_assets/img/bookmark.png';
 import bookmark_filled from '../../src_assets/img/bookmark_fill.png';
 import diaryImgRed from '../../src_assets/img/diary-img/diary-img-red.svg';
+import styled from 'styled-components';
+
+const Div = styled.div`
+  overflow: scroll;
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.4);
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 6px;
+  }
+`;
 
 function DiaryDetail() {
   // const location = useLocation();
@@ -119,12 +134,16 @@ function DiaryDetail() {
 
       <div className='grid justify-items-center'>
         <div className='w-[720px]'>
-          <div className='flex justify-between mt-5 absolute z-20 w-[720px] inset-y-8'>
-            <p className='text-2xl font-bold'>
-              {diarydate[0]}년 {diarydate[1]}월 {diarydate[2]}일
-            </p>
+          <p className='absolute z-20 text-xl font-bold inset-y-8'>
+            {diarydate[0]}년 {diarydate[1]}월 {diarydate[2]}일의 일기
+          </p>
+          <div className='flex justify-end absolute z-20 w-[720px] inset-y-8 mt-2'>
             {/* 감정 넣는 곳 */}
-            <p className='text-2xl font-bold'>{diaryDetail.emo}</p>
+            <img
+              src={diaryDetail.emo}
+              alt='Emotion'
+              className='w-12 h-12 mr-4'
+            ></img>
             {isBook ? (
               <div>
                 <img
@@ -139,15 +158,20 @@ function DiaryDetail() {
               </div>
             )}
           </div>
-          <div className='flex items-center justify-center mt-0'>
+          <div className='flex items-center justify-center'>
             <img
-              src={emo_joy}
+              src={diaryDetail.picture}
               alt='DALL:E2'
-              className='absolute z-20 my-10 inset-y-32 w-[256px] h-[256px] mt-2'
+              className='absolute z-20 my-2 rounded-lg opacity-25 inset-y-24'
+            />
+            <img
+              src={diaryDetail.picture}
+              alt='DALL:E2'
+              className='absolute z-20 inset-y-32 w-[200px] h-[200px] mt-2 border-2 border-black rounded-lg'
             />
           </div>
           <div className='absolute z-20 my-10 right-96 inset-y-80'>
-            <div className='flex justify-end'>
+            <div className='flex justify-end mt-4'>
               <Link
                 to={'/Diary/Edit'}
                 state={{
@@ -182,8 +206,8 @@ function DiaryDetail() {
               </button>
             </div>
           </div>
-          <div className='absolute z-20 my-10 w-[720px] text-3xl text-left underline inset-y-96 underline-offset-8'>
-            {diaryDetail.content}
+          <div className='absolute z-20 my-10 w-[720px] text-3xl text-left inset-y-96 underline underline-offset-8'>
+            <Div className='overflow-auto h-36'>{diaryDetail.content}</Div>
           </div>
         </div>
       </div>
