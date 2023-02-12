@@ -1,13 +1,12 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
-function GroupItem({ item }) {
+function GroupItem({ item, setGroupIdx, setGroupCompo }) {
   return (
-    <div>
-      <Link
+    <div onClick={() => { setGroupIdx(item.groupDetail.groupIdx); setGroupCompo([false, false, true, false, false]) }}>
+      {/* <div
         to={`/Group/Detail`}
         state={{ groupIdx: item.groupDetail.groupIdx, isToggle: 2 }}
-      >
+      > */}
         <div className='flex bg-[#F7F7F7] border-2 border-solid border-slate-400 rounded-lg m-1 mb-3 p-2'>
           <img
             src={item.groupDetail.imgUrl}
@@ -30,7 +29,7 @@ function GroupItem({ item }) {
             </div>
           </div>
         </div>
-      </Link>
+      {/* </div> */}
     </div>
   );
 }

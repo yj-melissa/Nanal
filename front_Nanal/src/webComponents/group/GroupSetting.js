@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 // import { useLocation } from 'react-router';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
 import FriendItem from '../friend/FriendItem';
 
-function GroupSetting() {
-  const { state } = useLocation();
+function GroupSetting({groupIdx, setGroupCompo}) {
+  // const { state } = useLocation();
   const navigate = useNavigate();
 
   const [groupDetail, setGroupName] = useState('');
@@ -21,6 +21,7 @@ function GroupSetting() {
 
     Swal.fire({
       // title: '그룹을 정말 나가실 건가요?',
+      title: '그룹 나가기',
       text: '그룹을 정말 나가실 건가요?',
       icon: 'warning',
       reverseButtons: true, // 버튼 순서 거꾸로
@@ -29,12 +30,12 @@ function GroupSetting() {
       cancelButtonColor: '#e11d48',
       confirmButtonText: '확인',
       cancelButtonText: '취소',
-      width: '70%',
+      width: '30%',
     }).then((result) => {
       if (result.isConfirmed) {
         // 확인(예) 버튼 클릭 시 이벤트
         axios_api
-          .delete(`group/${state.groupIdx}`)
+          .delete(`group/${groupIdx}`)
           .then(({ data }) => {
             if (data.statusCode === 200) {
               if (data.data.responseMessage === '그룹 탈퇴 성공') {
@@ -56,7 +57,7 @@ function GroupSetting() {
   useEffect(() => {
     onLogin();
     axios_api
-      .get(`/group/${state.groupIdx}`)
+      .get(`/group/${groupIdx}`)
       .then(({ data }) => {
         if (data.statusCode === 200) {
           setGroupName(null);
@@ -98,7 +99,7 @@ function GroupSetting() {
   }, []);
 
   return (
-    <div className='justify-center text-center'>
+    <div className='justify-center text-center w-[500px] h-[420px] overflow-auto'>
       {/* <h1 className='text-center'>그룹 상세 페이지</h1> */}
 
       <div className='justify-center w-full my-2 text-center'>
@@ -123,18 +124,17 @@ function GroupSetting() {
             );
           })}
         </div>
-        <div>
-          <Link
-            to={`/Group/Update`}
-            state={{ groupDetail: groupDetail.groupIdx }}
-          >
-            <button className='bg-cyan-600 text-white px-2.5 py-1 rounded-3xl m-auto mx-10 inline-block'>
+        <div className="flex justify-center">
+          <div onClick={() => setGroupCompo([false, false, false, false, true])}>
+            <button
+              className='bg-cyan-600 text-white px-2 py-1 rounded-3xl m-auto mx-5 inline-block'
+            >
               수정하기
             </button>
-          </Link>
+          </div>
           <button
             type='button'
-            className='bg-rose-600 text-white px-2.5 py-1 rounded-3xl m-auto mx-10 inline-block'
+            className='bg-rose-600 text-white px-2 py-1 rounded-3xl m-auto mx-5 inline-block'
             onClick={deleteGroup}
           >
             탈퇴하기
