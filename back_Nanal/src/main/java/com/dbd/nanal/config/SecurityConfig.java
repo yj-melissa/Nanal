@@ -131,7 +131,9 @@ public class SecurityConfig{
 //        configuration.addAllowedOriginPattern("*");
         configuration.setAllowedHeaders(Arrays.asList("Accept", "Accept-Language", "Authorization", "Content-Language", "Content-Type"));
         configuration.setAllowCredentials(true);
-        configuration.addExposedHeader("*");
+//        configuration.addExposedHeader("*");
+        configuration.addExposedHeader("accessToken");
+        configuration.addExposedHeader("accesstoken");
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
