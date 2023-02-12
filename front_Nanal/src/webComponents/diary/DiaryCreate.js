@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
 import Swal from 'sweetalert2';
+import nmr from '../../src_assets/img/bookmark-name/name-mark-red.svg';
 import diaryImgRed from '../../src_assets/img/diary-img/diary-img-red.svg';
 import styled from 'styled-components';
 
@@ -128,9 +129,12 @@ function DiaryCreate({}) {
 
   return (
     <div className='relative w-[1440px] mx-auto'>
+      <p className='absolute z-30 left-[330px] inset-y-28'>일기 작성</p>
+      <img src={nmr} className='absolute z-20 left-60 inset-y-20' />
       <img src={diaryImgRed} className='absolute w-[1280px] z-10 left-12' />
-      <div className='grid justify-items-center'>
-        <form className='absolute z-20 min-h-full mt-5 w-[720px]'>
+
+      <div>
+        <form className='absolute z-20 min-h-full mt-20 w-[720px] right-[200px]'>
           {/* <p className='text-2xl font-bold text-center'>일기 작성</p> */}
           {/* 날짜 선택란 */}
           <div className='text-xl'>
@@ -186,7 +190,7 @@ function DiaryCreate({}) {
             </label>
             {isShow ? (
               <>
-                <Div className='h-40 overflow-auto'>
+                <Div className='overflow-auto h-28'>
                   {groupList.map((groupItem, idx) => {
                     return (
                       <div
