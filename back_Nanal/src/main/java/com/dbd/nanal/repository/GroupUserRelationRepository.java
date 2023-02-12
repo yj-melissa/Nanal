@@ -20,7 +20,7 @@ public interface GroupUserRelationRepository extends JpaRepository<GroupUserRela
     @Query(nativeQuery = true, value = "select de.group_idx, de.img_url, de.group_name, t.tag_idx, t.tag from group_detail de join group_tag t on de.group_idx = t.group_idx left join\n" +
             "            (select d.diary_idx, d.creation_date, gd.group_idx from diary d join group_diary gd on d.diary_idx = gd.diary_idx\n" +
             "             group by gd.group_idx ) b on de.group_idx = b.group_idx where de.group_idx in (select r.group_idx from group_user_relation r where r.user_idx = 5)\n" +
-            "            order by b.creation_date desc")
+            "            order by b.creation_date desc, de.group_name")
     List<Object[]> findGroupListByTime(@Param("userIdx") int userIdx);
 
     @Query("select r from GroupUserRelationEntity r where r.user.userIdx = :userIdx and r.groupDetail.groupIdx = :groupIdx")
