@@ -33,6 +33,7 @@ public class DiaryEntity {
     @Column(name="diary_date")
     private Date diaryDate;
 
+    @Column(name = "content", length = 350)
     private String content;
 
     private String imgUrl;
