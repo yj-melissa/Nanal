@@ -28,20 +28,28 @@ function Nav({ changeIsBookCase }) {
         <div className='flex items-center'>
           <Link
             to='/home'
-            className='w-8 h-8 py-1 pr-1 my-1 font-medium rounded-lg text-slate-700 hover:bg-slate-100 hover:text-slate-900'
+            className='w-8 h-8 py-1 my-1 font-medium rounded-lg text-slate-700 hover:bg-slate-100 hover:text-slate-900'
           >
             <img src={logo} />
           </Link>
           {location.pathname === '/home' ? (
             <div>
               {isToggle ? (
-                <div className='w-6 h-6 pt-[5px]'>
-                  <img src={downarrow} onClick={() => toggleMenu()} />
+                <div className='w-3 h-3 mt-2'>
+                  <img
+                    src={downarrow}
+                    onClick={() => toggleMenu()}
+                    className='w-full h-full'
+                  />
                 </div>
               ) : (
                 <div>
-                  <div className='w-6 h-6 pt-[5px]'>
-                    <img src={uparrow} onClick={() => toggleMenu()} />
+                  <div className='w-3 h-3 mt-2'>
+                    <img
+                      src={uparrow}
+                      onClick={() => toggleMenu()}
+                      className='w-full h-full'
+                    />
                   </div>
                   <div className='absolute z-0 grid content-center w-24 h-20 grid-cols-1'>
                     <button
