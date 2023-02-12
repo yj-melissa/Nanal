@@ -28,14 +28,14 @@ function AlarmItem({
       .then(({ data }) => {
         if (data.statusCode === 200) {
           if (data.data.responseMessage === '친구 등록 성공') {
-            checkAlarm();
-            Swal.fire({
-              icon: 'success', // Alert 타입
-              text: '친구 등록에 수락했어요!', // Alert 내용
-              width: '65%',
-            }).then(function () {
-              window.location.reload(true);
-            });
+            checkAlarm(0);
+            // Swal.fire({
+            //   icon: 'success', // Alert 타입
+            //   text: '친구 등록에 수락했어요!', // Alert 내용
+            //   width: '65%',
+            // }).then(function () {
+            //   window.location.reload(true);
+            // });
             // navigate(`/Friend/List`);
           } else if (data.data.responseMessage === '이미 친구로 등록됨') {
             checkAlarm();
@@ -67,14 +67,14 @@ function AlarmItem({
       .then(({ data }) => {
         if (data.statusCode === 200) {
           if (data.data.responseMessage === '그룹 가입 성공') {
-            checkAlarm();
-            Swal.fire({
-              icon: 'success', // Alert 타입
-              text: '그룹 가입에 수락했어요!', // Alert 내용
-              width: '65%',
-            }).then(function () {
-              window.location.reload(true);
-            });
+            checkAlarm(1);
+            // Swal.fire({
+            //   icon: 'success', // Alert 타입
+            //   text: '그룹 가입에 수락했어요!', // Alert 내용
+            //   width: '65%',
+            // }).then(function () {
+            //   window.location.reload(true);
+            // });
             // navigate(`/Group/List`);
           } else if (data.data.responseMessage === '이미 가입한 그룹') {
             checkAlarm();
@@ -98,13 +98,31 @@ function AlarmItem({
   };
 
   //알람 읽음 처리
-  const checkAlarm = () => {
+  const checkAlarm = (index) => {
     axios_api
       .get(`notification/${noticeIdx}`)
       .then(({ data }) => {
         if (data.statusCode === 200) {
           if (data.data.responseMessage === '알림 조회 성공') {
-            window.location.reload(true);
+            if (index === 0) {
+              Swal.fire({
+                icon: 'success', // Alert 타입
+                text: '친구 등록에 수락했어요!', // Alert 내용
+                width: '80%',
+              }).then(function () {
+                window.location.reload(true);
+              });
+            } else if (index === 1) {
+              Swal.fire({
+                icon: 'success', // Alert 타입
+                text: '그룹 가입에 수락했어요!', // Alert 내용
+                width: '80%',
+              }).then(function () {
+                window.location.reload(true);
+              });
+            } else {
+              window.location.reload(true);
+            }
           }
         } else {
           console.log('알림 조회 오류: ');

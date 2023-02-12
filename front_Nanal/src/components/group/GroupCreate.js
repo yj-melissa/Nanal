@@ -22,8 +22,8 @@ function GroupCreate() {
     const currentName = e.target.value;
     setGroupName(e.target.value);
 
-    if (currentName.length >= 15) {
-      setCurrentGMessage('그룹명은 15글자 이하로 입력해주세요!');
+    if (currentName.length < 2 || currentName.length > 15) {
+      setCurrentGMessage('그룹명은 2글자 이상, 14글자 이하로 입력해주세요!');
       setIsCurrentGName(false);
     } else {
       setCurrentGMessage('');
@@ -38,8 +38,8 @@ function GroupCreate() {
     const currentName = e.target.value;
     setTagNew(e.target.value);
 
-    if (currentName.length >= 10) {
-      setCurrentGTMessage('태그명은 10글자 이하로 입력해주세요!');
+    if (currentName.length < 2 || currentName.length > 10) {
+      setCurrentGTMessage('태그명은 2글자 이상, 10글자 이하로 입력해주세요!');
       setIsCurrentGTName(false);
     } else {
       setCurrentGTMessage('');
@@ -310,7 +310,7 @@ function GroupCreate() {
             onChange={onChangeName}
             className='p-1 m-0.5 font-bold rounded-lg'
           ></input>
-          <p className='message'>{currentGMessage}</p>
+          <p className='text-xs text-rose-600'>{currentGMessage}</p>
         </div>
         {/* 그룹 태그 생성 */}
         <div id='group-tag-div' className='mb-2'>
@@ -330,9 +330,8 @@ function GroupCreate() {
           >
             추가
           </button>
+          <p className='text-xs text-rose-600'>{currentGTMessage}</p>
           <p htmlFor='group-tag'>(5개까지 가능)</p>
-
-          <p className='message'>{currentGTMessage}</p>
           {groupTag.map((tagging, idx) => {
             return (
               <button
