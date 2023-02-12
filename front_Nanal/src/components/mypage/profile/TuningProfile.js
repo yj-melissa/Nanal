@@ -284,6 +284,7 @@ const TuningProfile = () => {
               <div className='flex'>
                 <img
                   src={profile.img}
+                  alt='profile'
                   className='inline-block w-20 h-20 p-1 mr-3 rounded-md'
                 ></img>
                 <div className='flex'>
@@ -309,13 +310,13 @@ const TuningProfile = () => {
               <label htmlFor='user-name' className='text-sm'>
                 💙 프로필 소개글 :
               </label>
-              <textarea
+              <p
                 type='text'
                 id='user-name'
                 defaultValue={currentInfo.current || ''}
                 onChange={onChangeInfo}
-                className='font-medium m-0.5 p-1 w-full h-28 rounded-md text-sm'
-              ></textarea>
+                className='font-medium m-0.5 p-1 h-28 rounded-md text-sm'
+              ></p>
               <p className='text-xs text-rose-600'>{infoMessage}</p>
             </div>
 

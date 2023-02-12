@@ -27,7 +27,7 @@ function FavoriteList() {
 
   return (
     <div>
-      <h4 className='font-bold text-center my-5'>
+      <h4 className='my-5 font-bold text-center'>
         좋아하는 일기 개수는 총 {favoriteDiary.length}개 입니다.
       </h4>
       <div className='grid grid-cols-3 gap-3'>

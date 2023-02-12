@@ -117,9 +117,8 @@ function DiaryCreate() {
       <div>
         {loaded ? (
           <div>
-            <Spinner>
-              달리와 함께 그림을 만드는 중이에요. 잠시만 기다려주세요.
-            </Spinner>
+            <img />
+            <Spinner>달리가 그림을 만드는 중이에요...</Spinner>
           </div>
         ) : null}
         <h2 className='my-5 text-lg font-bold text-center'>일기 작성</h2>
