@@ -20,6 +20,7 @@ function DiaryDetail() {
   const diaryIdx = state.diaryIdx;
   const isToggle = state.isToggle;
   const groupIdx = state.groupIdx;
+  const diarydate = state.diarydate;
 
   const [diaryDetail, setDiaryDetail] = useState({});
   const [originGroupList, setOriginGroupList] = useState();
@@ -116,11 +117,12 @@ function DiaryDetail() {
 
   return (
     <div>
-      <div className='flex justify-between my-2'>
-        <strong>{diaryDetail.diaryDate}일</strong>
+      <p className='font-bold'>
+        {diarydate[0]}년 {diarydate[1]}월 {diarydate[2]}일의 일기
+      </p>
+      <div className='flex justify-end'>
         {/* 감정 넣는 곳 */}
-        <span>오늘의 감정 : </span>
-        <img src={diaryDetail.emo} alt='Emotion' className='w-8 h-8'></img>
+        <img src={diaryDetail.emo} alt='Emotion' className='w-8 h-8 mr-4'></img>
         {isBook ? (
           <img
             src={bookmark_filled}
@@ -146,10 +148,10 @@ function DiaryDetail() {
         <img
           src={diaryDetail.picture}
           alt='DALL:E2'
-          className='z-0 w-48 rounded-lg'
+          className='z-0 w-48 border-2 border-black rounded-lg'
         />
       </div>
-      {/* <span>{diaryDetail.nickname}</span> */}
+      {/* 작성자와 일치할 경우, 수정 삭제 버튼 존재 */}
       {userIdx === diaryDetail.userIdx ? (
         <div className='flex items-center justify-end my-6'>
           <Link

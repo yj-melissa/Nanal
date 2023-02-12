@@ -19,6 +19,7 @@ function DiaryItem({
         diaryIdx: diaryIdx,
         isToggle: isToggle,
         groupIdx: groupIdx,
+        diarydate: diarydate,
       }}
     >
       <div className='flex items-center p-2 m-1 mb-3 w-[328px]'>
