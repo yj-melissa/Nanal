@@ -38,19 +38,19 @@ public class GroupDetailEntity {
     private Date creationDate;
 
 
-    @OneToMany(mappedBy = "groupDetail") // 읽기만 가능
+    @OneToMany(mappedBy = "groupDetail", cascade = CascadeType.REMOVE) // 읽기만 가능
     @JsonIgnore
     private List<GroupTagEntity> groupTags = new ArrayList<>();
 
-    @OneToMany(mappedBy = "groupDetail") // 읽기만 가능
+    @OneToMany(mappedBy = "groupDetail", cascade = CascadeType.REMOVE) // 읽기만 가능
     @JsonIgnore
     private List<GroupUserRelationEntity> groupUserRelations = new ArrayList<>();
 
-    @OneToMany(mappedBy = "groupDetail") // 읽기만 가능
+    @OneToMany(mappedBy = "groupDetail", cascade = CascadeType.REMOVE) // 읽기만 가능
     @JsonIgnore
     private List<GroupDiaryRelationEntity> groupDiaries = new ArrayList<>();
 
-    @OneToMany(mappedBy = "groupDetail")
+    @OneToMany(mappedBy = "groupDetail", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private List<DiaryCommentEntity> diaryComments = new ArrayList<>();
 

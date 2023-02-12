@@ -224,6 +224,7 @@ public class DiaryService {
 
     // save keyword
     public void saveKeyword(int diaryIdx, List<String> keywords){
+        System.out.println("키워드 함수");
         List<KeywordEntity> keywordEntityList=keywordRepository.findByDiary(DiaryEntity.builder().diaryIdx(diaryIdx).build());
         // update keyword
         if(keywordEntityList.size()!=0){

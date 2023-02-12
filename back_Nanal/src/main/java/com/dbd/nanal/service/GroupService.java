@@ -78,13 +78,12 @@ public class GroupService {
 
         if (opt == 0) { // 이름순 정렬
             List<GroupDetailEntity> groupDetailEntities = groupUserRelationRepository.findGroupListByName(userIdx);
+
             for (GroupDetailEntity groupDetailEntity : groupDetailEntities) {
-                System.out.println(groupDetailEntity.getGroupName()+" idx : "+groupDetailEntity.getGroupIdx());
                 HashMap<String, Object> responseDTO = new HashMap<>();
                 responseDTO.put("groupDetail", new GroupDetailResponseDTO(groupDetailEntity));
 
                 List<GroupTagResponseDTO> tags = new ArrayList<>();
-                System.out.println("tag 개수 : "+groupDetailEntity.getGroupTags().size());
                 for (int i = 0; i < 5; i++) {
                     tags.add(new GroupTagResponseDTO(groupDetailEntity.getGroupTags().get(i)));
                 }
@@ -220,4 +219,7 @@ public class GroupService {
 
     }
 
+    public void deleteGroup(int groupIdx) {
+        groupRepository.deleteById(groupIdx);
+    }
 }
