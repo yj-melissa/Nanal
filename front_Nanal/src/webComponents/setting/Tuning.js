@@ -27,7 +27,8 @@ const Tuning = () => {
         navigate(`/`, {
           replace: true,
         });
-        window.location.reload()
+        window.localStorage.clear();
+        window.location.reload();
       });
     } else {
       console.log('로그아웃 실패====');

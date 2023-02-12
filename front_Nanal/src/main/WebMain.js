@@ -6,7 +6,7 @@ import MyDiary from '../webComponents/MyDiary';
 import GroupDiary from '../webComponents/GroupDiary';
 import FriendList from '../webComponents/FriendList';
 import RecycleBin from '../webComponents/RecycleBin';
-import SettingsNanal from '../webComponents/SettingsNanal';
+import DiaryNew from '../webComponents/DiaryNew';
 import SignUp from '../webComponents/account/SignUp';
 import SignIn from '../webComponents/account/SignIn';
 import DiaryCreate from '../webComponents/diary/DiaryCreate';
@@ -53,7 +53,7 @@ const AppMain = () => {
         ) : homeState[2] === true ? (
           <Route path='/home' element={<FriendList />}></Route>
         ) : homeState[3] === true ? (
-          <Route path='/home' element={<SettingsNanal />}></Route>
+          <Route path='/home' element={<DiaryNew />}></Route>
         ) : homeState[4] === true ? (
           <Route path='/home' element={<RecycleBin />}></Route>
         ) : null}

@@ -3,7 +3,7 @@ import {
   MobileView,
 } from 'react-device-detect';
 import './App.css';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { getCookie } from './config/Cookie';
 import MobileNav from './main/MobileNav';
 import MobileMain from './main/MobileMain.js';
@@ -17,6 +17,7 @@ function App() {
   const changeBookCase = (e) => {
     setIsBookCase(e);
   };
+
   return (
     <div id='App'>
       {/* 브라우저인 경우 */}
