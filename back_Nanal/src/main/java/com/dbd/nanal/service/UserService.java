@@ -75,13 +75,13 @@ public class UserService {
 
     // 유저 프로필 조회
     public HashMap<String, Object> getProfileByUserIdx(final int userIdx) throws NullPointerException {
-        return profileDTO(userProfileRepository.findByProfileId(userIdx));
+        return profileDTO(userProfileRepository.findByProfileIdx(userIdx));
     }
 
 
     // 회원 정보 수정
     public HashMap<String, Object> updateProfile(final int userIdx, final UserRequestDTO userRequest)  throws NullPointerException {
-        UserProfileEntity profile = userProfileRepository.findByProfileId(userIdx);
+        UserProfileEntity profile = userProfileRepository.findByProfileIdx(userIdx);
 
         profile.setNickname(userRequest.getNickname());
 //        profile.setImg(userRequest.getImg());

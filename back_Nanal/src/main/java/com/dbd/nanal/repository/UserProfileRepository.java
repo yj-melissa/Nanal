@@ -7,12 +7,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
-
 @Repository
 public interface UserProfileRepository extends JpaRepository<UserProfileEntity, Integer> {
 
-    UserProfileEntity findByProfileId(int profileId);
+    UserProfileEntity findByProfileIdx(int profileIdx);
     Boolean existsByNickname(String nickname);
 
     @Query("select p from UserProfileEntity p where p.user.userIdx = :userIdx")
