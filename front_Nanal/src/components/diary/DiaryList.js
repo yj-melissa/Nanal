@@ -43,7 +43,7 @@ function DiaryList({ isToggle, curDate, groupIdx }) {
   }, [curDate]);
 
   return (
-    <div className='p-5 w-80'>
+    <div className='p-2 w-[344px]'>
       {isToggle === 0 ? (
         <h4 className='font-bold text-center'>
           {diaryList.length}개의 일기가 있습니다.
