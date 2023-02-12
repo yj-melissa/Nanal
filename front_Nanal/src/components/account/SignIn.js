@@ -19,8 +19,19 @@ function SignIn() {
     setPw(e.target.value);
   };
 
-  function onLoginSuccess(data) {
-    const { accessToken } = data;
+  // function onLoginSuccess(data) {
+  //   const { accessToken } = data;
+
+  //   setCookie('accessToken', accessToken, {
+  //     path: '/',
+  //     secure: true,
+  //     // httpOnly: true,
+  //     sameSite: 'none',
+  //   });
+  // }
+
+  function onLoginSuccess(token) {
+    const accessToken = token;
 
     setCookie('accessToken', accessToken, {
       path: '/',
@@ -37,11 +48,17 @@ function SignIn() {
         userId: userId,
         password: userPw,
       })
-      .then(({ data }) => {
+      .then((response) => {
+        const data = response.data;
         if (data.statusCode === 200) {
           if (data.data.responseMessage === '로그인 성공') {
             // console.log(data.data.token);
-            onLoginSuccess(data.data.token);
+            // onLoginSuccess(data.data.token);
+            onLoginSuccess(response.headers.get('accessToken'));
+            // console.log(response.headers);
+            // console.log(JSON.stringify(response.headers));
+            // console.log(response.headers.get('accesstoken'));
+            // console.log(response.headers.get('accessToken'));
             window.location.replace('/home');
             // navigate(`/home`, {
             //   replace: true,

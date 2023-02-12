@@ -21,19 +21,21 @@ function SignUp() {
   const [emailV1, setEmailV1] = useState('');
   const [emailV2, setEmailV2] = useState('');
 
+  const emailMessageCss = isEmail === true ? '' : 'text-rose-600';
+
   const onChangeEmail = (e) => {
     const currentEmail = e.target.value;
     setEmail(currentEmail);
-    // const emailRegExp =
-    //   /^[A-Za-z0-9_]+[A-Za-z0-9]*[@]{1}[A-Za-z0-9]+[A-Za-z0-9]*[.]{1}[A-Za-z]{1,3}$/;
-    // if (!emailRegExp.test(currentEmail)) {
-    //   setEmailMessage("이메일의 형식이 올바르지 않습니다!");
-    //   setIsEmail(false);
-    // } else {
-    //   setEmailMessage("이메일의 형식이 올바릅니다.");
-    //   setIsEmail(true);
-    // }
-    // setIsEmail(true);
+    const emailRegExp =
+      /^[A-Za-z0-9_]+[A-Za-z0-9]*[@]{1}[A-Za-z0-9]+[A-Za-z0-9]*[.]{1}[A-Za-z]{1,3}$/;
+    if (!emailRegExp.test(currentEmail)) {
+      setEmailMessage('이메일의 형식이 올바르지 않습니다!');
+      setIsEmail(false);
+    } else {
+      setEmailMessage('이메일의 형식이 올바릅니다.');
+      setIsEmail(true);
+    }
+    setIsEmail(true);
   };
 
   const sendEmail = (emailstring) => {
@@ -93,6 +95,9 @@ function SignUp() {
   const [id, setId] = useState('');
   const [idMessage, setIdMessage] = useState('');
   const [isId, setIsId] = useState(false);
+
+  const idMessageCss = isId === true ? '' : 'text-rose-600';
+
   const onChangeId = (e) => {
     const currentId = e.target.value;
     setId(currentId);
@@ -125,6 +130,9 @@ function SignUp() {
   const [password, setPassword] = useState('');
   const [passwordMessage, setPasswordMessage] = useState('');
   const [isPassword, setIsPassword] = useState(false);
+
+  const pwMessageCss = isPassword === true ? '' : 'text-rose-600';
+
   const onChangePassword = (e) => {
     const currentPassword = e.target.value;
     setPassword(currentPassword);
@@ -145,6 +153,9 @@ function SignUp() {
   const [passwordConfirm, setPasswordConfirm] = useState('');
   const [passwordConfirmMessage, setPasswordConfirmMessage] = useState('');
   const [isPasswordConfirm, setIsPasswordConfirm] = useState(false);
+
+  const pwConfirmMessageCss = isPasswordConfirm === true ? '' : 'text-rose-600';
+
   const onChangePasswordConfirm = (e) => {
     const currentPasswordConfirm = e.target.value;
     setPasswordConfirm(currentPasswordConfirm);
@@ -161,6 +172,9 @@ function SignUp() {
   const [nickName, setNickName] = useState('');
   const [nickNameMessage, setNickNameMessage] = useState('');
   const [isNickName, setIsNickName] = useState(false);
+
+  const nickNameMessageCss = isNickName === true ? '' : 'text-rose-600';
+
   const onChangeNickName = (e) => {
     const currentName = e.target.value;
     setNickName(currentName);
@@ -322,12 +336,12 @@ function SignUp() {
                   </button>
                 </div>
               ) : emailcheckToggle === true ? (
-                <p>이메일 인증이 완료 되었습니다.</p>
+                <p className='text-sm'>이메일 인증이 완료 되었습니다.</p>
               ) : (
                 <></>
               )}
             </div>
-            {/* <p className='message'>{emailMessage}</p> */}
+            <p className={`text-xs ${emailMessageCss}`}>{emailMessage}</p>
           </div>
           {/* 유저아이디 id */}
           <div className='m-1'>
@@ -340,7 +354,7 @@ function SignUp() {
               onChange={onChangeId}
               className='mr-5 max-w-full p-0.5 mb-2 rounded-lg'
             />
-            <p className='text-sm'> {idMessage} </p>
+            <p className={`text-xs ${idMessageCss}`}> {idMessage} </p>
           </div>
           {/* 비밀번호 password */}
           <div className='m-1'>
@@ -353,7 +367,7 @@ function SignUp() {
               onChange={onChangePassword}
               className='mr-5 max-w-full p-0.5 mb-2 rounded-lg'
             />
-            <p className='text-sm'>{passwordMessage}</p>
+            <p className={`text-xs ${pwMessageCss}`}>{passwordMessage}</p>
           </div>
           {/* 비밀번호 확인 passwordConfirm */}
           <div className='m-1'>
@@ -366,7 +380,9 @@ function SignUp() {
               onChange={onChangePasswordConfirm}
               className='mr-5 max-w-full p-0.5 mb-2 rounded-lg'
             />
-            <p className='text-sm'>{passwordConfirmMessage}</p>
+            <p className={`text-xs ${pwConfirmMessageCss}`}>
+              {passwordConfirmMessage}
+            </p>
           </div>
           {/* 닉네임 nickName */}
           <div className='m-1'>
@@ -379,7 +395,7 @@ function SignUp() {
               onChange={onChangeNickName}
               className='mr-5 max-w-full p-0.5 mb-2 rounded-lg'
             />
-            <p className='text-sm'>{nickNameMessage}</p>
+            <p className={`text-xs ${nickNameMessageCss}`}>{nickNameMessage}</p>
           </div>
           <div className='mt-3 text-center'>
             <button

@@ -14,6 +14,8 @@ import nanalImg from '../src_assets/img/나날2.png';
 
 function BookCase() {
   const [Collocate, setCollocate] = useState(true);
+  const [emotion, SetEmotion] = useState([]);
+
   const changeCollocate = () => {
     setCollocate((Collocate) => !Collocate);
   };
@@ -64,6 +66,26 @@ function BookCase() {
       })
       .catch(({ error }) => {
         console.log('그룹 리스트 불러오기 오류: ' + error);
+      });
+    axios_api
+      .get('friend/emo')
+      .then(({ data }) => {
+        if (data.statusCode === 200) {
+          SetEmotion(null);
+          if (data.data.responseMessage === '감정 조회 성공') {
+            SetEmotion(data.data.emotions);
+            console.log(data.data.emotions);
+          } else if (data.data.responseMessage === '데이터 없음') {
+            console.log('데이터 없음');
+          }
+        } else {
+          console.log('감정 조회 오류 : ');
+          console.log(data.statusCode);
+          console.log(data.data.responseMessage);
+        }
+      })
+      .catch(({ error }) => {
+        console.log('감정 조회 오류 : ' + error);
       });
   }, []);
 
