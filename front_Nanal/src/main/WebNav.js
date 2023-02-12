@@ -3,8 +3,12 @@ import bell from '../src_assets/img/bell.svg';
 import logo from '../src_assets/img/home-alt.svg';
 import Tuning from '../webComponents/setting/Tuning'
 import AlarmList from '../webComponents/another/AlarmList'
+import { Link } from "react-router-dom";
 
 function Nav() {
+  // animate-ping 쓸지말지 고민 좀 해보자.
+  // const [useAlarm, setUseAlarm] = useState(false)
+
   const userProfile = {
     'days' : window.localStorage.getItem('profileDays'),
     'img': window.localStorage.getItem('profileImg'),
@@ -59,17 +63,17 @@ function Nav() {
   return (
     <div>
       <nav className='flex justify-between space-x-4 m-auto'>
-        <div
+        <Link to='/home'
           className='rounded-lg w-8 h-8 pr-1 py-1 my-1 text-slate-700 font-medium hover:bg-slate-100 hover:text-slate-900'
         >
           <img src={logo} alt='logo'/>
-        </div>
+        </Link>
         <div className='m-auto'>
           <p>나날과 함께한지 {userProfile.days}일 째 되는 날입니다.</p>
         </div>
         <div className='flex items-center m-auto'>
           {/* Alarm */}
-          <div ref={alarmRef} onClick={toggleAlarmMenu}>
+          <div ref={alarmRef} onClick={toggleAlarmMenu} className='cursor-pointer'>
             <img src={bell} className='w-6 h-6 my-3' alt='bell'/>
           </div>
           {isAlarmToggle && <div ref={alarmRef} className='absolute right-40 inset-y-[48px] rounded-md box-border border border-black w-72 h-[500px] z-40 bg-slate-100 grid grid-cols-1 justify-items-center overflow-auto'>
@@ -77,7 +81,7 @@ function Nav() {
           </div>}
           
           {/* ProfileMenu */}
-          <div ref={menuRef} className="rounded-full w-8 h-8 ml-5 overflow-hidden" onClick={toggleProfileMenu}>
+          <div ref={menuRef} className="rounded-full w-8 h-8 ml-5 overflow-hidden cursor-pointer" onClick={toggleProfileMenu}>
             {userProfile.img !== null && <img src={userProfile.img} alt='usere-profile-img'/>}
           </div>
           {isToggle && <div ref={menuRef} className='absolute right-40 inset-y-[48px] rounded-md box-border border border-black w-72 h-[500px] z-40 bg-slate-100 grid grid-cols-1 justify-items-center'>

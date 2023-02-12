@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router';
-import { Link } from 'react-router-dom';
 import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
 import DiaryList from '../diary/DiaryList';
 import settingIcon from '../../src_assets/img/setting_icon.png';
 
-function GroupDetail() {
-  const { state } = useLocation();
+function GroupDetail({groupIdx, setGroupCompo}) {
 
   const [groupDetail, setGroupDetail] = useState('');
   const [groupTag, setGroupTag] = useState([]);
@@ -15,7 +12,7 @@ function GroupDetail() {
   useEffect(() => {
     onLogin();
     axios_api
-      .get(`/group/${state.groupIdx}`)
+      .get(`/group/${groupIdx}`)
       .then(({ data }) => {
         if (data.statusCode === 200) {
           setGroupDetail(null);
@@ -36,13 +33,11 @@ function GroupDetail() {
 
   return (
     <div className='text-center'>
-      <Link
-        to={`/Group/Setting`}
-        state={{ groupIdx: groupDetail.groupIdx }}
-        className='inline-block float-right'
+      <div
+        onClick={setGroupCompo([false, false, false, true, false])}
       >
         <img src={settingIcon} className='w-[20px] h-[20px] mx-1.5' />
-      </Link>
+      </div>
       <div>
         <p className='mb-1 text-2xl font-bold text-center'>
           {groupDetail.groupName}
@@ -61,7 +56,7 @@ function GroupDetail() {
       {/* <hr className='mx-5 my-5 text-center border-solid w-72 border-1 border-slate-600' /> */}
 
       {/* 일기 리스트 */}
-      <DiaryList isToggle={state.isToggle} groupIdx={state.groupIdx} />
+      <DiaryList groupIdx={groupIdx} />
     </div>
   );
 }

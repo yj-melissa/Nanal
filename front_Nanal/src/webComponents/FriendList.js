@@ -17,7 +17,10 @@ const FriendList = () => {
       <div className="absolute z-20 left-52 inset-y-[184px]">
         <FList setFriendAdd={setFriendCompo} setUserIdx={setUserIdx} />
       </div>
-      {friendCompo[0] === true ? null :
+      {friendCompo[0] === true ? <div className='absolute z-20 right-[360px] inset-y-60'>
+        <p>선택된 메뉴가 없습니다.</p>
+        <p>좌측에서 메뉴를 선택해 주세요.</p>
+      </div> :
       friendCompo[1] === true ?
       <div className="absolute z-20 right-80 inset-y-[72px]">
         <FriendAdd />
@@ -25,7 +28,10 @@ const FriendList = () => {
       friendCompo[2] === true ?
       <div className="absolute z-20 right-80 inset-y-44">
         <FriendDetail userIdx={userIdx} />
-      </div> : null
+      </div> : <div className='absolute z-20 right-[360px] inset-y-60'>
+        <p>선택된 메뉴가 없습니다.</p>
+        <p>좌측에서 메뉴를 선택해 주세요.</p>
+      </div>
       }
     </div>
   );
