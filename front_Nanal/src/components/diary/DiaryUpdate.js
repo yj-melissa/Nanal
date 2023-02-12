@@ -1,4 +1,3 @@
-import { set } from 'date-fns';
 import { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios_api from '../../config/Axios';
@@ -24,10 +23,12 @@ function DiaryUpdate() {
 
   // 수정 취소 버튼 클릭 시 실행되는 함수
   const handleQuitEdit = () => {
-    // setLocalDate(location.state.diaryDate);
-    // setLocalContent(location.state.diaryDetail.content);
+    setLocalDate(location.state.diaryDate);
+    setLocalContent(location.state.diaryDetail.content);
     navigate(-1);
   };
+
+  const changeDate = localDate.split('-');
 
   // 삭제 버튼 클릭 시 실행되는 함수
   const updateDiary = () => {
@@ -44,6 +45,7 @@ function DiaryUpdate() {
             navigate('/Diary/Detail', {
               state: {
                 diaryIdx: location.state.diaryDetail.diaryIdx,
+                diarydate: changeDate,
               },
               replace: true,
             });

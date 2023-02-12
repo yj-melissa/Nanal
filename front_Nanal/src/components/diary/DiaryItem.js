@@ -18,7 +18,9 @@ function DiaryItem({
       state={{
         diaryIdx: diaryIdx,
         isToggle: isToggle,
+        content: content,
         groupIdx: groupIdx,
+        diaryDate: diaryDate,
         diarydate: diarydate,
       }}
     >
@@ -31,14 +33,13 @@ function DiaryItem({
         <div className='w-full px-1 m-1 text-sm text-right truncate'>
           <div>
             <p>
-              <span className='mr-2'>감정</span>
               {isToggle === 1 ? (
                 <span className='text-sm'>
                   {diarydate[0]}년 {diarydate[1]}월 {diarydate[2]}일
                 </span>
               ) : (
                 <span className='text-sm'>
-                  {diarydate[0]}년 {diarydate[1]}월 {diarydate[2]}일
+                  {diarydate[1]}월 {diarydate[2]}일
                 </span>
               )}
             </p>
