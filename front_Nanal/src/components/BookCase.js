@@ -1,20 +1,31 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios_api from '../config/Axios';
 import { onLogin } from '../config/Login';
 import shelf from '../src_assets/img/shelf.png';
-import ang from '../src_assets/img/emotion/emo_ang.png';
-import calm from '../src_assets/img/emotion/emo_calm.png';
-import emb from '../src_assets/img/emotion/emo_emb.png';
-import joy from '../src_assets/img/emotion/emo_joy.png';
-import nerv from '../src_assets/img/emotion/emo_nerv.png';
-import sad from '../src_assets/img/emotion/emo_sad.png';
-import addIcon from '../src_assets/img/file_add_icon.png';
+import joy from '../src_assets/img/emotion/emo_joy_s.png';
+import calm from '../src_assets/img/emotion/emo_calm_s.png';
+import nerv from '../src_assets/img/emotion/emo_nerv_s.png';
+import ang from '../src_assets/img/emotion/emo_ang_s.png';
+import emb from '../src_assets/img/emotion/emo_emb_s.png';
+import sad from '../src_assets/img/emotion/emo_sad_s.png';
 import nanalImg from '../src_assets/img/나날2.png';
+import addIcon from '../src_assets/img/file_add_icon.png';
+import ballpenIcon from '../src_assets/img/ballpen_icon.png';
 
 function BookCase() {
+  const navigate = useNavigate();
+
   const [Collocate, setCollocate] = useState(true);
   const [emotion, SetEmotion] = useState([]);
+  const [emotionDisplay, SetEmotionDisplay] = useState([
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+  ]);
 
   const changeCollocate = () => {
     setCollocate((Collocate) => !Collocate);
@@ -24,28 +35,48 @@ function BookCase() {
   const emoCss = 'w-12 h-12 absolute'; // standart top-100, left-26
   const joyCss =
     Collocate === true
-      ? 'animate-bounce hover:animate-none top-24 right-12'
+      ? 'animate-bounce hover:animate-none top-24 right-12 cursor-pointer'
       : 'animate-pulse';
   const calmCss =
     Collocate === true
-      ? 'animate-bounce hover:animate-none top-28 left-12'
+      ? 'animate-bounce hover:animate-none top-28 left-12 cursor-pointer'
       : 'animate-pulse';
   const nervCss =
     Collocate === true
-      ? 'animate-bounce hover:animate-none top-72 left-20'
+      ? 'animate-bounce hover:animate-none top-72 left-20 cursor-pointer'
       : 'animate-pulse';
   const angCss =
     Collocate === true
-      ? 'animate-bounce hover:animate-none top-1/2 right-8'
+      ? 'animate-bounce hover:animate-none top-1/2 right-8 cursor-pointer'
       : 'animate-pulse';
   const embCss =
     Collocate === true
-      ? 'animate-bounce hover:animate-none top-3/4 right-20'
+      ? 'animate-bounce hover:animate-none top-3/4 right-20 cursor-pointer'
       : 'animate-pulse';
   const sadCss =
     Collocate === true
-      ? 'animate-bounce hover:animate-none top-88 left-20'
+      ? 'animate-bounce hover:animate-none top-88 left-20 cursor-pointer'
       : 'animate-pulse';
+
+  const emoMouseOut = () => {
+    SetEmotionDisplay([false, false, false, false, false, false]);
+  };
+
+  const emoMouseOver = (emo) => {
+    if (emo === 'joy' && emotion.joy.cnt > 0) {
+      SetEmotionDisplay([true, false, false, false, false, false]);
+    } else if (emo === 'calm' && emotion.calm.cnt > 0) {
+      SetEmotionDisplay([false, true, false, false, false, false]);
+    } else if (emo === 'nerv' && emotion.nerv.cnt > 0) {
+      SetEmotionDisplay([false, false, true, false, false, false]);
+    } else if (emo === 'ang' && emotion.ang.cnt > 0) {
+      SetEmotionDisplay([false, false, false, true, false, false]);
+    } else if (emo === 'emb' && emotion.emb.cnt > 0) {
+      SetEmotionDisplay([false, false, false, false, true, false]);
+    } else if (emo === 'sad' && emotion.sad.cnt > 0) {
+      SetEmotionDisplay([false, false, false, false, false, true]);
+    }
+  };
 
   const [groupList, setGroupList] = useState([]);
 
@@ -60,6 +91,7 @@ function BookCase() {
             setGroupList(data.data.groupList);
           }
         } else {
+          console.log('그룹 리스트 불러오기 오류: ');
           console.log(data.statusCode);
           console.log(data.data.responseMessage);
         }
@@ -74,7 +106,7 @@ function BookCase() {
           SetEmotion(null);
           if (data.data.responseMessage === '감정 조회 성공') {
             SetEmotion(data.data.emotions);
-            console.log(data.data.emotions);
+            // console.log(data.data.emotions);
           } else if (data.data.responseMessage === '데이터 없음') {
             console.log('데이터 없음');
           }
@@ -95,22 +127,23 @@ function BookCase() {
 
       <div>
         {/* 첫번째 단 */}
-        <div className='my-12'>
+        <div className='my-10'>
           {/* 사진 */}
-          <div className='relative flex h-20 p-4 text-center w-60 top-5 left-10 justify-evenly'>
+          <div className='relative flex h-24 p-4 text-center w-60 top-5 left-10 justify-evenly'>
             {/* 내 전체 일기장 */}
-            <div className='box-border relative grid items-center w-16 h-16 overflow-hidden text-center border border-zinc-400'>
+            <div className='mx-5'>
               <Link
                 to={'/Diary/List'}
                 state={{
                   isToggle: 1,
                 }}
+                className='box-border relative grid items-center w-20 h-20 overflow-hidden text-center rounded-md border-zinc-400'
               >
                 <img src={nanalImg} className='object-cover'></img>
               </Link>
             </div>
             {/* 일기 최신순 0번째 그룹 */}
-            <div>
+            <div className='mx-5'>
               {groupList && groupList.length > 0 && (
                 <Link
                   to={`/Group/Detail`}
@@ -118,7 +151,7 @@ function BookCase() {
                     groupIdx: groupList[0].groupDetail.groupIdx,
                     isToggle: 2,
                   }}
-                  className='box-border relative grid items-center w-16 h-16 overflow-hidden text-center border border-zinc-400'
+                  className='box-border relative grid items-center w-20 h-20 overflow-hidden text-center rounded-md border-zinc-400'
                 >
                   <img
                     src={groupList[0].groupDetail.imgUrl}
@@ -129,15 +162,15 @@ function BookCase() {
             </div>
           </div>
           {/* 책장 */}
-          <img src={shelf} className='w-64 py-3 mx-auto' />
+          <img src={shelf} className='py-3 mx-auto w-72' />
         </div>
 
         {/* 두번째 단 */}
-        <div className='my-12'>
+        <div className='my-10'>
           {/* 사진 */}
-          <div className='relative flex h-20 p-4 text-center w-60 top-5 left-10 justify-evenly'>
+          <div className='relative flex h-24 p-4 text-center w-60 top-5 left-10 justify-evenly'>
             {/* 일기 최신순 1번째 그룹 */}
-            <div>
+            <div className='mx-5'>
               {groupList && groupList.length > 1 && (
                 <Link
                   to={`/Group/Detail`}
@@ -145,7 +178,7 @@ function BookCase() {
                     groupIdx: groupList[1].groupDetail.groupIdx,
                     isToggle: 2,
                   }}
-                  className='box-border relative grid items-center w-16 h-16 overflow-hidden text-center border border-zinc-400'
+                  className='box-border relative grid items-center w-20 h-20 overflow-hidden text-center rounded-md border-zinc-400'
                 >
                   <img
                     src={groupList[1].groupDetail.imgUrl}
@@ -155,7 +188,7 @@ function BookCase() {
               )}
             </div>
             {/* 일기 최신순 2번째 그룹 */}
-            <div>
+            <div className='mx-5'>
               {groupList && groupList.length > 2 && (
                 <Link
                   to={`/Group/Detail`}
@@ -163,7 +196,7 @@ function BookCase() {
                     groupIdx: groupList[2].groupDetail.groupIdx,
                     isToggle: 2,
                   }}
-                  className='box-border relative grid items-center w-16 h-16 overflow-hidden text-center border border-zinc-400'
+                  className='box-border relative grid items-center w-20 h-20 overflow-hidden text-center rounded-md border-zinc-400'
                 >
                   <img
                     src={groupList[2].groupDetail.imgUrl}
@@ -174,15 +207,15 @@ function BookCase() {
             </div>
           </div>
           {/* 책장 */}
-          <img src={shelf} className='w-64 py-3 mx-auto' />
+          <img src={shelf} className='py-3 mx-auto w-72' />
         </div>
 
         {/* 세번째 단 */}
-        <div className='my-12'>
+        <div className='my-10'>
           {/* 사진 */}
-          <div className='relative flex h-20 p-4 text-center w-60 top-5 left-10 justify-evenly'>
+          <div className='relative flex h-24 p-4 text-center w-60 top-5 left-10 justify-evenly'>
             {/* 일기 최신순 3번째 그룹 */}
-            <div className=''>
+            <div className='mx-5'>
               {groupList && groupList.length > 3 && (
                 <Link
                   to={`/Group/Detail`}
@@ -190,7 +223,7 @@ function BookCase() {
                     groupIdx: groupList[3].groupDetail.groupIdx,
                     isToggle: 2,
                   }}
-                  className='box-border relative grid items-center w-16 h-16 overflow-hidden text-center border border-zinc-400'
+                  className='box-border relative grid items-center w-20 h-20 overflow-hidden text-center rounded-md border-zinc-400'
                 >
                   <img
                     src={groupList[3].groupDetail.imgUrl}
@@ -200,26 +233,150 @@ function BookCase() {
               )}
             </div>
             {/* 그룹 리스트로 이동 */}
-            <Link
-              to='/Group/List'
-              className='relative grid items-center w-12 h-12 text-center'
-            >
-              <img src={addIcon} className='m-auto mt-2' />
-            </Link>
+            <div className='mx-5'>
+              <Link
+                to='/Group/List'
+                className='relative grid items-center w-12 h-12 mx-5 mt-2 text-center'
+              >
+                <img src={addIcon} className='m-auto mt-2' />
+              </Link>
+            </div>
           </div>
           {/* 책장 */}
-          <img src={shelf} className='w-64 py-3 mx-auto' />
+          <img src={shelf} className='py-3 mx-auto w-72' />
         </div>
       </div>
 
       {/* 먼지 이미지 */}
       <div className='flex justify-center my-7 '>
-        <img src={sad} className={`${emoCss} ${sadCss}`} />
-        <img src={nerv} className={`${emoCss} ${nervCss}`} />
-        <img src={emb} className={`${emoCss} ${embCss}`} />
-        <img src={ang} className={`${emoCss} ${angCss}`} />
-        <img src={calm} className={`${emoCss} ${calmCss}`} />
-        <img src={joy} className={`${emoCss} ${joyCss}`} />
+        <img
+          src={joy}
+          className={`${emoCss} ${joyCss}`}
+          onMouseOver={() => emoMouseOver('joy')}
+          onMouseOut={emoMouseOut}
+        />
+        <img
+          src={calm}
+          className={`${emoCss} ${calmCss}`}
+          onMouseOver={() => emoMouseOver('calm')}
+          onMouseOut={emoMouseOut}
+        />
+        <img
+          src={nerv}
+          className={`${emoCss} ${nervCss}`}
+          onMouseOver={() => emoMouseOver('nerv')}
+          onMouseOut={emoMouseOut}
+        />
+        <img
+          src={ang}
+          className={`${emoCss} ${angCss}`}
+          onMouseOver={() => emoMouseOver('ang')}
+          onMouseOut={emoMouseOut}
+        />
+        <img
+          src={emb}
+          className={`${emoCss} ${embCss}`}
+          onMouseOver={() => emoMouseOver('emb')}
+          onMouseOut={emoMouseOut}
+        />
+        <img
+          src={sad}
+          className={`${emoCss} ${sadCss}`}
+          onMouseOver={() => emoMouseOver('sad')}
+          onMouseOut={emoMouseOut}
+        />
+        <div>
+          {emotionDisplay[0] === true ? (
+            <div
+              className={`w-16 p-2 text-center rounded-lg h-50 bg-zinc-100 ${emoCss} ${joyCss}`}
+            >
+              {emotion && emotion.joy
+                ? emotion.joy.nickname.map((name, idx) => {
+                    return (
+                      <p key={idx} className='py-0.5 text-xs truncate'>
+                        {name}
+                      </p>
+                    );
+                  })
+                : null}
+            </div>
+          ) : null}
+          {emotionDisplay[1] === true ? (
+            <div
+              className={`w-16 p-2 text-center rounded-lg h-50 bg-zinc-100 ${emoCss} ${calmCss}`}
+            >
+              {emotion && emotion.calm
+                ? emotion.calm.nickname.map((name, idx) => {
+                    return (
+                      <p key={idx} className='py-0.5 text-xs truncate'>
+                        {name}
+                      </p>
+                    );
+                  })
+                : null}
+            </div>
+          ) : null}
+          {emotionDisplay[2] === true ? (
+            <div
+              className={`w-16 p-2 text-center rounded-lg h-50 bg-zinc-100 ${emoCss} ${nervCss}`}
+            >
+              {emotion && emotion.nerv
+                ? emotion.nerv.nickname.map((name, idx) => {
+                    return (
+                      <p key={idx} className='py-0.5 text-xs truncate'>
+                        {name}
+                      </p>
+                    );
+                  })
+                : null}
+            </div>
+          ) : null}
+          {emotionDisplay[3] === true ? (
+            <div
+              className={`w-16 p-2 text-center rounded-lg h-50 bg-zinc-100 ${emoCss} ${angCss}`}
+            >
+              {emotion && emotion.ang
+                ? emotion.ang.nickname.map((name, idx) => {
+                    return (
+                      <p key={idx} className='py-0.5 text-xs truncate'>
+                        {name}
+                      </p>
+                    );
+                  })
+                : null}
+            </div>
+          ) : null}
+          {emotionDisplay[4] === true ? (
+            <div
+              className={`w-16 p-2 text-center rounded-lg h-50 bg-zinc-100 ${emoCss} ${embCss}`}
+            >
+              {emotion && emotion.emb
+                ? emotion.emb.nickname.map((name, idx) => {
+                    return (
+                      <p key={idx} className='py-0.5 text-xs truncate'>
+                        {name}
+                      </p>
+                    );
+                  })
+                : null}
+            </div>
+          ) : null}
+          {emotionDisplay[5] === true ? (
+            <div
+              className={`w-16 p-2 text-center rounded-lg h-50 bg-zinc-100 ${emoCss} ${sadCss}`}
+            >
+              {emotion && emotion.sad
+                ? emotion.sad.nickname.map((name, idx) => {
+                    return (
+                      <p key={idx} className='py-0.5 text-xs truncate'>
+                        {name}
+                      </p>
+                    );
+                  })
+                : null}
+            </div>
+          ) : null}
+        </div>
         <button
           className='text-[12px] box-border rounded-full bg-slate-100/50 h-16 w-16 absolute'
           onClick={changeCollocate}
@@ -229,6 +386,13 @@ function BookCase() {
           </p>
         </button>
       </div>
+
+      {/* 일기쓰러가기 버튼 */}
+      <img
+        src={ballpenIcon}
+        onClick={() => navigate('/Diary/Create')}
+        className='fixed z-50 flex p-1 cursor-pointer w-9 bottom-10 right-10'
+      ></img>
     </div>
   );
 }

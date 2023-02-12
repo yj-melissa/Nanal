@@ -362,20 +362,26 @@ function GroupCreate() {
         <div id='group-user-div'>
           <p className='my-2 text-center'>✨ 추가 된 사용자 ✨</p>
 
-          {includeFriend.map((friendItem, idx) => {
-            return (
-              <button
-                type='button'
-                key={idx}
-                onClick={() => {
-                  onChangeFRemove(idx);
-                }}
-                className='items-center inline-block px-2 mx-12 my-1 rounded-lg bg-slate-100 hover:bg-blue-200'
-              >
-                {friendItem.nickname}
-              </button>
-            );
-          })}
+          <div className='items-center justify-between mb-2 text-center'>
+            {includeFriend.map((friendItem, idx) => {
+              return (
+                <div
+                  key={idx}
+                  className='items-center inline-block my-1 text-center w-36'
+                >
+                  <button
+                    type='button'
+                    onClick={() => {
+                      onChangeFRemove(idx);
+                    }}
+                    className='px-2 rounded-lg bg-slate-200 hover:bg-blue-300'
+                  >
+                    {friendItem.nickname}
+                  </button>
+                </div>
+              );
+            })}
+          </div>
         </div>
         <button
           type='button'
@@ -391,20 +397,27 @@ function GroupCreate() {
 
         <p className='mb-0.5'>🤗 내 친구 목록 --------------------</p>
 
-        {friendList.map((friendItem, idx) => {
-          return (
-            <button
-              type='button'
-              key={idx}
-              onClick={() => {
-                addFriend(idx);
-              }}
-              className='items-center inline-block px-2 mx-12 my-1 rounded-lg bg-slate-100 hover:bg-blue-200'
-            >
-              {friendItem.nickname}
-            </button>
-          );
-        })}
+        <div className='items-center justify-between text-center'>
+          {friendList.map((friendItem, idx) => {
+            return (
+              <div
+                key={idx}
+                className='items-center inline-block my-1 text-center w-36'
+              >
+                <button
+                  type='button'
+                  onClick={() => {
+                    addFriend(idx);
+                  }}
+                  // className='items-center inline-block px-2 mx-auto my-1 rounded-lg bg-slate-100 hover:bg-blue-200'
+                  className='px-2 rounded-lg bg-slate-200 hover:bg-blue-300'
+                >
+                  {friendItem.nickname}
+                </button>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
