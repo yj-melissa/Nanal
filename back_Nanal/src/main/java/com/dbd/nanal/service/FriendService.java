@@ -108,16 +108,78 @@ public class FriendService {
 
     }
 
-    public List<HashMap<String, Object>> findEmotionOfLastDay(int userIdx) {
+    public HashMap<String, Object> findEmotionOfLastDay(int userIdx) {
+        HashMap<String, Object> result = new HashMap<>();
+
+        List<Object[]> friendDetailResponseDTOS = friendRepository.findEmotionOfLastDay(userIdx);
+
+        if (friendDetailResponseDTOS.size() == 0) {
+            return null;
+        }
+
+        List<String> sads = new ArrayList<>();
+        List<String> joys = new ArrayList<>();
+        List<String> angs = new ArrayList<>();
+        List<String> embs = new ArrayList<>();
+        List<String> calms = new ArrayList<>();
+        List<String> nervs = new ArrayList<>();
 
 
-        List<Object[]> findEmotionOfLastDayList = new ArrayList<>();
-        findEmotionOfLastDayList = friendRepository.findEmotionOfLastDay(userIdx);
+        for (Object[] dto : friendDetailResponseDTOS) {
 
+            switch ((String) dto[0]) {
+                case "ang":
+                    angs.add((String) dto[1]);
+                    break;
+                case "joy":
+                    joys.add((String) dto[1]);
+                    break;
+                case "nerv":
+                    nervs.add((String) dto[1]);
+                    break;
+                case "calm":
+                    calms.add((String) dto[1]);
+                    break;
+                case "emb":
+                    embs.add((String) dto[1]);
+                    break;
+                case "sad":
+                    sads.add((String) dto[1]);
+                    break;
+            }
 
-        System.out.println("끝?");
-        System.out.println("size : "+findEmotionOfLastDayList.size());
+        }
 
-        return null;
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("nickname", angs);
+        map.put("cnt", angs.size());
+        result.put("ang", map);
+
+        map = new HashMap<>();
+        map.put("nickname", sads);
+        map.put("cnt", sads.size());
+        result.put("sad", map);
+
+        map = new HashMap<>();
+        map.put("nickname", joys);
+        map.put("cnt", joys.size());
+        result.put("joy", map);
+
+        map = new HashMap<>();
+        map.put("nickname", embs);
+        map.put("cnt", embs.size());
+        result.put("emb", map);
+
+        map = new HashMap<>();
+        map.put("nickname", nervs);
+        map.put("cnt", nervs.size());
+        result.put("nerv", map);
+
+        map = new HashMap<>();
+        map.put("nickname", calms);
+        map.put("cnt", calms.size());
+        result.put("calm", map);
+
+        return result;
     }
 }
