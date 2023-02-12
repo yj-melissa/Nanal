@@ -25,7 +25,13 @@ import bmkBW from '../src_assets/img/bookmark/bookmark-blue-white.svg';
 
 const AppMain = () => {
   const accessToken = getCookie('accessToken');
-  const [homeState, setHomeState] = useState([true,false,false,false,false]);
+  const [homeState, setHomeState] = useState([
+    true,
+    false,
+    false,
+    false,
+    false,
+  ]);
   const changeHomeStateZero = () => {
     setHomeState([true, false, false, false, false]);
   };
@@ -65,44 +71,47 @@ const AppMain = () => {
       </Routes>
       {accessToken !== undefined ? (
         <div className='w-[1440px]'>
-        {homeState[0] === true ? (
-          <img src={bmkRR} className='absolute z-0 right-[270px] top-20' />
-        ) : (
-          <div onClick={changeHomeStateZero}>
-            <img src={bmkRW} className='absolute z-0 right-[270px] top-20' />
-          </div>
-        )}
-        {homeState[1] === true ? (
-          <img src={bmkOO} className='absolute z-0 right-[270px] top-40' />
-        ) : (
-          <div onClick={changeHomeStateOne}>
-            <img src={bmkOW} className='absolute z-0 right-[270px] top-40' />
-          </div>
-        )}
-        {homeState[2] === true ? (
-          <img src={bmkYY} className='absolute z-0 right-[270px] top-60' />
-        ) : (
-          <div onClick={changeHomeStateTwo}>
-            <img src={bmkYW} className='absolute z-0 right-[270px] top-60' />
-          </div>
-        )}
-        {homeState[3] === true ? (
-          <img src={bmkGG} className='absolute z-0 right-[270px] top-80' />
-        ) : (
-          <div onClick={changeHomeStateThree}>
-            <img src={bmkGW} className='absolute z-0 right-[270px] top-80' />
-          </div>
-        )}
-        {homeState[4] === true ? (
-          <img src={bmkBB} className='absolute z-0 right-[270px] top-[400px]' />
-        ) : 
-          <div onClick={changeHomeStateFour}>
+          {homeState[0] === true ? (
+            <img src={bmkRR} className='absolute z-0 right-[270px] top-20' />
+          ) : (
+            <div onClick={changeHomeStateZero}>
+              <img src={bmkRW} className='absolute z-0 right-[270px] top-20' />
+            </div>
+          )}
+          {homeState[1] === true ? (
+            <img src={bmkOO} className='absolute z-0 right-[270px] top-40' />
+          ) : (
+            <div onClick={changeHomeStateOne}>
+              <img src={bmkOW} className='absolute z-0 right-[270px] top-40' />
+            </div>
+          )}
+          {homeState[2] === true ? (
+            <img src={bmkYY} className='absolute z-0 right-[270px] top-60' />
+          ) : (
+            <div onClick={changeHomeStateTwo}>
+              <img src={bmkYW} className='absolute z-0 right-[270px] top-60' />
+            </div>
+          )}
+          {homeState[3] === true ? (
+            <img src={bmkGG} className='absolute z-0 right-[270px] top-80' />
+          ) : (
+            <div onClick={changeHomeStateThree}>
+              <img src={bmkGW} className='absolute z-0 right-[270px] top-80' />
+            </div>
+          )}
+          {homeState[4] === true ? (
             <img
-              src={bmkBW}
+              src={bmkBB}
               className='absolute z-0 right-[270px] top-[400px]'
             />
-          </div>
-        }
+          ) : (
+            <div onClick={changeHomeStateFour}>
+              <img
+                src={bmkBW}
+                className='absolute z-0 right-[270px] top-[400px]'
+              />
+            </div>
+          )}
         </div>
       ) : null}
     </div>

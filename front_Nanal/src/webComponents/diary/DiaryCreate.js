@@ -21,7 +21,7 @@ const Div = styled.div`
   }
 `;
 
-function DiaryCreate({}) {
+function DiaryCreate() {
   const location = useLocation();
   // 날짜, 일기, 그룹여부 데이터 받기
   const [date, setDate] = useState(location.state.today);
@@ -191,37 +191,41 @@ function DiaryCreate({}) {
             {isShow ? (
               <>
                 <Div className='overflow-auto h-28'>
-                  {groupList.map((groupItem, idx) => {
-                    return (
-                      <div
-                        key={idx}
-                        className='bg-[#F7F7F7] border-2 border-solid border-slate-400 rounded-lg m-1 mb-3 p-2'
-                      >
-                        <label
-                          htmlFor={groupItem.groupDetail.groupIdx}
-                          className='cursor-pointer'
+                  <div className='flex flex-wrap justify-between'>
+                    {groupList.map((groupItem, idx) => {
+                      return (
+                        <div
+                          key={idx}
+                          className='bg-[#F7F7F7] border-2 border-solid border-slate-400 rounded-lg m-1 mb-3 p-2 w-[47%]'
                         >
-                          {groupItem.groupDetail.groupName}
-                        </label>
-                        <input
-                          className='cursor-pointer'
-                          type='checkbox'
-                          id={groupItem.groupDetail.groupIdx}
-                          checked={
-                            checkedList.includes(groupItem.groupDetail.groupIdx)
-                              ? true
-                              : false
-                          }
-                          onChange={(e) => {
-                            onChecked(
-                              e.target.checked,
-                              groupItem.groupDetail.groupIdx
-                            );
-                          }}
-                        />
-                      </div>
-                    );
-                  })}
+                          <label
+                            htmlFor={groupItem.groupDetail.groupIdx}
+                            className='mr-2 cursor-pointer'
+                          >
+                            {groupItem.groupDetail.groupName}
+                          </label>
+                          <input
+                            className='cursor-pointer'
+                            type='checkbox'
+                            id={groupItem.groupDetail.groupIdx}
+                            checked={
+                              checkedList.includes(
+                                groupItem.groupDetail.groupIdx
+                              )
+                                ? true
+                                : false
+                            }
+                            onChange={(e) => {
+                              onChecked(
+                                e.target.checked,
+                                groupItem.groupDetail.groupIdx
+                              );
+                            }}
+                          />
+                        </div>
+                      );
+                    })}
+                  </div>
                 </Div>
               </>
             ) : (
@@ -231,13 +235,13 @@ function DiaryCreate({}) {
           {/* 작성 취소 및 완료 버튼 */}
           <footer className='relative flex justify-between px-1 pb-5'>
             <input
-              className='hover:bg-slate-300 bg-slate-300/50 rounded-xl px-2.5 py-1 block font-bold cursor-pointer text-2xl mt-4'
+              className='hover:bg-slate-300 bg-slate-300/50 rounded-xl px-2.5 py-1 block font-bold cursor-pointer text-xl mt-4'
               type='reset'
               onClick={resetData}
               value='초기화'
             />
             <button
-              className='hover:bg-cyan-600 bg-cyan-500 text-white px-2.5 py-1 rounded-xl block font-bold text-2xl mt-4'
+              className='hover:bg-cyan-600 bg-cyan-500 text-white px-2.5 py-1 rounded-xl block font-bold text-xl mt-4'
               onClick={handleSubmit}
             >
               작성 완료
