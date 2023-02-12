@@ -40,7 +40,7 @@ function FriendAdd() {
             Swal.fire({
               icon: 'success', // Alert 타입
               text: '친구 추가를 요청했어요!', // Alert 내용
-              width: '35%',
+              width: '80%',
             }).then(function () {
               window.location.reload(true);
             });

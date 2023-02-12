@@ -18,7 +18,7 @@ function FriendList() {
           if (data.data.responseMessage === '친구 리스트 조회 성공') {
             setFriendList(data.data.friendList);
           } else if (data.data.responseMessage === '데이터 없음') {
-            setFriendList(['아직은 친구가 없습니다.']);
+            // setFriendList(['아직은 친구가 없습니다.']);
           }
         } else {
           console.log('친구 리스트 조회 오류: ');
@@ -42,12 +42,12 @@ function FriendList() {
           <img src={addIcon} className='w-[20px] h-[20px] mx-1.5' />
         </Link>
       </div>
-      {friendList.length !== 0 ? (
+      {friendList && friendList.length !== 0 ? (
         friendList.map((friendItem) => (
           <FriendItem key={friendItem.userIdx} item={friendItem} />
         ))
       ) : (
-        <p>아직은 친구가 없습니다.</p>
+        <p className='text-lg text-center '>아직은 친구가 없습니다.</p>
       )}
     </div>
   );
