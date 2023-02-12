@@ -166,13 +166,19 @@ public class FileController {
                 // new 이미지 저장
                 FileHandler handler = new FileHandler();
 
+                System.out.println("이미지 선택");
+                
                 paintingRequestDTO.setMultipartFile(multipartFile); // input data dto에 합치기
                 paintingRequestDTO = handler.parseFile(paintingRequestDTO);// file로 변환해서 dto에 넣기
                 String imgUrl = fileService.saveToS3(paintingRequestDTO.getFile());// file s3에 저장하고 링크 반환
 
+                System.out.println("s3에 저장완료");
+                
                 paintingRequestDTO.setImgUrl(imgUrl); // dto에 imgUrl 저장
                 painting = fileService.paintingSave(paintingRequestDTO); // painting table update
 
+                System.out.println("db에 저장 완료");
+                
                 // 그룹 or 사용자
                 if (paintingRequestDTO.getGroupIdx() != 0) {
                     // group idx를 받았으면 group 인덱스의 이미지 idx를 변경한다.
