@@ -20,7 +20,7 @@ const toStringByFormatting = (value, delimeter = '-') => {
   return [year, month, date].join(delimeter);
 };
 
-const MyDiary = () => {
+const MyDiary = ({ changeHomeStateThree, setToday }) => {
   const [value, onChange] = useState(new Date());
   const checkedDate = toStringByFormatting(value);
   const diarydate = checkedDate.split('-');
@@ -42,7 +42,13 @@ const MyDiary = () => {
       <img src={diaryImgRed} className='absolute w-[1280px] z-10 left-12' />
 
       <div className='absolute z-20 w-[450px] inset-y-20 right-48'>
-        <DiaryList isToggle={0} curDate={checkedDate} diarydate={diarydate} />
+        <DiaryList
+          isToggle={0}
+          curDate={checkedDate}
+          diarydate={diarydate}
+          changeHomeStateThree={changeHomeStateThree}
+          setToday={setToday}
+        />
       </div>
     </div>
   );

@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import axios_api from '../../config/Axios';
@@ -9,10 +8,7 @@ import styled from 'styled-components';
 const Div = styled.div`
   overflow: scroll;
   &::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-    border-radius: 6px;
-    background: rgba(255, 255, 255, 0.4);
+    display: none;
   }
   &::-webkit-scrollbar-thumb {
     background: rgba(0, 0, 0, 0.3);
@@ -20,7 +16,14 @@ const Div = styled.div`
   }
 `;
 
-function DiaryList({ isToggle, curDate, groupIdx, diarydate }) {
+function DiaryList({
+  isToggle,
+  curDate,
+  groupIdx,
+  diarydate,
+  changeHomeStateThree,
+  setToday,
+}) {
   const { state } = useLocation();
   const today = curDate;
 
@@ -81,13 +84,17 @@ function DiaryList({ isToggle, curDate, groupIdx, diarydate }) {
               없습니다.
             </p>
 
-            <Link to={`/Diary/Create`} state={{ today: today }}>
-              <div className='flex items-center justify-center mt-10'>
-                <button className='p-2 text-lg font-bold text-center rounded-lg cursor-pointer bg-violet-100 text-violet-700 whitespace-nowrap'>
-                  일기 쓰러 가기
-                </button>
-              </div>
-            </Link>
+            <div
+              className='flex items-center justify-center mt-10'
+              onClick={() => {
+                changeHomeStateThree();
+                setToday(today);
+              }}
+            >
+              <button className='p-2 text-lg font-bold text-center rounded-lg cursor-pointer bg-violet-100 text-violet-700 whitespace-nowrap'>
+                일기 쓰러 가기
+              </button>
+            </div>
           </div>
         )
       ) : isToggle === 1 ? (
