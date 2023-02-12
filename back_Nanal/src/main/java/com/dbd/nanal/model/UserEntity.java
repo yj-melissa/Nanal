@@ -76,7 +76,7 @@ public class UserEntity implements UserDetails {
 //    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private UserProfileEntity userProfile;
 
-    @OneToOne(cascade = CascadeType.REMOVE)
+    @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     @JoinColumn(name = "emotion_idx")
     @JsonIgnore
     private EmotionEntity emotion;
