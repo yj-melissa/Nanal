@@ -123,9 +123,9 @@ public class GroupController {
                 responseDTO.put("responseMessage", ResponseMessage.GROUP_JOIN_SUCCESS);
                 return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
             } else {
-                System.out.println("이미 가입");
+                System.out.println("이미 가입한 그룹");
                 responseDTO.put("responseMessage", ResponseMessage.GROUP_JOIN_FAIL);
-                return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.INTERNAL_SERVER_ERROR);
+                return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
             }
 
         } catch (Exception e) {
