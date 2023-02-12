@@ -26,17 +26,15 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserService {
 
-    //    @Autowired
     private final UserRepository userRepository;
-    //    @Autowired
     private final UserProfileRepository userProfileRepository;
     private final PaintingRepository paintingRepository;
 
     // 회원 가입
-    public UserEntity join(final UserEntity userEntity, final UserProfileEntity userProfileEntity) {
-        if (userEntity == null || userProfileEntity == null || userEntity.getUserId() == null || userEntity.getEmail() == null || userProfileEntity.getNickname() == null) {
-            throw new NullPointerException("");
-        }
+    public UserEntity join(final UserEntity userEntity, final UserProfileEntity userProfileEntity)  throws NullPointerException {
+//        if (userEntity == null || userProfileEntity == null || userEntity.getUserId() == null || userEntity.getEmail() == null || userProfileEntity.getNickname() == null) {
+//            throw new NullPointerException("");
+//        }
 
         final String userId = userEntity.getUserId();
         checkUserId(userId);
@@ -55,7 +53,7 @@ public class UserService {
     }
 
     // 로그인
-    public UserEntity getByCredentials(final String userId, final String userPassword, final PasswordEncoder passwordEncoder) {
+    public UserEntity getByCredentials(final String userId, final String userPassword, final PasswordEncoder passwordEncoder)  throws NullPointerException {
 
         final UserEntity user = userRepository.findByUserId(userId);
         if(user != null && passwordEncoder.matches(userPassword, user.getPassword())) {
@@ -75,51 +73,14 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    // 프로필 조회
-//    public HashMap<String, String> getByUserIdx(final int userIdx) {
-//        final UserEntity user = userRepository.findByUserIdx(userIdx);
-//        final UserProfileEntity userProfile = userProfileRepository.findByProfileId(userIdx);
-//
-//        if (user != null) {
-//            HashMap<String, String> profile = new HashMap<>();
-//            profile.put("name", user.getName());
-//            profile.put("email", user.getEmail());
-//            profile.put("userId", user.getUserId());
-//            profile.put("img", userProfile.getImg());
-//            profile.put("nickname", userProfile.getNickname());
-//            profile.put("introduction", userProfile.getIntroduction());
-//
-//            return profile;
-//        }
-//        throw new NullPointerException();
-//    }
-
     // 유저 프로필 조회
-    public HashMap<String, Object> getByUserIdx(final int userIdx) {
-        log.info("userService getByUserIdx"+userIdx);
-        final UserProfileEntity userProfile = userProfileRepository.findByProfileId(userIdx);
-        LocalDate createDate = userProfile.getUser().getCreationDate().toLocalDate();
-        long days = (LocalDate.now().until(createDate, ChronoUnit.DAYS) * -1) + 1;
-
-        if (userProfile != null) {
-            HashMap<String, Object> profile = new HashMap<>();
-            profile.put("img", userProfile.getImg());
-            profile.put("nickname", userProfile.getNickname());
-            profile.put("introduction", userProfile.getIntroduction());
-            profile.put("days", days);
-
-            return profile;
-        }
-        throw new NullPointerException();
+    public HashMap<String, Object> getProfileByUserIdx(final int userIdx) throws NullPointerException {
+        return profileDTO(userProfileRepository.findByProfileId(userIdx));
     }
 
+
     // 회원 정보 수정
-    public HashMap<String, Object> updateProfile(final int userIdx, final UserRequestDTO userRequest) {
-
-        if (userRequest == null) {
-            throw new NullPointerException("");
-        }
-
+    public HashMap<String, Object> updateProfile(final int userIdx, final UserRequestDTO userRequest)  throws NullPointerException {
         UserProfileEntity profile = userProfileRepository.findByProfileId(userIdx);
 
         profile.setNickname(userRequest.getNickname());
@@ -127,67 +88,40 @@ public class UserService {
         profile.setIntroduction(userRequest.getIntroduction());
 //        profile.setIsPrivate(userForm.getIsPrivate());
 
-        LocalDate createDate = profile.getUser().getCreationDate().toLocalDate();
-        long days = (LocalDate.now().until(createDate, ChronoUnit.DAYS) * -1) + 1;
 
         profile = userProfileRepository.save(profile);
 
-        if (profile != null) {
-            HashMap<String, Object> newProfile = new HashMap<>();
-            newProfile.put("img", profile.getImg());
-            newProfile.put("nickname", profile.getNickname());
-            newProfile.put("introduction", profile.getIntroduction());
-            newProfile.put("days", days);
 
-            return newProfile;
-        }
-        return null;
+        return profileDTO(profile);
     }
-
     // 비밀번호 수정
+
     public void updatePassword(int userIdx, String newPassword) {
-        if (newPassword == null) {
-            throw new NullPointerException("");
-        }
 
         UserEntity user = userRepository.findByUserIdx(userIdx);
         user.setPassword(newPassword);
         userRepository.save(user);
 
     }
-
     // 회원 탈퇴
-    public void deleteByUserIdx(int userIdx) {
-        log.info("deleteByUserIdx 실행");
-//        UserEntity user = userRepository.findByUserIdx(userIdx);
-//        if (user != null) {
-//            log.info("삭제 시도");
-//            userRepository.delete(user);
-//            log.info("삭제 성공");
-//        }
-//        else {
-//            log.info("유저 정보 없음");
-//            throw new NullPointerException();
-//        }
-        log.info("삭제 시도");
-        userRepository.deleteById(userIdx);
-        log.info("삭제 성공");
-    }
 
+    public void deleteByUserIdx(int userIdx) {
+        userRepository.deleteById(userIdx);
+    }
     // 비밀번호 확인용
+
     public Boolean isUserExist(String userId) {
         return userRepository.existsByUserId(userId);
     }
 
-
     // 중복 체크
+
     public void checkUserId(String userId) {
         Boolean result = userRepository.existsByUserId(userId);
         if (result) {
             throw new DuplicateKeyException(userId);
         }
     }
-
     public void checkNickname(String nickname) {
         Boolean result = userProfileRepository.existsByNickname(nickname);
         if (result) {
@@ -212,6 +146,19 @@ public class UserService {
 
         PaintingEntity painting = paintingRepository.getReferenceById(pictureIdx);
         userProfileEntity.setPainting(painting);
+    }
+
+    public HashMap<String, Object> profileDTO(UserProfileEntity userProfile) {
+        LocalDate createDate = userProfile.getUser().getCreationDate().toLocalDate();
+        long days = (LocalDate.now().until(createDate, ChronoUnit.DAYS) * -1) + 1;
+
+        HashMap<String, Object> profile = new HashMap<>();
+        profile.put("img", userProfile.getImg());
+        profile.put("nickname", userProfile.getNickname());
+        profile.put("introduction", userProfile.getIntroduction());
+        profile.put("days", days);
+
+        return profile;
     }
 }
 
