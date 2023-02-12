@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
@@ -13,7 +12,6 @@ const TuningProfile = () => {
   const closeModal = () => {
     setModalOpen(false);
   };
-  const navigate = useNavigate();
 
   const [profile, setProfile] = useState({});
   let currentName = useRef('');
@@ -112,13 +110,11 @@ const TuningProfile = () => {
                     type: 'application/json',
                   })
                 );
-
                 if (imageFile === null) {
                   formData.append('multipartFile', null);
                 } else {
                   formData.append('multipartFile', imageFile);
                 }
-
                 // 이미지 업로드
                 axios_api
                   .put('file/s3', formData, {
@@ -129,7 +125,28 @@ const TuningProfile = () => {
                   .then(({ data }) => {
                     if (data.statusCode === 200) {
                       if (data.data.responseMessage === '그림 저장 성공') {
-                        //okay
+                        axios_api
+                          .get('user/profile')
+                          .then(({ data }) => {
+                            if (data.statusCode === 200) {
+                              if (data.data.responseMessage === '회원 정보 조회 성공') {
+                                // console.log(data.data.profile);
+                                window.localStorage.setItem('profileDays', data.data.profile.days)
+                                window.localStorage.setItem('profileImg', data.data.profile.img)
+                                window.localStorage.setItem('profileIntroduction', data.data.profile.introduction)
+                                window.localStorage.setItem('profileNickname', data.data.profile.nickname)
+                                window.location.reload()
+                              }
+                            } else {
+                              console.log('회원 정보 오류: ');
+                              console.log(data.statusCode);
+                              console.log(data.data.responseMessage);
+                            }
+                          })
+                          .catch(({ error }) => {
+                            console.log('회원 정보 조회: ' + error);
+                          }); 
+                        closeModal()
                       }
                     } else {
                       console.log('그림 저장 오류 : ');
@@ -142,9 +159,28 @@ const TuningProfile = () => {
                   });
               } else {
                 // 이미지를 변경하지 않는 경우
-                navigate(`/MyPage`, {
-                  replace: true,
-                });
+                axios_api
+                  .get('user/profile')
+                  .then(({ data }) => {
+                    if (data.statusCode === 200) {
+                      if (data.data.responseMessage === '회원 정보 조회 성공') {
+                        // console.log(data.data.profile);
+                        window.localStorage.setItem('profileDays', data.data.profile.days)
+                        window.localStorage.setItem('profileImg', data.data.profile.img)
+                        window.localStorage.setItem('profileIntroduction', data.data.profile.introduction)
+                        window.localStorage.setItem('profileNickname', data.data.profile.nickname)
+                        window.location.reload()
+                      }
+                    } else {
+                      console.log('회원 정보 오류: ');
+                      console.log(data.statusCode);
+                      console.log(data.data.responseMessage);
+                    }
+                  })
+                  .catch(({ error }) => {
+                    console.log('회원 정보 조회: ' + error);
+                  }); 
+                closeModal()
               }
             }
           } else {
@@ -251,17 +287,24 @@ const TuningProfile = () => {
                     id='user-name'
                     defaultValue={currentInfo.current || ''}
                     onChange={onChangeInfo}
-                    className='font-medium m-0.5 w-full h-28 rounded-md text-sm'
+                    className='font-medium m-0.5 w-full h-28 rounded-md text-sm border border-teal-600 indent-2'
                   ></textarea>
                   <p className='text-xs'>{infoMessage}</p>
                 </div>
-
-                <button
-                  className='hover:bg-sky-700 bg-cyan-600 text-white px-2.5 py-1 rounded-3xl m-auto block text-sm'
-                  onClick={userUpdate}
-                >
-                  수정하기
-                </button>
+                <div className='flex justify-end'>
+                  <button
+                    className='hover:bg-sky-700 bg-cyan-600 text-white px-2.5 py-1 rounded-3xl my-auto mr-5 block text-sm'
+                    onClick={userUpdate}
+                  >
+                    수정하기
+                  </button>
+                  <button
+                    className='hover:bg-red-700 bg-red-500 text-white px-2.5 py-1 rounded-3xl my-auto block text-sm'
+                    onClick={closeModal}
+                  >
+                    닫기
+                  </button>
+                </div>
               </form>
             </div>
           </div>
