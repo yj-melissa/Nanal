@@ -56,13 +56,10 @@ public class DiaryController {
         HashMap<String, Object> responseDTO = new HashMap<>();
         try {
 
-            //diary keyword analyze
             List<String> keywordList = new ArrayList<>();
-            //picture
-            //music
 
             diary.setUserIdx(userInfo.getUserIdx());
-            //save diary
+
             // [감정 분석]
             requestToEmotionFlask(diary);
 
@@ -80,8 +77,11 @@ public class DiaryController {
             // [번역된 일기]
             String eng = (String) result.get("translatedText");
 
+            // [문장 추출]
+            String sentenceResult=requestToKeySentenceFlask(eng);
+
             // [달리 그림 만들기]
-            String dalleResult = requestToDalleFlask(eng);
+            String dalleResult = requestToDalleFlask(sentenceResult);
 
             // [그림 저장하기]
             File file = fileHandler.urlToFile(dalleResult);
@@ -177,8 +177,12 @@ public class DiaryController {
             // [번역된 일기]
             String eng = (String) result.get("translatedText");
             System.out.println("eng : "+eng);
+
+            // [문장 추출]
+            String sentenceResult=requestToKeySentenceFlask(eng);
+
             // [달리 그림 만들기]
-            String dalleResult = requestToDalleFlask(eng);
+            String dalleResult = requestToDalleFlask(sentenceResult);
 
             // [그림 저장하기]
             File file = fileHandler.urlToFile(dalleResult);
@@ -295,9 +299,7 @@ public class DiaryController {
                     "{} \n\n" +
                     "[Back] \n" +
                     "[{diaryIdx(int), userIdx(int), nickname(String), diaryDate(Date), content(String), picture(String), emo(String)}]")
-//    @GetMapping("/list/user/{userIdx}")
     @GetMapping("/list/user")
-//    public ResponseEntity<?> userDiaryList(@PathVariable("userIdx") int userIdx){
     public ResponseEntity<?> userDiaryList(@ApiParam("유저 idx") @AuthenticationPrincipal UserEntity userInfo) {
         HashMap<String, Object> responseDTO = new HashMap<>();
         try {
@@ -438,9 +440,7 @@ public class DiaryController {
                     "{} \n\n" +
                     "[Back] \n" +
                     "[{diaryIdx(int), userIdx(int), diaryDate(Date), content(String), picture(String), emo(String)}]")
-//    @GetMapping("/trashbin/{userIdx}")
     @GetMapping("/trashbin")
-//    public ResponseEntity<?> getTrashBinDiaryList(@PathVariable("userIdx") int userIdx){
     public ResponseEntity<?> getTrashBinDiaryList(@AuthenticationPrincipal UserEntity userInfo) {
         HashMap<String, Object> responseDTO = new HashMap<>();
         try {
@@ -460,9 +460,7 @@ public class DiaryController {
                     "{} \n\n" +
                     "[Back] \n" +
                     "ok(200)")
-//    @DeleteMapping("/trashbin/{userIdx}")
     @DeleteMapping("/trashbin")
-//    public ResponseEntity<?> deleteTrashBin(@ApiParam(value="user id") @PathVariable("userIdx") int userIdx){
     public ResponseEntity<?> deleteTrashBin(@ApiParam(value = "user id") @AuthenticationPrincipal UserEntity userInfo) {
         HashMap<String, Object> responseDTO = new HashMap<>();
         try {
@@ -521,9 +519,7 @@ public class DiaryController {
                     "{} \n\n" +
                     "[Back] \n" +
                     "[{bookmarkIdx(int), diaryIdx(int), userIdx(int), creationDate(Date), content(String), picture(String), music(int), emo(String)}]")
-//    @GetMapping("/bookmark/{userIdx}")
     @GetMapping("/bookmark/list")
-//    public ResponseEntity<?> getBookmarkList(@ApiParam(value = "유저 정보")@PathVariable("userIdx") int userIdx) {
     public ResponseEntity<?> getBookmarkList(@ApiParam(value = "유저 정보") @AuthenticationPrincipal UserEntity userInfo) {
         HashMap<String, Object> responseDTO = new HashMap<>();
         try {
@@ -654,6 +650,30 @@ public class DiaryController {
         return result;
     }
 
+    private String requestToKeySentenceFlask(String content){
+        RestTemplate restTemplate = new RestTemplate();
+
+        String url = "http://i8d110.p.ssafy.io:5010/keySentence";
+
+        // Header set
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        // Body set
+        HashMap<String, String> sentence=new HashMap<>();
+        sentence.put("content", content);
+
+        // Message
+        HttpEntity<?> requestMessage = new HttpEntity<>(sentence, httpHeaders);
+        // Request
+        ResponseEntity<String> response = restTemplate.postForEntity(url, requestMessage, String.class);
+
+        String result=response.getBody();
+        System.out.println("sentence: "+ result);
+
+        return result;
+    }
+
     static class EmotionDTO {
         String content;
 
@@ -664,7 +684,5 @@ public class DiaryController {
         public String getContent() {
             return content;
         }
-
     }
-
 }
