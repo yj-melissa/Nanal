@@ -31,6 +31,11 @@ function Nav() {
         console.log('회원 정보 조회: ' + error);
       });
   }, [])
+  const [isToggle, setIsToggle] = useState(false)
+  const toggleProfileMenu = () => {
+    setIsToggle(isToggle => !isToggle)
+  }
+  console.log(isToggle) 
 
   return (
     <div>
@@ -38,18 +43,21 @@ function Nav() {
         <div
           className='rounded-lg w-8 h-8 pr-1 py-1 my-1 text-slate-700 font-medium hover:bg-slate-100 hover:text-slate-900'
         >
-          <img src={logo} />
+          <img src={logo} alt='logo'/>
         </div>
         <div>
           <p>search bar 들어올 자리</p>
         </div>
         <div className='flex items-center m-auto'>
           <Link to='/Alarm'>
-            <img src={bell} className='w-6 h-6 my-3' />
+            <img src={bell} className='w-6 h-6 my-3' alt='bell'/>
           </Link>
-          <div className="rounded-full w-8 h-8 ml-5 overflow-auto">
-            <img src={userProfile.img}/>
+          <div className="rounded-full w-8 h-8 ml-5 overflow-auto" onClick={toggleProfileMenu}>
+            {userProfile.img !== null && <img src={userProfile.img} alt='usere-profile-img'/>}
           </div>
+          {isToggle && <div className='absolute right-20 inset-y-10 box-border border border-black'>
+
+          </div>}
         </div>
       </nav>
     </div>

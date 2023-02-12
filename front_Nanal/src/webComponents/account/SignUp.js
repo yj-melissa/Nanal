@@ -58,6 +58,7 @@ function SignUp() {
               navigate(`/SignIn`, {
                 replace: true,
               });
+              window.location.reload()
             });
           } else {
             // alert('이메일을 확인하고 다시 입력해주세요.');

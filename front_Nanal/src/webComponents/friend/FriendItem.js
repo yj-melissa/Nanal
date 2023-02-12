@@ -5,6 +5,7 @@ function FriendItem({ item, setFriendAdd, setUserIdx }) {
         <img
           src={item.img}
           className='inline-block w-1/4 p-1 mr-3 rounded-full h-1/4'
+          alt='item-img'
         ></img>
         <div className='my-2'>
           <p className='mb-1 font-bold'>{item.nickname}</p>
