@@ -108,4 +108,16 @@ public class FriendService {
 
     }
 
+    public List<HashMap<String, Object>> findEmotionOfLastDay(int userIdx) {
+
+
+        List<Object[]> findEmotionOfLastDayList = new ArrayList<>();
+        findEmotionOfLastDayList = friendRepository.findEmotionOfLastDay(userIdx);
+
+
+        System.out.println("끝?");
+        System.out.println("size : "+findEmotionOfLastDayList.size());
+
+        return null;
+    }
 }
