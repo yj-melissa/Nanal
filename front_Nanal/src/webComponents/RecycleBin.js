@@ -10,10 +10,7 @@ import styled from 'styled-components';
 const Div = styled.div`
   overflow: scroll;
   &::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-    border-radius: 6px;
-    background: rgba(255, 255, 255, 0.4);
+    display: none;
   }
   &::-webkit-scrollbar-thumb {
     background: rgba(0, 0, 0, 0.3);
@@ -74,7 +71,7 @@ const RecycleBin = () => {
       <img src={diaryImgBlue} className='absolute w-[1280px] z-10 left-12' />
 
       <div className='flex justify-center my-2'>
-        <div className='absolute z-30 left-[280px] inset-y-48'>
+        <div className='absolute z-30 left-[240px] inset-y-60'>
           <button
             className='px-2 py-1 my-2 text-xl font-bold text-white bg-rose-500 hover:bg-rose-600 rounded-xl'
             onClick={() => {
@@ -96,11 +93,11 @@ const RecycleBin = () => {
             전체 삭제
           </button>
         </div>
-        <p className='absolute z-20 py-2 text-2xl font-bold text-center top-24 right-80'>
+        <p className='absolute z-30 left-[240px] inset-y-52 text-2xl font-bold'>
           휴지통에 일기가 {trashDiary.length}개 있습니다.
         </p>
       </div>
-      <div className='absolute z-20 justify-between mt-5 inset-y-32 right-60'>
+      <div className='absolute z-20 justify-between mt-5 inset-y-20 right-60'>
         <Div className='overflow-auto h-96'>
           {trashDiary.map((diary, idx) => (
             <TrashItem key={idx} {...diary} />

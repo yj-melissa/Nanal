@@ -9,8 +9,8 @@ import RecycleBin from '../webComponents/RecycleBin';
 import DiaryNew from '../webComponents/DiaryNew';
 import SignUp from '../webComponents/account/SignUp';
 import SignIn from '../webComponents/account/SignIn';
-import DiaryCreate from '../webComponents/diary/DiaryCreate';
 import DiaryDetail from '../webComponents/diary/DiaryDetail';
+import DiaryUpdate from '../webComponents/diary/DiaryUpdate';
 import NotFound from '../webComponents/another/NotFound';
 import bmkRR from '../src_assets/img/bookmark/bookmark-red-red.svg';
 import bmkRW from '../src_assets/img/bookmark/bookmark-red-white.svg';
@@ -23,7 +23,15 @@ import bmkGW from '../src_assets/img/bookmark/bookmark-green-white.svg';
 import bmkBB from '../src_assets/img/bookmark/bookmark-blue-blue.svg';
 import bmkBW from '../src_assets/img/bookmark/bookmark-blue-white.svg';
 
+const getStringDate = (date) => {
+  // 대한민국의 offset을 수동으로 추가한 뒤 날짜 전달
+  const offset = date.getTimezoneOffset() * 60000;
+  const dateOffset = new Date(date.getTime() - offset);
+  return dateOffset.toISOString().slice(0, 10);
+};
+
 const AppMain = () => {
+  const [today, setToday] = useState(getStringDate(new Date()));
   const accessToken = getCookie('accessToken');
   const [homeState, setHomeState] = useState([
     true,
@@ -53,20 +61,28 @@ const AppMain = () => {
       <Routes>
         <Route path='/' element={<LogoHome />}></Route>
         {homeState[0] === true ? (
-          <Route path='/home' element={<MyDiary />}></Route>
+          <Route
+            path='/home'
+            element={
+              <MyDiary
+                changeHomeStateThree={changeHomeStateThree}
+                setToday={setToday}
+              />
+            }
+          ></Route>
         ) : homeState[1] === true ? (
           <Route path='/home' element={<GroupDiary />}></Route>
         ) : homeState[2] === true ? (
           <Route path='/home' element={<FriendList />}></Route>
         ) : homeState[3] === true ? (
-          <Route path='/home' element={<DiaryNew />}></Route>
+          <Route path='/home' element={<DiaryNew today={today} />}></Route>
         ) : homeState[4] === true ? (
           <Route path='/home' element={<RecycleBin />}></Route>
         ) : null}
         <Route path='/SignIn' element={<SignIn />}></Route>
         <Route path='/SignUp' element={<SignUp />}></Route>
-        <Route path='/Diary/Create' element={<DiaryCreate />}></Route>
         <Route path='/Diary/Detail' element={<DiaryDetail />}></Route>
+        <Route path='/Diary/Edit' element={<DiaryUpdate />}></Route>
         <Route path='*' element={<NotFound />}></Route>
       </Routes>
       {accessToken !== undefined ? (

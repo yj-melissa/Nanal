@@ -2,6 +2,23 @@ import { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
+import nmr from '../../src_assets/img/bookmark-name/name-mark-red.svg';
+import diaryImgRed from '../../src_assets/img/diary-img/diary-img-red.svg';
+import styled from 'styled-components';
+
+const Div = styled.div`
+  overflow: scroll;
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.4);
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 6px;
+  }
+`;
 
 function DiaryUpdate() {
   const location = useLocation();
@@ -25,7 +42,7 @@ function DiaryUpdate() {
   const handleQuitEdit = () => {
     setLocalDate(location.state.diaryDate);
     setLocalContent(location.state.diaryDetail.content);
-    navigate(-1);
+    navigate('/Diary/Detail');
   };
 
   // input 태그가 체크된 경우 실행되는 함수 = 다중 선택 가능
@@ -67,68 +84,50 @@ function DiaryUpdate() {
   const [isShow, setShow] = useState(false);
 
   return (
-    <div>
-      <div className='h-auto min-h-full pb-5'>
-        <h2 className='my-5 text-lg font-bold text-center'>일기 수정하기</h2>
-        {/* 날짜 선택란 */}
-        <div>
-          <input
-            className='p-2 rounded-lg cursor-pointer bg-slate-300/50'
-            value={localDate}
-            onChange={(e) => setLocalDate(e.target.value)}
-            type='date'
-          />
-          {/* 일기 내용 작성란 */}
-          <div>
-            <textarea
-              className='w-full h-40 px-2 py-2 my-2 rounded-lg bg-slate-300/50'
-              name='content'
-              ref={localConetRef}
-              value={localContent}
-              onChange={(e) => {
-                setLocalContent(e.target.value);
-              }}
-            />
-          </div>
-        </div>
-        {/* 그룹 여부 선택란 */}
-        <div className='mt-2'>
-          <h4 className='my-2 text-lg font-bold'>공개 범위 설정</h4>
-          <input
-            className='cursor-pointer'
-            id='private'
-            type='radio'
-            value='개인'
-            checked={group === '개인'}
-            onChange={(e) => setGroup(e.target.value)}
-            onClick={() => {
-              setShow(false);
-              setCheckedList([]);
-            }}
-          />
-          <label className='ml-2 mr-4 cursor-pointer' htmlFor='private'>
-            개인
-          </label>
-          <input
-            className='cursor-pointer'
-            id='group'
-            type='radio'
-            value='그룹'
-            checked={group === '그룹'}
-            onChange={(e) => setGroup(e.target.value)}
-            onClick={() => setShow(true)}
-          />
-          <label className='ml-2 cursor-pointer' htmlFor='group'>
-            그룹
-          </label>
-          <div className='flex flex-wrap justify-between'>
-            {isShow ? (
-              <>
+    <div className='relative w-[1440px] mx-auto'>
+      <p className='absolute z-30 left-[330px] inset-y-28'>일기 수정</p>
+      <img src={nmr} className='absolute z-20 left-60 inset-y-20' />
+      <img src={diaryImgRed} className='absolute w-[1280px] z-10 left-12' />
+
+      {/* 그룹 여부 선택란 */}
+      <div className='absolute z-20 left-[250px] inset-y-48 mt-2'>
+        <p className='my-1 text-xl font-bold'>공개 범위 설정</p>
+        <input
+          className='cursor-pointer'
+          id='private'
+          type='radio'
+          value='개인'
+          checked={group === '개인'}
+          onChange={(e) => setGroup(e.target.value)}
+          onClick={() => {
+            setShow(false);
+            setCheckedList([]);
+          }}
+        />
+        <label className='ml-2 mr-4 text-xl cursor-pointer' htmlFor='private'>
+          개인
+        </label>
+        <input
+          className='cursor-pointer'
+          id='group'
+          type='radio'
+          value='그룹'
+          checked={group === '그룹'}
+          onChange={(e) => setGroup(e.target.value)}
+          onClick={() => setShow(true)}
+        />
+        <label className='ml-2 text-xl cursor-pointer' htmlFor='group'>
+          그룹
+        </label>
+        {isShow ? (
+          <>
+            <Div className='h-48 overflow-auto'>
+              <div>
                 {groupList.map((groupItem, idx) => {
                   return (
                     <div
                       key={idx}
-                      className='bg-[#F7F7F7] border-2 border-solid border-slate-400 rounded-lg m-1 mb-3 p-2 w-[47%]'
+                      className='bg-[#F7F7F7] border-2 border-solid border-slate-400 rounded-lg m-1 mb-3 p-2 w-[200px]'
                     >
                       <label
                         htmlFor={groupItem.groupDetail.groupIdx}
@@ -155,45 +154,72 @@ function DiaryUpdate() {
                     </div>
                   );
                 })}
-              </>
-            ) : (
-              <></>
-            )}
+              </div>
+            </Div>
+          </>
+        ) : (
+          <></>
+        )}
+      </div>
+
+      <div>
+        <form className='absolute z-20 min-h-full mt-20 w-[720px] right-[200px]'>
+          {/* 날짜 선택란 */}
+          <div className='text-xl'>
+            <input
+              className='p-2 my-1 text-xl rounded-lg cursor-pointer bg-slate-300/50'
+              value={localDate}
+              onChange={(e) => setLocalDate(e.target.value)}
+              type='date'
+            />
+            {/* 일기 내용 작성란 */}
+            <div>
+              <textarea
+                className='w-full px-2 py-2 my-2 rounded-lg h-60 bg-slate-300/50'
+                name='content'
+                ref={localConetRef}
+                value={localContent}
+                onChange={(e) => {
+                  setLocalContent(e.target.value);
+                }}
+              />
+            </div>
           </div>
-        </div>
-        {/* 수정 취소 및 수정 완료 버튼 */}
-        <footer className='relative flex justify-between px-1 pb-5 translate-y-full'>
-          <button
-            className='hover:bg-slate-300 bg-slate-300/50 rounded-xl px-2.5 py-1 block'
-            onClick={handleQuitEdit}
-          >
-            수정 취소
-          </button>
-          <button
-            className='hover:bg-sky-700 bg-cyan-600 text-white px-2.5 py-1 rounded-xl block'
-            onClick={() => {
-              axios_api
-                .put('diary', {
-                  userIdx: location.state.diaryDetail.userIdx,
-                  diaryIdx: location.state.diaryDetail.diaryIdx,
-                  content: localContent,
-                  diaryDate: localDate,
-                  groupIdxList: checkedList,
-                })
-                .then(({ data }) => {
-                  navigate('/Diary/Detail', {
-                    state: {
-                      diaryIdx: location.state.diaryDetail.diaryIdx,
-                    },
-                    replace: true,
-                  });
-                })
-                .catch((err) => console.log(err));
-            }}
-          >
-            수정 완료
-          </button>
-        </footer>
+
+          {/* 수정 취소 및 수정 완료 버튼 */}
+          <div className='relative flex justify-between px-1 pb-5'>
+            <button
+              className='hover:bg-slate-300 bg-slate-300/50 rounded-xl px-2.5 py-1 block font-bold cursor-pointer text-xl mt-4'
+              onClick={handleQuitEdit}
+            >
+              수정 취소
+            </button>
+            <button
+              className='hover:bg-cyan-600 bg-cyan-500 text-white px-2.5 py-1 rounded-xl block font-bold text-xl mt-4'
+              onClick={() => {
+                axios_api
+                  .put('diary', {
+                    userIdx: location.state.diaryDetail.userIdx,
+                    diaryIdx: location.state.diaryDetail.diaryIdx,
+                    content: localContent,
+                    diaryDate: localDate,
+                    groupIdxList: checkedList,
+                  })
+                  .then(({ data }) => {
+                    navigate('/Diary/Detail', {
+                      state: {
+                        diaryIdx: location.state.diaryDetail.diaryIdx,
+                      },
+                      replace: true,
+                    });
+                  })
+                  .catch((err) => console.log(err));
+              }}
+            >
+              수정 완료
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );
