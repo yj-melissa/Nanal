@@ -42,7 +42,7 @@ public class CustomOAuthUserService extends DefaultOAuth2UserService {
         // 기존 유저라면 프로필 업데이트
         if(userRepository.existsByEmail(email)) {
             user = userRepository.findByEmail(email);
-            profile = userProfileRepository.findByProfileId(userRepository.findByEmail(email).getUserIdx());
+            profile = userProfileRepository.findByProfileIdx(userRepository.findByEmail(email).getUserIdx());
             profile.setNickname((String) kakaoProfile.get("nickname"));
             profile.setImg((String) kakaoProfile.get("thumbnail_image_url"));
             userProfileRepository.save(profile);
