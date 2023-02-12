@@ -87,8 +87,7 @@ public class FileController {
                 paintingRequestDTO.setMultipartFile(multipartFile);
                 // (1.2) requestDTO에 multipartfile -> file로 변환해서 file 담기
                 paintingRequestDTO = handler.parseFile(paintingRequestDTO);
-                System.out.println("쟈쟁ㄴ");
-                        
+
                 // (1.3) file s3에 저장하고 URL 반환받기
                 imgUrl = fileService.saveToS3(paintingRequestDTO.getFile());
                 // (1.4) requestDTD에 URL 저장하기
@@ -149,6 +148,7 @@ public class FileController {
 
         try {
             if (multipartFile == null) {
+                System.out.println("선택 x");
                 // 기본 이미지로 변경
                 paintingRequestDTO.init();// imgUrl에 기본 url도 다시 넣기 //
                 paintingRequestDTO.setGroupImgIdx(0); // 기본 이미지 idx로 변경
@@ -164,10 +164,12 @@ public class FileController {
                 }
             } else {
                 // new 이미지 저장
+                System.out.println("선택 o");
                 FileHandler handler = new FileHandler();
 
-                System.out.println("이미지 선택");
-                
+                System.out.println("multipartfile : ");
+                System.out.println(multipartFile);
+
                 paintingRequestDTO.setMultipartFile(multipartFile); // input data dto에 합치기
                 paintingRequestDTO = handler.parseFile(paintingRequestDTO);// file로 변환해서 dto에 넣기
                 String imgUrl = fileService.saveToS3(paintingRequestDTO.getFile());// file s3에 저장하고 링크 반환
