@@ -145,7 +145,36 @@ public class FriendController {
 
     }
 
-    // 감정 먼지
-//    @GetMapping("")
+    @ApiOperation(value = "전날 친구들의 감정 통계 조회하기", notes =
+            "user의 친구 리스트를 조회합니다.\n" +
+                    "[Front] \n" +
+                    "[Back] \n" +
+                    "friendList : [{userIdx(int), nickname(String), img(String), introduction(String)}, {..}] ")
+    @GetMapping("emo")
+    public ResponseEntity<?> getEmotionList(@ApiParam(value = "유저 idx", required = true) @AuthenticationPrincipal UserEntity userInfo) {
+
+        HashMap<String, Object> responseDTO = new HashMap<>();
+        try {
+            List<HashMap<String, Object>> friendList = friendService.findEmotionOfLastDay(userInfo.getUserIdx());
+            // 반환 성공
+            if (friendList.size() != 0) {
+                responseDTO.put("responseMessage", ResponseMessage.EMOTION_FRIEND_LIST_FIND_SUCCESS);
+                responseDTO.put("emoFriendList", friendList);
+                return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+            } else {
+                // 널 이렇게 넣을까??
+                responseDTO.put("friendList", friendList);
+                responseDTO.put("responseMessage", ResponseMessage.EMOTION_FRIEND_LIST_FIND_FAIL);
+                return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+            }
+        }
+        catch (Exception e) {
+            responseDTO.put("responseMessage", ResponseMessage.EXCEPTION);
+            return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
+        }
+
+    }
+
+
 
 }
