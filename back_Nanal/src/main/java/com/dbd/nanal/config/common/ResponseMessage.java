@@ -19,6 +19,7 @@ public class ResponseMessage {
     public static final String USER_FIND_FAIL = "회원을 찾을 수 없음";
     public static final String USER_UNAUTHROIZED = "접근 권한 없음";
     public static final String USER_CREATE_SUCCESS = "회원 가입 성공";
+    public static final String USER_CREATE_FAIL = "회원 가입 실패";
     public static final String USER_UPDATE_SUCCESS = "회원 정보 수정 성공";
     public static final String USER_DELETE_SUCCESS = "회원 탈퇴 성공";
     public static final String NOT_VALID_KEY = "입력 조건 불일치";

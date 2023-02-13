@@ -31,10 +31,7 @@ public class UserService {
     private final PaintingRepository paintingRepository;
 
     // 회원 가입
-    public UserEntity join(final UserEntity userEntity, final UserProfileEntity userProfileEntity)  throws NullPointerException {
-//        if (userEntity == null || userProfileEntity == null || userEntity.getUserId() == null || userEntity.getEmail() == null || userProfileEntity.getNickname() == null) {
-//            throw new NullPointerException("");
-//        }
+    public UserEntity join(final UserEntity userEntity, final UserProfileEntity userProfileEntity) {
 
         final String userId = userEntity.getUserId();
         checkUserId(userId);
@@ -53,7 +50,7 @@ public class UserService {
     }
 
     // 로그인
-    public UserEntity getByCredentials(final String userId, final String userPassword, final PasswordEncoder passwordEncoder)  throws NullPointerException {
+    public UserEntity getByCredentials(final String userId, final String userPassword, final PasswordEncoder passwordEncoder) {
 
         final UserEntity user = userRepository.findByUserId(userId);
         if(user != null && passwordEncoder.matches(userPassword, user.getPassword())) {
@@ -74,13 +71,13 @@ public class UserService {
     }
 
     // 유저 프로필 조회
-    public HashMap<String, Object> getProfileByUserIdx(final int userIdx) throws NullPointerException {
+    public HashMap<String, Object> getProfileByUserIdx(final int userIdx) {
         return profileDTO(userProfileRepository.findByProfileIdx(userIdx));
     }
 
 
     // 회원 정보 수정
-    public HashMap<String, Object> updateProfile(final int userIdx, final UserRequestDTO userRequest)  throws NullPointerException {
+    public HashMap<String, Object> updateProfile(final int userIdx, final UserRequestDTO userRequest) {
         UserProfileEntity profile = userProfileRepository.findByProfileIdx(userIdx);
 
         profile.setNickname(userRequest.getNickname());
@@ -88,9 +85,7 @@ public class UserService {
         profile.setIntroduction(userRequest.getIntroduction());
 //        profile.setIsPrivate(userForm.getIsPrivate());
 
-
         profile = userProfileRepository.save(profile);
-
 
         return profileDTO(profile);
     }
@@ -108,8 +103,8 @@ public class UserService {
     public void deleteByUserIdx(int userIdx) {
         userRepository.deleteById(userIdx);
     }
-    // 비밀번호 확인용
 
+    // 비밀번호 확인용
     public Boolean isUserExist(String userId) {
         return userRepository.existsByUserId(userId);
     }
