@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
 import Swal from 'sweetalert2';
-import Spinner from './Spinner';
+import { MutatingDots } from 'react-loader-spinner';
+import spinner from '../../src_assets/img/emotion/spinner.gif';
 
 const getStringDate = (date) => {
   // 대한민국의 offset을 수동으로 추가한 뒤 날짜 전달
@@ -116,9 +117,20 @@ function DiaryCreate() {
     <div className='h-auto min-h-full pb-5'>
       <div>
         {loaded ? (
-          <div>
-            <img />
-            <Spinner>달리가 그림을 만드는 중이에요...</Spinner>
+          <div className='flex items-center justify-center'>
+            <img src={spinner} alt='emotion_gif' />
+            <p className='text-xl'>달리가 그림을 만드는 중이에요...</p>
+            <MutatingDots
+              height='100'
+              width='100'
+              color='#4fa94d'
+              secondaryColor='#4fa94d'
+              radius='12.5'
+              ariaLabel='mutating-dots-loading'
+              wrapperStyle={{}}
+              wrapperClass=''
+              visible={true}
+            />
           </div>
         ) : null}
         <h2 className='my-5 text-lg font-bold text-center'>일기 작성</h2>
