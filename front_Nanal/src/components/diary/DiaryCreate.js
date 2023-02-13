@@ -126,21 +126,23 @@ function DiaryCreate() {
     <div className='h-auto min-h-full pb-5'>
       <div>
         {loaded ? (
-          <div className='flex items-center justify-center'>
-            <img src={spinner} alt='emotion_gif' />
-            <p className='text-xl'>달리가 그림을 만드는 중이에요...</p>
-            <MutatingDots
-              height='100'
-              width='100'
-              color='#4fa94d'
-              secondaryColor='#4fa94d'
-              radius='12.5'
-              ariaLabel='mutating-dots-loading'
-              wrapperStyle={{}}
-              wrapperClass=''
-              visible={true}
-            />
-          </div>
+          <>
+            <div className='bg-neutral-400'>
+              <p className='text-xl'>달리가 그림을 만드는 중이에요...</p>
+              <img src={spinner} alt='emotion_gif' />
+              <MutatingDots
+                height='100'
+                width='100'
+                color='#4fa94d'
+                secondaryColor='#4fa94d'
+                radius='12.5'
+                ariaLabel='mutating-dots-loading'
+                wrapperStyle={{}}
+                wrapperClass=''
+                visible={true}
+              />
+            </div>
+          </>
         ) : null}
         <h2 className='my-5 text-lg font-bold text-center'>일기 작성</h2>
         {/* 날짜 선택란 */}
