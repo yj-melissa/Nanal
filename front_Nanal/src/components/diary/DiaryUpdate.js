@@ -124,9 +124,9 @@ function DiaryUpdate() {
       <div>
         {loaded ? (
           <>
-            <div className='flex flex-col backdrop-opacity-30 backdrop-invert bg-white/30 w-80'>
+            <div className='flex flex-col justify-center w-screen h-screen backdrop-opacity-30 backdrop-invert bg-white/30'>
               <img src={spinner} alt='emotion_gif' className='w-16 h-16' />
-              <p className='my-2 text-xl font-bold animate-bounce'>
+              <p className='my-2 text-xl font-bold animate-bounce text-rose-500'>
                 달리가 그림을 만드는 중...
               </p>
               <TailSpin
