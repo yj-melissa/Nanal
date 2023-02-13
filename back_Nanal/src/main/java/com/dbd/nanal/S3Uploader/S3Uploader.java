@@ -1,21 +1,18 @@
 package com.dbd.nanal.S3Uploader;
 
 
+import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Optional;
+
 
 @Slf4j
 @RequiredArgsConstructor    // final 멤버변수가 있으면 생성자 항목에 포함시킴
@@ -36,9 +33,8 @@ public class S3Uploader {
 //    }
 
     public String upload(File uploadFile, String dirName) {
-
+        // 업로드 메인 함수
         String fileName = dirName + "/" + uploadFile.getName();
-
         String uploadImageUrl = putS3(uploadFile, fileName);
 
         removeNewFile(uploadFile);  // 로컬에 생성된 File 삭제 (MultipartFile -> File 전환 하며 로컬에 파일 생성됨)
@@ -46,6 +42,7 @@ public class S3Uploader {
     }
 
     private String putS3(File uploadFile, String fileName) {
+        // s3에 저장
         amazonS3Client.putObject(
                 new PutObjectRequest(bucket, fileName, uploadFile)
                         .withCannedAcl(CannedAccessControlList.PublicRead)	// PublicRead 권한으로 업로드 됨
@@ -54,6 +51,7 @@ public class S3Uploader {
     }
 
     private void removeNewFile(File targetFile) {
+        // 로컬 파일 삭제
         if(targetFile.delete()) {
 //            System.out.println("삭제되었습니다.");
             log.info("파일이 삭제되었습니다.");
@@ -62,15 +60,25 @@ public class S3Uploader {
         }
     }
 
-    private Optional<File> convert(MultipartFile file) throws  IOException {
-        File convertFile = new File(file.getOriginalFilename());
-        if(convertFile.createNewFile()) {
-            try (FileOutputStream fos = new FileOutputStream(convertFile)) {
-                fos.write(file.getBytes());
-            }
-            return Optional.of(convertFile);
+    // delete file
+    public void fileDelete(String fileName) {
+        log.info("file name : "+ fileName);
+        try {
+            amazonS3Client.deleteObject(this.bucket, (fileName).replace(File.separatorChar, '/'));
+        } catch (AmazonServiceException e) {
+            System.err.println(e.getErrorMessage());
         }
-        return Optional.empty();
     }
+
+//    private Optional<File> convert(MultipartFile file) throws  IOException {
+//        File convertFile = new File(file.getOriginalFilename());
+//        if(convertFile.createNewFile()) {
+//            try (FileOutputStream fos = new FileOutputStream(convertFile)) {
+//                fos.write(file.getBytes());
+//            }
+//            return Optional.of(convertFile);
+//        }
+//        return Optional.empty();
+//    }
 
 }
