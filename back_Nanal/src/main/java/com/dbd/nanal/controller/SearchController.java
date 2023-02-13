@@ -2,6 +2,8 @@ package com.dbd.nanal.controller;
 
 import com.dbd.nanal.config.common.DefaultRes;
 import com.dbd.nanal.config.common.ResponseMessage;
+import com.dbd.nanal.dto.SearchDiaryResponseDTO;
+import com.dbd.nanal.dto.SearchUserIdResponseDTO;
 import com.dbd.nanal.model.UserEntity;
 import com.dbd.nanal.service.SearchService;
 import io.swagger.annotations.Api;
@@ -14,6 +16,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 
 @Api(tags = {"검색 관련 API"})
 @CrossOrigin
@@ -30,17 +33,19 @@ public class SearchController {
                     "[Front] \n" +
                     "{id(String)} \n\n" +
                     "[Back] \n" +
-                    "{userIdx(int), name(String), email(String), user_id(String), nickanme(String(} ")
+                    "{userIdx(int), name(String), email(String), user_id(String), nickanme(String)} ")
     @GetMapping("/user/{id}")
     public ResponseEntity<?> getUserId(@ApiParam(value = "user id")@PathVariable("id") String id, @AuthenticationPrincipal UserEntity userInfo){
         HashMap<String, Object> responseDTO = new HashMap<>();
-        try{
+
+        List<SearchUserIdResponseDTO> searchUserIdResponseDTOList =searchService.getUser(id, userInfo.getUserIdx());
+        if( searchUserIdResponseDTOList != null ){
             responseDTO.put("responseMessage", ResponseMessage.FRIEND_FIND_SUCCESS);
-            responseDTO.put("userInfo", searchService.getUser(id, userInfo.getUserIdx()));
+            responseDTO.put("userInfo", searchUserIdResponseDTOList);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-        }catch (Exception e){
+        }else{
             responseDTO.put("responseMessage", ResponseMessage.FRIEND_FIND_FAIL);
-            return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
+            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }
     }
 
@@ -54,13 +59,15 @@ public class SearchController {
     @GetMapping("/diary/{content}")
     public ResponseEntity<?> getDiaryContent(@ApiParam(value = "diary content")@PathVariable("content") String content, @AuthenticationPrincipal UserEntity userInfo){
         HashMap<String, Object> responseDTO = new HashMap<>();
-        try{
+
+        List<SearchDiaryResponseDTO> searchDiaryResponseDTOList=searchService.getDiaryContent(content, userInfo.getUserIdx());
+        if(searchDiaryResponseDTOList != null ){
             responseDTO.put("responseMessage", ResponseMessage.DIARY_GET_SUCCESS);
-            responseDTO.put("userInfo", searchService.getDiaryContent(content, userInfo.getUserIdx()));
+            responseDTO.put("diaryInfo", searchDiaryResponseDTOList);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-        }catch (Exception e){
+        }else{
             responseDTO.put("responseMessage", ResponseMessage.DIARY_GET_FAIL);
-            return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
+            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }
     }
 }

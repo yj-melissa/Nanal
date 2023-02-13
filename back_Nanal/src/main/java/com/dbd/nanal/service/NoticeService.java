@@ -7,6 +7,7 @@ import com.dbd.nanal.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,24 +22,25 @@ public class NoticeService {
 
 
     //save friend notice
-    public void saveFriendNotice(NotificationRequestDTO notice){
-        for(int userIdx: notice.getUserIdx()) {
-            NoticeEntity noticeEntity = NoticeEntity.builder()
-                    .user(UserEntity.builder().userIdx(userIdx).build())
+    public NotificationResponseDTO saveFriendNotice(NotificationRequestDTO notice){
+        NoticeEntity noticeEntity = NoticeEntity.builder()
+                    .user(UserEntity.builder().userIdx(notice.getUserIdx().get(0)).build())
                     .requestUserIdx(notice.getRequest_user_idx())
                     .noticeType(notice.getNotice_type())
                     .content(userProfileRepository.getReferenceById(notice.getRequest_user_idx()).getNickname())
                     .build();
-            noticeRepository.save(noticeEntity);
-        }
+
+        return new NotificationResponseDTO(noticeRepository.save(noticeEntity));
     }
 
     //save group notice
-    public void saveGroupNotice(NotificationRequestDTO notice){
+    public List<NotificationResponseDTO> saveGroupNotice(NotificationRequestDTO notice){
         String nickname=userProfileRepository.getReferenceById(notice.getRequest_user_idx()).getNickname();
         String groupName=groupRepository.getReferenceById(notice.getRequest_group_idx()).getGroupName();
 
         String str=nickname+","+groupName;
+
+        List<NoticeEntity> noticeEntityList =new ArrayList<>();
         for(int userIdx: notice.getUserIdx()){
             NoticeEntity noticeEntity=NoticeEntity.builder()
                     .user(UserEntity.builder().userIdx(userIdx).build())
@@ -48,17 +50,19 @@ public class NoticeService {
                     .noticeType(notice.getNotice_type())
                     .content(str)
                     .build();
-            noticeRepository.save(noticeEntity);
+            noticeEntityList.add(noticeRepository.save(noticeEntity));
         }
+        return noticeEntityList.stream().map(x-> new NotificationResponseDTO(x)).collect(Collectors.toList());
     }
 
     //save comment notice
-    public void saveCommentNotice(NotificationRequestDTO notice){
+    public NotificationResponseDTO saveCommentNotice(NotificationRequestDTO notice){
         DiaryEntity diaryEntity=diaryRepository.getReferenceById(notice.getRequest_diary_idx());
         String userName=userProfileRepository.getReferenceById(diaryEntity.getUser().getUserIdx()).getNickname();
         String nickname=userProfileRepository.getReferenceById(notice.getRequest_user_idx()).getNickname();
 
         String str=userName +","+nickname;
+
         NoticeEntity noticeEntity=NoticeEntity.builder()
                 .user(UserEntity.builder().userIdx(diaryEntity.getUser().getUserIdx()).build())
                 .requestUserIdx(notice.getRequest_user_idx())
@@ -67,16 +71,17 @@ public class NoticeService {
                 .noticeType(notice.getNotice_type())
                 .content(str)
                 .build();
-        noticeRepository.save(noticeEntity);
+        return new NotificationResponseDTO(noticeRepository.save(noticeEntity));
     }
 
     // save diary notice
-    public void saveDiaryNotice(NotificationRequestDTO notice){
+    public List<NotificationResponseDTO> saveDiaryNotice(NotificationRequestDTO notice){
         String nickname=userProfileRepository.getReferenceById(notice.getRequest_user_idx()).getNickname();
         String groupName=groupRepository.getReferenceById(notice.getRequest_group_idx()).getGroupName();
         List<GroupUserRelationEntity> groupUserRelationEntityList=groupUserRelationRepository.findByGroupDetail(GroupDetailEntity.builder().groupIdx(notice.getRequest_group_idx()).build());
 
         String str=nickname+","+groupName;
+        List<NoticeEntity> noticeEntityList= new ArrayList<>();
         for(GroupUserRelationEntity groupUser: groupUserRelationEntityList){
             if(groupUser.getUser().getUserIdx() == notice.getRequest_user_idx()) continue;
             NoticeEntity noticeEntity=NoticeEntity.builder()
@@ -87,8 +92,9 @@ public class NoticeService {
                     .noticeType(notice.getNotice_type())
                     .content(str)
                     .build();
-            noticeRepository.save(noticeEntity);
+            noticeEntityList.add(noticeRepository.save(noticeEntity));
         }
+        return noticeEntityList.stream().map(x-> new NotificationResponseDTO(x)).collect(Collectors.toList());
     }
 
     //get notice
@@ -103,9 +109,10 @@ public class NoticeService {
     }
 
     // save notice check
-    public void saveNoticeCheck(int noticeIdx){
+    public NotificationResponseDTO saveNoticeCheck(int noticeIdx){
         NoticeEntity noticeEntity=noticeRepository.getReferenceById(noticeIdx);
         noticeEntity.setIsChecked(true);
-        noticeRepository.save(noticeEntity);
+
+        return new NotificationResponseDTO(noticeRepository.save(noticeEntity));
     }
 }
