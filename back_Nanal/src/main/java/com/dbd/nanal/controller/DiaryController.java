@@ -67,6 +67,7 @@ public class DiaryController {
             //////////////////////////////////////////////////////////////////
 
             // [번역할 일기 내용]
+
             api.setContent(diary.getContent());
 
             // [번역하기]
@@ -78,7 +79,7 @@ public class DiaryController {
             String eng = (String) result.get("translatedText");
 
             // [문장 추출]
-            String sentenceResult=requestToKeySentenceFlask(eng);
+            String sentenceResult = requestToKeySentenceFlask(eng);
 
             // [달리 그림 만들기]
             String dalleResult = requestToDalleFlask(sentenceResult);
@@ -163,43 +164,47 @@ public class DiaryController {
             //diary keyword analyze
             List<String> keywordList = new ArrayList<>();
 
+            DiaryResponseDTO diaryResponseDTO = diaryService.getDiary(diary.getDiaryIdx());
 
-            requestToEmotionFlask(diary);
+            if (!diaryResponseDTO.getContent().equals(diary.getContent())) {
+                // 일기 내용이 다르다면 그림 다시 만들기
+                requestToEmotionFlask(diary);
 
-            // [번역할 일기 내용]
-            api.setContent(diary.getContent());
+                // [번역할 일기 내용]
+                api.setContent(diary.getContent());
 
-            // [번역하기]
-            String en = api.transfer();
-            JSONObject jsonObj = (JSONObject) new JSONParser().parse(en);
-            JSONObject message = (JSONObject) jsonObj.get("message");
-            JSONObject result = (JSONObject) message.get("result");
-            // [번역된 일기]
-            String eng = (String) result.get("translatedText");
-            System.out.println("eng : "+eng);
+                // [번역하기]
+                String en = api.transfer();
+                JSONObject jsonObj = (JSONObject) new JSONParser().parse(en);
+                JSONObject message = (JSONObject) jsonObj.get("message");
+                JSONObject result = (JSONObject) message.get("result");
+                // [번역된 일기]
+                String eng = (String) result.get("translatedText");
 
-            // [문장 추출]
-            String sentenceResult=requestToKeySentenceFlask(eng);
+                // [문장 추출]
+                String sentenceResult = requestToKeySentenceFlask(eng);
 
-            // [달리 그림 만들기]
-            String dalleResult = requestToDalleFlask(sentenceResult);
+                // [달리 그림 만들기]
+                String dalleResult = requestToDalleFlask(sentenceResult);
 
-            // [그림 저장하기]
-            File file = fileHandler.urlToFile(dalleResult);
+                // [그림 저장하기]
+                File file = fileHandler.urlToFile(dalleResult);
 
-            // [달리 s3 올리기]
-            String dalleURL = fileService.saveToS3(file);
+                // [달리 s3 올리기]
+                String dalleURL = fileService.saveToS3(file);
 
-            // [DB에 저장]
-            PaintingResponseDTO paintingResponseDTO = fileService.paintingSave(new PaintingRequestDTO("Dalle", dalleURL));
+                // [DB에 저장]
+                PaintingResponseDTO paintingResponseDTO = fileService.paintingSave(new PaintingRequestDTO("Dalle", dalleURL));
 
-
-            diary.setPainting(PaintingEntity.builder().pictureIdx(paintingResponseDTO.getPictureIdx()).pictureTitle(paintingResponseDTO.getPictureTitle()).imgUrl(paintingResponseDTO.getImgUrl()).build());
-            diary.setImgUrl(dalleURL);
+                diary.setPainting(PaintingEntity.builder().pictureIdx(paintingResponseDTO.getPictureIdx()).pictureTitle(paintingResponseDTO.getPictureTitle()).imgUrl(paintingResponseDTO.getImgUrl()).build());
+                diary.setImgUrl(dalleURL);
+                diaryResponseDTO = diaryService.updateDiary(diary.toEntity());
+                //save keyword
+                diaryService.saveKeyword(diaryResponseDTO.getDiaryIdx(), keywordList);
+            }
 
             //picture
             //music
-            DiaryResponseDTO diaryResponseDTO = diaryService.updateDiary(diary.toEntity());
 
             int diaryIdx = diary.getDiaryIdx();
             //delete diary-group
@@ -210,9 +215,6 @@ public class DiaryController {
                 GroupDiaryRelationDTO groupDiaryRelationDTO = new GroupDiaryRelationDTO(diaryIdx, diary.getGroupIdxList().get(i));
                 diaryService.saveDiaryGroup(groupDiaryRelationDTO);
             }
-
-            //save keyword
-            diaryService.saveKeyword(diaryResponseDTO.getDiaryIdx(), keywordList);
 
             responseDTO.put("responseMessage", ResponseMessage.DIARY_UPDATE_SUCCESS);
             responseDTO.put("diary", diaryResponseDTO);
@@ -650,7 +652,7 @@ public class DiaryController {
         return result;
     }
 
-    private String requestToKeySentenceFlask(String content){
+    private String requestToKeySentenceFlask(String content) {
         RestTemplate restTemplate = new RestTemplate();
 
         String url = "http://i8d110.p.ssafy.io:5000/keySentence";
@@ -660,7 +662,7 @@ public class DiaryController {
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
 
         // Body set
-        HashMap<String, String> sentence=new HashMap<>();
+        HashMap<String, String> sentence = new HashMap<>();
         sentence.put("content", content);
 
         // Message
@@ -668,8 +670,8 @@ public class DiaryController {
         // Request
         ResponseEntity<String> response = restTemplate.postForEntity(url, requestMessage, String.class);
 
-        String result=response.getBody();
-        System.out.println("sentence: "+ result);
+        String result = response.getBody();
+        System.out.println("sentence: " + result);
 
         return result;
     }
