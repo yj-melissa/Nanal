@@ -95,7 +95,6 @@ function FriendAdd() {
           </p>
         </div>
       ))}
-      <div></div>
     </div>
   );
 }

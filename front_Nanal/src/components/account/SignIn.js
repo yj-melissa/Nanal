@@ -63,9 +63,7 @@ function SignIn() {
             // navigate(`/home`, {
             //   replace: true,
             // });
-          }
-        } else if (data.statusCode === 500) {
-          if (data.data.responseMessage === '로그인 실패') {
+          } else if (data.data.responseMessage === '로그인 실패') {
             // alert('아이디 또는 비밀번호를 다시 확인해주세요.');
             Swal.fire({
               icon: 'warning',

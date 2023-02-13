@@ -277,7 +277,7 @@ const TuningProfile = () => {
                 onChange={onChangeNickname}
                 className='font-medium m-0.5 mx-1 px-1 p-0.5 text-sm rounded-lg'
               ></input>
-              <p className='text-xs'>{nicknameMessage}</p>
+              <p className='text-xs text-rose-500'>{nicknameMessage}</p>
             </div>
             <div id='user-image' className='my-2'>
               <p className='text-sm'>💙 프로필 이미지 </p>
