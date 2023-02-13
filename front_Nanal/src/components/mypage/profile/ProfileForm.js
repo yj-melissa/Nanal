@@ -104,7 +104,7 @@ function ProfileForm() {
             프로필 소개글을 등록해주세요!ㅎㅎ
           </p>
         ) : (
-          <p className='break-words break-all whitespace-pre'>
+          <p className='px-1.5 mx-auto break-all whitespace-pre-line w-80'>
             {userProfile.introduction}
           </p>
         )}

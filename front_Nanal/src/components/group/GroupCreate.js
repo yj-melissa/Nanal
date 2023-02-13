@@ -341,7 +341,7 @@ function GroupCreate() {
                   onChangeTagRemove(idx);
                 }}
                 key={idx}
-                className='items-center inline-block p-1 mr-4 space-y-3 rounded-lg bg-slate-200 hover:bg-blue-300'
+                className='items-center inline-block p-1 my-0.5 mr-4 space-y-3 rounded-lg bg-slate-200 hover:bg-blue-300'
               >
                 #{tagging}
               </button>

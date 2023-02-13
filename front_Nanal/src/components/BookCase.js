@@ -63,17 +63,17 @@ function BookCase() {
   };
 
   const emoMouseOver = (emo) => {
-    if (emo === 'joy' && emotion.joy.cnt > 0) {
+    if (emo === 'joy' && emotion && emotion.joy.cnt > 0) {
       SetEmotionDisplay([true, false, false, false, false, false]);
-    } else if (emo === 'calm' && emotion.calm.cnt > 0) {
+    } else if (emo === 'calm' && emotion && emotion.calm.cnt > 0) {
       SetEmotionDisplay([false, true, false, false, false, false]);
-    } else if (emo === 'nerv' && emotion.nerv.cnt > 0) {
+    } else if (emo === 'nerv' && emotion && emotion.nerv.cnt > 0) {
       SetEmotionDisplay([false, false, true, false, false, false]);
-    } else if (emo === 'ang' && emotion.ang.cnt > 0) {
+    } else if (emo === 'ang' && emotion && emotion.ang.cnt > 0) {
       SetEmotionDisplay([false, false, false, true, false, false]);
-    } else if (emo === 'emb' && emotion.emb.cnt > 0) {
+    } else if (emo === 'emb' && emotion && emotion.emb.cnt > 0) {
       SetEmotionDisplay([false, false, false, false, true, false]);
-    } else if (emo === 'sad' && emotion.sad.cnt > 0) {
+    } else if (emo === 'sad' && emotion && emotion.sad.cnt > 0) {
       SetEmotionDisplay([false, false, false, false, false, true]);
     }
   };
@@ -108,7 +108,7 @@ function BookCase() {
             SetEmotion(data.data.emotions);
             // console.log(data.data.emotions);
           } else if (data.data.responseMessage === '데이터 없음') {
-            console.log('데이터 없음');
+            // console.log('데이터 없음');
           }
         } else {
           console.log('감정 조회 오류 : ');
@@ -286,7 +286,7 @@ function BookCase() {
           onMouseOut={emoMouseOut}
         />
         <div>
-          {emotionDisplay[0] === true ? (
+          {emotion && emotionDisplay[0] === true ? (
             <div
               className={`w-16 p-2 text-center rounded-lg h-50 bg-zinc-100 ${emoCss} ${joyCss}`}
             >
@@ -301,7 +301,7 @@ function BookCase() {
                 : null}
             </div>
           ) : null}
-          {emotionDisplay[1] === true ? (
+          {emotion && emotionDisplay[1] === true ? (
             <div
               className={`w-16 p-2 text-center rounded-lg h-50 bg-zinc-100 ${emoCss} ${calmCss}`}
             >
@@ -316,7 +316,7 @@ function BookCase() {
                 : null}
             </div>
           ) : null}
-          {emotionDisplay[2] === true ? (
+          {emotion && emotionDisplay[2] === true ? (
             <div
               className={`w-16 p-2 text-center rounded-lg h-50 bg-zinc-100 ${emoCss} ${nervCss}`}
             >
@@ -331,7 +331,7 @@ function BookCase() {
                 : null}
             </div>
           ) : null}
-          {emotionDisplay[3] === true ? (
+          {emotion && emotionDisplay[3] === true ? (
             <div
               className={`w-16 p-2 text-center rounded-lg h-50 bg-zinc-100 ${emoCss} ${angCss}`}
             >
@@ -346,7 +346,7 @@ function BookCase() {
                 : null}
             </div>
           ) : null}
-          {emotionDisplay[4] === true ? (
+          {emotion && emotionDisplay[4] === true ? (
             <div
               className={`w-16 p-2 text-center rounded-lg h-50 bg-zinc-100 ${emoCss} ${embCss}`}
             >
@@ -361,7 +361,7 @@ function BookCase() {
                 : null}
             </div>
           ) : null}
-          {emotionDisplay[5] === true ? (
+          {emotion && emotionDisplay[5] === true ? (
             <div
               className={`w-16 p-2 text-center rounded-lg h-50 bg-zinc-100 ${emoCss} ${sadCss}`}
             >
