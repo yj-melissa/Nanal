@@ -18,10 +18,7 @@ function DiaryItem({
       state={{
         diaryIdx: diaryIdx,
         isToggle: isToggle,
-        content: content,
         groupIdx: groupIdx,
-        diaryDate: diaryDate,
-        diarydate: diarydate,
       }}
     >
       <div className='flex items-center p-2 m-0.5 w-[328px]'>

@@ -20,10 +20,11 @@ function DiaryDetail() {
   const diaryIdx = state.diaryIdx;
   const isToggle = state.isToggle;
   const groupIdx = state.groupIdx;
-  const diarydate = state.diaryDate.split('-');
 
   const [diaryDetail, setDiaryDetail] = useState({});
   const [originGroupList, setOriginGroupList] = useState();
+
+  const [diarydate, setDiarydate] = useState(['0000', '00', '00']);
 
   // 북마크 여부 데이터
   const [isBook, setIsBook] = useState(false);
@@ -99,6 +100,7 @@ function DiaryDetail() {
         if (data.statusCode === 200) {
           if (data.data.responseMessage === '일기 조회 성공') {
             setDiaryDetail(data.data.diary);
+            setDiarydate(data.data.diary.diaryDate.split('-'));
             setOriginGroupList(data.data.groupList);
             if (data.data.isBookmark === true) {
               setIsBook(!isBook);
