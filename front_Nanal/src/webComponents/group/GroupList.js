@@ -102,7 +102,7 @@ function GroupList({setGroupCompo, setGroupIdx}) {
         </ul>
         <div
           className='inline-block float-right ml-5 pl-5'
-          onClick={() => setGroupCompo([false, true, false, false])}
+          onClick={() => setGroupCompo([false, true, false, false, false])}
         >
           <img src={addIcon} className='w-[22px] h-[22px] mx-1.5' />
         </div>

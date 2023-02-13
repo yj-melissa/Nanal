@@ -27,7 +27,8 @@ const GroupDiary = () => {
         <GroupCreate setGroupCompo={setGroupCompo} setGroupIdx={setGroupIdx} />
       </div> :
       groupCompo[2] === true ?
-      <div className="absolute z-20 right-80 inset-y-52">
+      <div className="absolute z-20 right-80 inset-y-52 w-[400px]">
+        {/* <p>hihihihi</p> */}
         <GroupDetail groupIdx={groupIdx} setGroupCompo={setGroupCompo} />
       </div> :
       groupCompo[3] === true ?
@@ -38,9 +39,10 @@ const GroupDiary = () => {
       <div className="absolute z-20 right-40 inset-y-28 w-[600px]">
         <GroupUpdate groupyIdx={groupIdx} />
       </div>
-      :      
+      :
       <div className='absolute z-20 right-[360px] inset-y-72'>
         <p>선택된 메뉴가 없습니다.</p>
+        <p>좌측에서 메뉴를 선택해 주세요.</p>
         <p>좌측에서 메뉴를 선택해 주세요.</p>
       </div>
       }
