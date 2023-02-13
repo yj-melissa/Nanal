@@ -11,24 +11,24 @@ const FriendList = () => {
 
   return (
     <div className='relative w-[1440px] mx-auto'>
-      <p className='absolute z-30 left-[330px] inset-y-28'>친구 목록</p>
-      <img src={nmy} className='absolute z-20 left-60 inset-y-20' />
-      <img src={diaryImgYellow} className='absolute w-[1280px] z-10 left-12' />
-      <div className="absolute z-20 left-52 inset-y-[184px]">
+      <p className='absolute z-30 left-[330px] inset-y-36'>친구 목록</p>
+      <img src={nmy} className='absolute z-20 left-60 inset-y-28' />
+      <img src={diaryImgYellow} className='absolute w-[1280px] z-10 left-12 top-8' />
+      <div className="absolute z-20 left-60 inset-y-[216px]">
         <FList setFriendAdd={setFriendCompo} setUserIdx={setUserIdx} />
       </div>
-      {friendCompo[0] === true ? <div className='absolute z-20 right-[360px] inset-y-60'>
+      {friendCompo[0] === true ? <div className='absolute z-20 right-[360px] inset-y-72'>
         <p>선택된 메뉴가 없습니다.</p>
         <p>좌측에서 메뉴를 선택해 주세요.</p>
       </div> :
       friendCompo[1] === true ?
-      <div className="absolute z-20 right-80 inset-y-[72px]">
+      <div className="absolute z-20 right-80 inset-y-[104px]">
         <FriendAdd />
       </div> :
       friendCompo[2] === true ?
-      <div className="absolute z-20 right-80 inset-y-44">
+      <div className="absolute z-20 right-72 inset-y-52 w-[400px]">
         <FriendDetail userIdx={userIdx} />
-      </div> : <div className='absolute z-20 right-[360px] inset-y-60'>
+      </div> : <div className='absolute z-20 right-[360px] inset-y-72'>
         <p>선택된 메뉴가 없습니다.</p>
         <p>좌측에서 메뉴를 선택해 주세요.</p>
       </div>

@@ -4,11 +4,11 @@ import imageCompression from 'browser-image-compression';
 import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
 
-function GroupUpdate() {
-  const { state } = useLocation();
+function GroupUpdate({groupIdx}) {
+  // const { state } = useLocation();
   const navigate = useNavigate();
 
-  const [groupIdx, setGroupIdx] = useState(0);
+  // const [groupIdx, setGroupIdx] = useState(0);
   const [groupName, setGroupName] = useState('');
   const [groupTag, setGroupTag] = useState([]);
   const [groupImg, setGroupImg] = useState('');
@@ -148,6 +148,7 @@ function GroupUpdate() {
   // 그룹 수정 요청 함수
   const GroupUpdate = (e) => {
     e.preventDefault();
+    console.log(e)
 
     let isCurrentGTName = true;
 
@@ -164,6 +165,7 @@ function GroupUpdate() {
     } else {
       // setGroupName(currentName.current);
       // setGroupTag(currentTag.current);
+      // console.log(groupIdx)
       axios_api
         .put('/group', {
           groupIdx: groupIdx,
@@ -222,10 +224,10 @@ function GroupUpdate() {
                                 if (
                                   data.data.responseMessage === '알림 저장 성공'
                                 ) {
-                                  navigate(`/Group/Setting`, {
-                                    state: { groupIdx: groupidx },
-                                    replace: true,
-                                  });
+                                  // navigate(`/Group/Setting`, {
+                                  //   state: { groupIdx: groupidx },
+                                  //   replace: true,
+                                  // });
                                 }
                               } else {
                                 console.log('알림 저장 오류 : ');
@@ -258,10 +260,10 @@ function GroupUpdate() {
                   .then(({ data }) => {
                     if (data.statusCode === 200) {
                       if (data.data.responseMessage === '알림 저장 성공') {
-                        navigate(`/Group/Setting`, {
-                          state: { groupIdx: groupidx },
-                          replace: true,
-                        });
+                        // navigate(`/Group/Setting`, {
+                        //   state: { groupIdx: groupidx },
+                        //   replace: true,
+                        // });
                       }
                     } else {
                       console.log('알림 저장 오류 : ');
@@ -289,7 +291,7 @@ function GroupUpdate() {
   useEffect(() => {
     onLogin();
     axios_api
-      .get(`/group/${state.groupDetail}`)
+      .get(`/group/${groupIdx}`)
       .then(({ data }) => {
         if (data.statusCode === 200) {
           setGroupName(null);
@@ -297,7 +299,7 @@ function GroupUpdate() {
           currentName.current = [];
           if (data.data.responseMessage === '그룹 조회 성공') {
             // console.log(data.data.groupDetail);
-            setGroupIdx(data.data.groupDetail.groupIdx);
+            // setGroupIdx(data.data.groupDetail.groupIdx);
             setGroupName(data.data.groupDetail.groupName);
             setGroupTag(data.data.tags);
             setGroupImg(data.data.groupDetail.imgUrl);
@@ -372,7 +374,7 @@ function GroupUpdate() {
     <div id='group-Update'>
       <h2 className='m-1 text-lg font-bold text-center'> 그룹 수정 </h2>
       <div>
-        <form onSubmit={GroupUpdate}>
+        <form onSubmit={()=>GroupUpdate()}>
           <p className='my-2 text-center'>✨ 그룹 프로필 ✨</p>
           <div id='group-name-div'>
             <label htmlFor='group-name'>💙 그룹 이름 : </label>

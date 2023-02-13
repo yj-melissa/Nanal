@@ -52,7 +52,6 @@ function DiaryList({
           setDiaryList(null);
           if (data.data.responseMessage === '일기 리스트 조회 성공') {
             setDiaryList(data.data.diary);
-
             if (data.data.diary.length !== 0) {
               setIsShow(true);
             } else {

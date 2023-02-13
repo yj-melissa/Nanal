@@ -14,6 +14,7 @@ function GroupDetail({groupIdx, setGroupCompo}) {
     axios_api
       .get(`/group/${groupIdx}`)
       .then(({ data }) => {
+        console.log(data)
         if (data.statusCode === 200) {
           setGroupDetail(null);
           setGroupTag(null);
