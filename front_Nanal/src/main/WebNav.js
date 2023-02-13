@@ -72,17 +72,18 @@ function Nav() {
         </div>
         <div className='flex items-center m-auto'>
           {/* Alarm */}
-          <div ref={alarmRef} onClick={toggleAlarmMenu} className='cursor-pointer'>
-            <img src={bell} className='w-6 h-6 my-3' alt='bell'/>
+          <div ref={alarmRef} onClick={toggleAlarmMenu} className='relative cursor-pointer'>
+            <img src={bell} className='w-6 h-6 my-3' alt='bell' />
+            {useAlarm === true ?
+            <span className="flex h-3 w-3 absolute -right-2 top-2">
+              <span className="animate-ping absolute inline-flex h-3 w-3 rounded-full bg-sky-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-sky-500"></span>
+            </span>: null}
           </div>
           {isAlarmToggle && <div ref={alarmRef} className='absolute right-40 inset-y-[48px] rounded-md box-border border border-black w-72 h-[500px] z-40 bg-slate-100 grid grid-cols-1 justify-items-center overflow-auto'>
             <AlarmList setUseAlarm={setUseAlarm} />
           </div>}
-          {useAlarm === true ?
-            <span class="absolute flex h-3 w-3 right-[260px] top-5">
-              <span class="animate-ping absolute inline-flex h-3 w-3 rounded-full bg-sky-400 opacity-75"></span>
-              <span class="relative inline-flex rounded-full h-3 w-3 bg-sky-500"></span>
-            </span>: null}
+          
           {/* ProfileMenu */}
           <div ref={menuRef} className="rounded-full w-8 h-8 ml-5 overflow-hidden cursor-pointer" onClick={toggleProfileMenu}>
             {userProfile.img !== null && <img src={userProfile.img} alt='usere-profile-img'/>}

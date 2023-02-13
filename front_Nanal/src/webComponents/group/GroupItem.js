@@ -2,7 +2,7 @@ import React from 'react';
 
 function GroupItem({ item, setGroupIdx, setGroupCompo }) {
   return (
-    <div onClick={() => { setGroupIdx(item.groupDetail.groupIdx); setGroupCompo([false, false, true, false, false]) }}>
+    <div onClick={() => { setGroupIdx(item.groupDetail.groupIdx); setGroupCompo([false, false, true, false, false]); }}>
       {/* <div
         to={`/Group/Detail`}
         state={{ groupIdx: item.groupDetail.groupIdx, isToggle: 2 }}
