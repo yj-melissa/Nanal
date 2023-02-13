@@ -1,14 +1,13 @@
 import { useState, useRef, useEffect } from 'react';
 import bell from '../src_assets/img/bell.svg';
-import logo from '../src_assets/img/home-alt.svg';
+import logo from '../src_assets/img/nanalLogo.svg';
 import Tuning from '../webComponents/setting/Tuning'
 import AlarmList from '../webComponents/another/AlarmList'
 import { Link } from "react-router-dom";
 
 function Nav() {
   // animate-ping 쓸지말지 고민 좀 해보자.
-  // const [useAlarm, setUseAlarm] = useState(false)
-
+  const [useAlarm, setUseAlarm] = useState(true)
   const userProfile = {
     'days' : window.localStorage.getItem('profileDays'),
     'img': window.localStorage.getItem('profileImg'),
@@ -28,7 +27,7 @@ function Nav() {
       // current.contains(e.target) : 컴포넌트 특정 영역 외 클릭 감지를 위해 사용
       if (menuRef.current && !menuRef.current.contains(e.target)) {
         setIsToggle(false);
-        console.log("profile===ref");
+        // console.log("profile===ref");
       }
     }
     document.addEventListener("mousedown", handleOutside);
@@ -50,7 +49,7 @@ function Nav() {
       // current.contains(e.target) : 컴포넌트 특정 영역 외 클릭 감지를 위해 사용
       if (alarmRef.current && !alarmRef.current.contains(e.target)) {
         setIsAlarmToggle(false);
-        console.log("alarm===ref");
+        // console.log("alarm===ref");
       }
     }
     document.addEventListener("mousedown", handleOutside);
@@ -62,9 +61,9 @@ function Nav() {
 
   return (
     <div>
-      <nav className='flex justify-between space-x-4 m-auto'>
+      <nav className='flex justify-between space-x-4 m-auto h-16'>
         <Link to='/home'
-          className='rounded-lg w-8 h-8 pr-1 py-1 my-1 text-slate-700 font-medium hover:bg-slate-100 hover:text-slate-900'
+          className='rounded-lg w-24 h-16 pr-1 py-1 my-auto text-slate-700 font-medium hover:bg-slate-100 hover:text-slate-900'
         >
           <img src={logo} alt='logo'/>
         </Link>
@@ -77,9 +76,13 @@ function Nav() {
             <img src={bell} className='w-6 h-6 my-3' alt='bell'/>
           </div>
           {isAlarmToggle && <div ref={alarmRef} className='absolute right-40 inset-y-[48px] rounded-md box-border border border-black w-72 h-[500px] z-40 bg-slate-100 grid grid-cols-1 justify-items-center overflow-auto'>
-            <AlarmList />
+            <AlarmList setUseAlarm={setUseAlarm} />
           </div>}
-          
+          {useAlarm === true ?
+            <span class="absolute flex h-3 w-3 right-[260px] top-5">
+              <span class="animate-ping absolute inline-flex h-3 w-3 rounded-full bg-sky-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-3 w-3 bg-sky-500"></span>
+            </span>: null}
           {/* ProfileMenu */}
           <div ref={menuRef} className="rounded-full w-8 h-8 ml-5 overflow-hidden cursor-pointer" onClick={toggleProfileMenu}>
             {userProfile.img !== null && <img src={userProfile.img} alt='usere-profile-img'/>}

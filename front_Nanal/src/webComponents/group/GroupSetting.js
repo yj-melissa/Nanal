@@ -99,7 +99,7 @@ function GroupSetting({groupIdx, setGroupCompo}) {
   }, []);
 
   return (
-    <div className='justify-center text-center w-[500px] h-[420px] overflow-auto'>
+    <div className='justify-center text-center w-[500px] h-[420px] overflow-auto pr-2'>
       {/* <h1 className='text-center'>그룹 상세 페이지</h1> */}
 
       <div className='justify-center w-full my-2 text-center'>
@@ -141,14 +141,20 @@ function GroupSetting({groupIdx, setGroupCompo}) {
           </button>
         </div>
         <hr className='mx-auto my-5 border-solid border-1 border-slate-800 w-80' />
+        
       </div>
 
       {friendList[0] === '아직은 친구가 없습니다.' ? (
         <p>아직은 그룹에 친구가 없습니다.</p>
       ) : (
-        friendList.map((friendItem, idx) => (
-          <FriendItem key={idx} item={friendItem} />
-        ))
+        <div>
+          <p className='pb-2'>그룹에 가입된 친구 목록 입니다.</p>
+          {
+            friendList.map((friendItem, idx) => (
+              <FriendItem key={idx} item={friendItem} />
+            ))
+          }
+        </div>
       )}
     </div>
   );
