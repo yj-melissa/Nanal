@@ -36,15 +36,16 @@ public class NotificationController {
     @PostMapping("/friend")
     public ResponseEntity<?> saveFriendNotice(@ApiParam(value = "알림 정보")@RequestBody NotificationRequestDTO notice, @AuthenticationPrincipal UserEntity userInfo) {
         HashMap<String, Object> responseDTO = new HashMap<>();
-        System.out.println(notice.toString());
-        try{
-            notice.setRequest_user_idx(userInfo.getUserIdx());
-            notice.setNotice_type(0);
-            noticeService.saveFriendNotice(notice);
+
+        notice.setRequest_user_idx(userInfo.getUserIdx());
+        notice.setNotice_type(0);
+        NotificationResponseDTO notificationResponseDTO=noticeService.saveFriendNotice(notice);
+        if(notificationResponseDTO != null){
             responseDTO.put("responseMessage", ResponseMessage.NOTICE_SAVE_SUCCESS);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-        }catch (Exception e){
-            return new ResponseEntity<>("서버오류", HttpStatus.INTERNAL_SERVER_ERROR);
+        }else{
+            responseDTO.put("responseMessage", ResponseMessage.NOTICE_SAVE_FAIL);
+            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }
     }
 
@@ -57,17 +58,16 @@ public class NotificationController {
     @PostMapping("/group")
     public ResponseEntity<?> saveGroupNotice(@ApiParam(value = "알림 정보")@RequestBody NotificationRequestDTO notice, @AuthenticationPrincipal UserEntity userInfo) {
         HashMap<String, Object> responseDTO = new HashMap<>();
-        System.out.println(notice.toString());
-        try{
-            notice.setRequest_user_idx(userInfo.getUserIdx());
-            notice.setNotice_type(1);
-            noticeService.saveGroupNotice(notice);
+
+        notice.setRequest_user_idx(userInfo.getUserIdx());
+        notice.setNotice_type(1);
+        List<NotificationResponseDTO> notificationResponseDTOList= noticeService.saveGroupNotice(notice);
+        if(notificationResponseDTOList != null ){
             responseDTO.put("responseMessage", ResponseMessage.NOTICE_SAVE_SUCCESS);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-        }catch (Exception e){
+        }else{
             responseDTO.put("responseMessage", ResponseMessage.NOTICE_SAVE_FAIL);
-            return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
-
+            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }
     }
 
@@ -80,18 +80,21 @@ public class NotificationController {
     @PostMapping("/comment")
     public ResponseEntity<?> saveCommentNotice(@ApiParam(value = "알림 정보")@RequestBody NotificationRequestDTO notice, @AuthenticationPrincipal UserEntity userInfo) {
         HashMap<String, Object> responseDTO = new HashMap<>();
-        try{
-            System.out.println("notice: "+ userInfo.getUserIdx()+" "+ notice.getRequest_user_idx());
-            if(userInfo.getUserIdx() != notice.getRequest_user_idx()){
-                notice.setRequest_user_idx(userInfo.getUserIdx());
-                notice.setNotice_type(3);
-                noticeService.saveCommentNotice(notice);
+
+        if(userInfo.getUserIdx() != notice.getRequest_user_idx()){
+            notice.setRequest_user_idx(userInfo.getUserIdx());
+            notice.setNotice_type(3);
+            NotificationResponseDTO notificationResponseDTO=noticeService.saveCommentNotice(notice);
+            if(notificationResponseDTO != null){
+                responseDTO.put("responseMessage", ResponseMessage.NOTICE_SAVE_SUCCESS);
+                return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+            }else{
+                responseDTO.put("responseMessage", ResponseMessage.NOTICE_SAVE_FAIL);
+                return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
             }
+        }else{
             responseDTO.put("responseMessage", ResponseMessage.NOTICE_SAVE_SUCCESS);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-        }catch (Exception e){
-            responseDTO.put("responseMessage", ResponseMessage.NOTICE_SAVE_FAIL);
-            return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
         }
     }
 
@@ -104,16 +107,16 @@ public class NotificationController {
     @PostMapping("/diary")
     public ResponseEntity<?> saveDiaryNotice(@ApiParam(value = "알림 정보")@RequestBody NotificationRequestDTO notice, @AuthenticationPrincipal UserEntity userInfo) {
         HashMap<String, Object> responseDTO = new HashMap<>();
-        try{
-            notice.setRequest_user_idx(userInfo.getUserIdx());
-            notice.setNotice_type(2);
-            noticeService.saveDiaryNotice(notice);
+
+        notice.setRequest_user_idx(userInfo.getUserIdx());
+        notice.setNotice_type(2);
+        List<NotificationResponseDTO> notificationResponseDTOList= noticeService.saveDiaryNotice(notice);
+        if(notificationResponseDTOList != null ){
             responseDTO.put("responseMessage", ResponseMessage.NOTICE_SAVE_SUCCESS);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-        }catch (Exception e){
+        }else{
             responseDTO.put("responseMessage", ResponseMessage.NOTICE_SAVE_FAIL);
-            return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
-
+            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }
     }
 
@@ -126,14 +129,15 @@ public class NotificationController {
     @GetMapping("")
     public ResponseEntity<?> getNotice(@ApiParam(value = "유저 id") @AuthenticationPrincipal UserEntity userInfo){
         HashMap<String, Object> responseDTO = new HashMap<>();
-        try{
-            List<NotificationResponseDTO> notificationResponseDTOList =noticeService.getNotice(userInfo.getUserIdx());
+
+        List<NotificationResponseDTO> notificationResponseDTOList =noticeService.getNotice(userInfo.getUserIdx());
+        if( notificationResponseDTOList != null ){
             responseDTO.put("responseMessage", ResponseMessage.NOTICE_GET_SUCCESS);
             responseDTO.put("notice", notificationResponseDTOList);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-        }catch (Exception e){
+        }else{
             responseDTO.put("responseMessage", ResponseMessage.NOTICE_GET_FAIL);
-            return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
+            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }
     }
 
@@ -146,14 +150,10 @@ public class NotificationController {
     @DeleteMapping("/{noticeIdx}")
     public ResponseEntity<?> deleteDiary( @ApiParam(value="알림 id") @PathVariable("noticeIdx") int noticeIdx){
         HashMap<String, Object> responseDTO = new HashMap<>();
-        try{
-            noticeService.deleteNotice(noticeIdx);
-            responseDTO.put("responseMessage", ResponseMessage.NOTICE_DELETE_SUCCESS);
-            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-        }catch (Exception e){
-            responseDTO.put("responseMessage", ResponseMessage.NOTICE_DELETE_FAIL);
-            return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
-        }
+
+        noticeService.deleteNotice(noticeIdx);
+        responseDTO.put("responseMessage", ResponseMessage.NOTICE_DELETE_SUCCESS);
+        return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
 
     @ApiOperation(value = "알림 읽음 처리", notes =
@@ -165,13 +165,35 @@ public class NotificationController {
     @GetMapping("/{noticeIdx}")
     public ResponseEntity<?> saveNoticeCheck(@ApiParam(value = "알림 id")  @PathVariable("noticeIdx") int noticeIdx){
         HashMap<String, Object> responseDTO = new HashMap<>();
-        try{
-            noticeService.saveNoticeCheck(noticeIdx);
+
+        NotificationResponseDTO notificationResponseDTO=noticeService.saveNoticeCheck(noticeIdx);
+        if(notificationResponseDTO != null ){
             responseDTO.put("responseMessage", ResponseMessage.NOTICE_GET_SUCCESS);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-        }catch (Exception e){
+        }else{
             responseDTO.put("responseMessage", ResponseMessage.NOTICE_GET_FAIL);
-            return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
+            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }
+    }
+
+    // get new notification
+    @ApiOperation(value = "userIdx로 새 알림 여부 반환", notes =
+            "새 알림 여부를 반환합니다..\n" +
+                    "[Front] \n" +
+                    "{} \n\n" +
+                    "[Back] \n" +
+                    "{check(boolean)}")
+    @GetMapping("/check")
+    public ResponseEntity<?> getNoticeCount(@ApiParam(value = "유저 id") @AuthenticationPrincipal UserEntity userInfo){
+        HashMap<String, Object> responseDTO = new HashMap<>();
+
+        int cnt =noticeService.getNotice(userInfo.getUserIdx()).size();
+        if( cnt > 0 ){
+            responseDTO.put("check", true);
+        }else{
+            responseDTO.put("check", false);
+        }
+        responseDTO.put("responseMessage", ResponseMessage.NOTICE_GET_SUCCESS);
+        return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
 }
