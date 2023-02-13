@@ -4,6 +4,7 @@ import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
 import Swal from 'sweetalert2';
 import { MutatingDots } from 'react-loader-spinner';
+import spinner from '../../src_assets/img/emotion/spinner';
 
 const getStringDate = (date) => {
   // 대한민국의 offset을 수동으로 추가한 뒤 날짜 전달
@@ -116,8 +117,9 @@ function DiaryCreate() {
     <div className='h-auto min-h-full pb-5'>
       <div>
         {loaded ? (
-          <div>
-            <p className='text-sm'>달리가 그림을 만드는 중이에요...</p>
+          <div className='flex items-center justify-center'>
+            <img src={spinner} alt='emotion_gif' />
+            <p className='text-xl'>달리가 그림을 만드는 중이에요...</p>
             <MutatingDots
               height='100'
               width='100'
