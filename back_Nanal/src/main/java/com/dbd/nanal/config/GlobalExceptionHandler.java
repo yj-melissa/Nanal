@@ -1,14 +1,11 @@
 package com.dbd.nanal.config;
 
-
 import com.dbd.nanal.config.common.DefaultRes;
 import com.dbd.nanal.config.common.ResponseMessage;
-import io.jsonwebtoken.JwtException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.mail.MailException;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -34,24 +31,23 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
     }
 
-    @ExceptionHandler(DuplicateKeyException.class)
-    public ResponseEntity<?> handleDuplicateKeyException(Exception e) {
-        log.error("handleDuplicateKeyException : {}", e.getMessage());
-        responseDTO.put("responseMessage", ResponseMessage.DUPLICATED_KEY);
-        return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
-    }
+//    @ExceptionHandler(DuplicateKeyException.class)
+//    public ResponseEntity<?> handleDuplicateKeyException(Exception e) {
+//        log.error("handleDuplicateKeyException : {}", e.getMessage());
+//        responseDTO.put("responseMessage", ResponseMessage.DUPLICATED_KEY);
+//        return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
+//    }
 
-    @ExceptionHandler(JwtException.class)
-    public ResponseEntity<?> handleJwtException(Exception e) {
-        log.error("handleDuplicateKeyException : {}", e.getMessage());
-        responseDTO.put("responseMessage", ResponseMessage.DUPLICATED_KEY);
-        return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
-    }
+//    @ExceptionHandler(MethodArgumentNotValidException.class)
+//    public ResponseEntity<?> handleMethodArgumentNotValidException(Exception e) {
+//        log.error("handleMethodArgumentNotValidException : {}", e.getMessage());
+//        responseDTO.put("responseMessage", ResponseMessage.NOT_VALID_KEY);
+//        return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
+//    }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<?> handleMethodArgumentNotValidException(Exception e) {
-        log.error("handleMethodArgumentNotValidException : {}", e.getMessage());
-        responseDTO.put("responseMessage", ResponseMessage.NOT_VALID_KEY);
+    @ExceptionHandler(MailException.class)
+    public ResponseEntity<?> handleMailException(Exception e) {
+        responseDTO.put("responseMessage", ResponseMessage.EMAIL_SEND_FAIL);
         return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
     }
 

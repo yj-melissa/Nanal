@@ -17,7 +17,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -58,10 +57,13 @@ public class UserController {
                     "{accessToken(Header), refreshToken(Cookie)} \n")
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody @Valid UserFormDTO userformDTO, HttpServletResponse response) {
+        HashMap<String, Object> responseDTO = new HashMap<>();
         // 정보가 들어오지 않았을 때
         if (userformDTO
-                == null || userformDTO.getPassword() == null || userformDTO.getUserId() == null | userformDTO.getEmail() == null) {
-            throw new NullPointerException(ResponseMessage.EMPTY);
+                == null || userformDTO.getPassword() == null || userformDTO.getUserId() == null | userformDTO.getEmail() == null || userformDTO.getNickname() == null) {
+            responseDTO.put("responseMessage", ResponseMessage.USER_CREATE_FAIL);
+
+            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }
 
         UserEntity user = UserEntity.builder()
@@ -81,7 +83,7 @@ public class UserController {
         UserProfileEntity userProfile = UserProfileEntity.builder()
                 .user(user)
                 .nickname(userformDTO.getNickname())
-                .img(userformDTO.getImg())
+//                .img(userformDTO.getImg())
                 .introduction(userformDTO.getIntroduction())
                 .isPrivate(userformDTO.getIsPrivate())
                 .painting(paintingRequestDTO.toEntity())
@@ -94,7 +96,6 @@ public class UserController {
 //          JWT 토큰 발행
         HashMap<String, String> token = createTokens(user);
 
-        HashMap<String, Object> responseDTO = new HashMap<>();
         responseDTO.put("responseMessage", ResponseMessage.USER_CREATE_SUCCESS);
         responseDTO.put("accessToken", token.get("accessToken"));
         response.setHeader("accessToken", token.get("accessToken"));
@@ -114,34 +115,27 @@ public class UserController {
                     "{code(String), refreshToken(String)} \n")
     @GetMapping("/validate/{email}")
     public ResponseEntity<?> validateEmail(@PathVariable String email) throws Exception {
+        HashMap<String, Object> responseDTO = new HashMap<>();
+
         // 이메일 중복 확인
         ResponseEntity<?> isDuplicate = checkEmail(email);
-        if (isDuplicate == null) {
-            throw new DuplicateKeyException(email);
+        if (isDuplicate != null) {
+            responseDTO.put("responseMessage", ResponseMessage.DUPLICATED_KEY);
+            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }
 
         String code = emailService.sendSimpleMessage(email);
 
-        try {
-            HashMap<String, Object> responseDTO = new HashMap<>();
-            if (code == null) {
-                responseDTO.put("responseMessage", ResponseMessage.EMAIL_SEND_FAIL);
-
-                return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-            }
-
-            responseDTO.put("responseMessage", ResponseMessage.EMAIL_SEND_SUCCESS);
-            responseDTO.put("code", code);
-
-            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-        } catch (Exception e) {
-            log.info("[이메일 인증] 발송 실패 :" + e);
-            HashMap<String, Object> responseDTO = new HashMap<>();
+        if (code == null) {
             responseDTO.put("responseMessage", ResponseMessage.EMAIL_SEND_FAIL);
-            responseDTO.put("code", code);
 
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }
+
+        responseDTO.put("responseMessage", ResponseMessage.EMAIL_SEND_SUCCESS);
+        responseDTO.put("code", code);
+
+        return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
 
     @ApiOperation(value = "로그인", notes =
@@ -185,7 +179,7 @@ public class UserController {
                 // 해당 아이디 없음
                 responseDTO.put("responseMessage", ResponseMessage.USER_FIND_FAIL);
             }
-            return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
+            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }
     }
 
@@ -198,15 +192,6 @@ public class UserController {
     @PostMapping("/logout")
     public void logout() {
     }
-//    public ResponseEntity<?> logout(@AuthenticationPrincipal UserEntity userInfo) {
-//
-//        jwtTokenProvider.deleteRefreshToken(userInfo.getUserIdx());
-//
-//        HashMap<String, Object> responseDTO = new HashMap<>();
-//        responseDTO.put("responseMessage", ResponseMessage.LOGOUT_SUCCESS);
-//        return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-//    }
-
 
     @ApiOperation(value = "Access Token 재발급", notes =
             "Access Token을 재발급합니다.\n\n" +
@@ -263,30 +248,6 @@ public class UserController {
         responseDTO.put("profile", profile);
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
-
-
-    // 테스트용 api (Access Token 헤더로 받은 경우)
-//    @GetMapping("/test")
-//    public ResponseEntity<?> test(@ApiParam(value = "userIdx") @AuthenticationPrincipal UserEntity userInfo) {
-//
-//        HashMap<String, Object> responseDTO = new HashMap<>();
-//        responseDTO.put("responseMessage", ResponseMessage.SUCCESS);
-//        responseDTO.put("user", userInfo.getUserId());
-//
-//        return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-//    }
-
-    // 테스트용 api (Access Token 쿠키로 받은 경우)
-//    @GetMapping("/test")
-//    public ResponseEntity<?> test(@ApiParam(value = "userIdx") @CookieValue(name = "accessToken", required = false) String accessToken) {
-//
-//        HashMap<String, Object> responseDTO = new HashMap<>();
-//        String userId = jwtTokenProvider.getUserId(accessToken);
-//        responseDTO.put("userId", userId);
-//        responseDTO.put("responseMessage", ResponseMessage.SUCCESS);
-//
-//        return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-//    }
 
     @ApiOperation(value = "회원 정보 수정", notes =
             "회원 정보를 수정합니다.\n" +
@@ -351,7 +312,7 @@ public class UserController {
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         } else {
             responseDTO.put("responseMessage", ResponseMessage.LOGIN_FAIL);
-            return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
+            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }
     }
 
@@ -364,15 +325,16 @@ public class UserController {
     @PutMapping("/password")
     public ResponseEntity<?> updatePassword(@ApiParam(value = "userIdx") @AuthenticationPrincipal UserEntity userInfo, @RequestBody UserRequestDTO userRequestDTO) {
 
+        HashMap<String, Object> responseDTO = new HashMap<>();
         if (userRequestDTO.getPassword() == null) {
-            throw new NullPointerException(ResponseMessage.EMPTY);
+            responseDTO.put("responseMessage", ResponseMessage.EMPTY);
+            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }
 
         String newPassword = passwordEncoder.encode(userRequestDTO.getPassword());
 
         userService.updatePassword(userInfo.getUserIdx(), newPassword);
 
-        HashMap<String, Object> responseDTO = new HashMap<>();
         responseDTO.put("responseMessage", ResponseMessage.PASSWORD_UPDATE_SUCEESS);
 
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
