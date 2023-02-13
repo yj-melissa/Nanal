@@ -4,7 +4,7 @@ import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
 import Swal from 'sweetalert2';
 import { MutatingDots } from 'react-loader-spinner';
-import spinner from '../../src_assets/img/emotion/spinner';
+import spinner from '../../src_assets/img/emotion/spinner.gif';
 
 const getStringDate = (date) => {
   // 대한민국의 offset을 수동으로 추가한 뒤 날짜 전달
