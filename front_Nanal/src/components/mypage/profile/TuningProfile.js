@@ -307,16 +307,16 @@ const TuningProfile = () => {
               </div>
             </div>
             <div id='user-introduction-div'>
-              <label htmlFor='user-name' className='text-sm'>
+              <p htmlFor='user-name' className='text-sm'>
                 💙 프로필 소개글 :
-              </label>
-              <p
+              </p>
+              <textarea
                 type='text'
                 id='user-name'
                 defaultValue={currentInfo.current || ''}
                 onChange={onChangeInfo}
-                className='font-medium m-0.5 p-1 h-28 rounded-md text-sm'
-              ></p>
+                className='font-medium m-0.5 p-1 h-28 rounded-md text-sm w-full'
+              ></textarea>
               <p className='text-xs text-rose-600'>{infoMessage}</p>
             </div>
 
