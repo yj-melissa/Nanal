@@ -16,6 +16,7 @@ public class SearchDiaryResponseDTO {
     private String nickname;
     private int groupIdx;
     private String groupName;
+    private String picture;
 
     public SearchDiaryResponseDTO(DiaryEntity diary) {
         this.diaryIdx = diary.getDiaryIdx();
@@ -23,5 +24,6 @@ public class SearchDiaryResponseDTO {
         this.content = diary.getContent();
         this.userIdx = diary.getUser().getUserIdx();
         this.nickname = diary.getUser().getUserProfile().getNickname();
+        this.picture = diary.getPainting().getImgUrl();
     }
 }
