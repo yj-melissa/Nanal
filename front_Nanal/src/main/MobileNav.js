@@ -7,6 +7,7 @@ import profile from '../src_assets/img/person_FILL0.png';
 import close from '../src_assets/img/close.svg';
 import downarrow from '../src_assets/img/arrow_drop_down.png';
 import uparrow from '../src_assets/img/arrow_drop_up.png';
+import search from '../src_assets/img/search_icon_1.png';
 
 function Nav({ changeIsBookCase }) {
   // useNavigate == 뒤로가기나 앞으로가기를 위한 react 내장 객체
@@ -77,17 +78,20 @@ function Nav({ changeIsBookCase }) {
           ) : null}
         </div>
         <div className='flex items-center m-auto'>
+          <Link to='/Search'>
+            <img src={search} className='w-5 h-5 my-3' />
+          </Link>
           <Link to='/Alarm'>
-            <img src={bell} className='w-6 h-6 my-3' />
+            <img src={bell} className='w-6 h-6 my-3 ml-2.5' />
           </Link>
           {location.pathname === '/home' ? (
-            <Link to='/MyPage' className='ml-5 w-[36px]'>
+            <Link to='/MyPage' className='ml-2.5 w-[36px]'>
               <img src={profile} className='w-[30px] h-[30px]' />
             </Link>
           ) : (
             <img
               src={close}
-              className='ml-5 w-9 h-9'
+              className='ml-2.5 w-9 h-9'
               onClick={() => {
                 navigate(-1);
               }}
