@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -60,55 +61,19 @@ public class DiaryController {
 
             diary.setUserIdx(userInfo.getUserIdx());
 
-            // [감정 분석]
-            requestToEmotionFlask(diary);
+            // Flask 통신
+            connectingFlask(diary);
 
-            //////////////////////////////////////////////////////////////////
-            //////////////////////////////////////////////////////////////////
-
-            // [번역할 일기 내용]
-
-            api.setContent(diary.getContent());
-
-            // [번역하기]
-            String en = api.transfer();
-            JSONObject jsonObj = (JSONObject) new JSONParser().parse(en);
-            JSONObject message = (JSONObject) jsonObj.get("message");
-            JSONObject result = (JSONObject) message.get("result");
-            // [번역된 일기]
-            String eng = (String) result.get("translatedText");
-
-            // [문장 추출]
-            String sentenceResult = requestToKeySentenceFlask(eng);
-
-            // [달리 그림 만들기]
-            String dalleResult = requestToDalleFlask(sentenceResult);
-
-            // [그림 저장하기]
-            File file = fileHandler.urlToFile(dalleResult);
-
-            // [달리 s3 올리기]
-            String dalleURL = fileService.saveToS3(file);
-
-            // [DB에 저장]
-            PaintingResponseDTO paintingResponseDTO = fileService.paintingSave(new PaintingRequestDTO("Dalle", dalleURL));
-
-
-            diary.setPainting(PaintingEntity.builder().pictureIdx(paintingResponseDTO.getPictureIdx()).pictureTitle(paintingResponseDTO.getPictureTitle()).imgUrl(paintingResponseDTO.getImgUrl()).build());
-            diary.setImgUrl(dalleURL);
-
-            /////////////////////////////////////////////////////////////////
-            /////////////////////////////////////////////////////////////////
-
+            // save diary
             DiaryResponseDTO diaryResponseDTO = diaryService.save(diary);
             int diaryIdx = diaryResponseDTO.getDiaryIdx();
 
-            //save diary-group
+            // save diary-group
             for (int i = 0; i < diary.getGroupIdxList().size(); i++) {
                 GroupDiaryRelationDTO groupDiaryRelationDTO = new GroupDiaryRelationDTO(diaryIdx, diary.getGroupIdxList().get(i));
                 diaryService.saveDiaryGroup(groupDiaryRelationDTO);
             }
-            //save keyword
+            // save keyword
             diaryService.saveKeyword(diaryResponseDTO.getDiaryIdx(), keywordList);
 
             responseDTO.put("responseMessage", ResponseMessage.DIARY_SAVE_SUCCESS);
@@ -118,6 +83,38 @@ public class DiaryController {
             responseDTO.put("responseMessage", ResponseMessage.DIARY_SAVE_FAIL);
             return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
         }
+    }
+
+    private void connectingFlask(DiaryRequestDTO diary) throws ParseException, IOException {
+
+        // [감정분석]
+        requestToEmotionFlask(diary);
+
+        api.setContent(diary.getContent());
+
+        // [번역하기]
+        String en = api.transfer();
+        JSONObject jsonObj = (JSONObject) new JSONParser().parse(en);
+        JSONObject message = (JSONObject) jsonObj.get("message");
+        JSONObject result = (JSONObject) message.get("result");
+        String eng = (String) result.get("translatedText"); // 번역 결과
+
+        // [문장 추출]
+        String sentenceResult = requestToKeySentenceFlask(eng);
+
+        // [달리 그림 생성]
+        String dalleResult = requestToDalleFlask(sentenceResult);
+
+        // [그림 저장하기]
+        File file = fileHandler.urlToFile(dalleResult);
+
+        // [달리 s3 저장]
+        String dalleURL = fileService.saveToS3(file);
+
+        PaintingResponseDTO paintingResponseDTO = fileService.paintingSave(new PaintingRequestDTO("Dalle", dalleURL));
+
+        diary.setPainting(PaintingEntity.builder().pictureIdx(paintingResponseDTO.getPictureIdx()).pictureTitle(paintingResponseDTO.getPictureTitle()).imgUrl(paintingResponseDTO.getImgUrl()).build());
+        diary.setImgUrl(dalleURL);
     }
 
 
@@ -167,39 +164,11 @@ public class DiaryController {
             DiaryResponseDTO diaryResponseDTO = diaryService.getDiary(diary.getDiaryIdx());
 
             if (!diaryResponseDTO.getContent().equals(diary.getContent())) {
-                // 일기 내용이 다르다면 그림 다시 만들기
-                requestToEmotionFlask(diary);
-
-                // [번역할 일기 내용]
-                api.setContent(diary.getContent());
-
-                // [번역하기]
-                String en = api.transfer();
-                JSONObject jsonObj = (JSONObject) new JSONParser().parse(en);
-                JSONObject message = (JSONObject) jsonObj.get("message");
-                JSONObject result = (JSONObject) message.get("result");
-                // [번역된 일기]
-                String eng = (String) result.get("translatedText");
-
-                // [문장 추출]
-                String sentenceResult = requestToKeySentenceFlask(eng);
-
-                // [달리 그림 만들기]
-                String dalleResult = requestToDalleFlask(sentenceResult);
-
-                // [그림 저장하기]
-                File file = fileHandler.urlToFile(dalleResult);
-
-                // [달리 s3 올리기]
-                String dalleURL = fileService.saveToS3(file);
-
-                // [DB에 저장]
-                PaintingResponseDTO paintingResponseDTO = fileService.paintingSave(new PaintingRequestDTO("Dalle", dalleURL));
-
-                diary.setPainting(PaintingEntity.builder().pictureIdx(paintingResponseDTO.getPictureIdx()).pictureTitle(paintingResponseDTO.getPictureTitle()).imgUrl(paintingResponseDTO.getImgUrl()).build());
-                diary.setImgUrl(dalleURL);
+                // Flask 통신
+                connectingFlask(diary);
+                // update diary
                 diaryResponseDTO = diaryService.updateDiary(diary.toEntity());
-                //save keyword
+                // save keyword
                 diaryService.saveKeyword(diaryResponseDTO.getDiaryIdx(), keywordList);
             }
 
