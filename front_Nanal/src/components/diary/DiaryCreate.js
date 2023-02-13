@@ -14,8 +14,9 @@ const getStringDate = (date) => {
 };
 
 function DiaryCreate() {
+  // 뒤로가기 기능
+  const navigate = useNavigate();
   const { state } = useLocation();
-
   // 날짜, 일기, 그룹여부 데이터 받기
   const [date, setDate] = useState(getStringDate(new Date()));
   const [content, setContent] = useState('');
@@ -91,14 +92,6 @@ function DiaryCreate() {
     }
   };
 
-  // if (state.groupIdx !== null) {
-  //   setGroup('그룹');
-  //   setShow(true);
-  //   setCheckedList([state.groupIdx]);
-  // }
-
-  // 뒤로가기 기능
-  const navigate = useNavigate();
   // 그룹 리스트 데이터 가져오기
   const [groupList, setGroupList] = useState([]);
   useEffect(() => {
@@ -120,6 +113,13 @@ function DiaryCreate() {
       .catch(({ error }) => {
         console.log('그룹 리스트 불러오기 오류: ' + error);
       });
+
+    if (state && state.groupIdx !== null) {
+      console.log(state);
+      setGroup('그룹');
+      setShow(true);
+      setCheckedList([state.groupIdx]);
+    }
   }, []);
 
   return (
