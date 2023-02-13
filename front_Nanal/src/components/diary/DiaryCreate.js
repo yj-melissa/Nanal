@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
 import Swal from 'sweetalert2';
-import { MutatingDots } from 'react-loader-spinner';
+import { TailSpin } from 'react-loader-spinner';
 import spinner from '../../src_assets/img/emotion/spinner.gif';
 
 const getStringDate = (date) => {
@@ -127,18 +127,17 @@ function DiaryCreate() {
       <div>
         {loaded ? (
           <>
-            <div className='bg-neutral-400'>
-              <p className='text-xl'>달리가 그림을 만드는 중이에요...</p>
-              <img src={spinner} alt='emotion_gif' />
-              <MutatingDots
-                height='100'
-                width='100'
-                color='#4fa94d'
-                secondaryColor='#4fa94d'
-                radius='12.5'
-                ariaLabel='mutating-dots-loading'
-                wrapperStyle={{}}
-                wrapperClass=''
+            <div className='flex flex-col backdrop-opacity-30 backdrop-invert bg-white/30 w-80'>
+              <img src={spinner} alt='emotion_gif' className='w-16 h-16' />
+              <p className='my-2 text-xl font-bold animate-bounce'>
+                달리가 그림을 만드는 중...
+              </p>
+              <TailSpin
+                height='80'
+                width='80'
+                color='#ef4444'
+                ariaLabel='tail-spin-loading'
+                radius='1'
                 visible={true}
               />
             </div>
