@@ -5,7 +5,6 @@ import javax.mail.Message.RecipientType;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
@@ -67,13 +66,8 @@ public class EmailService {
 
     public String sendSimpleMessage(String receiver) throws Exception {
         MimeMessage message = createMessage(receiver);
-        try {
-            emailSender.send(message);
-            return code;
-        } catch(MailException e) {
-            return null;
-        }
+        emailSender.send(message);
+        return code;
     }
-
 
 }

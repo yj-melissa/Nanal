@@ -59,9 +59,15 @@ public class UserController {
     public ResponseEntity<?> signUp(@RequestBody @Valid UserFormDTO userformDTO, HttpServletResponse response) {
         HashMap<String, Object> responseDTO = new HashMap<>();
         // 정보가 들어오지 않았을 때
-        if (userformDTO
-                == null || userformDTO.getPassword() == null || userformDTO.getUserId() == null | userformDTO.getEmail() == null || userformDTO.getNickname() == null) {
+        if (userformDTO == null || userformDTO.getPassword() == null || userformDTO.getUserId() == null | userformDTO.getEmail() == null || userformDTO.getNickname() == null) {
             responseDTO.put("responseMessage", ResponseMessage.USER_CREATE_FAIL);
+
+            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+        }
+
+        // 중복값 체크
+        if(userService.checkUserId(userformDTO.getUserId()) || userService.checkEmail(userformDTO.getEmail()) || userService.checkNickname(userformDTO.getNickname())) {
+            responseDTO.put("responseMessage", ResponseMessage.DUPLICATED_KEY);
 
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }
@@ -118,19 +124,13 @@ public class UserController {
         HashMap<String, Object> responseDTO = new HashMap<>();
 
         // 이메일 중복 확인
-        ResponseEntity<?> isDuplicate = checkEmail(email);
-        if (isDuplicate != null) {
+        Boolean isDuplicate = userService.checkEmail(email);
+        if (isDuplicate) {
             responseDTO.put("responseMessage", ResponseMessage.DUPLICATED_KEY);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }
 
         String code = emailService.sendSimpleMessage(email);
-
-        if (code == null) {
-            responseDTO.put("responseMessage", ResponseMessage.EMAIL_SEND_FAIL);
-
-            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-        }
 
         responseDTO.put("responseMessage", ResponseMessage.EMAIL_SEND_SUCCESS);
         responseDTO.put("code", code);
@@ -261,7 +261,9 @@ public class UserController {
 
         if (userRequest == null) {
             log.info("updateProfile : userRequest == null");
-            throw new NullPointerException(ResponseMessage.EMPTY);
+            HashMap<String, Object> responseDTO = new HashMap<>();
+            responseDTO.put("responseMessage", ResponseMessage.USER_UPDATE_FAIL);
+            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }
 
         HashMap<String, Object> profile = userService.updateProfile(userInfo.getUserIdx(), userRequest);
@@ -363,7 +365,12 @@ public class UserController {
                     "{responseMessage(String)}")
     @GetMapping("/check/id/{userId}")
     public ResponseEntity<?> checkUserId(@PathVariable String userId) {
-        userService.checkUserId(userId);
+        if (userService.checkUserId(userId)) {
+            HashMap<String, Object> responseDTO = new HashMap<>();
+            responseDTO.put("responseMessage", ResponseMessage.DUPLICATED_KEY);
+            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+        }
+
         HashMap<String, Object> responseDTO = new HashMap<>();
         responseDTO.put("responseMessage", ResponseMessage.USUABLE_KEY);
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
@@ -376,7 +383,12 @@ public class UserController {
                     "{responseMessage(String)}")
     @GetMapping("/check/nickname/{nickname}")
     public ResponseEntity<?> checkNickname(@PathVariable String nickname) {
-        userService.checkNickname(nickname);
+        if (userService.checkNickname(nickname)) {
+            HashMap<String, Object> responseDTO = new HashMap<>();
+            responseDTO.put("responseMessage", ResponseMessage.DUPLICATED_KEY);
+            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+        }
+
         HashMap<String, Object> responseDTO = new HashMap<>();
         responseDTO.put("responseMessage", ResponseMessage.USUABLE_KEY);
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
@@ -389,7 +401,12 @@ public class UserController {
                     "{responseMessage(String)}")
     @GetMapping("/check/Email/{email}")
     public ResponseEntity<?> checkEmail(@PathVariable String email) {
-        userService.checkEmail(email);
+        if (userService.checkEmail(email)) {
+            HashMap<String, Object> responseDTO = new HashMap<>();
+            responseDTO.put("responseMessage", ResponseMessage.DUPLICATED_KEY);
+            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+        }
+
         HashMap<String, Object> responseDTO = new HashMap<>();
         responseDTO.put("responseMessage", ResponseMessage.USUABLE_KEY);
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);

@@ -16,7 +16,6 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -111,24 +110,34 @@ public class UserService {
 
     // 중복 체크
 
-    public void checkUserId(String userId) {
-        Boolean result = userRepository.existsByUserId(userId);
-        if (result) {
-            throw new DuplicateKeyException(userId);
-        }
-    }
-    public void checkNickname(String nickname) {
-        Boolean result = userProfileRepository.existsByNickname(nickname);
-        if (result) {
-            throw new DuplicateKeyException(nickname);
-        }
+//    public void checkUserId(String userId) {
+//        Boolean result = userRepository.existsByUserId(userId);
+//        if (result) {
+//            throw new DuplicateKeyException(userId);
+//        }
+//    }
+    public Boolean checkUserId(String userId) {
+        return userRepository.existsByUserId(userId);
     }
 
-    public void checkEmail(String email) {
-        Boolean result = userRepository.existsByEmail(email);
-        if (result) {
-            throw new DuplicateKeyException(email);
-        }
+//    public void checkNickname(String nickname) {
+//        Boolean result = userProfileRepository.existsByNickname(nickname);
+//        if (result) {
+//            throw new DuplicateKeyException(nickname);
+//        }
+//    }
+    public Boolean checkNickname(String nickname) {
+        return userProfileRepository.existsByNickname(nickname);
+    }
+
+//    public void checkEmail(String email) {
+//        Boolean result = userRepository.existsByEmail(email);
+//        if (result) {
+//            throw new DuplicateKeyException(email);
+//        }
+//    }
+    public Boolean checkEmail(String email) {
+        return userRepository.existsByEmail(email);
     }
 
 
