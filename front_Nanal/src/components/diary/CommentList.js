@@ -68,6 +68,7 @@ function CommentList({ diaryIdx, isToggle, groupIdx }) {
 
   const arrAxios = [
     `diary/comment/${diaryIdx}`,
+    `diary/comment/${diaryIdx}`,
     `diary/comment/${groupIdx}/${diaryIdx}`,
   ];
 
@@ -76,7 +77,7 @@ function CommentList({ diaryIdx, isToggle, groupIdx }) {
   useEffect(() => {
     onLogin();
     axios_api
-      .get(arrAxios[0])
+      .get(arrAxios[isToggle])
       .then(({ data }) => {
         if (data.statusCode === 200) {
           setCommentList(null);
