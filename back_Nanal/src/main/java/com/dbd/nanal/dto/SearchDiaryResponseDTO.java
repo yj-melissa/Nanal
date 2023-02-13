@@ -4,14 +4,14 @@ import com.dbd.nanal.model.DiaryEntity;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Getter
 @Setter
 public class SearchDiaryResponseDTO {
     private int diaryIdx;
     private int userIdx;
-    private LocalDateTime creationDate;
+    private Date diaryDate;
     private String content;
     private String nickname;
     private int groupIdx;
@@ -19,7 +19,7 @@ public class SearchDiaryResponseDTO {
 
     public SearchDiaryResponseDTO(DiaryEntity diary) {
         this.diaryIdx = diary.getDiaryIdx();
-        this.creationDate = diary.getCreationDate();
+        this.diaryDate = diary.getDiaryDate();
         this.content = diary.getContent();
         this.userIdx = diary.getUser().getUserIdx();
         this.nickname = diary.getUser().getUserProfile().getNickname();

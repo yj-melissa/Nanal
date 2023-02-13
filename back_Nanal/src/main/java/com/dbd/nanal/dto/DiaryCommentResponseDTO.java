@@ -4,7 +4,6 @@ import com.dbd.nanal.model.DiaryCommentEntity;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Getter
 public class DiaryCommentResponseDTO {
