@@ -65,7 +65,9 @@ function GroupDetail() {
       {/* 일기쓰러가기 버튼 */}
       <img
         src={ballpenIcon}
-        onClick={() => navigate('/Diary/Create')}
+        onClick={() =>
+          navigate('/Diary/Create', { state: { groupIdx: state.groupIdx } })
+        }
         className='fixed z-50 flex w-10 p-1 cursor-pointer bottom-10 right-10'
       ></img>
       <hr className='mx-auto mt-5 border-dashed w-80 border-1 border-slate-400' />

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
 import Swal from 'sweetalert2';
@@ -14,6 +14,8 @@ const getStringDate = (date) => {
 };
 
 function DiaryCreate() {
+  const { state } = useLocation();
+
   // 날짜, 일기, 그룹여부 데이터 받기
   const [date, setDate] = useState(getStringDate(new Date()));
   const [content, setContent] = useState('');
@@ -76,6 +78,10 @@ function DiaryCreate() {
 
   // 체크된 그룹을 넣어줄 배열
   const [checkedList, setCheckedList] = useState([]);
+
+  // 그룹 리스트 보여줄지 말지
+  const [isShow, setShow] = useState(false);
+
   // input 태그가 체크된 경우 실행되는 함수
   const onChecked = (checked, id) => {
     if (checked) {
@@ -84,6 +90,12 @@ function DiaryCreate() {
       setCheckedList(checkedList.filter((el) => el !== id));
     }
   };
+
+  // if (state.groupIdx !== null) {
+  //   setGroup('그룹');
+  //   setShow(true);
+  //   setCheckedList([state.groupIdx]);
+  // }
 
   // 뒤로가기 기능
   const navigate = useNavigate();
@@ -109,9 +121,6 @@ function DiaryCreate() {
         console.log('그룹 리스트 불러오기 오류: ' + error);
       });
   }, []);
-
-  // 그룹 리스트 보여줄지 말지
-  const [isShow, setShow] = useState(false);
 
   return (
     <div className='h-auto min-h-full pb-5'>
