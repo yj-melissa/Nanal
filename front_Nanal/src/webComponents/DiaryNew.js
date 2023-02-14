@@ -130,11 +130,14 @@ const DiaryNew = ({ today }) => {
     <div className='relative w-[1440px] mx-auto'>
       <p className='absolute z-30 left-[330px] inset-y-36'>일기쓰기</p>
       <img src={nmg} className='absolute z-20 left-60 inset-y-28' />
-      <img src={diaryImgGreen} className='absolute w-[1280px] z-10 left-12 top-8' />
+      <img
+        src={diaryImgGreen}
+        className='absolute w-[1280px] z-10 left-12 top-8'
+      />
 
       {/* 그룹 여부 선택란 */}
       <div className='absolute z-20 left-60 inset-y-56 mt-2'>
-        <p className='my-1 text-xl font-bold'>공개 범위 설정</p>
+        <p className='my-1 text-xl font-bold mb-2'>공개 범위 설정</p>
         <input
           className='cursor-pointer'
           id='private'
@@ -161,7 +164,7 @@ const DiaryNew = ({ today }) => {
         </label>
         {isShow ? (
           <>
-            <Div className='h-48 overflow-auto'>
+            <Div className='h-60 overflow-auto'>
               <div>
                 {groupList.map((groupItem, idx) => {
                   return (
@@ -203,7 +206,7 @@ const DiaryNew = ({ today }) => {
       </div>
 
       <div>
-        <form className='absolute z-20 min-h-full mt-20 w-[720px] right-[200px] top-8'>
+        <form className='absolute z-20 min-h-full mt-20 w-[720px] right-[200px] top-24'>
           {/* 날짜 선택란 */}
           <div className='text-xl'>
             <input

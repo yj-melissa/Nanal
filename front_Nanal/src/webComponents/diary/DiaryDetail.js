@@ -170,7 +170,7 @@ function DiaryDetail() {
       </div>
 
       {/* 감정/북마크/일기 내용 */}
-      <div className='flex justify-end absolute z-20 w-[720px] inset-y-12 mt-2 right-40'>
+      <div className='flex justify-end absolute z-20 w-[720px] inset-y-24 mt-2 right-40'>
         {/* 감정 넣는 곳 */}
         <img
           src={diaryDetail.emo}
@@ -191,7 +191,7 @@ function DiaryDetail() {
           </div>
         )}
       </div>
-      <div className='absolute z-20 text-2xl text-left underline inset-y-32 underline-offset-8 w-[720px] right-40'>
+      <div className='absolute z-20 text-2xl text-left underline inset-y-44 underline-offset-8 w-[720px] right-40'>
         {diaryDetail.content}
       </div>
     </div>
