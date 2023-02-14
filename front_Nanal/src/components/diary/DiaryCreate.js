@@ -52,13 +52,13 @@ function DiaryCreate() {
         .then(({ data }) => {
           if (data.statusCode === 200) {
             if (data.data.responseMessage === '일기 생성 성공') {
-              setLoaded(false);
               Swal.fire({
                 icon: 'success', // Alert 타입
                 title: '일기 저장 완료', // Alert 제목
                 text: '작성하신 일기가 작성 완료됐습니다.', // Alert 내용
                 width: '90%',
               });
+              setLoaded(false);
               navigate('/', { replace: true });
             }
           } else {
@@ -127,19 +127,11 @@ function DiaryCreate() {
       <div>
         {loaded ? (
           <>
-            <div className='flex flex-col justify-center w-screen h-screen backdrop-opacity-30 backdrop-invert bg-white/30'>
+            <div className='flex flex-col justify-center items-center w-[344px] h-screen'>
               <img src={spinner} alt='emotion_gif' className='w-16 h-16' />
               <p className='my-2 text-xl font-bold animate-bounce text-rose-500'>
                 달리가 그림을 만드는 중...
               </p>
-              <TailSpin
-                height='80'
-                width='80'
-                color='#ef4444'
-                ariaLabel='tail-spin-loading'
-                radius='1'
-                visible={true}
-              />
             </div>
           </>
         ) : (

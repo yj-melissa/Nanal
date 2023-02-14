@@ -1,9 +1,8 @@
 // import { useState } from 'react';
 import axios_api from '../../config/Axios';
-import emo_joy from '../../src_assets/img/emotion/emo_joy.png';
 import Swal from 'sweetalert2';
 
-function TrashItem({ diaryIdx, diaryDate, content }) {
+function TrashItem({ diaryIdx, diaryDate, content, picture, emo }) {
   // 일기 복구하기
   const recovery = () => {
     Swal.fire({
@@ -40,7 +39,7 @@ function TrashItem({ diaryIdx, diaryDate, content }) {
     <div className='my-2'>
       <div className='flex p-2 m-1 mb-3 item-center'>
         <img
-          src={emo_joy}
+          src={picture}
           alt='DALL:E2'
           className='w-16 h-16 p-1 rounded-lg hover:translate-y-2'
         />
