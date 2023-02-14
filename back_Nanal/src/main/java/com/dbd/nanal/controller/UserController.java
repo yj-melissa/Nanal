@@ -17,7 +17,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -58,13 +57,15 @@ public class UserController {
                     "{accessToken(Header), refreshToken(Cookie)} \n")
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody @Valid UserFormDTO userformDTO, HttpServletResponse response) {
-        // 정보가 들어오지 않았을 때
-        if (userformDTO
-                == null || userformDTO.getPassword() == null || userformDTO.getUserId() == null | userformDTO.getEmail() == null) {
-            throw new NullPointerException(ResponseMessage.EMPTY);
-        }
-
-        UserEntity user = UserEntity.builder()
+        HashMap<String, Object> responseDTO = new HashMap<>();
+        if (userformDTO == null || userformDTO.getPassword() == null || userformDTO.getUserId() == null | userformDTO.getEmail() == null || userformDTO.getNickname() == null) {
+            // 정보가 들어오지 않았을 때
+            responseDTO.put("responseMessage", ResponseMessage.USER_CREATE_FAIL);
+        } else if (userService.checkUserId(userformDTO.getUserId()) || userService.checkEmail(userformDTO.getEmail()) || userService.checkNickname(userformDTO.getNickname())) {
+            // 중복값이 있을 때
+            responseDTO.put("responseMessage", ResponseMessage.DUPLICATED_KEY);
+        } else {
+            UserEntity user = UserEntity.builder()
                 .userId(userformDTO.getUserId())
                 .name(userformDTO.getName())
                 .email(userformDTO.getEmail())
@@ -74,34 +75,33 @@ public class UserController {
                 .lastAccessDate(LocalDateTime.now())
                 .build();
 
-        PaintingRequestDTO paintingRequestDTO = new PaintingRequestDTO();
-        paintingRequestDTO.init();
-        fileService.paintingSave(paintingRequestDTO);
+            PaintingRequestDTO paintingRequestDTO = new PaintingRequestDTO();
+            paintingRequestDTO.init();
+            fileService.paintingSave(paintingRequestDTO);
 
-        UserProfileEntity userProfile = UserProfileEntity.builder()
+            UserProfileEntity userProfile = UserProfileEntity.builder()
                 .user(user)
                 .nickname(userformDTO.getNickname())
-                .img(userformDTO.getImg())
                 .introduction(userformDTO.getIntroduction())
                 .isPrivate(userformDTO.getIsPrivate())
                 .painting(paintingRequestDTO.toEntity())
                 .img(paintingRequestDTO.getImgUrl())
                 .build();
 
-        UserEntity createdUser = userService.join(user, userProfile);
-        log.debug("createdUser : " + createdUser);
+            UserEntity createdUser = userService.join(user, userProfile);
+            log.debug("createdUser : " + createdUser);
 
 //          JWT 토큰 발행
-        HashMap<String, String> token = createTokens(user);
+            HashMap<String, String> token = createTokens(user);
 
-        HashMap<String, Object> responseDTO = new HashMap<>();
-        responseDTO.put("responseMessage", ResponseMessage.USER_CREATE_SUCCESS);
-        responseDTO.put("accessToken", token.get("accessToken"));
-        response.setHeader("accessToken", token.get("accessToken"));
+            responseDTO.put("responseMessage", ResponseMessage.USER_CREATE_SUCCESS);
+            responseDTO.put("accessToken", token.get("accessToken"));
+            response.setHeader("accessToken", token.get("accessToken"));
 
-        Cookie refreshTokenCookie = refreshTokenCookie(token.get("refreshToken"));
+            Cookie refreshTokenCookie = refreshTokenCookie(token.get("refreshToken"));
 
-        response.addCookie(refreshTokenCookie);
+            response.addCookie(refreshTokenCookie);
+        }
 
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
@@ -114,34 +114,21 @@ public class UserController {
                     "{code(String), refreshToken(String)} \n")
     @GetMapping("/validate/{email}")
     public ResponseEntity<?> validateEmail(@PathVariable String email) throws Exception {
+        HashMap<String, Object> responseDTO = new HashMap<>();
+
         // 이메일 중복 확인
-        ResponseEntity<?> isDuplicate = checkEmail(email);
-        if (isDuplicate == null) {
-            throw new DuplicateKeyException(email);
-        }
+        Boolean isDuplicate = userService.checkEmail(email);
 
-        String code = emailService.sendSimpleMessage(email);
-
-        try {
-            HashMap<String, Object> responseDTO = new HashMap<>();
-            if (code == null) {
-                responseDTO.put("responseMessage", ResponseMessage.EMAIL_SEND_FAIL);
-
-                return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-            }
+        if (isDuplicate) {
+            responseDTO.put("responseMessage", ResponseMessage.DUPLICATED_KEY);
+        } else {
+            String code = emailService.sendSimpleMessage(email);
 
             responseDTO.put("responseMessage", ResponseMessage.EMAIL_SEND_SUCCESS);
             responseDTO.put("code", code);
-
-            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-        } catch (Exception e) {
-            log.info("[이메일 인증] 발송 실패 :" + e);
-            HashMap<String, Object> responseDTO = new HashMap<>();
-            responseDTO.put("responseMessage", ResponseMessage.EMAIL_SEND_FAIL);
-            responseDTO.put("code", code);
-
-            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }
+
+        return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
 
     @ApiOperation(value = "로그인", notes =
@@ -158,11 +145,12 @@ public class UserController {
                 userRequestDTO.getPassword(),
                 passwordEncoder);
 
+        HashMap<String, Object> responseDTO = new HashMap<>();
+
         if (user != null) {
             // 로그인 성공 -> JWT 발급
             HashMap<String, String> token = createTokens(user);
 
-            HashMap<String, Object> responseDTO = new HashMap<>();
             responseDTO.put("responseMessage", ResponseMessage.LOGIN_SUCCESS);
             responseDTO.put("token", token);
             response.setHeader("accessToken", token.get("accessToken"));
@@ -170,13 +158,9 @@ public class UserController {
             Cookie refreshTokenCookie = refreshTokenCookie(token.get("refreshToken"));
 
             response.addCookie(refreshTokenCookie);
-
-            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-
         } else {
             // 로그인 실패
             Boolean isUserExist = userService.isUserExist(userRequestDTO.getUserId());
-            HashMap<String, Object> responseDTO = new HashMap<>();
 
             if (isUserExist) {
                 // 비밀번호 미일치
@@ -185,8 +169,8 @@ public class UserController {
                 // 해당 아이디 없음
                 responseDTO.put("responseMessage", ResponseMessage.USER_FIND_FAIL);
             }
-            return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
         }
+        return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
 
     @ApiOperation(value = "로그아웃", notes =
@@ -198,15 +182,6 @@ public class UserController {
     @PostMapping("/logout")
     public void logout() {
     }
-//    public ResponseEntity<?> logout(@AuthenticationPrincipal UserEntity userInfo) {
-//
-//        jwtTokenProvider.deleteRefreshToken(userInfo.getUserIdx());
-//
-//        HashMap<String, Object> responseDTO = new HashMap<>();
-//        responseDTO.put("responseMessage", ResponseMessage.LOGOUT_SUCCESS);
-//        return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-//    }
-
 
     @ApiOperation(value = "Access Token 재발급", notes =
             "Access Token을 재발급합니다.\n\n" +
@@ -222,12 +197,11 @@ public class UserController {
         if (newToken == null) {
             response.sendRedirect("/nanal/user/login");
             responseDTO.put("responseMessage", ResponseMessage.TOKEN_NOT_VALID);
-            return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+        } else {
+            responseDTO.put("responseMessage", ResponseMessage.SUCCESS);
+            responseDTO.put("accessToken", newToken);
+            response.setHeader("accessToken", newToken);
         }
-
-        responseDTO.put("responseMessage", ResponseMessage.SUCCESS);
-        responseDTO.put("accessToken", newToken);
-        response.setHeader("accessToken", newToken);
 
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
@@ -264,30 +238,6 @@ public class UserController {
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
 
-
-    // 테스트용 api (Access Token 헤더로 받은 경우)
-//    @GetMapping("/test")
-//    public ResponseEntity<?> test(@ApiParam(value = "userIdx") @AuthenticationPrincipal UserEntity userInfo) {
-//
-//        HashMap<String, Object> responseDTO = new HashMap<>();
-//        responseDTO.put("responseMessage", ResponseMessage.SUCCESS);
-//        responseDTO.put("user", userInfo.getUserId());
-//
-//        return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-//    }
-
-    // 테스트용 api (Access Token 쿠키로 받은 경우)
-//    @GetMapping("/test")
-//    public ResponseEntity<?> test(@ApiParam(value = "userIdx") @CookieValue(name = "accessToken", required = false) String accessToken) {
-//
-//        HashMap<String, Object> responseDTO = new HashMap<>();
-//        String userId = jwtTokenProvider.getUserId(accessToken);
-//        responseDTO.put("userId", userId);
-//        responseDTO.put("responseMessage", ResponseMessage.SUCCESS);
-//
-//        return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-//    }
-
     @ApiOperation(value = "회원 정보 수정", notes =
             "회원 정보를 수정합니다.\n" +
                     "[Front] \n" +
@@ -295,19 +245,25 @@ public class UserController {
                     "[Back] \n" +
                     "{img(String), nickname(String), days(int), introduction(String)} \n\n")
     @PutMapping("/profile")
-    public ResponseEntity<?> updateProfile(@AuthenticationPrincipal UserEntity userInfo, @RequestBody UserRequestDTO userRequest) {
+    public ResponseEntity<?> updateProfile(@AuthenticationPrincipal UserEntity userInfo, @RequestBody @Valid UserRequestDTO userRequest) {
         log.info("updateProfile 실행 : {}", userInfo.getUserProfile().getNickname());
+
+        HashMap<String, Object> responseDTO = new HashMap<>();
 
         if (userRequest == null) {
             log.info("updateProfile : userRequest == null");
-            throw new NullPointerException(ResponseMessage.EMPTY);
+            responseDTO.put("responseMessage", ResponseMessage.USER_UPDATE_FAIL);
+        } else if (userInfo.getUserProfile().getNickname().equals(userRequest.getNickname())) {
+            // 닉네임 변경한 경우 중복 체크
+            if (userService.checkNickname(userRequest.getNickname())) {
+                responseDTO.put("responseMessage", ResponseMessage.DUPLICATED_KEY);
+            }
+        }else{
+            HashMap<String, Object> profile = userService.updateProfile(userInfo.getUserIdx(), userRequest);
+
+            responseDTO.put("responseMessage", ResponseMessage.USER_UPDATE_SUCCESS);
+            responseDTO.put("profile", profile);
         }
-
-        HashMap<String, Object> profile = userService.updateProfile(userInfo.getUserIdx(), userRequest);
-
-        HashMap<String, Object> responseDTO = new HashMap<>();
-        responseDTO.put("responseMessage", ResponseMessage.USER_UPDATE_SUCCESS);
-        responseDTO.put("profile", profile);
 
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
@@ -322,7 +278,7 @@ public class UserController {
     public ResponseEntity<?> deleteUser(@AuthenticationPrincipal UserEntity userInfo) {
         log.info("deleteUser 실행");
         int userIdx = userInfo.getUserIdx();
-        userService.deleteByUserIdx(userIdx);
+        userService.deleteByUserIdx(userInfo.getUserIdx());
         jwtTokenProvider.deleteRefreshToken(userIdx);
         HashMap<String, Object> responseDTO = new HashMap<>();
         responseDTO.put("responseMessage", ResponseMessage.USER_DELETE_SUCCESS);
@@ -347,12 +303,10 @@ public class UserController {
 
         if (isCorrect) {
             responseDTO.put("responseMessage", ResponseMessage.LOGIN_SUCCESS);
-
-            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         } else {
             responseDTO.put("responseMessage", ResponseMessage.LOGIN_FAIL);
-            return new ResponseEntity<>(DefaultRes.res(500, responseDTO), HttpStatus.OK);
         }
+        return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
 
     @ApiOperation(value = "비밀번호 수정", notes =
@@ -362,18 +316,18 @@ public class UserController {
                     "[Back] \n" +
                     "{responseMessage(String)} \n\n")
     @PutMapping("/password")
-    public ResponseEntity<?> updatePassword(@ApiParam(value = "userIdx") @AuthenticationPrincipal UserEntity userInfo, @RequestBody UserRequestDTO userRequestDTO) {
-
-        if (userRequestDTO.getPassword() == null) {
-            throw new NullPointerException(ResponseMessage.EMPTY);
-        }
-
-        String newPassword = passwordEncoder.encode(userRequestDTO.getPassword());
-
-        userService.updatePassword(userInfo.getUserIdx(), newPassword);
+    public ResponseEntity<?> updatePassword(@ApiParam(value = "userIdx") @AuthenticationPrincipal UserEntity userInfo, @RequestBody @Valid UserRequestDTO userRequestDTO) {
 
         HashMap<String, Object> responseDTO = new HashMap<>();
-        responseDTO.put("responseMessage", ResponseMessage.PASSWORD_UPDATE_SUCEESS);
+        if (userRequestDTO.getPassword() == null) {
+            responseDTO.put("responseMessage", ResponseMessage.EMPTY);
+        } else {
+            String newPassword = passwordEncoder.encode(userRequestDTO.getPassword());
+
+            userService.updatePassword(userInfo.getUserIdx(), newPassword);
+
+            responseDTO.put("responseMessage", ResponseMessage.PASSWORD_UPDATE_SUCEESS);
+        }
 
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
@@ -401,9 +355,14 @@ public class UserController {
                     "{responseMessage(String)}")
     @GetMapping("/check/id/{userId}")
     public ResponseEntity<?> checkUserId(@PathVariable String userId) {
-        userService.checkUserId(userId);
         HashMap<String, Object> responseDTO = new HashMap<>();
-        responseDTO.put("responseMessage", ResponseMessage.USUABLE_KEY);
+
+        if (userService.checkUserId(userId)) {
+            responseDTO.put("responseMessage", ResponseMessage.DUPLICATED_KEY);
+        } else {
+            responseDTO.put("responseMessage", ResponseMessage.USUABLE_KEY);
+        }
+
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
 
@@ -414,9 +373,14 @@ public class UserController {
                     "{responseMessage(String)}")
     @GetMapping("/check/nickname/{nickname}")
     public ResponseEntity<?> checkNickname(@PathVariable String nickname) {
-        userService.checkNickname(nickname);
         HashMap<String, Object> responseDTO = new HashMap<>();
-        responseDTO.put("responseMessage", ResponseMessage.USUABLE_KEY);
+
+        if (userService.checkNickname(nickname)) {
+            responseDTO.put("responseMessage", ResponseMessage.DUPLICATED_KEY);
+        } else {
+            responseDTO.put("responseMessage", ResponseMessage.USUABLE_KEY);
+        }
+
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
 
@@ -427,9 +391,13 @@ public class UserController {
                     "{responseMessage(String)}")
     @GetMapping("/check/Email/{email}")
     public ResponseEntity<?> checkEmail(@PathVariable String email) {
-        userService.checkEmail(email);
         HashMap<String, Object> responseDTO = new HashMap<>();
-        responseDTO.put("responseMessage", ResponseMessage.USUABLE_KEY);
+
+        if (userService.checkEmail(email)) {
+            responseDTO.put("responseMessage", ResponseMessage.DUPLICATED_KEY);
+        } else {
+            responseDTO.put("responseMessage", ResponseMessage.USUABLE_KEY);
+        }
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
 

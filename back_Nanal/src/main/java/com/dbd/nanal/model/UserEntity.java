@@ -103,6 +103,14 @@ public class UserEntity implements UserDetails {
     @JsonIgnore
     private List<DiaryEntity> diaries = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user_idx1", cascade = CascadeType.REMOVE)
+    @JsonIgnore
+    private List<FriendEntity> friendEntity;
+
+    @OneToMany(mappedBy = "user_idx2", cascade = CascadeType.REMOVE)
+    @JsonIgnore
+    private List<FriendEntity> friendEntity2;
+
     // 스프링 시큐리티 UserDetails
 
     @Override
@@ -148,5 +156,6 @@ public class UserEntity implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
 }
 

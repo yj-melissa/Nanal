@@ -16,7 +16,6 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,19 +30,11 @@ public class UserService {
     private final PaintingRepository paintingRepository;
 
     // 회원 가입
-    public UserEntity join(final UserEntity userEntity, final UserProfileEntity userProfileEntity)  throws NullPointerException {
-//        if (userEntity == null || userProfileEntity == null || userEntity.getUserId() == null || userEntity.getEmail() == null || userProfileEntity.getNickname() == null) {
-//            throw new NullPointerException("");
-//        }
+    public UserEntity join(final UserEntity userEntity, final UserProfileEntity userProfileEntity) {
 
-        final String userId = userEntity.getUserId();
-        checkUserId(userId);
-
-        final String email = userEntity.getEmail();
-        checkEmail(email);
-
-        final String nickname = userProfileEntity.getNickname();
-        checkNickname(nickname);
+        checkUserId(userEntity.getUserId());
+        checkEmail(userEntity.getEmail());
+        checkNickname(userProfileEntity.getNickname());
 
         UserEntity newUser = userRepository.save(userEntity);
         userProfileEntity.setUser(newUser);
@@ -53,7 +44,7 @@ public class UserService {
     }
 
     // 로그인
-    public UserEntity getByCredentials(final String userId, final String userPassword, final PasswordEncoder passwordEncoder)  throws NullPointerException {
+    public UserEntity getByCredentials(final String userId, final String userPassword, final PasswordEncoder passwordEncoder) {
 
         final UserEntity user = userRepository.findByUserId(userId);
         if(user != null && passwordEncoder.matches(userPassword, user.getPassword())) {
@@ -74,28 +65,25 @@ public class UserService {
     }
 
     // 유저 프로필 조회
-    public HashMap<String, Object> getProfileByUserIdx(final int userIdx) throws NullPointerException {
+    public HashMap<String, Object> getProfileByUserIdx(final int userIdx) {
         return profileDTO(userProfileRepository.findByProfileIdx(userIdx));
     }
 
 
     // 회원 정보 수정
-    public HashMap<String, Object> updateProfile(final int userIdx, final UserRequestDTO userRequest)  throws NullPointerException {
+    public HashMap<String, Object> updateProfile(final int userIdx, final UserRequestDTO userRequest) {
         UserProfileEntity profile = userProfileRepository.findByProfileIdx(userIdx);
 
         profile.setNickname(userRequest.getNickname());
-//        profile.setImg(userRequest.getImg());
         profile.setIntroduction(userRequest.getIntroduction());
 //        profile.setIsPrivate(userForm.getIsPrivate());
 
-
         profile = userProfileRepository.save(profile);
-
 
         return profileDTO(profile);
     }
-    // 비밀번호 수정
 
+    // 비밀번호 수정
     public void updatePassword(int userIdx, String newPassword) {
 
         UserEntity user = userRepository.findByUserIdx(userIdx);
@@ -103,37 +91,29 @@ public class UserService {
         userRepository.save(user);
 
     }
-    // 회원 탈퇴
 
+    // 회원 탈퇴
     public void deleteByUserIdx(int userIdx) {
         userRepository.deleteById(userIdx);
     }
-    // 비밀번호 확인용
 
+    // 비밀번호 확인용
     public Boolean isUserExist(String userId) {
         return userRepository.existsByUserId(userId);
     }
 
     // 중복 체크
 
-    public void checkUserId(String userId) {
-        Boolean result = userRepository.existsByUserId(userId);
-        if (result) {
-            throw new DuplicateKeyException(userId);
-        }
-    }
-    public void checkNickname(String nickname) {
-        Boolean result = userProfileRepository.existsByNickname(nickname);
-        if (result) {
-            throw new DuplicateKeyException(nickname);
-        }
+    public Boolean checkUserId(String userId) {
+        return userRepository.existsByUserId(userId);
     }
 
-    public void checkEmail(String email) {
-        Boolean result = userRepository.existsByEmail(email);
-        if (result) {
-            throw new DuplicateKeyException(email);
-        }
+    public Boolean checkNickname(String nickname) {
+        return userProfileRepository.existsByNickname(nickname);
+    }
+
+    public Boolean checkEmail(String email) {
+        return userRepository.existsByEmail(email);
     }
 
 
