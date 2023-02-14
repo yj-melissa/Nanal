@@ -1,6 +1,8 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import axios_api from '../config/Axios';
+import { onLogin } from '../config/Login';
 import bell from '../src_assets/img/bell.svg';
 import logo from '../src_assets/img/home-alt.svg';
 import profile from '../src_assets/img/person_FILL0.png';
@@ -17,12 +19,34 @@ function Nav({ changeIsBookCase }) {
   const location = useLocation();
   // Home 옆의 화살표 토글
   const [isToggle, setToggle] = useState(true);
+  const [checkAlarm, setCheckAlarm] = useState(true);
+
   const toggleMenu = () => {
     setToggle((isToggle) => !isToggle);
   };
   const changeBookCase = (e) => {
     changeIsBookCase(e);
   };
+
+  useEffect(() => {
+    onLogin();
+    axios_api
+      .get('notification/check')
+      .then(({ data }) => {
+        if (data.statusCode === 200) {
+          setCheckAlarm(null);
+          if (data.data.responseMessage === '알림 조회 성공') {
+            setCheckAlarm(data.data.check);
+          }
+        } else {
+          console.log('새 알림 여부 확인 오류 : ');
+          console.log(data.statusCode);
+          console.log(data.data.responseMessage);
+        }
+      })
+      .catch(({ error }) => console.log('새 알림 여부 확인 오류 : ' + error));
+  }, []);
+
   return (
     <div>
       <nav className='flex justify-between m-auto space-x-4 w-80'>
@@ -79,10 +103,16 @@ function Nav({ changeIsBookCase }) {
         </div>
         <div className='flex items-center m-auto'>
           <Link to='/Search'>
-            <img src={search} className='w-5 h-5 my-3' />
+            <img src={search} className='w-[18px] h-[18px] my-3' />
           </Link>
           <Link to='/Alarm'>
             <img src={bell} className='w-6 h-6 my-3 ml-2.5' />
+            {checkAlarm === true ? (
+              <span className='absolute flex w-3 h-3 right-14 top-2'>
+                <span className='absolute inline-flex w-2 h-2 rounded-full opacity-75 animate-ping bg-sky-300'></span>
+                <span className='relative inline-flex w-2 h-2 rounded-full bg-sky-400'></span>
+              </span>
+            ) : null}
           </Link>
           {location.pathname === '/home' ? (
             <Link to='/MyPage' className='ml-2.5 w-[36px]'>

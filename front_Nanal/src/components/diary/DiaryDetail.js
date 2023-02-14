@@ -94,7 +94,6 @@ function DiaryDetail() {
   // 일기 상세 페이지 불러오기
   useEffect(() => {
     onLogin();
-
     axios_api
       .get(`diary/${diaryIdx}`)
       .then(({ data }) => {
@@ -176,6 +175,8 @@ function DiaryDetail() {
             state={{
               diaryDetail: diaryDetail,
               originGroupList: originGroupList,
+              isToggle: state.isToggle,
+              groupIdx: state.groupIdx,
             }}
           >
             <button className='hover:bg-sky-700 bg-cyan-600 text-white px-2.5 py-1 rounded-3xl m-auto block'>

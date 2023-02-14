@@ -33,6 +33,7 @@ function BookCase() {
 
   // img태그가 갖는 공통 css 속성
   const emoCss = 'w-12 h-12 absolute'; // standart top-100, left-26
+  const emoTextCss = 'w-12 absolute'; // standart top-100, left-26
   const joyCss =
     Collocate === true
       ? 'animate-bounce hover:animate-none top-24 right-12 cursor-pointer'
@@ -288,7 +289,7 @@ function BookCase() {
         <div>
           {emotion && emotionDisplay[0] === true ? (
             <div
-              className={`w-16 p-2 text-center rounded-lg h-50 bg-zinc-100 ${emoCss} ${joyCss}`}
+              className={`w-16 p-2 text-center rounded-lg bg-zinc-100 ${emoTextCss} ${joyCss}`}
             >
               {emotion && emotion.joy
                 ? emotion.joy.nickname.map((name, idx) => {
@@ -303,7 +304,7 @@ function BookCase() {
           ) : null}
           {emotion && emotionDisplay[1] === true ? (
             <div
-              className={`w-16 p-2 text-center rounded-lg h-50 bg-zinc-100 ${emoCss} ${calmCss}`}
+              className={`w-16 p-2 text-center rounded-lg bg-zinc-100 ${emoTextCss} ${calmCss}`}
             >
               {emotion && emotion.calm
                 ? emotion.calm.nickname.map((name, idx) => {
@@ -318,7 +319,7 @@ function BookCase() {
           ) : null}
           {emotion && emotionDisplay[2] === true ? (
             <div
-              className={`w-16 p-2 text-center rounded-lg h-50 bg-zinc-100 ${emoCss} ${nervCss}`}
+              className={`w-16 p-2 text-center rounded-lg bg-zinc-100 ${emoTextCss} ${nervCss}`}
             >
               {emotion && emotion.nerv
                 ? emotion.nerv.nickname.map((name, idx) => {
@@ -333,7 +334,7 @@ function BookCase() {
           ) : null}
           {emotion && emotionDisplay[3] === true ? (
             <div
-              className={`w-16 p-2 text-center rounded-lg h-50 bg-zinc-100 ${emoCss} ${angCss}`}
+              className={`w-16 p-2 text-center rounded-lg bg-zinc-100 ${emoTextCss} ${angCss}`}
             >
               {emotion && emotion.ang
                 ? emotion.ang.nickname.map((name, idx) => {
@@ -348,7 +349,7 @@ function BookCase() {
           ) : null}
           {emotion && emotionDisplay[4] === true ? (
             <div
-              className={`w-16 p-2 text-center rounded-lg h-50 bg-zinc-100 ${emoCss} ${embCss}`}
+              className={`w-16 p-2 text-center rounded-lg bg-zinc-100 ${emoTextCss} ${embCss}`}
             >
               {emotion && emotion.emb
                 ? emotion.emb.nickname.map((name, idx) => {
@@ -363,7 +364,7 @@ function BookCase() {
           ) : null}
           {emotion && emotionDisplay[5] === true ? (
             <div
-              className={`w-16 p-2 text-center rounded-lg h-50 bg-zinc-100 ${emoCss} ${sadCss}`}
+              className={`w-16 p-2 text-center rounded-lg bg-zinc-100 ${emoTextCss} ${sadCss}`}
             >
               {emotion && emotion.sad
                 ? emotion.sad.nickname.map((name, idx) => {

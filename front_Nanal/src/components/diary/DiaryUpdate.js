@@ -25,9 +25,18 @@ function DiaryUpdate() {
 
   // 수정 취소 버튼 클릭 시 실행되는 함수
   const handleQuitEdit = () => {
-    setLocalDate(location.state.diaryDate);
-    setLocalContent(location.state.diaryDetail.content);
-    navigate(-1);
+    // setLocalDate(location.state.diaryDate);
+    // setLocalContent(location.state.diaryDetail.content);
+    // navigate(-1);
+    navigate('/Diary/Detail', {
+      state: {
+        diaryIdx: location.state.diaryDetail.diaryIdx,
+        diarydate: changeDate,
+        groupIdx: location.state.groupIdx,
+        isToggle: location.state.isToggle,
+      },
+      replace: true,
+    });
   };
 
   const changeDate = localDate.split('-');
