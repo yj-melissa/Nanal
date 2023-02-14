@@ -118,7 +118,6 @@ public class DiaryService {
 
     // save diary-group
     public void saveDiaryGroup(GroupDiaryRelationDTO groupDiaryRelationDTO){
-        System.out.println("wㅇㄹㅇㄹㄹㄹ");
         GroupDiaryRelationEntity groupDiaryRelationEntity=GroupDiaryRelationEntity.builder()
                 .diary(DiaryEntity.builder().diaryIdx(groupDiaryRelationDTO.getDiaryIdx()).build())
                 .groupDetail(GroupDetailEntity.builder().groupIdx(groupDiaryRelationDTO.getGroupIdx()).build())

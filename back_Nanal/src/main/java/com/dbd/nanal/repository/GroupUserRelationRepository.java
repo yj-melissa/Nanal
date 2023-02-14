@@ -18,9 +18,9 @@ public interface GroupUserRelationRepository extends JpaRepository<GroupUserRela
     List<GroupDetailEntity> findGroupListByName(@Param("userIdx") int userIdx);
 
     @Query(nativeQuery = true, value = "select de.group_idx, de.img_url, de.group_name, t.tag_idx, t.tag from group_detail de join group_tag t on de.group_idx = t.group_idx left join\n" +
-            "            (select d.diary_idx, d.creation_date, gd.group_idx from diary d join group_diary gd on d.diary_idx = gd.diary_idx\n" +
-            "             group by gd.group_idx ) b on de.group_idx = b.group_idx where de.group_idx in (select r.group_idx from group_user_relation r where r.user_idx = :userIdx)" +
-            "            order by b.creation_date desc, de.group_name, t.tag_idx")
+            "            (select d.diary_idx, max(d.diary_date) as diary_date, gd.group_idx from diary d join group_diary gd on d.diary_idx = gd.diary_idx\n" +
+            "             group by gd.group_idx ) b on de.group_idx = b.group_idx where de.group_idx in (select r.group_idx from group_user_relation r where r.user_idx = 6)\n" +
+            "            order by b.diary_date desc, b.diary_idx desc, de.group_name, t.tag_idx")
     List<Object[]> findGroupListByTime(@Param("userIdx") int userIdx);
 
     @Query("select r from GroupUserRelationEntity r where r.user.userIdx = :userIdx and r.groupDetail.groupIdx = :groupIdx")
