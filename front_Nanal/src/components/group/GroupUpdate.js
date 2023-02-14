@@ -259,7 +259,7 @@ function GroupUpdate() {
                 // 그룹에 추가할 친구가 있는 경우
                 axios_api
                   .post('notification/group', {
-                    request_group_idx: groupidx,
+                    request_group_idx: [groupidx],
                     userIdx: includeFriendIdx,
                   })
                   .then(({ data }) => {

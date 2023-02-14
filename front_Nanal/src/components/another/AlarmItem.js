@@ -141,8 +141,15 @@ function AlarmItem({
       .get(`notification/${noticeIdx}`)
       .then(({ data }) => {
         if (data.statusCode === 200) {
-          if (data.data.responseMessage === '알림 읽음 처리 성공') {
-            navigate(`diary/${requestDiaryIdx}`);
+          if (data.data.responseMessage === '알림 조회 성공') {
+            navigate('/Diary/Detail', {
+              state: {
+                diaryIdx: requestDiaryIdx,
+                groupIdx: requestGroupIdx,
+                isToggle: 2,
+              },
+              replace: true,
+            });
           }
         } else {
           console.log('알림 읽음 처리 오류: ');
@@ -271,6 +278,7 @@ function AlarmItem({
       </div>
     );
   } else if (noticeType === 3) {
+    let content_text = content.split(',');
     return (
       <div className='my-3'>
         <hr className='my-2 border-dashed border-stone-800' />
@@ -278,12 +286,16 @@ function AlarmItem({
           <p>
             <span className='mr-2 font-bold'>[댓글 알림]</span>
             <span className='rounded-md bg-gradient-to-t from-yellow-200'>
-              {content}
+              {content_text[0]}
             </span>
             <span className='mr-2'>님의</span>
             <span className='mr-2'>일기에</span>
-            <span className='mr-2'>새 댓글이</span>
-            <span className='mr-2'>작성되었어요.</span>
+            <span className='rounded-md bg-gradient-to-t from-green-200'>
+              {content_text[1]}
+            </span>
+            <span className='mr-2'>님이</span>
+            <span className='mr-2'>새 댓글을</span>
+            <span className='mr-2'>작성했어요.</span>
           </p>
           {/* <button className='grid content-start'>X</button> */}
         </div>

@@ -33,27 +33,27 @@ function CommentList({ diaryIdx, isToggle, groupIdx }) {
       .then(({ data }) => {
         if (data.statusCode === 200) {
           if (data.data.responseMessage === '일기 댓글 저장 성공') {
-            // axios_api
-            //   .get(`diary/comment/${groupIdx}/${diaryIdx}`)
-            //   .then(({ data }) => {
-            //     if (data.statusCode === 200) {
-            //       setDiaryComment(null);
-            //       if (
-            //         data.data.responseMessage ===
-            //         '일기 그룹에 해당하는 댓글 리스트 조회 성공'
-            //       ) {
-            //         setDiaryComment(data.data.diaryComment);
-            //       }
-            //     } else {
-            //       console.log('일기 그룹에 해당하는 댓글 리스트 조회 실패 : ');
-            //       console.log(data.statusCode);
-            //       console.log(data.data.responseMessage);
-            //     }
-            //   })
-            //   .catch((err) => console.log(err));
-            // // 저장 후 댓글 데이터 초기화
-            // setContent('');
-            window.location.reload();
+            axios_api
+              .post(`notification/comment`, {
+                request_diary_idx: diaryIdx,
+                request_group_idx: [groupIdx],
+              })
+              .then(({ data }) => {
+                if (data.statusCode === 200) {
+                  if (data.data.responseMessage === '알림 저장 성공') {
+                    // 저장 후 댓글 데이터 초기화
+                    // setContent('');
+                    window.location.reload();
+                  }
+                } else {
+                  console.log('새 댓글 알림 저장 실패 : ');
+                  console.log(data.statusCode);
+                  console.log(data.data.responseMessage);
+                }
+              })
+              .catch(({ error }) => {
+                console.log('새 댓글 알림 저장 실패 : ' + error);
+              });
           }
         } else {
           console.log('일기 댓글 저장 오류: ');

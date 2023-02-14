@@ -48,29 +48,41 @@ function DiaryCreate() {
           groupIdxList: checkedList,
           content: content,
         })
-        // .then(({ data }) => {
-        //   if (data.statusCode === 200) {
-        //     if (data.data.responseMessage === '일기 생성 성공') {
-        //       axios_api
-        //         .post('notification/diary', {
-        //           requestUserIdx: [],
-        //           requestDiaryIdx: data.data.diaryIdx,
-        //           requestGroupIdx: 0,
-        //         })
         .then(({ data }) => {
-          console.log(data);
           if (data.statusCode === 200) {
             if (data.data.responseMessage === '일기 생성 성공') {
+              const diaryIdx = data.data.diary.diaryIdx;
               setLoaded(false);
-              Swal.fire({
-                icon: 'success',
-                text: '작성하신 일기가 작성 완료됐습니다.',
-                width: '90%',
-              });
-              navigate('/', { replace: true });
+              axios_api
+                .post('/notification/diary', {
+                  request_diary_idx: diaryIdx,
+                  request_group_idx: checkedList,
+                })
+                .then(({ data }) => {
+                  if (data.statusCode === 200) {
+                    if (data.data.responseMessage === '알림 저장 성공') {
+                      // 저장 후 일기 데이터 초기화
+                      setContent('');
+                      setGroup('private');
+
+                      Swal.fire({
+                        icon: 'success',
+                        text: '작성하신 일기가 작성 완료됐습니다.',
+                        width: '90%',
+                      });
+                      navigate('/', { replace: true });
+                    }
+                  } else {
+                    console.log('알림 저장 오류: ');
+                    console.log(data.statusCode);
+                    console.log(data.data.responseMessage);
+                  }
+                })
+                .catch(({ error }) => {
+                  console.log('알림 저장 오류: ' + error);
+                });
             }
           } else {
-            console.log(11111111);
             console.log('일기 생성 오류: ');
             console.log(data.statusCode);
             console.log(data.data.responseMessage);
@@ -80,21 +92,7 @@ function DiaryCreate() {
           console.log('일기 생성 오류: ' + error);
         });
     }
-    //   } else {
-    //     console.log('일기 생성 오류: ');
-    //     console.log(data.statusCode);
-    //     console.log(data.data.responseMessage);
-    //   }
-    // })
-    // .catch(({ error }) => {
-    //   console.log('일기 생성 오류: ' + error);
-    // });
-
-    // 저장 후 일기 데이터 초기화
-    setContent('');
-    setGroup('private');
   };
-  // };
 
   // 체크된 그룹을 넣어줄 배열
   const [checkedList, setCheckedList] = useState([]);
@@ -134,7 +132,7 @@ function DiaryCreate() {
       });
 
     if (state && state.groupIdx !== null) {
-      console.log(state);
+      // console.log(state);
       setGroup('그룹');
       setShow(true);
       setCheckedList([state.groupIdx]);
