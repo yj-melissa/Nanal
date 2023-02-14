@@ -4,7 +4,6 @@ import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
 import Swal from 'sweetalert2';
 import spinner from '../../src_assets/img/emotion/spinner.gif';
-import { TailSpin } from 'react-loader-spinner';
 
 function DiaryUpdate() {
   const location = useLocation();
@@ -124,19 +123,11 @@ function DiaryUpdate() {
       <div>
         {loaded ? (
           <>
-            <div className='flex flex-col justify-center w-screen h-screen backdrop-opacity-30 backdrop-invert bg-white/30'>
+            <div className='flex flex-col justify-center items-center w-[344px] h-screen'>
               <img src={spinner} alt='emotion_gif' className='w-16 h-16' />
               <p className='my-2 text-xl font-bold animate-bounce text-rose-500'>
                 달리가 그림을 만드는 중...
               </p>
-              <TailSpin
-                height='80'
-                width='80'
-                color='#ef4444'
-                ariaLabel='tail-spin-loading'
-                radius='1'
-                visible={true}
-              />
             </div>
           </>
         ) : (
