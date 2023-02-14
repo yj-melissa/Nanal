@@ -24,11 +24,11 @@ public class NoticeService {
     //save friend notice
     public NotificationResponseDTO saveFriendNotice(NotificationRequestDTO notice){
         NoticeEntity noticeEntity = NoticeEntity.builder()
-                    .user(UserEntity.builder().userIdx(notice.getUserIdx().get(0)).build())
-                    .requestUserIdx(notice.getRequest_user_idx())
-                    .noticeType(notice.getNotice_type())
-                    .content(userProfileRepository.getReferenceById(notice.getRequest_user_idx()).getNickname())
-                    .build();
+                .user(UserEntity.builder().userIdx(notice.getUserIdx().get(0)).build())
+                .requestUserIdx(notice.getRequest_user_idx())
+                .noticeType(notice.getNotice_type())
+                .content(userProfileRepository.getReferenceById(notice.getRequest_user_idx()).getNickname())
+                .build();
 
         return new NotificationResponseDTO(noticeRepository.save(noticeEntity));
     }
@@ -36,7 +36,7 @@ public class NoticeService {
     //save group notice
     public List<NotificationResponseDTO> saveGroupNotice(NotificationRequestDTO notice){
         String nickname=userProfileRepository.getReferenceById(notice.getRequest_user_idx()).getNickname();
-        String groupName=groupRepository.getReferenceById(notice.getRequest_group_idx()).getGroupName();
+        String groupName=groupRepository.getReferenceById(notice.getRequest_group_idx().get(0)).getGroupName();
 
         String str=nickname+","+groupName;
 
@@ -45,7 +45,7 @@ public class NoticeService {
             NoticeEntity noticeEntity=NoticeEntity.builder()
                     .user(UserEntity.builder().userIdx(userIdx).build())
                     .requestUserIdx(notice.getRequest_user_idx())
-                    .requestGroupIdx(notice.getRequest_group_idx())
+                    .requestGroupIdx(notice.getRequest_group_idx().get(0))
                     .requestDiaryIdx(notice.getRequest_diary_idx())
                     .noticeType(notice.getNotice_type())
                     .content(str)
@@ -66,7 +66,7 @@ public class NoticeService {
         NoticeEntity noticeEntity=NoticeEntity.builder()
                 .user(UserEntity.builder().userIdx(diaryEntity.getUser().getUserIdx()).build())
                 .requestUserIdx(notice.getRequest_user_idx())
-                .requestGroupIdx(notice.getRequest_group_idx())
+                .requestGroupIdx(notice.getRequest_group_idx().get(0))
                 .requestDiaryIdx(notice.getRequest_diary_idx())
                 .noticeType(notice.getNotice_type())
                 .content(str)
@@ -75,26 +75,31 @@ public class NoticeService {
     }
 
     // save diary notice
-    public List<NotificationResponseDTO> saveDiaryNotice(NotificationRequestDTO notice){
+    public List<List<NotificationResponseDTO>> saveDiaryNotice(NotificationRequestDTO notice){
         String nickname=userProfileRepository.getReferenceById(notice.getRequest_user_idx()).getNickname();
-        String groupName=groupRepository.getReferenceById(notice.getRequest_group_idx()).getGroupName();
-        List<GroupUserRelationEntity> groupUserRelationEntityList=groupUserRelationRepository.findByGroupDetail(GroupDetailEntity.builder().groupIdx(notice.getRequest_group_idx()).build());
 
-        String str=nickname+","+groupName;
-        List<NoticeEntity> noticeEntityList= new ArrayList<>();
-        for(GroupUserRelationEntity groupUser: groupUserRelationEntityList){
-            if(groupUser.getUser().getUserIdx() == notice.getRequest_user_idx()) continue;
-            NoticeEntity noticeEntity=NoticeEntity.builder()
-                    .user(UserEntity.builder().userIdx(groupUser.getUser().getUserIdx()).build())
-                    .requestUserIdx(notice.getRequest_user_idx())
-                    .requestGroupIdx(notice.getRequest_group_idx())
-                    .requestDiaryIdx(notice.getRequest_diary_idx())
-                    .noticeType(notice.getNotice_type())
-                    .content(str)
-                    .build();
-            noticeEntityList.add(noticeRepository.save(noticeEntity));
+        List<List<NotificationResponseDTO>> list=new ArrayList<>();
+        for(int i: notice.getRequest_group_idx()){
+            String groupName=groupRepository.getReferenceById(i).getGroupName();
+            List<GroupUserRelationEntity> groupUserRelationEntityList=groupUserRelationRepository.findByGroupDetail(GroupDetailEntity.builder().groupIdx(i).build());
+
+            String str=nickname+","+groupName;
+            List<NoticeEntity> noticeEntityList= new ArrayList<>();
+            for(GroupUserRelationEntity groupUser: groupUserRelationEntityList){
+                if(groupUser.getUser().getUserIdx() == notice.getRequest_user_idx()) continue;
+                NoticeEntity noticeEntity=NoticeEntity.builder()
+                        .user(UserEntity.builder().userIdx(groupUser.getUser().getUserIdx()).build())
+                        .requestUserIdx(notice.getRequest_user_idx())
+                        .requestGroupIdx(i)
+                        .requestDiaryIdx(notice.getRequest_diary_idx())
+                        .noticeType(notice.getNotice_type())
+                        .content(str)
+                        .build();
+                noticeEntityList.add(noticeRepository.save(noticeEntity));
+            }
+            list.add(noticeEntityList.stream().map(x-> new NotificationResponseDTO(x)).collect(Collectors.toList()));
         }
-        return noticeEntityList.stream().map(x-> new NotificationResponseDTO(x)).collect(Collectors.toList());
+        return list;
     }
 
     //get notice

@@ -10,7 +10,7 @@ import java.util.List;
 public class NotificationRequestDTO {
     private List<Integer> userIdx;
     private int request_user_idx;
-    private int request_group_idx;
+    private List<Integer> request_group_idx;
     private int notice_type;
     private int request_diary_idx;
 }
