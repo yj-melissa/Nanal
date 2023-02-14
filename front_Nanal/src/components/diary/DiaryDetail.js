@@ -12,7 +12,7 @@ import bookmark_filled from '../../src_assets/img/bookmark_fill.png';
 function DiaryDetail() {
   // const location = useLocation();
   const { state } = useLocation();
-  console.log(state);
+  // console.log(state);
   const navigate = useNavigate();
 
   const token = getCookie('accessToken');
