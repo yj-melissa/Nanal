@@ -44,7 +44,6 @@ function DiaryList({
   // console.log("무한 로딩")
   useEffect(() => {
     onLogin();
-    console.log(arrAxios[isToggle])
     axios_api
       .get(arrAxios[isToggle])
       .then(({ data }) => {
@@ -53,7 +52,7 @@ function DiaryList({
           setDiaryList(null);
           if (data.data.responseMessage === '일기 리스트 조회 성공') {
             setDiaryList(data.data.diary);
-            console.log(data.data.diary)
+
             if (data.data.diary.length !== 0) {
               setIsShow(true);
             } else {
@@ -105,7 +104,7 @@ function DiaryList({
       ) : (
         <></>
       )}
-      <div className='my-5'>
+      <div className='my-2'>
         <Div className='overflow-auto h-96'>
           {diaryList.map((diary) => (
             <DiaryItem

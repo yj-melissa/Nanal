@@ -42,7 +42,6 @@ function DiaryUpdate() {
   const handleQuitEdit = () => {
     setLocalDate(location.state.diaryDate);
     setLocalContent(location.state.diaryDetail.content);
-    navigate('/Diary/Detail');
   };
 
   // input 태그가 체크된 경우 실행되는 함수 = 다중 선택 가능
@@ -91,7 +90,7 @@ function DiaryUpdate() {
 
       {/* 그룹 여부 선택란 */}
       <div className='absolute z-20 left-[250px] inset-y-48 mt-2'>
-        <p className='my-1 text-xl font-bold'>공개 범위 설정</p>
+        <p className='my-1 text-xl font-bold mb-2'>공개 범위 설정</p>
         <input
           className='cursor-pointer'
           id='private'
@@ -121,7 +120,7 @@ function DiaryUpdate() {
         </label>
         {isShow ? (
           <>
-            <Div className='h-48 overflow-auto'>
+            <Div className='h-64 overflow-auto'>
               <div>
                 {groupList.map((groupItem, idx) => {
                   return (
@@ -163,7 +162,7 @@ function DiaryUpdate() {
       </div>
 
       <div>
-        <form className='absolute z-20 min-h-full mt-20 w-[720px] right-[200px]'>
+        <form className='absolute z-20 min-h-full inset-y-40 w-[720px] right-[200px]'>
           {/* 날짜 선택란 */}
           <div className='text-xl'>
             <input
@@ -190,17 +189,20 @@ function DiaryUpdate() {
           <div className='relative flex justify-between px-1 pb-5'>
             <Link
               to='/Diary/Detail'
-              state={{ diaryIdx: location.state.diaryDetail.diaryIdx }}
+              state={{
+                diaryIdx: location.state.diaryDetail.diaryIdx,
+                diaryDate: location.state.diaryDetail.diaryDate,
+              }}
             >
               <button
-                className='hover:bg-slate-300 bg-slate-300/50 rounded-xl px-2.5 py-1 block font-bold cursor-pointer text-xl mt-4'
+                className='hover:bg-slate-300 bg-slate-300/50 rounded-xl px-2.5 py-1 block font-bold cursor-pointer text-xl mt-2'
                 onClick={handleQuitEdit}
               >
                 수정 취소
               </button>
             </Link>
             <button
-              className='hover:bg-cyan-600 bg-cyan-500 text-white px-2.5 py-1 rounded-xl block font-bold text-xl mt-4'
+              className='hover:bg-cyan-600 bg-cyan-500 text-white px-2.5 py-1 rounded-xl block font-bold text-xl mt-2'
               onClick={() => {
                 axios_api
                   .put('diary', {

@@ -44,16 +44,19 @@ function TrashItem({ diaryIdx, diaryDate, content, picture, emo }) {
           className='w-16 h-16 p-1 rounded-lg hover:translate-y-2'
         />
         <div className='w-9/12 px-1 m-1 text-sm '>
-          <div className='flex justify-between mb-2'>
+          <div className='flex justify-evenly items-center'>
+            <img src={emo} alt='Emotion' className='w-6 h-6' />
             <span className='text-sm'>{diaryDate}</span>
             <button
-              className='bg-cyan-600  text-white px-2.5 py-1 rounded-xl'
+              className='bg-cyan-600  text-white px-2.5 py-1 rounded-xl '
               onClick={recovery}
             >
               복구
             </button>
           </div>
-          <p className='w-11/12 mt-1 font-bold truncate'>{content}</p>
+          <p className='w-11/12 mt-1 font-bold truncate text-right pr-16'>
+            {content}
+          </p>
         </div>
       </div>
     </div>

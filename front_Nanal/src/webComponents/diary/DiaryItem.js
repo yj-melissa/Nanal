@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import emo_joy from '../../src_assets/img/emotion/emo_joy.png';
 
 function DiaryItem({
   isToggle,
@@ -8,6 +7,8 @@ function DiaryItem({
   diaryIdx,
   diaryDate,
   content,
+  picture,
+  emo,
 }) {
   const diarydate = diaryDate.split('-');
 
@@ -21,35 +22,35 @@ function DiaryItem({
         diaryDate: diaryDate,
       }}
     >
-      <div className='flex items-center p-2 m-1 mb-3'>
+      <div className='flex items-center p-2 m-1'>
         {isToggle !== 0 ? (
           <img
-            src={emo_joy}
+            src={picture}
             alt='DALL:E2'
             className='w-32 h-32 p-1 rounded-lg'
           />
         ) : (
           <img
-            src={emo_joy}
+            src={picture}
             alt='DALL:E2'
-            className='w-20 h-20 p-1 rounded-lg hover:translate-y-2'
+            className='w-28 h-28 p-1 rounded-lg hover:translate-y-2'
           />
         )}
-        <div className='w-3/4 px-1 m-1 text-lg text-right'>
-          <p>
-            <span className='mr-2'>감정</span>
+        <div className='w-3/4 px-1 m-1 text-right'>
+          <p className='flex justify-end'>
+            <img src={emo} alt='Emotion' className='w-8 h-8 mr-3' />
             {isToggle === 1 ? (
               <span>
                 {diarydate[0]}년 {diarydate[1]}월 {diarydate[2]}일
               </span>
             ) : (
-              <span>
+              <span className='text-lg'>
                 {diarydate[0]}년 {diarydate[1]}월 {diarydate[2]}일
               </span>
             )}
           </p>
           <p>{isToggle === 2 ? <span>{nickname}</span> : <></>}</p>
-          <p className='block font-bold truncate'>{content}</p>
+          <p className='block font-bold truncate text-xl'>{content}</p>
         </div>
       </div>
     </Link>
