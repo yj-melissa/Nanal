@@ -3,7 +3,7 @@ import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
 import AlarmItem from './AlarmItem';
 
-function AlarmList() {
+function AlarmList({setUseAlarm}) {
   const [isAlarmList, setIsAlarmList] = useState([]);
 
   // DB에서 알람 리스트 다 땡겨와야함.
@@ -32,6 +32,14 @@ function AlarmList() {
         console.log('알림 리스트 조회 오류: ' + error);
       });
   }, []);
+
+  useEffect(() => {
+    if (isAlarmList.length > 0) {
+      setUseAlarm(true)
+    } else {
+      setUseAlarm(false)
+    }
+  },[isAlarmList])
 
   //알람은 최근 30일 것까지만...
   return (

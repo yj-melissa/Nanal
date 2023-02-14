@@ -12,6 +12,7 @@ import bookmark_filled from '../../src_assets/img/bookmark_fill.png';
 function DiaryDetail() {
   // const location = useLocation();
   const { state } = useLocation();
+  console.log(state);
   const navigate = useNavigate();
 
   const token = getCookie('accessToken');
@@ -119,29 +120,43 @@ function DiaryDetail() {
 
   return (
     <div>
-      <p className='font-bold'>
-        {diarydate[0]}년 {diarydate[1]}월 {diarydate[2]}일의 일기
-      </p>
-      <div className='flex justify-end'>
-        {/* 감정 넣는 곳 */}
-        <img src={diaryDetail.emo} alt='Emotion' className='w-8 h-8 mr-4'></img>
-        {isBook ? (
+      <div className='flex justify-between'>
+        <p className='font-bold'>
+          {diarydate[0]}년 {diarydate[1]}월 {diarydate[2]}일의 일기
+        </p>
+      </div>
+      <div className='flex justify-between'>
+        <div>
+          {/* 닉네임 */}
+          <p className='text-sm font-bold text-left'>{diaryDetail.nickname}</p>
+        </div>
+        <div className='flex justify-end w-30'>
+          {/* 감정 넣는 곳 */}
           <img
-            src={bookmark_filled}
-            alt='bookmark_filled'
-            onClick={bookmarkDelete}
-            className='w-1/12'
-          />
-        ) : (
-          <img
-            src={bookmark}
-            alt='bookmark'
-            onClick={bookmarkSave}
-            className='w-1/12'
-          />
-        )}
+            src={diaryDetail.emo}
+            alt='Emotion'
+            className='w-8 h-8 mr-2'
+          ></img>
+          {/* 북마크 아이콘 */}
+          {isBook ? (
+            <img
+              src={bookmark_filled}
+              alt='bookmark_filled'
+              onClick={bookmarkDelete}
+              className='w-1/3'
+            />
+          ) : (
+            <img
+              src={bookmark}
+              alt='bookmark'
+              onClick={bookmarkSave}
+              className='w-1/3'
+            />
+          )}
+        </div>
       </div>
       <div className='relative flex items-center justify-center my-12'>
+        {/* 달리 그림 */}
         <img
           src={diaryDetail.picture}
           alt='DALL:E2'
@@ -155,7 +170,7 @@ function DiaryDetail() {
       </div>
       {/* 작성자와 일치할 경우, 수정 삭제 버튼 존재 */}
       {userIdx === diaryDetail.userIdx ? (
-        <div className='flex items-center justify-end my-6'>
+        <div className='flex items-center justify-end my-6 mt-8'>
           <Link
             to={'/Diary/Edit'}
             state={{

@@ -128,12 +128,12 @@ const DiaryNew = ({ today }) => {
 
   return (
     <div className='relative w-[1440px] mx-auto'>
-      <p className='absolute z-30 left-[330px] inset-y-28'>일기쓰기</p>
-      <img src={nmg} className='absolute z-20 left-60 inset-y-20' />
-      <img src={diaryImgGreen} className='absolute w-[1280px] z-10 left-12' />
+      <p className='absolute z-30 left-[330px] inset-y-36'>일기쓰기</p>
+      <img src={nmg} className='absolute z-20 left-60 inset-y-28' />
+      <img src={diaryImgGreen} className='absolute w-[1280px] z-10 left-12 top-8' />
 
       {/* 그룹 여부 선택란 */}
-      <div className='absolute z-20 left-[250px] inset-y-48 mt-2'>
+      <div className='absolute z-20 left-60 inset-y-56 mt-2'>
         <p className='my-1 text-xl font-bold'>공개 범위 설정</p>
         <input
           className='cursor-pointer'
@@ -144,7 +144,7 @@ const DiaryNew = ({ today }) => {
           onChange={(e) => setGroup(e.target.value)}
           onClick={() => setShow(false)}
         />
-        <label className='ml-2 mr-4 text-xl cursor-pointer' htmlFor='private'>
+        <label className='ml-2 mr-4 text-lg cursor-pointer' htmlFor='private'>
           개인
         </label>
         <input
@@ -156,7 +156,7 @@ const DiaryNew = ({ today }) => {
           onChange={(e) => setGroup(e.target.value)}
           onClick={() => setShow(true)}
         />
-        <label className='ml-2 text-xl cursor-pointer' htmlFor='group'>
+        <label className='ml-2 text-lg cursor-pointer' htmlFor='group'>
           그룹
         </label>
         {isShow ? (
@@ -203,7 +203,7 @@ const DiaryNew = ({ today }) => {
       </div>
 
       <div>
-        <form className='absolute z-20 min-h-full mt-20 w-[720px] right-[200px]'>
+        <form className='absolute z-20 min-h-full mt-20 w-[720px] right-[200px] top-8'>
           {/* 날짜 선택란 */}
           <div className='text-xl'>
             <input
@@ -215,7 +215,7 @@ const DiaryNew = ({ today }) => {
             {/* 일기 내용 작성란 */}
             <div>
               <textarea
-                className='w-full px-2 py-2 my-2 rounded-lg h-60 bg-slate-300/50'
+                className='w-full px-2 py-2 my-2 rounded-lg h-60 bg-slate-300/50 text-lg'
                 placeholder='오늘의 하루는 어땠나요?'
                 name='content'
                 ref={contentRef}
@@ -230,13 +230,13 @@ const DiaryNew = ({ today }) => {
           {/* 작성 취소 및 완료 버튼 */}
           <div className='relative flex justify-between px-1 pb-5'>
             <input
-              className='hover:bg-slate-300 bg-slate-300/50 rounded-xl px-2.5 py-1 block font-bold cursor-pointer text-xl mt-4'
+              className='hover:bg-slate-300 bg-slate-300/50 rounded-xl px-2.5 py-1 block font-bold cursor-pointer text-lg mt-4'
               type='reset'
               onClick={resetData}
               value='초기화'
             />
             <button
-              className='hover:bg-cyan-600 bg-cyan-500 text-white px-2.5 py-1 rounded-xl block font-bold text-xl mt-4'
+              className='hover:bg-cyan-600 bg-cyan-500 text-white px-2.5 py-1 rounded-xl block font-bold text-lg mt-4'
               onClick={handleSubmit}
             >
               작성 완료

@@ -70,6 +70,7 @@ function CommentList({ diaryIdx, isToggle, groupIdx }) {
     `diary/comment/${diaryIdx}`,
     `diary/comment/${diaryIdx}`,
     `diary/comment/${groupIdx}/${diaryIdx}`,
+    `diary/comment/${groupIdx}/${diaryIdx}`,
   ];
 
   // 디테일 페이지에서 댓글 있으면 보여줘야 함
@@ -101,7 +102,7 @@ function CommentList({ diaryIdx, isToggle, groupIdx }) {
   return (
     <div className='comment-container'>
       <hr className='my-2 border-dashed border-slate-400/75 w-65' />
-      {isToggle === 2 ? (
+      {isToggle === 2 || isToggle === 3 ? (
         <form className='flex justify-end mx-auto my-3' onSubmit={handleSubmit}>
           <input
             type='text'

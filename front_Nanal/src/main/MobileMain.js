@@ -22,6 +22,7 @@ import AlarmList from '../components/another/AlarmList.js';
 import MyPage from '../components/mypage/MyPage.js';
 import Tuning from '../components/mypage/setting/Tuning';
 import RecycleBin from '../components/another/RecycleBin';
+import Search from '../components/another/SearchList';
 import NotFound from '../components/another/NotFound.js';
 
 const AppMain = ({ isBookCase }) => {
@@ -52,6 +53,7 @@ const AppMain = ({ isBookCase }) => {
       <Route path='/Tuning' element={<Tuning />}></Route>
       <Route path='/MyPage' element={<MyPage />}></Route>
       <Route path='/RecycleBin' element={<RecycleBin />}></Route>
+      <Route path='/Search' element={<Search />}></Route>
       <Route path='*' element={<NotFound />}></Route>
     </Routes>
   );

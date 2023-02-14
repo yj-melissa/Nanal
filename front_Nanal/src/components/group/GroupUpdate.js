@@ -465,10 +465,12 @@ function GroupUpdate() {
             <div className='items-center justify-between text-center'>
               {includeFriend.map((friendItem, idx) => {
                 return (
-                  <div className='items-center inline-block my-1 text-center w-36'>
+                  <div
+                    key={idx}
+                    className='items-center inline-block my-1 text-center w-36'
+                  >
                     <button
                       type='button'
-                      key={idx}
                       onClick={() => {
                         onChangeFRemove(idx);
                       }}
@@ -499,10 +501,12 @@ function GroupUpdate() {
           {groupNotFriendList.length >= 0 ? (
             groupNotFriendList.map((friendItem, idx) => {
               return (
-                <div className='items-center inline-block my-1 text-center w-36'>
+                <div
+                  key={idx}
+                  className='items-center inline-block my-1 text-center w-36'
+                >
                   <button
                     type='button'
-                    key={idx}
                     onClick={() => {
                       addFriend(idx);
                     }}

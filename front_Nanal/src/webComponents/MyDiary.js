@@ -27,7 +27,7 @@ const MyDiary = ({ changeHomeStateThree, setToday }) => {
 
   return (
     <div className='relative w-[1440px] mx-auto'>
-      <div className='absolute z-20 border-none inset-y-52 left-60'>
+      <div className='absolute z-20 border-none inset-y-60 left-60'>
         <Calendar
           onChange={onChange}
           value={value}
@@ -37,11 +37,11 @@ const MyDiary = ({ changeHomeStateThree, setToday }) => {
           }
         />
       </div>
-      <p className='absolute z-30 left-[330px] inset-y-28'>내 일기</p>
-      <img src={nmr} className='absolute z-20 left-60 inset-y-20' />
-      <img src={diaryImgRed} className='absolute w-[1280px] z-10 left-12' />
+      <p className='absolute z-30 left-[330px] inset-y-36'>내 일기</p>
+      <img src={nmr} className='absolute z-20 left-60 inset-y-28' />
+      <img src={diaryImgRed} className='absolute w-[1280px] z-10 left-12 top-8' />
 
-      <div className='absolute z-20 w-[450px] inset-y-20 right-48'>
+      <div className='absolute z-20 w-[450px] inset-y-32 right-48'>
         <DiaryList
           isToggle={0}
           curDate={checkedDate}

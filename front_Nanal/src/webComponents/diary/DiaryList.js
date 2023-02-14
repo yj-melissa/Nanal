@@ -41,9 +41,10 @@ function DiaryList({
   const [diaryList, setDiaryList] = useState([]);
   // 해당 날짜의 일기 유무에 따라 보여질 화면 다름
   const [isShow, setIsShow] = useState(true);
-
+  // console.log("무한 로딩")
   useEffect(() => {
     onLogin();
+    console.log(arrAxios[isToggle])
     axios_api
       .get(arrAxios[isToggle])
       .then(({ data }) => {
@@ -52,7 +53,7 @@ function DiaryList({
           setDiaryList(null);
           if (data.data.responseMessage === '일기 리스트 조회 성공') {
             setDiaryList(data.data.diary);
-
+            console.log(data.data.diary)
             if (data.data.diary.length !== 0) {
               setIsShow(true);
             } else {
@@ -68,7 +69,7 @@ function DiaryList({
       .catch(({ error }) => {
         console.log('일기 리스트 불러오기 오류: ', error);
       });
-  }, [curDate]);
+  }, [groupIdx || curDate]);
 
   return (
     <div>

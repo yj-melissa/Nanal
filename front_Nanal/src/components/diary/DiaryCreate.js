@@ -52,14 +52,31 @@ function DiaryCreate() {
         .then(({ data }) => {
           if (data.statusCode === 200) {
             if (data.data.responseMessage === '일기 생성 성공') {
-              Swal.fire({
-                icon: 'success', // Alert 타입
-                title: '일기 저장 완료', // Alert 제목
-                text: '작성하신 일기가 작성 완료됐습니다.', // Alert 내용
-                width: '90%',
-              });
-              setLoaded(false);
-              navigate('/', { replace: true });
+              axios_api
+                .post('notification/diary', {
+                  requestDiaryIdx: 0,
+                  requestGroupIdx: 0,
+                })
+                .then(({ data }) => {
+                  if (data.statusCode === 200) {
+                    if (data.data.responseMessage === '일기 생성 성공') {
+                      Swal.fire({
+                        icon: 'success',
+                        text: '작성하신 일기가 작성 완료됐습니다.',
+                        width: '90%',
+                      });
+                      setLoaded(false);
+                      navigate('/', { replace: true });
+                    }
+                  } else {
+                    console.log('일기 생성 오류: ');
+                    console.log(data.statusCode);
+                    console.log(data.data.responseMessage);
+                  }
+                })
+                .catch(({ error }) => {
+                  console.log('일기 생성 오류: ' + error);
+                });
             }
           } else {
             console.log('일기 생성 오류: ');

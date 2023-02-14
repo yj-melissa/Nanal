@@ -3,18 +3,21 @@ import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
 
 function FriendDetail(userIdx) {
-
   const [friend, setFriend] = useState([]);
-
+  const [imgList, setImgList] = useState([]);
+  // console.log('제일밖')
   useEffect(() => {
     onLogin();
+    // console.log('밖')
     axios_api
       .get(`/friend/${userIdx.userIdx}`)
       .then(({ data }) => {
+        // console.log('안')
         if (data.statusCode === 200) {
           setFriend(null);
           if (data.data.responseMessage === '친구 조회 성공') {
             setFriend(data.data.friend);
+            setImgList(data.data.diary);
           }
         } else {
           console.log('친구 상세 보기 오류: ');
@@ -43,6 +46,18 @@ function FriendDetail(userIdx) {
         <p>{friend.introduction}</p>
       </div>
       <hr className='my-2 border-dashed border-slate-400/75 w-65' />
+      <div>
+        {imgList.map((image) => {
+          return (
+            <img
+              src={image.imgUrl}
+              key={image.diaryIdx}
+              alt='FriendDiary'
+              className='inline-block m-1 mx-1.5 rounded-lg w-[102px]'
+            />
+          );
+        })}
+      </div>
     </div>
   );
 }
