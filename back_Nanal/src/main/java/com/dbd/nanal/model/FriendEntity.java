@@ -18,11 +18,11 @@ public class FriendEntity {
     @Column(columnDefinition = "INT UNSIGNED")
     private int friend_idx;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "user_idx")
     private UserEntity user_idx1;
 
-    @ManyToOne
+    @ManyToOne(cascade =CascadeType.REMOVE)
     @JoinColumn(name = "user_idx2")
     private UserEntity user_idx2;
 
