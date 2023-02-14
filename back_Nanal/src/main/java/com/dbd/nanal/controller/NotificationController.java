@@ -74,7 +74,7 @@ public class NotificationController {
     @ApiOperation(value = "댓글 알림 생성", notes =
             "댓글 알림을 생성합니다.\n" +
                     "[Front] \n" +
-                    "{userIdx([]), requestDiaryIdx(int) ,requestGroupIdx(int)} \n\n" +
+                    "{requestDiaryIdx(int) ,requestGroupIdx([])} \n\n" +
                     "[Back] \n" +
                     "ok(200) ")
     @PostMapping("/comment")
@@ -101,7 +101,7 @@ public class NotificationController {
     @ApiOperation(value = "새로운 일기 알림 생성", notes =
             "새로운 일기 알림을 생성합니다.\n" +
                     "[Front] \n" +
-                    "{userIdx([]), requestDiaryIdx(int) ,requestGroupIdx(int)} \n\n" +
+                    "{requestDiaryIdx(int) ,requestGroupIdx([])} \n\n" +
                     "[Back] \n" +
                     "ok(200) ")
     @PostMapping("/diary")
@@ -110,7 +110,7 @@ public class NotificationController {
 
         notice.setRequest_user_idx(userInfo.getUserIdx());
         notice.setNotice_type(2);
-        List<NotificationResponseDTO> notificationResponseDTOList= noticeService.saveDiaryNotice(notice);
+        List<List<NotificationResponseDTO>> notificationResponseDTOList= noticeService.saveDiaryNotice(notice);
         if(notificationResponseDTOList != null ){
             responseDTO.put("responseMessage", ResponseMessage.NOTICE_SAVE_SUCCESS);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
