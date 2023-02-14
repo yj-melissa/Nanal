@@ -75,7 +75,6 @@ public class UserService {
         UserProfileEntity profile = userProfileRepository.findByProfileIdx(userIdx);
 
         profile.setNickname(userRequest.getNickname());
-//        profile.setImg(userRequest.getImg());
         profile.setIntroduction(userRequest.getIntroduction());
 //        profile.setIsPrivate(userForm.getIsPrivate());
 
@@ -83,8 +82,8 @@ public class UserService {
 
         return profileDTO(profile);
     }
-    // 비밀번호 수정
 
+    // 비밀번호 수정
     public void updatePassword(int userIdx, String newPassword) {
 
         UserEntity user = userRepository.findByUserIdx(userIdx);
@@ -92,8 +91,8 @@ public class UserService {
         userRepository.save(user);
 
     }
-    // 회원 탈퇴
 
+    // 회원 탈퇴
     public void deleteByUserIdx(int userIdx) {
         userRepository.deleteById(userIdx);
     }
@@ -105,32 +104,14 @@ public class UserService {
 
     // 중복 체크
 
-//    public void checkUserId(String userId) {
-//        Boolean result = userRepository.existsByUserId(userId);
-//        if (result) {
-//            throw new DuplicateKeyException(userId);
-//        }
-//    }
     public Boolean checkUserId(String userId) {
         return userRepository.existsByUserId(userId);
     }
 
-//    public void checkNickname(String nickname) {
-//        Boolean result = userProfileRepository.existsByNickname(nickname);
-//        if (result) {
-//            throw new DuplicateKeyException(nickname);
-//        }
-//    }
     public Boolean checkNickname(String nickname) {
         return userProfileRepository.existsByNickname(nickname);
     }
 
-//    public void checkEmail(String email) {
-//        Boolean result = userRepository.existsByEmail(email);
-//        if (result) {
-//            throw new DuplicateKeyException(email);
-//        }
-//    }
     public Boolean checkEmail(String email) {
         return userRepository.existsByEmail(email);
     }

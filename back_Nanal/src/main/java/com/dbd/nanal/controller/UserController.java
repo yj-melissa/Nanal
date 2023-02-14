@@ -245,7 +245,7 @@ public class UserController {
                     "[Back] \n" +
                     "{img(String), nickname(String), days(int), introduction(String)} \n\n")
     @PutMapping("/profile")
-    public ResponseEntity<?> updateProfile(@AuthenticationPrincipal UserEntity userInfo, @RequestBody UserRequestDTO userRequest) {
+    public ResponseEntity<?> updateProfile(@AuthenticationPrincipal UserEntity userInfo, @RequestBody @Valid UserRequestDTO userRequest) {
         log.info("updateProfile 실행 : {}", userInfo.getUserProfile().getNickname());
 
         HashMap<String, Object> responseDTO = new HashMap<>();
@@ -253,7 +253,12 @@ public class UserController {
         if (userRequest == null) {
             log.info("updateProfile : userRequest == null");
             responseDTO.put("responseMessage", ResponseMessage.USER_UPDATE_FAIL);
-        } else {
+        } else if (userInfo.getUserProfile().getNickname().equals(userRequest.getNickname())) {
+            // 닉네임 변경한 경우 중복 체크
+            if (userService.checkNickname(userRequest.getNickname())) {
+                responseDTO.put("responseMessage", ResponseMessage.DUPLICATED_KEY);
+            }
+        }else{
             HashMap<String, Object> profile = userService.updateProfile(userInfo.getUserIdx(), userRequest);
 
             responseDTO.put("responseMessage", ResponseMessage.USER_UPDATE_SUCCESS);
@@ -311,7 +316,7 @@ public class UserController {
                     "[Back] \n" +
                     "{responseMessage(String)} \n\n")
     @PutMapping("/password")
-    public ResponseEntity<?> updatePassword(@ApiParam(value = "userIdx") @AuthenticationPrincipal UserEntity userInfo, @RequestBody UserRequestDTO userRequestDTO) {
+    public ResponseEntity<?> updatePassword(@ApiParam(value = "userIdx") @AuthenticationPrincipal UserEntity userInfo, @RequestBody @Valid UserRequestDTO userRequestDTO) {
 
         HashMap<String, Object> responseDTO = new HashMap<>();
         if (userRequestDTO.getPassword() == null) {
