@@ -32,14 +32,9 @@ public class UserService {
     // 회원 가입
     public UserEntity join(final UserEntity userEntity, final UserProfileEntity userProfileEntity) {
 
-        final String userId = userEntity.getUserId();
-        checkUserId(userId);
-
-        final String email = userEntity.getEmail();
-        checkEmail(email);
-
-        final String nickname = userProfileEntity.getNickname();
-        checkNickname(nickname);
+        checkUserId(userEntity.getUserId());
+        checkEmail(userEntity.getEmail());
+        checkNickname(userProfileEntity.getNickname());
 
         UserEntity newUser = userRepository.save(userEntity);
         userProfileEntity.setUser(newUser);
