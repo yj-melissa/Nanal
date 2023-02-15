@@ -16,7 +16,7 @@ function GroupDetail({ groupIdx, setGroupCompo }) {
       .get(`/group/${groupIdx}`)
       .then(({ data }) => {
         // console.log('안')
-        console.log(data.data);
+        // console.log(data.data);
         if (data.statusCode === 200) {
           setGroupDetail(null);
           setGroupTag(null);

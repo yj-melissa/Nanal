@@ -4,7 +4,8 @@ import imageCompression from 'browser-image-compression';
 import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
 
-function GroupUpdate({groupIdx}) {
+function GroupUpdate({ groupIdx }) {
+  console.log(groupIdx);
   // const { state } = useLocation();
   const navigate = useNavigate();
 
@@ -148,7 +149,7 @@ function GroupUpdate({groupIdx}) {
   // 그룹 수정 요청 함수
   const GroupUpdate = (e) => {
     e.preventDefault();
-    console.log(e)
+    console.log(e);
 
     let isCurrentGTName = true;
 
@@ -175,6 +176,7 @@ function GroupUpdate({groupIdx}) {
           tags: currentTag.current,
         })
         .then(({ data }) => {
+          console.log(data);
           if (data.statusCode === 200) {
             if (data.data.responseMessage === '그룹 수정 성공') {
               // console.log(data.data.groupDetail);
@@ -293,6 +295,7 @@ function GroupUpdate({groupIdx}) {
     axios_api
       .get(`/group/${groupIdx}`)
       .then(({ data }) => {
+        console.log(data);
         if (data.statusCode === 200) {
           setGroupName(null);
           setGroupTag(null);
@@ -371,10 +374,10 @@ function GroupUpdate({groupIdx}) {
   }, []);
 
   return (
-    <div id='group-Update'>
+    <div id='group-Update' className='overflow-auto h-[480px]'>
       <h2 className='m-1 text-lg font-bold text-center'> 그룹 수정 </h2>
       <div>
-        <form onSubmit={()=>GroupUpdate()}>
+        <form onSubmit={() => GroupUpdate()}>
           <p className='my-2 text-center'>✨ 그룹 프로필 ✨</p>
           <div id='group-name-div'>
             <label htmlFor='group-name'>💙 그룹 이름 : </label>
