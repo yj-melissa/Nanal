@@ -11,7 +11,7 @@ import SignUp from '../webComponents/account/SignUp';
 import SignIn from '../webComponents/account/SignIn';
 import DiaryDetail from '../webComponents/diary/DiaryDetail';
 import DiaryUpdate from '../webComponents/diary/DiaryUpdate';
-import KaKaoLogin from '../webComponents/KaKaoLogin';
+import KaKaoLogin from '../webComponents/account/KaKaoLogin';
 import NotFound from '../webComponents/another/NotFound';
 import bmkRR from '../src_assets/img/bookmark/bookmark-red-red.svg';
 import bmkRW from '../src_assets/img/bookmark/bookmark-red-white.svg';
