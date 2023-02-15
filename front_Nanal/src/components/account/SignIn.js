@@ -10,7 +10,8 @@ function SignIn() {
 
   const [userId, setUserId] = useState('');
   const [userPw, setPw] = useState('');
-  const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_KAKAO_CLIENT_ID}&redirect_uri=${process.env.REACT_KAKAO_REDIRECT_URI}&response_type=code`;
+  // const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_KAKAO_CLIENT_ID}&redirect_uri=${process.env.REACT_KAKAO_REDIRECT_URI}&response_type=code`;
+  const KAKAO_AUTH_URL = 'https://i8d110.p.ssafy.io/nanal/user/oauth2/kakao';
 
   const onChangeId = (e) => {
     setUserId(e.target.value);
@@ -144,18 +145,18 @@ function SignIn() {
             </div>
           </form>
         </div>
-        {/* <div className='mt-4'>
+        <div className='mt-4'>
           <a href={KAKAO_AUTH_URL}>
             <div className='p-1 text-center border border-black rounded-full cursor-pointer w-36 mx-auton'>
               ihihihi
             </div>
           </a>
-        </div> */}
-        {/* <div className='mt-4'>
+        </div>
+        <div className='mt-4'>
           <p className='text-xs text-center'>
             아이디와 비밀번호를 까먹으셨다면 soyeon@gmail.com으로 연락주세요!
           </p>
-        </div> */}
+        </div>
       </div>
     </div>
   );
