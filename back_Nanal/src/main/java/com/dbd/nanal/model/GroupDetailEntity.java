@@ -20,7 +20,7 @@ import java.util.List;
 public class GroupDetailEntity {
 
     @Id // Primary key
-    @GeneratedValue(strategy = GenerationType.IDENTITY)// auto_increment
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(columnDefinition = "INT UNSIGNED")
     private int groupIdx;
 
@@ -67,10 +67,6 @@ public class GroupDetailEntity {
         this.groupDiaries = groupDiaries;
         this.diaryComments = diaryComments;
         this.imgUrl = imgUrl;
-    }
-
-    public boolean getIsPrivate() {
-        return isPrivate;
     }
 
 }

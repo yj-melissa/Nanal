@@ -37,7 +37,7 @@ public class FileController {
     private final GroupService groupService;
 
 
-    @ApiOperation(value = "그림 등록", notes =
+    @ApiOperation(value = "그림 등록", hidden = true, notes =
             "이미지를 등록합니다.\n" +
                     "[1] 기본 이미지를 등록합니다.\n" +
                     "[2] 새로운 이미지를 등록합니다.\n" +
@@ -123,7 +123,7 @@ public class FileController {
     }
 
 
-    @ApiOperation(value = "그림 수정", notes =
+    @ApiOperation(value = "그림 수정", hidden = true, notes =
             "이미지를 수정합니다.\n" +
                     "[Front] \n" +
                     "user 프로필 사진 수정할 때 \n" +

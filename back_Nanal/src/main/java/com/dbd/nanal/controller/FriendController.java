@@ -27,7 +27,7 @@ public class FriendController {
 
     private final FriendService friendService;
 
-    @ApiOperation(value = "친구 등록", notes =
+    @ApiOperation(value = "친구 등록", hidden = true, notes =
             "userIdx의 친구로 등록합니다.\n" +
                     "[Front] \n" +
                     "{friendIdx(int)} \n\n" +
