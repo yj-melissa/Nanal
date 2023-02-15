@@ -100,7 +100,7 @@ function CommentList({ diaryIdx, isToggle, groupIdx }) {
   }, []);
 
   return (
-    <div className='comment-container'>
+    <div>
       <hr className='my-2 border-dashed border-slate-400/75 w-65' />
       {isToggle === 2 || isToggle === 3 ? (
         <form className='flex justify-end mx-auto my-3' onSubmit={handleSubmit}>
