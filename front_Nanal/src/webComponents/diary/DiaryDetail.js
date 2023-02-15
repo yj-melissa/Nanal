@@ -115,7 +115,7 @@ function DiaryDetail() {
       .catch(({ error }) => {
         console.log('일기 조회 오류: ' + error);
       });
-  }, []);
+  }, [diaryIdx]);
 
   return (
     <div className='relative w-[1440px] mx-auto'>
