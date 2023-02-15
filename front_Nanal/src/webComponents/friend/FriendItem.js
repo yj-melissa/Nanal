@@ -1,6 +1,11 @@
 function FriendItem({ item, setFriendAdd, setUserIdx }) {
   return (
-    <div onClick={() => { setFriendAdd([false, false, true]); setUserIdx(item.userIdx)}}>
+    <div
+      onClick={() => {
+        setFriendAdd([false, false, true]);
+        setUserIdx(item.userIdx);
+      }}
+    >
       <div className='flex bg-[#fde68a] border-1 border-[#fde68a] rounded-md m-1 mb-3 p-2'>
         <img
           src={item.img}

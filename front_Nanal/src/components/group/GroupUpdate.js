@@ -216,8 +216,7 @@ function GroupUpdate() {
                   .then(({ data }) => {
                     if (data.statusCode === 200) {
                       if (data.data.responseMessage === '그림 저장 성공') {
-                        // console.log(data.data);
-                        if (includeFriend.size !== 0) {
+                        if (includeFriend.length !== 0) {
                           // 그룹에 추가할 친구가 있는 경우
                           axios_api
                             .post('notification/group', {
@@ -257,28 +256,35 @@ function GroupUpdate() {
               } else {
                 // 이미지를 변경하지 않는 경우
                 // 그룹에 추가할 친구가 있는 경우
-                axios_api
-                  .post('notification/group', {
-                    request_group_idx: [groupidx],
-                    userIdx: includeFriendIdx,
-                  })
-                  .then(({ data }) => {
-                    if (data.statusCode === 200) {
-                      if (data.data.responseMessage === '알림 저장 성공') {
-                        navigate(`/Group/Setting`, {
-                          state: { groupIdx: groupidx },
-                          replace: true,
-                        });
+                if (includeFriend.length !== 0) {
+                  axios_api
+                    .post('notification/group', {
+                      request_group_idx: [groupidx],
+                      userIdx: includeFriendIdx,
+                    })
+                    .then(({ data }) => {
+                      if (data.statusCode === 200) {
+                        if (data.data.responseMessage === '알림 저장 성공') {
+                          navigate(`/Group/Setting`, {
+                            state: { groupIdx: groupidx },
+                            replace: true,
+                          });
+                        }
+                      } else {
+                        console.log('알림 저장 오류 : ');
+                        console.log(data.statusCode);
+                        console.log(data.data.responseMessage);
                       }
-                    } else {
-                      console.log('알림 저장 오류 : ');
-                      console.log(data.statusCode);
-                      console.log(data.data.responseMessage);
-                    }
-                  })
-                  .catch(({ error }) => {
-                    console.log('알림 저장 오류 : ' + error);
+                    })
+                    .catch(({ error }) => {
+                      console.log('알림 저장 오류 : ' + error);
+                    });
+                } else {
+                  navigate(`/Group/Setting`, {
+                    state: { groupIdx: groupidx },
+                    replace: true,
                   });
+                }
               }
             }
           } else {

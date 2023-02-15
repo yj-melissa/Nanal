@@ -33,7 +33,11 @@ function FriendDetail(userIdx) {
   return (
     <div>
       <div className='flex mt-5 justify-evenly'>
-        <img src={friend.img} className='p-1 rounded-full w-28 h-28' alt='friend-img'></img>
+        <img
+          src={friend.img}
+          className='p-1 rounded-full w-28 h-28'
+          alt='friend-img'
+        ></img>
         <div className='p-1 my-auto font-bold'>
           <p className=''>
             <span className='mr-1.5 text-2xl'>{friend.nickname}</span>
@@ -46,7 +50,7 @@ function FriendDetail(userIdx) {
         <p>{friend.introduction}</p>
       </div>
       <hr className='my-2 border-dashed border-slate-400/75 w-65' />
-      <div>
+      <div className='h-56 overflow-auto'>
         {imgList.map((image) => {
           return (
             <img

@@ -28,16 +28,7 @@ function AlarmItem({
       .then(({ data }) => {
         if (data.statusCode === 200) {
           if (data.data.responseMessage === '친구 등록 성공') {
-            checkAlarm();
-            Swal.fire({
-              title: '친구 등록',
-              icon: 'success', // Alert 타입
-              text: '친구가 등록되었습니다!', // Alert 내용
-              width: '35%',
-            }).then(function () {
-              window.location.reload(true);
-            });
-            // navigate(`/Friend/List`);
+            checkAlarm(0);
           } else if (data.data.responseMessage === '이미 친구로 등록됨') {
             checkAlarm();
             Swal.fire({
@@ -69,16 +60,7 @@ function AlarmItem({
       .then(({ data }) => {
         if (data.statusCode === 200) {
           if (data.data.responseMessage === '그룹 가입 성공') {
-            checkAlarm();
-            Swal.fire({
-              title: '그룹 가입',
-              icon: 'success', // Alert 타입
-              text: '그룹 가입을 수락했어요!', // Alert 내용
-              width: '35%',
-            }).then(function () {
-              window.location.reload(true);
-            });
-            // navigate(`/Group/List`);
+            checkAlarm(1);
           } else if (data.data.responseMessage === '이미 가입한 그룹') {
             checkAlarm();
             Swal.fire({
@@ -102,13 +84,33 @@ function AlarmItem({
   };
 
   //알람 읽음 처리
-  const checkAlarm = () => {
+  const checkAlarm = (index) => {
     axios_api
       .get(`notification/${noticeIdx}`)
       .then(({ data }) => {
         if (data.statusCode === 200) {
           if (data.data.responseMessage === '알림 조회 성공') {
-            window.location.reload(true);
+            if (index === 0) {
+              Swal.fire({
+                title: '친구 등록',
+                icon: 'success', // Alert 타입
+                text: '친구가 등록되었습니다!', // Alert 내용
+                width: '35%',
+              }).then(function () {
+                window.location.reload(true);
+              });
+            } else if (index === 1) {
+              Swal.fire({
+                title: '그룹 가입',
+                icon: 'success', // Alert 타입
+                text: '그룹 가입을 수락했어요!', // Alert 내용
+                width: '35%',
+              }).then(function () {
+                window.location.reload(true);
+              });
+            } else {
+              window.location.reload(true);
+            }
           }
         } else {
           console.log('알림 조회 오류: ');
@@ -127,17 +129,25 @@ function AlarmItem({
       .get(`notification/${noticeIdx}`)
       .then(({ data }) => {
         if (data.statusCode === 200) {
-          if (data.data.responseMessage === '알림 읽음 처리 성공') {
-            navigate(`diary/${requestDiaryIdx}`);
+          if (data.data.responseMessage === '알림 조회 성공') {
+            // navigate(`diary/${requestDiaryIdx}`);
+            navigate('/Diary/Detail', {
+              state: {
+                diaryIdx: requestDiaryIdx,
+                groupIdx: requestGroupIdx,
+                isToggle: 2,
+              },
+              replace: true,
+            });
           }
         } else {
-          console.log('알림 읽음 처리 오류: ');
+          console.log('알림 조회 오류: ');
           console.log(data.statusCode);
           console.log(data.data.responseMessage);
         }
       })
       .catch(({ error }) => {
-        console.log('알림 읽음 처리 오류: ' + error);
+        console.log('알림 조회 오류: ' + error);
       });
   };
 
@@ -257,19 +267,24 @@ function AlarmItem({
       </div>
     );
   } else if (noticeType === 3) {
+    let content_text = content.split(',');
     return (
       <div className='my-3'>
         <hr className='my-2 border-dashed border-stone-800' />
         <div className='my-1 text-left'>
           <p>
-            <span className='mx-2 font-bold'>[댓글 알림]</span>
+            <span className='mr-2 font-bold'>[댓글 알림]</span>
             <span className='rounded-md bg-gradient-to-t from-yellow-200'>
-              {content}
+              {content_text[0]}
             </span>
             <span className='mr-2'>님의</span>
             <span className='mr-2'>일기에</span>
-            <span className='mr-2'>새 댓글이</span>
-            <span className='mr-2'>작성되었어요.</span>
+            <span className='rounded-md bg-gradient-to-t from-green-200'>
+              {content_text[1]}
+            </span>
+            <span className='mr-2'>님이</span>
+            <span className='mr-2'>새 댓글을</span>
+            <span className='mr-2'>작성했어요.</span>
           </p>
           {/* <button className='grid content-start'>X</button> */}
         </div>

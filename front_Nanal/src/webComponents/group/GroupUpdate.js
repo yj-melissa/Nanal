@@ -180,6 +180,7 @@ function GroupUpdate({ groupIdx }) {
           tags: currentTag.current,
         })
         .then(({ data }) => {
+          console.log(data);
           if (data.statusCode === 200) {
             if (data.data.responseMessage === '그룹 수정 성공') {
               // console.log(data.data.groupDetail);
@@ -298,6 +299,7 @@ function GroupUpdate({ groupIdx }) {
     axios_api
       .get(`/group/${groupIdx}`)
       .then(({ data }) => {
+        console.log(data);
         if (data.statusCode === 200) {
           setGroupName(null);
           setGroupTag(null);

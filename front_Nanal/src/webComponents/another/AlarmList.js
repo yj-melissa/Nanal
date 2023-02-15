@@ -3,7 +3,7 @@ import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
 import AlarmItem from './AlarmItem';
 
-function AlarmList({setUseAlarm}) {
+function AlarmList({ setUseAlarm }) {
   const [isAlarmList, setIsAlarmList] = useState([]);
 
   // DB에서 알람 리스트 다 땡겨와야함.
@@ -35,28 +35,28 @@ function AlarmList({setUseAlarm}) {
 
   useEffect(() => {
     if (isAlarmList.length > 0) {
-      setUseAlarm(true)
+      setUseAlarm(true);
     } else {
-      setUseAlarm(false)
+      setUseAlarm(false);
     }
-  },[isAlarmList])
+  }, [isAlarmList]);
 
   //알람은 최근 30일 것까지만...
   return (
-    <div className='text-center'>
+    <div className='w-full text-center'>
       <p className='mx-auto my-5 text-xl font-bold text-center'>알람 목록 🔔</p>
-      <div className="grid justify-center grid-cols-1">
-      {isAlarmList.length === 0 ? (
-        <div className='my-4 text-lg'>
-          <p>도착한 알림이 없어요!</p>
-        </div>
-      ) : (
-        <div className="mx-1">
-          {isAlarmList.map((ar) => (
-            <AlarmItem key={ar.noticeIdx} {...ar} />
-          ))}
-        </div>
-      )}
+      <div className='grid justify-center grid-cols-1'>
+        {isAlarmList.length === 0 ? (
+          <div className='my-4 text-lg'>
+            <p>도착한 알림이 없어요!</p>
+          </div>
+        ) : (
+          <div className='mx-1'>
+            {isAlarmList.map((ar) => (
+              <AlarmItem key={ar.noticeIdx} {...ar} />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
