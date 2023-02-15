@@ -1,12 +1,11 @@
 package com.dbd.nanal.config.oauth;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.web.util.UriComponentsBuilder.fromUriString;
 
 import com.dbd.nanal.config.common.ResponseMessage;
 import com.dbd.nanal.config.security.JwtTokenProvider;
 import com.dbd.nanal.config.security.JwtTokenDTO;
-import com.dbd.nanal.config.security.JwtTokenRepository;
-import com.dbd.nanal.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.HashMap;
@@ -19,6 +18,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @Component
 @AllArgsConstructor
@@ -56,9 +56,14 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         HashMap<String, Object> data = new HashMap<>();
         data.put("responseMessage", ResponseMessage.LOGIN_SUCCESS);
         responseDTO.put("data", data);
-        response.sendRedirect("https://i8d110.p.ssafy.io/home");
 
         new ObjectMapper().writeValue(response.getWriter(), responseDTO);
         response.getWriter().flush();
+
+        String targetUrl = UriComponentsBuilder.fromUriString("/home")
+            .build().toUriString();
+        getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
-}
+
+
+    }
