@@ -50,6 +50,7 @@ public class JwtTokenProvider {
     );
 
     // 토큰 생성
+    // 일반 로그인
     public JwtTokenDTO createJwtTokens(UserEntity user) {
         String userId = user.getUserId();
         int userIdx = user.getUserIdx();
@@ -84,7 +85,8 @@ public class JwtTokenProvider {
         return jwtTokenDTO;
     }
 
-    public JwtTokenDTO createJwtTokens(final Authentication authentication) {
+    // 소셜로그인
+    public JwtTokenDTO createJwtTokens(Authentication authentication) {
         ApplicationOAuth2User userPrincipal = (ApplicationOAuth2User) authentication.getPrincipal();
         String userId = userPrincipal.getName();
         int userIdx = userRepository.findByUserId(userId).getUserIdx();
@@ -143,8 +145,6 @@ public class JwtTokenProvider {
             .setSubject(user.getUserId());
         claims.put("roles", user.getRoles());
         claims.put("userIdx", userIdx);
-
-//        String secretKey = "daybydayNanalPutanXonmychestonmychestButImstillstandingcauseIwontforgetThehellonearthyouputmethroughIllsavemyselfinspiteofyou";
 
         String token = Jwts.builder()
             .signWith(SignatureAlgorithm.HS512, secretKey)

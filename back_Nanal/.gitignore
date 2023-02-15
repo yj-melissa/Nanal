@@ -9,6 +9,7 @@ src/main/resources/application-db.properties
 src/main/resources/application-aws.properties
 /src/main/resources/application-email.properties
 /src/main/resources/application-naver.properties
+/src/main/resources/application-jwt.properties
 
 ### STS ###
 .apt_generated
