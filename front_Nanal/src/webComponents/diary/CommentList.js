@@ -4,21 +4,6 @@ import axios_api from '../../config/Axios';
 import { getCookie } from '../../config/Cookie';
 import { onLogin } from '../../config/Login';
 import CommentDetail from './CommentDetail';
-import styled from 'styled-components';
-
-const Div = styled.div`
-  overflow: scroll;
-  &::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-    border-radius: 6px;
-    background: rgba(255, 255, 255, 0.1);
-  }
-  &::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 6px;
-  }
-`;
 
 function CommentList({ diaryIdx, isToggle, groupIdx }) {
   const token = getCookie('accessToken');
@@ -138,11 +123,11 @@ function CommentList({ diaryIdx, isToggle, groupIdx }) {
         <></>
       )}
       <div className='comments-body'>
-        <Div className='h-40 overflow-auto'>
+        <div className='overflow-auto h-40'>
           {commentList.map((comment, idx) => (
             <CommentDetail key={idx} item={comment} userIdx={userIdx} />
           ))}
-        </Div>
+        </div>
       </div>
     </div>
   );
