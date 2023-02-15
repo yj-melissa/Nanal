@@ -5,7 +5,7 @@ import Swal from 'sweetalert2';
 import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
 
-function GroupUpdate({ groupIdx }) {
+function GroupUpdate({ groupIdx, setGroupCompo }) {
   // const { state } = useLocation();
   const navigate = useNavigate();
 
@@ -230,10 +230,18 @@ function GroupUpdate({ groupIdx }) {
                                 if (
                                   data.data.responseMessage === '알림 저장 성공'
                                 ) {
-                                  navigate(`/Group/Setting`, {
-                                    groupIdx: groupidx,
-                                    replace: true,
-                                  });
+                                  // navigate(`/home`, {
+                                  //   groupIdx: groupidx,
+                                  //   replace: true,
+                                  // });
+                                  // window.location.reload();
+                                  setGroupCompo([
+                                    false,
+                                    false,
+                                    true,
+                                    false,
+                                    false,
+                                  ]);
                                 }
                               } else {
                                 console.log('알림 저장 오류 : ');
@@ -266,10 +274,12 @@ function GroupUpdate({ groupIdx }) {
                   .then(({ data }) => {
                     if (data.statusCode === 200) {
                       if (data.data.responseMessage === '알림 저장 성공') {
-                        navigate(`/Group/Setting`, {
-                          groupIdx: groupidx,
-                          replace: true,
-                        });
+                        // navigate(`/home`, {
+                        //   groupIdx: groupidx,
+                        //   replace: true,
+                        // });
+                        // window.location.reload();
+                        setGroupCompo([false, false, true, false, false]);
                       }
                     } else {
                       console.log('알림 저장 오류 : ');
