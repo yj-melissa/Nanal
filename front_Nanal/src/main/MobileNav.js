@@ -108,7 +108,7 @@ function Nav({ changeIsBookCase }) {
           <Link to='/Alarm'>
             <img src={bell} className='w-6 h-6 my-3 ml-2.5' />
             {checkAlarm === true ? (
-              <span className='absolute flex w-3 h-3 right-[84px] top-2'>
+              <span className='absolute flex w-3 h-3 right-[70px] top-2'>
                 <span className='absolute inline-flex w-2 h-2 rounded-full opacity-75 animate-ping bg-sky-300'></span>
                 <span className='relative inline-flex w-2 h-2 rounded-full bg-sky-400'></span>
               </span>

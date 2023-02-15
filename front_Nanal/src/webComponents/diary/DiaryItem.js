@@ -50,7 +50,7 @@ function DiaryItem({
             )}
           </p>
           <p>{isToggle === 2 ? <span>{nickname}</span> : <></>}</p>
-          <p className='block font-bold truncate text-xl'>{content}</p>
+          <p className='block font-bold truncate text-lg'>{content}</p>
         </div>
       </div>
     </Link>

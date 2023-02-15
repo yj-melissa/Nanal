@@ -3,18 +3,6 @@ import { useLocation } from 'react-router-dom';
 import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
 import DiaryItem from './DiaryItem';
-import styled from 'styled-components';
-
-const Div = styled.div`
-  overflow: scroll;
-  &::-webkit-scrollbar {
-    display: none;
-  }
-  &::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 6px;
-  }
-`;
 
 function DiaryList({
   isToggle,
@@ -78,14 +66,14 @@ function DiaryList({
             {diaryList.length}개의 일기가 있습니다.
           </p>
         ) : (
-          <div className='absolute z-20 inset-y-40 right-2'>
-            <p className='w-[480px] text-2xl font-bold text-center'>
+          <div className='text-center'>
+            <p className='text-2xl font-bold mt-40'>
               {diarydate[0]}년 {diarydate[1]}월 {diarydate[2]}일의 일기는
               없습니다.
             </p>
 
             <div
-              className='flex items-center justify-center mt-10'
+              className='mt-10'
               onClick={() => {
                 changeHomeStateThree();
                 setToday(today);
@@ -105,7 +93,7 @@ function DiaryList({
         <></>
       )}
       <div className='my-2'>
-        <Div className='overflow-auto h-96'>
+        <div className='overflow-auto h-96'>
           {diaryList.map((diary) => (
             <DiaryItem
               key={diary.diaryIdx}
@@ -114,7 +102,7 @@ function DiaryList({
               {...diary}
             />
           ))}
-        </Div>
+        </div>
       </div>
     </div>
   );
