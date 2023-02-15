@@ -46,7 +46,7 @@ public class DiaryController {
     @Value("${Dalle-API-Key}")
     private String key;
 
-    @ApiOperation(value = "일기 생성", notes =
+    @ApiOperation(value = "일기 생성",hidden = true, notes =
             "일기를 생성합니다.\n" +
                     "[Front] \n" +
                     "{content(String), groupIdx(List<Integer>)} \n\n" +
@@ -146,7 +146,7 @@ public class DiaryController {
         }
     }
 
-    @ApiOperation(value = "일기 내용 수정", notes =
+    @ApiOperation(value = "일기 내용 수정", hidden = true, notes =
             "일기 내용을 수정합니다.\n" +
                     "[Front] \n" +
                     "{diaryIdx(int), content(String), diaryDate(Date)}\n\n" +
@@ -194,7 +194,7 @@ public class DiaryController {
         }
     }
 
-    @ApiOperation(value = "diaryIdx로 일기 삭제", notes =
+    @ApiOperation(value = "diaryIdx로 일기 삭제", hidden = true, notes =
             "일기를 삭제합니다.\n" +
                     "[Front] \n" +
                     "{diaryIdx(int)} \n\n" +
@@ -304,7 +304,7 @@ public class DiaryController {
         }
     }
 
-    @ApiOperation(value = "일기 댓글 작성", notes =
+    @ApiOperation(value = "일기 댓글 작성", hidden = true, notes =
             "일기 댓글을 작성합니다.\n" +
                     "[Front] \n" +
                     "{diaryIdx(int), groupIdx(int), content(String)} \n\n" +
@@ -325,7 +325,7 @@ public class DiaryController {
         }
     }
 
-    @ApiOperation(value = "일기 댓글 수정", notes =
+    @ApiOperation(value = "일기 댓글 수정", hidden = true, notes =
             "일기 댓글을 수정합니다.\n" +
                     "[Front] \n" +
                     "{commentIdx(int), content(String)} \n\n" +
@@ -385,7 +385,7 @@ public class DiaryController {
         }
     }
 
-    @ApiOperation(value = "commentIdx로 일기 삭제", notes =
+    @ApiOperation(value = "commentIdx로 일기 삭제", hidden = true, notes =
             "일기를 삭제합니다.\n" +
                     "[Front] \n" +
                     "{commentIdx(int)} \n\n" +
@@ -425,7 +425,7 @@ public class DiaryController {
         }
     }
 
-    @ApiOperation(value = "userIdx로 휴지통 비우기", notes =
+    @ApiOperation(value = "userIdx로 휴지통 비우기", hidden = true, notes =
             "휴지통을 비우기.\n" +
                     "[Front] \n" +
                     "{} \n\n" +
@@ -444,7 +444,7 @@ public class DiaryController {
         }
     }
 
-    @ApiOperation(value = "휴지통에서 일기 복구", notes =
+    @ApiOperation(value = "휴지통에서 일기 복구", hidden = true, notes =
             "휴지통에서 일기를 복구합니다.\n" +
                     "[Front] \n" +
                     "{diaryIdx(int)} \n\n" +
@@ -504,7 +504,7 @@ public class DiaryController {
         }
     }
 
-    @ApiOperation(value = "일기 북마크 삭제", notes =
+    @ApiOperation(value = "일기 북마크 삭제", hidden = true, notes =
             "일기 북마크를 삭제합니다.\n" +
                     "[Front] \n" +
                     "{diaryIdx(int)} \n\n" +
@@ -596,16 +596,16 @@ public class DiaryController {
         RestTemplate restTemplate = new RestTemplate();
         // url
         String url = "http://i8d110.p.ssafy.io:5000/dalle";
-//        String url = "http://127.0.0.1:5000/dalle";
+        // String url = "http://127.0.0.1:5000/dalle";
 
 
-//         Header set
+        // Header set
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-//         Body set
+        // Body set
         DalleDTO body = new DalleDTO(content, key);
 
-//         Message
+        // Message
         HttpEntity<?> requestMessage = new HttpEntity<>(body, httpHeaders);
         // Request
         ResponseEntity<String> response = restTemplate.postForEntity(url, requestMessage, String.class);

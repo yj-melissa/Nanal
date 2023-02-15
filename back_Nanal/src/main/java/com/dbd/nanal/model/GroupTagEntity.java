@@ -17,7 +17,7 @@ import javax.persistence.*;
 public class GroupTagEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)// auto_increment
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(columnDefinition = "INT UNSIGNED")
     private int tagIdx;
 
