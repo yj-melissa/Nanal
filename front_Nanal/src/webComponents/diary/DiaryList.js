@@ -57,6 +57,21 @@ function DiaryList({
         console.log('일기 리스트 불러오기 오류: ', error);
       });
   }, [groupIdx || curDate]);
+  {
+    if (diaryList.length > 0) {
+      return (
+        <div>
+          {isToggle === 0 ? (
+            isShow === true ? (
+              <p className='text-2xl font-bold text-center'>
+                {diaryList.length}개의 일기가 있습니다.
+              </p>
+            ) : (
+              <div className='absolute z-20 inset-y-40 right-2'>
+                <p className='w-[480px] text-2xl font-bold text-center'>
+                  {diarydate[0]}년 {diarydate[1]}월 {diarydate[2]}일의 일기는
+                  없습니다.
+                </p>
 
   return (
     <div>

@@ -26,7 +26,7 @@ const MyDiary = ({ changeHomeStateThree, setToday }) => {
   const diarydate = checkedDate.split('-');
 
   return (
-    <div className='relative w-[1440px] mx-auto'>
+    <div className='absolute w-[1440px] mx-auto'>
       <div className='absolute z-20 border-none inset-y-60 left-60'>
         <Calendar
           onChange={onChange}

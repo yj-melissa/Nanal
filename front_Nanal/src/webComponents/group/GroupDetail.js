@@ -4,8 +4,7 @@ import { onLogin } from '../../config/Login';
 import DiaryList from '../diary/DiaryList';
 import settingIcon from '../../src_assets/img/setting_icon.png';
 
-function GroupDetail({groupIdx, setGroupCompo}) {
-
+function GroupDetail({ groupIdx, setGroupCompo }) {
   const [groupDetail, setGroupDetail] = useState('');
   const [groupTag, setGroupTag] = useState([]);
   // console.log('제일밖')
@@ -17,6 +16,7 @@ function GroupDetail({groupIdx, setGroupCompo}) {
       .get(`/group/${groupIdx}`)
       .then(({ data }) => {
         // console.log('안')
+        console.log(data.data);
         if (data.statusCode === 200) {
           setGroupDetail(null);
           setGroupTag(null);
@@ -35,9 +35,11 @@ function GroupDetail({groupIdx, setGroupCompo}) {
   }, [groupIdx]);
 
   return (
-    <div className='text-center'>
+    <div className='absolute text-center z-40 -top-24 w-[500px]'>
       <div
-        onClick={() => { setGroupCompo([false, false, false, true, false]);console.log("나느느느ㅡ") }}
+        onClick={() => {
+          setGroupCompo([false, false, false, true, false]);
+        }}
       >
         <img src={settingIcon} className='w-[20px] h-[20px] mx-1.5' />
       </div>

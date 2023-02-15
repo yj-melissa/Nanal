@@ -7,7 +7,7 @@ import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
 import FriendItem from '../friend/FriendItem';
 
-function GroupSetting({groupIdx, setGroupCompo}) {
+function GroupSetting({ groupIdx, setGroupCompo }) {
   // const { state } = useLocation();
   const navigate = useNavigate();
 
@@ -37,9 +37,21 @@ function GroupSetting({groupIdx, setGroupCompo}) {
         axios_api
           .delete(`group/${groupIdx}`)
           .then(({ data }) => {
+            console.log(data);
             if (data.statusCode === 200) {
               if (data.data.responseMessage === '그룹 탈퇴 성공') {
-                navigate('/Group/List');
+                Swal.fire({
+                  title: '그룹 나가기',
+                  text: '그룹을 탈퇴하셨습니다.',
+                  icon: 'success',
+                  confirmButtonColor: '#0891b2',
+                  confirmButtonText: '확인',
+                  width: '30%',
+                }).then(() => {
+                  navigate('/home');
+                  window.location.reload();
+                  // reload 해줘야 한당...
+                });
               }
             } else {
               console.log('그룹 탈퇴 오류: ');
@@ -124,11 +136,11 @@ function GroupSetting({groupIdx, setGroupCompo}) {
             );
           })}
         </div>
-        <div className="flex justify-center">
-          <div onClick={() => setGroupCompo([false, false, false, false, true])}>
-            <button
-              className='bg-cyan-600 text-white px-2 py-1 rounded-3xl m-auto mx-5 inline-block'
-            >
+        <div className='flex justify-center'>
+          <div
+            onClick={() => setGroupCompo([false, false, false, false, true])}
+          >
+            <button className='bg-cyan-600 text-white px-2 py-1 rounded-3xl m-auto mx-5 inline-block'>
               수정하기
             </button>
           </div>
@@ -141,7 +153,6 @@ function GroupSetting({groupIdx, setGroupCompo}) {
           </button>
         </div>
         <hr className='mx-auto my-5 border-solid border-1 border-slate-800 w-80' />
-        
       </div>
 
       {friendList[0] === '아직은 친구가 없습니다.' ? (
@@ -149,11 +160,9 @@ function GroupSetting({groupIdx, setGroupCompo}) {
       ) : (
         <div>
           <p className='pb-2'>그룹에 가입된 친구 목록 입니다.</p>
-          {
-            friendList.map((friendItem, idx) => (
-              <FriendItem key={idx} item={friendItem} />
-            ))
-          }
+          {friendList.map((friendItem, idx) => (
+            <FriendItem key={idx} item={friendItem} />
+          ))}
         </div>
       )}
     </div>

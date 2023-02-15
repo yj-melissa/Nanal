@@ -158,7 +158,7 @@ const DiaryNew = ({ today }) => {
   const [isShow, setShow] = useState(false);
 
   return (
-    <div className='relative w-[1440px] mx-auto'>
+    <div className='absolute w-[1440px] mx-auto'>
       {loaded ? (
         <>
           <div className='flex flex-col justify-center items-center w-[344px] h-screen'>
