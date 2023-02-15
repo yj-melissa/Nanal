@@ -46,9 +46,7 @@ function SignUp() {
           if (data.data.responseMessage === '이메일 발송 성공') {
             setEmailV1(data.data.code);
             setEmailToggle(true);
-          }
-        } else {
-          if (data.data.responseMessage === '사용 불가') {
+          } else if (data.data.responseMessage === '사용 불가') {
             // alert('이미 가입한 이메일 입니다.');
             Swal.fire({
               icon: 'warning', // Alert 타입
@@ -56,14 +54,17 @@ function SignUp() {
               width: '60%',
             }).then(function () {});
             window.location.replace('/SignIn');
-          } else {
-            // alert('이메일을 확인하고 다시 입력해주세요.');
-            Swal.fire({
-              icon: 'warning',
-              text: '이메일을 확인하고 다시 입력해주세요',
-              width: '60%',
-            }).then(function () {});
           }
+        } else {
+          // alert('이메일을 확인하고 다시 입력해주세요.');
+          Swal.fire({
+            icon: 'warning',
+            text: '이메일을 확인하고 다시 입력해주세요',
+            width: '60%',
+          }).then(function () {});
+          // console.log('이메일 인증 과정 오류: ');
+          // console.log(data.statusCode);
+          // console.log(data.data.responseMessage);
         }
       })
       .catch((error) => {
@@ -114,14 +115,18 @@ function SignUp() {
             if (data.data.responseMessage === '사용 가능') {
               setIdMessage('사용가능한 아이디 입니다.');
               setIsId(true);
+            } else if (data.data.responseMessage === '사용 불가') {
+              setIdMessage('중복된 아이디 입니다.');
+              setIsId(false);
             }
           } else {
-            setIdMessage('중복된 아이디 입니다.');
-            setIsId(false);
+            console.log('아이디 중복 확인 오류: ');
+            console.log(data.statusCode);
+            console.log(data.data.responseMessage);
           }
         })
         .catch((error) => {
-          console.log('회원 가입 오류: ' + error);
+          console.log('아이디 중복 확인 오류: ' + error);
         });
     }
   };
@@ -190,14 +195,18 @@ function SignUp() {
             if (data.data.responseMessage === '사용 가능') {
               setNickNameMessage('사용가능한 닉네임 입니다.');
               setIsNickName(true);
+            } else if (data.data.responseMessage === '사용 불가') {
+              setNickNameMessage('중복된 닉네임 입니다.');
+              setIsNickName(false);
             }
           } else {
-            setNickNameMessage('중복된 닉네임 입니다.');
-            setIsNickName(false);
+            console.log('닉네임 중복 확인 오류: ');
+            console.log(data.statusCode);
+            console.log(data.data.responseMessage);
           }
         })
         .catch((error) => {
-          console.log('회원 가입 오류: ' + error);
+          console.log('닉네임 중복 확인 오류: ' + error);
         });
     }
   };
@@ -266,13 +275,23 @@ function SignUp() {
                 replace: true,
               });
               // window.location.replace('/SignIn');
+            } else if (data.data.responseMessage === '사용 불가') {
+              Swal.fire({
+                icon: 'warning',
+                text: '이미 가입된 이메일입니다!',
+                width: '60%',
+              }).then(function () {
+                setEmail('');
+                setId('');
+                setPassword('');
+                setPasswordConfirm('');
+                setNickName('');
+              });
             }
           } else {
-            console.log(data.data.responseMessage);
-            // alert('이미 가입된 이메일입니다!');
             Swal.fire({
               icon: 'warning',
-              text: '이미 가입된 이메일입니다!',
+              text: '입력 조건을 다시 확인해주세요',
               width: '60%',
             }).then(function () {
               setEmail('');

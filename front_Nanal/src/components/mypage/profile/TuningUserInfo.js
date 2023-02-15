@@ -36,6 +36,10 @@ const TuningUserInfo = () => {
           setPassword('');
           setPrevPassword('');
           setIsPassConfirm(true);
+        } else {
+          // console.log('입력 조건 불일치 오류: ');
+          // console.log(data.statusCode);
+          // console.log(data.data.responseMessage);
         }
       })
       .catch(({ error }) => {
