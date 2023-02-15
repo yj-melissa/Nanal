@@ -69,55 +69,60 @@ function DiaryList({
         console.log('일기 리스트 불러오기 오류: ', error);
       });
   }, [groupIdx || curDate]);
+  {
+    if (diaryList.length > 0) {
+      return (
+        <div>
+          {isToggle === 0 ? (
+            isShow === true ? (
+              <p className='text-2xl font-bold text-center'>
+                {diaryList.length}개의 일기가 있습니다.
+              </p>
+            ) : (
+              <div className='absolute z-20 inset-y-40 right-2'>
+                <p className='w-[480px] text-2xl font-bold text-center'>
+                  {diarydate[0]}년 {diarydate[1]}월 {diarydate[2]}일의 일기는
+                  없습니다.
+                </p>
 
-  return (
-    <div>
-      {isToggle === 0 ? (
-        isShow === true ? (
-          <p className='text-2xl font-bold text-center'>
-            {diaryList.length}개의 일기가 있습니다.
-          </p>
-        ) : (
-          <div className='absolute z-20 inset-y-40 right-2'>
-            <p className='w-[480px] text-2xl font-bold text-center'>
-              {diarydate[0]}년 {diarydate[1]}월 {diarydate[2]}일의 일기는
-              없습니다.
+                <div
+                  className='flex items-center justify-center mt-10'
+                  onClick={() => {
+                    changeHomeStateThree();
+                    setToday(today);
+                  }}
+                >
+                  <button className='p-2 text-lg font-bold text-center rounded-lg cursor-pointer bg-violet-100 text-violet-700 whitespace-nowrap'>
+                    일기 쓰러 가기
+                  </button>
+                </div>
+              </div>
+            )
+          ) : isToggle === 1 ? (
+            <p className='my-5 text-2xl font-bold text-center'>
+              내가 쓴 일기 개수는 총 {diaryList.length}개 입니다.
             </p>
-
-            <div
-              className='flex items-center justify-center mt-10'
-              onClick={() => {
-                changeHomeStateThree();
-                setToday(today);
-              }}
-            >
-              <button className='p-2 text-lg font-bold text-center rounded-lg cursor-pointer bg-violet-100 text-violet-700 whitespace-nowrap'>
-                일기 쓰러 가기
-              </button>
-            </div>
+          ) : (
+            <></>
+          )}
+          <div className='my-2'>
+            <Div className='overflow-auto h-96'>
+              {diaryList.map((diary) => (
+                <DiaryItem
+                  key={diary.diaryIdx}
+                  isToggle={isToggle}
+                  groupIdx={groupIdx}
+                  {...diary}
+                />
+              ))}
+            </Div>
           </div>
-        )
-      ) : isToggle === 1 ? (
-        <p className='my-5 text-2xl font-bold text-center'>
-          내가 쓴 일기 개수는 총 {diaryList.length}개 입니다.
-        </p>
-      ) : (
-        <></>
-      )}
-      <div className='my-2'>
-        <Div className='overflow-auto h-96'>
-          {diaryList.map((diary) => (
-            <DiaryItem
-              key={diary.diaryIdx}
-              isToggle={isToggle}
-              groupIdx={groupIdx}
-              {...diary}
-            />
-          ))}
-        </Div>
-      </div>
-    </div>
-  );
+        </div>
+      );
+    } else {
+      return <div className='mt-10'>아직 작성된 일기가 없습니다. </div>;
+    }
+  }
 }
 
 DiaryList.defaultProps = {

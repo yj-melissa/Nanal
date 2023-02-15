@@ -53,7 +53,7 @@ const RecycleBin = () => {
   }, []);
 
   return (
-    <div className='relative w-[1440px] mx-auto'>
+    <div className='absolute w-[1440px] mx-auto'>
       <p className='absolute z-30 left-[330px] inset-y-36'>휴지통</p>
       <img src={nmb} alt='bg' className='absolute z-20 left-60 inset-y-28' />
       <img
