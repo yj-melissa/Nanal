@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import imageCompression from 'browser-image-compression';
+import Swal from 'sweetalert2';
 import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
 
-function GroupUpdate({groupIdx}) {
+function GroupUpdate({ groupIdx }) {
   // const { state } = useLocation();
   const navigate = useNavigate();
 
@@ -148,7 +149,6 @@ function GroupUpdate({groupIdx}) {
   // 그룹 수정 요청 함수
   const GroupUpdate = (e) => {
     e.preventDefault();
-    console.log(e)
 
     let isCurrentGTName = true;
 
@@ -158,14 +158,19 @@ function GroupUpdate({groupIdx}) {
       }
     }
 
-    if (currentName.current.length >= 15) {
-      alert('그룹명은 15글자 이하로 입력해주세요!');
+    if (currentName.current.length >= 15 || currentName.current.length < 2) {
+      Swal.fire({
+        icon: 'warning',
+        text: '그룹명은 2글자 이상, 14글자 이하로 입력해주세요!',
+      });
     } else if (isCurrentGTName === false) {
-      alert('태그명은 10글자 이하로 입력해주세요!');
+      Swal.fire({
+        icon: 'warning',
+        text: '태그명은 10글자 이하로 입력해주세요!',
+      });
     } else {
       // setGroupName(currentName.current);
       // setGroupTag(currentTag.current);
-      // console.log(groupIdx)
       axios_api
         .put('/group', {
           groupIdx: groupIdx,
@@ -212,7 +217,7 @@ function GroupUpdate({groupIdx}) {
                     if (data.statusCode === 200) {
                       if (data.data.responseMessage === '그림 저장 성공') {
                         // console.log(data.data);
-                        if (includeFriend.size !== 0) {
+                        if (includeFriend.length !== 0) {
                           // 그룹에 추가할 친구가 있는 경우
                           axios_api
                             .post('notification/group', {
@@ -224,10 +229,10 @@ function GroupUpdate({groupIdx}) {
                                 if (
                                   data.data.responseMessage === '알림 저장 성공'
                                 ) {
-                                  // navigate(`/Group/Setting`, {
-                                  //   state: { groupIdx: groupidx },
-                                  //   replace: true,
-                                  // });
+                                  navigate(`/Group/Setting`, {
+                                    groupIdx: groupidx,
+                                    replace: true,
+                                  });
                                 }
                               } else {
                                 console.log('알림 저장 오류 : ');
@@ -254,16 +259,16 @@ function GroupUpdate({groupIdx}) {
                 // 그룹에 추가할 친구가 있는 경우
                 axios_api
                   .post('notification/group', {
-                    request_group_idx: groupidx,
+                    request_group_idx: [groupidx],
                     userIdx: includeFriendIdx,
                   })
                   .then(({ data }) => {
                     if (data.statusCode === 200) {
                       if (data.data.responseMessage === '알림 저장 성공') {
-                        // navigate(`/Group/Setting`, {
-                        //   state: { groupIdx: groupidx },
-                        //   replace: true,
-                        // });
+                        navigate(`/Group/Setting`, {
+                          groupIdx: groupidx,
+                          replace: true,
+                        });
                       }
                     } else {
                       console.log('알림 저장 오류 : ');
@@ -371,10 +376,10 @@ function GroupUpdate({groupIdx}) {
   }, []);
 
   return (
-    <div id='group-Update'>
+    <div id='group-Update' className='overflow-auto h-[480px]'>
       <h2 className='m-1 text-lg font-bold text-center'> 그룹 수정 </h2>
       <div>
-        <form onSubmit={()=>GroupUpdate()}>
+        <form onSubmit={GroupUpdate}>
           <p className='my-2 text-center'>✨ 그룹 프로필 ✨</p>
           <div id='group-name-div'>
             <label htmlFor='group-name'>💙 그룹 이름 : </label>
@@ -448,29 +453,35 @@ function GroupUpdate({groupIdx}) {
             {groupFriendList.map((friendItem, idx) => {
               return (
                 <span key={idx} className='mr-2'>
-                  {friendItem.nickname}
+                  {friendItem.nickname},
                 </span>
               );
             })}
           </div>
 
           <div>
-            <p className='my-2 text-center'>✨ 추가 된 사용자 ✨</p>
+            <p className='my-2 text-center'>✨ 사용자 초대하기 ✨</p>
 
-            {includeFriend.map((friendItem, idx) => {
-              return (
-                <button
-                  type='button'
-                  key={idx}
-                  onClick={() => {
-                    onChangeFRemove(idx);
-                  }}
-                  className='items-center inline-block px-2 mx-12 my-1 rounded-lg bg-slate-100 hover:bg-blue-200'
-                >
-                  {friendItem.nickname}
-                </button>
-              );
-            })}
+            <div className='items-center justify-between text-center'>
+              {includeFriend.map((friendItem, idx) => {
+                return (
+                  <div
+                    key={idx}
+                    className='items-center inline-block my-1 text-center w-36'
+                  >
+                    <button
+                      type='button'
+                      onClick={() => {
+                        onChangeFRemove(idx);
+                      }}
+                      className='px-2 rounded-lg bg-slate-200 hover:bg-blue-300'
+                    >
+                      {friendItem.nickname}
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
           </div>
 
           <button
@@ -486,26 +497,32 @@ function GroupUpdate({groupIdx}) {
         <hr className='my-5 border-solid border-1 border-slate-800 w-80' />
 
         <p className='mb-0.5'>🤗 내 친구 목록 --------------------</p>
-        {groupNotFriendList.length >= 0 ? (
-          groupNotFriendList.map((friendItem, idx) => {
-            return (
-              <button
-                type='button'
-                key={idx}
-                onClick={() => {
-                  addFriend(idx);
-                }}
-                className='items-center inline-block px-2 mx-12 my-1 rounded-lg bg-slate-100 hover:bg-blue-200'
-              >
-                {friendItem.nickname}
-              </button>
-            );
-          })
-        ) : (
-          <p className='my-2 text-center'>
-            모든 친구가 이미 그룹에 속해있습니다.
-          </p>
-        )}
+        <div className='items-center justify-between text-center'>
+          {groupNotFriendList.length >= 0 ? (
+            groupNotFriendList.map((friendItem, idx) => {
+              return (
+                <div
+                  key={idx}
+                  className='items-center inline-block my-1 text-center w-36'
+                >
+                  <button
+                    type='button'
+                    onClick={() => {
+                      addFriend(idx);
+                    }}
+                    className='px-2 rounded-lg bg-slate-200 hover:bg-blue-300'
+                  >
+                    {friendItem.nickname}
+                  </button>
+                </div>
+              );
+            })
+          ) : (
+            <p className='my-2 text-center'>
+              모든 친구가 이미 그룹에 속해있습니다.
+            </p>
+          )}
+        </div>
       </div>
     </div>
   );
