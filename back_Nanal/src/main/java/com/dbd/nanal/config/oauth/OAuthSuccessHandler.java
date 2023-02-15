@@ -23,8 +23,6 @@ import org.springframework.stereotype.Component;
 @Component
 @AllArgsConstructor
 public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
-    private final JwtTokenRepository jwtTokenRepository;
-    private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
     @Override
@@ -58,6 +56,7 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         HashMap<String, Object> data = new HashMap<>();
         data.put("responseMessage", ResponseMessage.LOGIN_SUCCESS);
         responseDTO.put("data", data);
+        response.sendRedirect("https://i8d110.p.ssafy.io/home");
 
         new ObjectMapper().writeValue(response.getWriter(), responseDTO);
         response.getWriter().flush();
