@@ -27,7 +27,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         response.setCharacterEncoding("utf-8");
 
         HashMap<String, Object> responseDTO = new HashMap<>();
-        responseDTO.put("statusCode", 500);
+        responseDTO.put("statusCode", 200);
         HashMap<String, Object> data = new HashMap<>();
         data.put("responseMessage", ResponseMessage.TOKEN_NOT_VALID);
         responseDTO.put("data", data);

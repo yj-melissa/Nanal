@@ -29,7 +29,7 @@ public class OAuthFailureHandler extends SimpleUrlAuthenticationFailureHandler {
         response.setCharacterEncoding("utf-8");
 
         HashMap<String, Object> responseDTO = new HashMap<>();
-        responseDTO.put("statusCode", 500);
+        responseDTO.put("statusCode", 200);
         HashMap<String, Object> data = new HashMap<>();
         data.put("responseMessage", ResponseMessage.LOGIN_FAIL);
         responseDTO.put("data", data);
