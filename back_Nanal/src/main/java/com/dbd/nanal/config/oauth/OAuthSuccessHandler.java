@@ -43,23 +43,11 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         response.setCharacterEncoding("utf-8");
 
         response.addCookie(refreshTokenCookie);
-//        response.setStatus(200);
-//        response.addHeader("accessToken", jwtTokenDTO.getAccessToken());
-//        response.setHeader("kakaoAccessToken", oAuth2AccessToken.getTokenValue());
 
-//        HashMap<String, Object> responseDTO = new HashMap<>();
-//        responseDTO.put("statusCode", 200);
-//        HashMap<String, Object> data = new HashMap<>();
-//        data.put("responseMessage", ResponseMessage.LOGIN_SUCCESS);
-//        responseDTO.put("data", data);
-
-//        new ObjectMapper().writeValue(response.getWriter(), responseDTO);
-//        response.getWriter().flush();
-
-        String targetUrl = UriComponentsBuilder.fromUriString("/home")
+        String targetUrl = UriComponentsBuilder.fromHttpUrl("https://i8d110.p.ssafy.io/kakaoLogin")
                 .queryParam("accessToken", jwtTokenDTO.getAccessToken())
                 .queryParam("kakaoAccessToken", oAuth2AccessToken.getTokenValue())
-                    .build().toUriString();
+                .build().toUriString();
 
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
 
