@@ -86,45 +86,57 @@ const AppMain = () => {
         <Route path='*' element={<NotFound />}></Route>
       </Routes>
       {accessToken !== undefined ? (
-        <div className='w-[1440px]'>
+        <div className='w-[1440px] relative'>
           {homeState[0] === true ? (
-            <img src={bmkRR} className='absolute z-0 right-[270px] top-36' />
+            <img src={bmkRR} className='absolute z-0 right-[60px] top-36' />
           ) : (
             <Link to='/home' onClick={changeHomeStateZero}>
-              <img src={bmkRW} className='absolute z-0 right-[270px] top-36' />
+              <img src={bmkRW} className='absolute z-0 right-[60px] top-36' />
             </Link>
           )}
           {homeState[1] === true ? (
-            <img src={bmkOO} className='absolute z-0 right-[270px] top-56' />
+            <img src={bmkOO} className='absolute z-0 right-[60px] top-56' />
           ) : (
             <Link to='/home' onClick={changeHomeStateOne}>
-              <img src={bmkOW} className='absolute z-0 right-[270px] top-56' />
+              <img src={bmkOW} className='absolute z-0 right-[60px] top-56' />
             </Link>
           )}
           {homeState[2] === true ? (
-            <img src={bmkYY} className='absolute z-0 right-[270px] top-[304px]' />
+            <img
+              src={bmkYY}
+              className='absolute z-0 right-[60px] top-[304px]'
+            />
           ) : (
             <Link to='/home' onClick={changeHomeStateTwo}>
-              <img src={bmkYW} className='absolute z-0 right-[270px] top-[304px]' />
+              <img
+                src={bmkYW}
+                className='absolute z-0 right-[60px] top-[304px]'
+              />
             </Link>
           )}
           {homeState[3] === true ? (
-            <img src={bmkGG} className='absolute z-0 right-[270px] top-[384px]' />
+            <img
+              src={bmkGG}
+              className='absolute z-0 right-[60px] top-[384px]'
+            />
           ) : (
             <Link to='/home' onClick={changeHomeStateThree}>
-              <img src={bmkGW} className='absolute z-0 right-[270px] top-[384px]' />
+              <img
+                src={bmkGW}
+                className='absolute z-0 right-[60px] top-[384px]'
+              />
             </Link>
           )}
           {homeState[4] === true ? (
             <img
               src={bmkBB}
-              className='absolute z-0 right-[270px] top-[464px]'
+              className='absolute z-0 right-[60px] top-[464px]'
             />
           ) : (
             <Link to='/home' onClick={changeHomeStateFour}>
               <img
                 src={bmkBW}
-                className='absolute z-0 right-[270px] top-[464px]'
+                className='absolute z-0 right-[60px] top-[464px]'
               />
             </Link>
           )}
