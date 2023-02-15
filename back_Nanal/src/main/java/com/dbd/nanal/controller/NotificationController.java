@@ -27,7 +27,7 @@ public class NotificationController {
 
     private final NoticeService noticeService;
 
-    @ApiOperation(value = "친구 추가 알림 생성", notes =
+    @ApiOperation(value = "친구 추가 알림 생성", hidden = true, notes =
             "친구 추가 알림을 생성합니다.\n" +
                     "[Front] \n" +
                     "{userIdx(list)} \n\n" +
@@ -49,7 +49,7 @@ public class NotificationController {
         }
     }
 
-    @ApiOperation(value = "그룹 초대 알림 생성", notes =
+    @ApiOperation(value = "그룹 초대 알림 생성", hidden = true, notes =
             "그룹 초대 알림을 생성합니다.\n" +
                     "[Front] \n" +
                     "{userIdx(list), requestGroupIdx(int)} \n\n" +
@@ -71,7 +71,7 @@ public class NotificationController {
         }
     }
 
-    @ApiOperation(value = "댓글 알림 생성", notes =
+    @ApiOperation(value = "댓글 알림 생성", hidden = true, notes =
             "댓글 알림을 생성합니다.\n" +
                     "[Front] \n" +
                     "{requestDiaryIdx(int) ,requestGroupIdx([])} \n\n" +
@@ -98,7 +98,7 @@ public class NotificationController {
         }
     }
 
-    @ApiOperation(value = "새로운 일기 알림 생성", notes =
+    @ApiOperation(value = "새로운 일기 알림 생성", hidden = true, notes =
             "새로운 일기 알림을 생성합니다.\n" +
                     "[Front] \n" +
                     "{requestDiaryIdx(int) ,requestGroupIdx([])} \n\n" +
@@ -141,7 +141,7 @@ public class NotificationController {
         }
     }
 
-    @ApiOperation(value = "알림 삭제", notes =
+    @ApiOperation(value = "알림 삭제", hidden = true, notes =
             "알림을 삭제합니다.\n" +
                     "[Front] \n" +
                     "{noticeIdx(int)} \n\n" +

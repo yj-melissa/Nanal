@@ -28,7 +28,7 @@ public class GroupController {
 
     private final GroupService groupService;
 
-    @ApiOperation(value = "새로운 그룹 생성", notes =
+    @ApiOperation(value = "새로운 그룹 생성", hidden = true, notes =
             "새로운 그룹을 생성합니다.\n" +
                     "[Front] \n" +
                     "{groupIdx(int), groupImg(String), groupName(String), private(boolean), tags(List(String)), creationDate(String)} \n\n" +
@@ -90,7 +90,7 @@ public class GroupController {
 
     }
 
-    @ApiOperation(value = "그룹 가입", notes =
+    @ApiOperation(value = "그룹 가입", hidden = true, notes =
             "(초대 수락) userIdx 사용자가 groupIdx 그룹에 가입합니다.\n" +
                     "[Front] \n" +
                     "{groupIdx(int)} \n\n" +
@@ -136,7 +136,7 @@ public class GroupController {
 
     }
 
-    @ApiOperation(value = "그룹 정보 수정", notes =
+    @ApiOperation(value = "그룹 정보 수정", hidden = true, notes =
             "groupIdx 그룹의 정보를 수정합니다.\n" +
                     "[Front] \n" +
                     "{groupIdx(int)) groupName(String), tags({}}),)} \n\n" +
@@ -160,7 +160,7 @@ public class GroupController {
 
     }
 
-    @ApiOperation(value = "그룹 탈퇴", notes =
+    @ApiOperation(value = "그룹 탈퇴", hidden = true, notes =
             "userIdx 사용자가 groupIdx 그룹을 탈퇴합니다.\n" +
                     "[Front]\n" +
                     "{groupIdx(int)}\n" +
@@ -201,7 +201,7 @@ public class GroupController {
 
     }
 
-    @ApiOperation(value = "그룹 삭제", notes =
+    @ApiOperation(value = "그룹 삭제", hidden = true, notes =
             "그룹을 삭제합니다.\n" +
                     "[Front] \n" +
                     "{groupIdx(int)} \n\n" +
