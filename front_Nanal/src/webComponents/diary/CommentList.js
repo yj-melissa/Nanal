@@ -123,7 +123,7 @@ function CommentList({ diaryIdx, isToggle, groupIdx }) {
         <></>
       )}
       <div className='comments-body'>
-        <div className='overflow-auto h-40'>
+        <div className='h-40 overflow-auto'>
           {commentList.map((comment, idx) => (
             <CommentDetail key={idx} item={comment} userIdx={userIdx} />
           ))}
