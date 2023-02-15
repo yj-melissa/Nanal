@@ -25,15 +25,16 @@ import org.springframework.stereotype.Component;
 public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private final JwtTokenRepository jwtTokenRepository;
     private final UserRepository userRepository;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
         Authentication authentication) throws IOException, ServletException {
-        JwtTokenProvider tokenProvider = new JwtTokenProvider(jwtTokenRepository, userRepository);
+
         ApplicationOAuth2User userPrincipal = (ApplicationOAuth2User) authentication.getPrincipal();
         OAuth2AccessToken oAuth2AccessToken = userPrincipal.getAccessToken();
 
-        JwtTokenDTO jwtTokenDTO = tokenProvider.createJwtTokens(authentication);
+        JwtTokenDTO jwtTokenDTO = jwtTokenProvider.createJwtTokens(authentication);
 
         // 토큰
 
