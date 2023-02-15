@@ -14,7 +14,7 @@ function KaKaoLogin() {
 
   useEffect(() => {
     const token = getUrlParameter('accessToken');
-    const { accessToken } = token;
+    const accessToken = token;
 
     setCookie('accessToken', accessToken, {
       path: '/',
