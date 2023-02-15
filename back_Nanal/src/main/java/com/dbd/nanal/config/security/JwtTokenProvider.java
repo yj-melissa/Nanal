@@ -14,6 +14,7 @@ import javax.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,8 @@ public class JwtTokenProvider {
     private final JwtTokenRepository jwtTokenRepository;
     private final UserRepository userRepository;
 
-    String secretKey = "daybydayNanalInhighseasorinlowseasImgonnabeyourfriendImgonnabeyourfriendInhighseasorinlowseasIllbebyyoursideIllbebyyourside";
+    @Value("${secretKey}")
+    String secretKey;
 
 
     // Access Token 기한 = 10분
@@ -67,11 +69,6 @@ public class JwtTokenProvider {
             .refreshToken(jwtTokenDTO.getRefreshToken())
             .build();
 
-        // JWT 쿠키 생성
-//        Cookie accessTokenCookie = new Cookie("accessToken", accessToken);
-//        accessTokenCookie.setMaxAge(1 * 24 * 60 * 60);    // 1일 - 초단위
-//        accessTokenCookie.setPath("/");     // 모든 경로에서 접근 가능
-
         Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
         refreshTokenCookie.setMaxAge(14 * 24 * 60 * 60);    // 14일
         refreshTokenCookie.setPath("/");
@@ -106,11 +103,6 @@ public class JwtTokenProvider {
             .userIdx(userIdx)
             .refreshToken(jwtTokenDTO.getRefreshToken())
             .build();
-
-        // JWT 쿠키 생성
-//        Cookie accessTokenCookie = new Cookie("accessToken", accessToken);
-//        accessTokenCookie.setMaxAge(1 * 24 * 60 * 60);    // 1일 - 초단위
-//        accessTokenCookie.setPath("/");     // 모든 경로에서 접근 가능
 
         Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
         refreshTokenCookie.setMaxAge(14 * 24 * 60 * 60);    // 14일
