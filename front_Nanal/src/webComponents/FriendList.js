@@ -30,7 +30,7 @@ const FriendList = () => {
           <FriendAdd />
         </div>
       ) : friendCompo[2] === true ? (
-        <div className='absolute z-20 right-72 inset-y-52 w-[400px]'>
+        <div className='absolute z-20 right-72 inset-y-28 w-[400px]'>
           <FriendDetail userIdx={userIdx} />
         </div>
       ) : (

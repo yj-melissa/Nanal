@@ -76,7 +76,15 @@ const AppMain = () => {
         ) : homeState[2] === true ? (
           <Route path='/home' element={<FriendList />}></Route>
         ) : homeState[3] === true ? (
-          <Route path='/home' element={<DiaryNew today={today} />}></Route>
+          <Route
+            path='/home'
+            element={
+              <DiaryNew
+                today={today}
+                changeHomeStateZero={changeHomeStateZero}
+              />
+            }
+          ></Route>
         ) : homeState[4] === true ? (
           <Route path='/home' element={<RecycleBin />}></Route>
         ) : null}
