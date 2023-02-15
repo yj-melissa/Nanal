@@ -11,6 +11,7 @@ import SignUp from '../webComponents/account/SignUp';
 import SignIn from '../webComponents/account/SignIn';
 import DiaryDetail from '../webComponents/diary/DiaryDetail';
 import DiaryUpdate from '../webComponents/diary/DiaryUpdate';
+import KaKaoLogin from '../webComponents/KaKaoLogin';
 import NotFound from '../webComponents/another/NotFound';
 import bmkRR from '../src_assets/img/bookmark/bookmark-red-red.svg';
 import bmkRW from '../src_assets/img/bookmark/bookmark-red-white.svg';
@@ -83,6 +84,7 @@ const AppMain = () => {
         <Route path='/SignUp' element={<SignUp />}></Route>
         <Route path='/Diary/Detail' element={<DiaryDetail />}></Route>
         <Route path='/Diary/Edit' element={<DiaryUpdate />}></Route>
+        <Route path='/kakaoLogin' element={<KaKaoLogin />}></Route>
         <Route path='*' element={<NotFound />}></Route>
       </Routes>
       {accessToken !== undefined ? (

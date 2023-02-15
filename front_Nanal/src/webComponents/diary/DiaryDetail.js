@@ -124,31 +124,56 @@ function DiaryDetail() {
         alt='bg-img'
         className='absolute w-[1280px] z-10 left-12'
       />
-      <p className='absolute z-20 text-2xl font-bold inset-y-20 left-[190px]'>
+      <p className='absolute z-20 text-2xl font-bold inset-y-24 right-40'>
         {diarydate[0]}년 {diarydate[1]}월 {diarydate[2]}일의 일기
       </p>
+
+      {/* 감정 & 북마크 */}
+      <div className='flex items-center absolute z-20 inset-y-24 mt-1 left-[275px]'>
+        <img
+          src={diaryDetail.emo}
+          alt='Emotion'
+          className='w-12 h-12 mr-4'
+        ></img>
+        {isBook ? (
+          <div>
+            <img
+              src={bookmark_filled}
+              alt='bookmark_filled'
+              onClick={bookmarkDelete}
+            />
+          </div>
+        ) : (
+          <div>
+            <img src={bookmark} alt='bookmark' onClick={bookmarkSave} />
+          </div>
+        )}
+      </div>
+
       {/* 그림 */}
       <div className='flex justify-start'>
         <img
           src={diaryDetail.picture}
           alt='DALL:E2'
-          className='absolute z-20 my-2 rounded-lg opacity-25 inset-y-32 left-[200px]'
+          className='absolute z-20 my-2 rounded-lg opacity-25 w-[320px] h-[320px] inset-y-32 left-[170px]'
         />
         <img
           src={diaryDetail.picture}
           alt='DALL:E2'
-          className='absolute z-20 inset-y-40 left-[230px] w-[200px] h-[200px] mt-2 border-2 border-black rounded-lg'
+          className='absolute z-20 inset-y-40 left-[200px] w-[256px] h-[256px] mt-2 border-2 border-black rounded-lg'
         />
       </div>
+
       {/* 수정/삭제 버튼 */}
       {userIdx === diaryDetail.userIdx ? (
-        <div className='absolute z-20 my-10 inset-y-96 left-[250px]'>
+        <div className='absolute z-20 my-10 inset-y-[420px] left-[250px]'>
           <div className='flex justify-start mt-4'>
             <Link
               to={'/Diary/Edit'}
               state={{
                 diaryDetail: diaryDetail,
                 originGroupList: originGroupList,
+                isToggle: isToggle,
               }}
             >
               <button className='font-bold hover:bg-cyan-500 bg-cyan-400 text-white px-2.5 py-1 rounded-3xl m-auto block text-2xl'>
@@ -180,31 +205,11 @@ function DiaryDetail() {
         </div>
       ) : null}
 
-      {/* 감정/북마크/일기 내용 */}
-      <div className='flex justify-end absolute z-20 w-[720px] inset-y-24 mt-2 right-40'>
-        {/* 감정 넣는 곳 */}
-        <img
-          src={diaryDetail.emo}
-          alt='Emotion'
-          className='w-12 h-12 mr-4'
-        ></img>
-        {isBook ? (
-          <div>
-            <img
-              src={bookmark_filled}
-              alt='bookmark_filled'
-              onClick={bookmarkDelete}
-            />
-          </div>
-        ) : (
-          <div>
-            <img src={bookmark} alt='bookmark' onClick={bookmarkSave} />
-          </div>
-        )}
-      </div>
-      <div className='absolute z-20 text-2xl text-left underline inset-y-44 underline-offset-8 w-[720px] right-40'>
+      {/* 일기 내용 */}
+      <div className='absolute z-20 text-2xl text-left underline inset-y-36 underline-offset-8 w-[720px] right-40'>
         {diaryDetail.content}
       </div>
+      {/* 댓글 내용 */}
       <div className='my-5'>
         <CommentList
           diaryIdx={diaryIdx}

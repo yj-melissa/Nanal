@@ -39,7 +39,6 @@ const RecycleBin = () => {
           setTrashDiary(null);
           if (data.data.responseMessage === '일기 리스트 조회 성공') {
             setTrashDiary(data.data.diary); // 데이터는 response.data.data 안에 들어있음
-            console.log(data.data.diary);
           }
         } else {
           console.log('알림 리스트 조회 오류: ');

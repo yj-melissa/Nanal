@@ -38,10 +38,19 @@ function DiaryUpdate() {
   const originGroupList = location.state.originGroupList;
   const [checkedList, setCheckedList] = useState(originGroupList);
 
+  const changeDate = localDate.split('-');
+
   // 수정 취소 버튼 클릭 시 실행되는 함수
   const handleQuitEdit = () => {
-    setLocalDate(location.state.diaryDate);
-    setLocalContent(location.state.diaryDetail.content);
+    navigate('/Diary/Detail', {
+      state: {
+        diaryIdx: location.state.diaryDetail.diaryIdx,
+        diarydate: changeDate,
+        groupIdx: location.state.groupIdx,
+        isToggle: location.state.isToggle,
+      },
+      replace: true,
+    });
   };
 
   // input 태그가 체크된 경우 실행되는 함수 = 다중 선택 가능
@@ -187,20 +196,12 @@ function DiaryUpdate() {
 
           {/* 수정 취소 및 수정 완료 버튼 */}
           <div className='relative flex justify-between px-1 pb-5'>
-            <Link
-              to='/Diary/Detail'
-              state={{
-                diaryIdx: location.state.diaryDetail.diaryIdx,
-                diaryDate: location.state.diaryDetail.diaryDate,
-              }}
+            <button
+              className='hover:bg-slate-300 bg-slate-300/50 rounded-xl px-2.5 py-1 block font-bold cursor-pointer text-xl mt-2'
+              onClick={handleQuitEdit}
             >
-              <button
-                className='hover:bg-slate-300 bg-slate-300/50 rounded-xl px-2.5 py-1 block font-bold cursor-pointer text-xl mt-2'
-                onClick={handleQuitEdit}
-              >
-                수정 취소
-              </button>
-            </Link>
+              수정 취소
+            </button>
             <button
               className='hover:bg-cyan-600 bg-cyan-500 text-white px-2.5 py-1 rounded-xl block font-bold text-xl mt-2'
               onClick={() => {

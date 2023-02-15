@@ -3,18 +3,6 @@ import { useLocation } from 'react-router-dom';
 import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
 import DiaryItem from './DiaryItem';
-import styled from 'styled-components';
-
-const Div = styled.div`
-  overflow: scroll;
-  &::-webkit-scrollbar {
-    display: none;
-  }
-  &::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 6px;
-  }
-`;
 
 function DiaryList({
   isToggle,
@@ -85,44 +73,54 @@ function DiaryList({
                   없습니다.
                 </p>
 
-                <div
-                  className='flex items-center justify-center mt-10'
-                  onClick={() => {
-                    changeHomeStateThree();
-                    setToday(today);
-                  }}
-                >
-                  <button className='p-2 text-lg font-bold text-center rounded-lg cursor-pointer bg-violet-100 text-violet-700 whitespace-nowrap'>
-                    일기 쓰러 가기
-                  </button>
-                </div>
-              </div>
-            )
-          ) : isToggle === 1 ? (
-            <p className='my-5 text-2xl font-bold text-center'>
-              내가 쓴 일기 개수는 총 {diaryList.length}개 입니다.
+  return (
+    <div>
+      {isToggle === 0 ? (
+        isShow === true ? (
+          <p className='text-2xl font-bold text-center'>
+            {diaryList.length}개의 일기가 있습니다.
+          </p>
+        ) : (
+          <div className='text-center'>
+            <p className='text-2xl font-bold mt-40'>
+              {diarydate[0]}년 {diarydate[1]}월 {diarydate[2]}일의 일기는
+              없습니다.
             </p>
-          ) : (
-            <></>
-          )}
-          <div className='my-2'>
-            <Div className='overflow-auto h-96'>
-              {diaryList.map((diary) => (
-                <DiaryItem
-                  key={diary.diaryIdx}
-                  isToggle={isToggle}
-                  groupIdx={groupIdx}
-                  {...diary}
-                />
-              ))}
-            </Div>
+
+            <div
+              className='mt-10'
+              onClick={() => {
+                changeHomeStateThree();
+                setToday(today);
+              }}
+            >
+              <button className='p-2 text-lg font-bold text-center rounded-lg cursor-pointer bg-violet-100 text-violet-700 whitespace-nowrap'>
+                일기 쓰러 가기
+              </button>
+            </div>
           </div>
+        )
+      ) : isToggle === 1 ? (
+        <p className='my-5 text-2xl font-bold text-center'>
+          내가 쓴 일기 개수는 총 {diaryList.length}개 입니다.
+        </p>
+      ) : (
+        <></>
+      )}
+      <div className='my-2'>
+        <div className='overflow-auto h-96'>
+          {diaryList.map((diary) => (
+            <DiaryItem
+              key={diary.diaryIdx}
+              isToggle={isToggle}
+              groupIdx={groupIdx}
+              {...diary}
+            />
+          ))}
         </div>
-      );
-    } else {
-      return <div className='mt-10'>아직 작성된 일기가 없습니다. </div>;
-    }
-  }
+      </div>
+    </div>
+  );
 }
 
 DiaryList.defaultProps = {

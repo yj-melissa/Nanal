@@ -97,47 +97,50 @@ function CommentDetail({ item, userIdx }) {
         </div>
       ) : (
         <div>
-          <div className=''>
-            <div className='flex justify-start'>
-              <img
-                src={item.img}
-                alt='DALL:E2'
-                className='w-1/12 m-1 rounded-lg h-1/12'
-              />
-              <span className='ml-2 font-bold text-center'>
-                {item.nickname}
-              </span>
-            </div>
+          <div className='flex items-center'>
+            <img
+              src={item.img}
+              alt='DALL:E2'
+              className='w-1/12 m-1 rounded-lg h-1/12'
+            />
+
             {userIdx === item.userIdx ? (
-              <div className='mx-1 text-sm'>
-                <div className='flex items-center justify-end'>
-                  <p className='px-1 text-sm font-bold'>{commentDetail}</p>
-                  <button
-                    className='m-1 bg-violet-100 text-violet-700 rounded-3xl cursor-pointer px-2.5 py-1 whitespace-nowrap font-bold'
-                    onClick={toggleIsEdit}
-                  >
-                    수정
-                  </button>
-                  <button
-                    className='ml-2 bg-rose-100 text-rose-700 px-2.5 py-1 rounded-3xl whitespace-nowrap font-bold'
-                    onClick={() => {
-                      Swal.fire({
-                        icon: 'warning',
-                        text: '댓글을 정말 삭제하시겠습니까?',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: '삭제',
-                        cancelButtonText: '취소',
-                      }).then((result) => {
-                        if (result.isConfirmed) {
-                          commentDelete();
-                        }
-                      });
-                    }}
-                  >
-                    삭제
-                  </button>
+              <div className='mx-1 text-sm w-full'>
+                <span className='ml-2 font-bold text-center'>
+                  {item.nickname}
+                </span>
+                <div className='flex justify-between items-center'>
+                  <div>
+                    <p className='px-1 text-sm font-bold'>{commentDetail}</p>
+                  </div>
+                  <div className='place-content-end'>
+                    <button
+                      className='m-1 bg-violet-100 text-violet-700 rounded-3xl cursor-pointer px-2.5 py-1 whitespace-nowrap font-bold'
+                      onClick={toggleIsEdit}
+                    >
+                      수정
+                    </button>
+                    <button
+                      className='ml-1 bg-rose-100 text-rose-700 px-2.5 py-1 rounded-3xl whitespace-nowrap font-bold'
+                      onClick={() => {
+                        Swal.fire({
+                          icon: 'warning',
+                          text: '댓글을 정말 삭제하시겠습니까?',
+                          showCancelButton: true,
+                          confirmButtonColor: '#3085d6',
+                          cancelButtonColor: '#d33',
+                          confirmButtonText: '삭제',
+                          cancelButtonText: '취소',
+                        }).then((result) => {
+                          if (result.isConfirmed) {
+                            commentDelete();
+                          }
+                        });
+                      }}
+                    >
+                      삭제
+                    </button>
+                  </div>
                 </div>
               </div>
             ) : (
