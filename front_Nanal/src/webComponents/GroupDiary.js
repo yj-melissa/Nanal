@@ -51,7 +51,7 @@ const GroupDiary = () => {
         </div>
       ) : groupCompo[4] === true ? (
         <div className='absolute z-20 right-40 inset-y-28 w-[600px]'>
-          <GroupUpdate groupIdx={groupIdx} />
+          <GroupUpdate groupIdx={groupIdx} setGroupCompo={setGroupCompo} />
         </div>
       ) : (
         <div className='absolute z-20 right-[360px] inset-y-72'>
