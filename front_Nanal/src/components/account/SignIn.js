@@ -145,13 +145,13 @@ function SignIn() {
             </div>
           </form>
         </div>
-        <div className='mt-4'>
+        {/* <div className='mt-4'>
           <a href={KAKAO_AUTH_URL}>
             <div className='p-1 text-center border border-black rounded-full cursor-pointer w-36 mx-auton'>
               ihihihi
             </div>
           </a>
-        </div>
+        </div> */}
         <div className='mt-4'>
           <p className='text-xs text-center'>
             아이디와 비밀번호를 까먹으셨다면 soyeon@gmail.com으로 연락주세요!
