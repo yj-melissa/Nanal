@@ -2,8 +2,10 @@ import { useState, useEffect } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import axios_api from '../../config/Axios';
+import jwt_decode from 'jwt-decode';
+import { getCookie } from '../../config/Cookie';
 import { onLogin } from '../../config/Login';
-// import CommentList from './CommentList';
+import CommentList from './CommentList';
 import bookmark from '../../src_assets/img/bookmark.png';
 import bookmark_filled from '../../src_assets/img/bookmark_fill.png';
 import diaryImgRed from '../../src_assets/img/diary-img/diary-img-red.svg';
@@ -12,12 +14,14 @@ function DiaryDetail() {
   // const location = useLocation();
   const { state } = useLocation();
 
+  const token = getCookie('accessToken');
+  const userIdx = jwt_decode(token).userIdx;
+
   const navigate = useNavigate();
   const diaryIdx = state.diaryIdx;
   const isToggle = state.isToggle;
   const groupIdx = state.groupIdx;
-  const diaryDate = state.diaryDate;
-  const diarydate = diaryDate.split('-');
+  const [diarydate, setDiarydate] = useState(['0000', '00', '00']);
 
   const [diaryDetail, setDiaryDetail] = useState({});
   const [originGroupList, setOriginGroupList] = useState();
@@ -95,6 +99,7 @@ function DiaryDetail() {
         if (data.statusCode === 200) {
           if (data.data.responseMessage === '일기 조회 성공') {
             setDiaryDetail(data.data.diary);
+            setDiarydate(data.data.diary.diaryDate.split('-'));
             setOriginGroupList(data.data.groupList);
 
             if (data.data.isBookmark === true) {
@@ -114,7 +119,11 @@ function DiaryDetail() {
 
   return (
     <div className='relative w-[1440px] mx-auto'>
-      <img src={diaryImgRed} className='absolute w-[1280px] z-10 left-12' />
+      <img
+        src={diaryImgRed}
+        alt='bg-img'
+        className='absolute w-[1280px] z-10 left-12'
+      />
       <p className='absolute z-20 text-2xl font-bold inset-y-20 left-[190px]'>
         {diarydate[0]}년 {diarydate[1]}월 {diarydate[2]}일의 일기
       </p>
@@ -132,42 +141,44 @@ function DiaryDetail() {
         />
       </div>
       {/* 수정/삭제 버튼 */}
-      <div className='absolute z-20 my-10 inset-y-96 left-[250px]'>
-        <div className='flex justify-start mt-4'>
-          <Link
-            to={'/Diary/Edit'}
-            state={{
-              diaryDetail: diaryDetail,
-              originGroupList: originGroupList,
-            }}
-          >
-            <button className='font-bold hover:bg-cyan-500 bg-cyan-400 text-white px-2.5 py-1 rounded-3xl m-auto block text-2xl'>
-              수정
+      {userIdx === diaryDetail.userIdx ? (
+        <div className='absolute z-20 my-10 inset-y-96 left-[250px]'>
+          <div className='flex justify-start mt-4'>
+            <Link
+              to={'/Diary/Edit'}
+              state={{
+                diaryDetail: diaryDetail,
+                originGroupList: originGroupList,
+              }}
+            >
+              <button className='font-bold hover:bg-cyan-500 bg-cyan-400 text-white px-2.5 py-1 rounded-3xl m-auto block text-2xl'>
+                수정
+              </button>
+            </Link>
+            <button
+              className='font-bold bg-rose-400 hover:bg-rose-500 text-white px-2.5 py-1 rounded-3xl mx-4 inline-block text-2xl'
+              onClick={() => {
+                Swal.fire({
+                  title: `일기를 정말 삭제하시겠습니까?`,
+                  text: '삭제한 일기는 휴지통에서 확인 가능합니다.',
+                  icon: 'warning',
+                  showCancelButton: true,
+                  confirmButtonColor: '#3085d6',
+                  cancelButtonColor: '#d33',
+                  confirmButtonText: '삭제',
+                  cancelButtonText: '취소',
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    diaryDelete();
+                  }
+                });
+              }}
+            >
+              삭제
             </button>
-          </Link>
-          <button
-            className='font-bold bg-rose-400 hover:bg-rose-500 text-white px-2.5 py-1 rounded-3xl mx-4 inline-block text-2xl'
-            onClick={() => {
-              Swal.fire({
-                title: `일기를 정말 삭제하시겠습니까?`,
-                text: '삭제한 일기는 휴지통에서 확인 가능합니다.',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: '삭제',
-                cancelButtonText: '취소',
-              }).then((result) => {
-                if (result.isConfirmed) {
-                  diaryDelete();
-                }
-              });
-            }}
-          >
-            삭제
-          </button>
+          </div>
         </div>
-      </div>
+      ) : null}
 
       {/* 감정/북마크/일기 내용 */}
       <div className='flex justify-end absolute z-20 w-[720px] inset-y-24 mt-2 right-40'>
@@ -193,6 +204,13 @@ function DiaryDetail() {
       </div>
       <div className='absolute z-20 text-2xl text-left underline inset-y-44 underline-offset-8 w-[720px] right-40'>
         {diaryDetail.content}
+      </div>
+      <div className='my-5'>
+        <CommentList
+          diaryIdx={diaryIdx}
+          isToggle={isToggle}
+          groupIdx={groupIdx}
+        />
       </div>
     </div>
   );

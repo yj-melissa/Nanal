@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import axios_api from '../../config/Axios';
-import emo_joy from '../../src_assets/img/emotion/emo_joy.png';
 import Swal from 'sweetalert2';
 
 function CommentDetail({ item, userIdx }) {
@@ -97,7 +96,7 @@ function CommentDetail({ item, userIdx }) {
           />
         </div>
       ) : (
-        <div className=''>
+        <div>
           <div className='flex justify-between mx-1'>
             <div className='float-left'>
               <img
@@ -120,8 +119,6 @@ function CommentDetail({ item, userIdx }) {
                   onClick={() => {
                     Swal.fire({
                       icon: 'warning',
-                      // title: `댓글을 정말 삭제하시겠습니까?`,
-                      // text: '삭제한 댓글은 다시 확인할 수 없습니다.',
                       text: '댓글을 정말 삭제하시겠습니까?',
                       showCancelButton: true,
                       confirmButtonColor: '#3085d6',
