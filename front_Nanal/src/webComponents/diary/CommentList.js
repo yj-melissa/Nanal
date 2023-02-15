@@ -1,9 +1,14 @@
 import { useState, useRef, useEffect } from 'react';
+import jwt_decode from 'jwt-decode';
 import axios_api from '../../config/Axios';
+import { getCookie } from '../../config/Cookie';
 import { onLogin } from '../../config/Login';
 import CommentDetail from './CommentDetail';
 
 function CommentList({ diaryIdx, isToggle, groupIdx }) {
+  const token = getCookie('accessToken');
+  const userIdx = jwt_decode(token).userIdx;
+
   // 댓글 내용
   const [content, setContent] = useState('');
   // const onChange = (e) => setContent(e.target.value);
@@ -28,27 +33,27 @@ function CommentList({ diaryIdx, isToggle, groupIdx }) {
       .then(({ data }) => {
         if (data.statusCode === 200) {
           if (data.data.responseMessage === '일기 댓글 저장 성공') {
-            // axios_api
-            //   .get(`diary/comment/${groupIdx}/${diaryIdx}`)
-            //   .then(({ data }) => {
-            //     if (data.statusCode === 200) {
-            //       setDiaryComment(null);
-            //       if (
-            //         data.data.responseMessage ===
-            //         '일기 그룹에 해당하는 댓글 리스트 조회 성공'
-            //       ) {
-            //         setDiaryComment(data.data.diaryComment);
-            //       }
-            //     } else {
-            //       console.log('일기 그룹에 해당하는 댓글 리스트 조회 실패 : ');
-            //       console.log(data.statusCode);
-            //       console.log(data.data.responseMessage);
-            //     }
-            //   })
-            //   .catch((err) => console.log(err));
-            // // 저장 후 댓글 데이터 초기화
-            // setContent('');
-            window.location.reload();
+            axios_api
+              .post(`notification/comment`, {
+                request_diary_idx: diaryIdx,
+                request_group_idx: [groupIdx],
+              })
+              .then(({ data }) => {
+                if (data.statusCode === 200) {
+                  if (data.data.responseMessage === '알림 저장 성공') {
+                    // 저장 후 댓글 데이터 초기화
+                    // setContent('');
+                    window.location.reload();
+                  }
+                } else {
+                  console.log('새 댓글 알림 저장 실패 : ');
+                  console.log(data.statusCode);
+                  console.log(data.data.responseMessage);
+                }
+              })
+              .catch(({ error }) => {
+                console.log('새 댓글 알림 저장 실패 : ' + error);
+              });
           }
         } else {
           console.log('일기 댓글 저장 오류: ');
@@ -63,6 +68,8 @@ function CommentList({ diaryIdx, isToggle, groupIdx }) {
 
   const arrAxios = [
     `diary/comment/${diaryIdx}`,
+    `diary/comment/${diaryIdx}`,
+    `diary/comment/${groupIdx}/${diaryIdx}`,
     `diary/comment/${groupIdx}/${diaryIdx}`,
   ];
 
@@ -71,7 +78,7 @@ function CommentList({ diaryIdx, isToggle, groupIdx }) {
   useEffect(() => {
     onLogin();
     axios_api
-      .get(arrAxios[0])
+      .get(arrAxios[isToggle])
       .then(({ data }) => {
         if (data.statusCode === 200) {
           setCommentList(null);
@@ -95,7 +102,7 @@ function CommentList({ diaryIdx, isToggle, groupIdx }) {
   return (
     <div className='comment-container'>
       <hr className='my-2 border-dashed border-slate-400/75 w-65' />
-      {isToggle === 2 ? (
+      {isToggle === 2 || isToggle === 3 ? (
         <form className='flex justify-end mx-auto my-3' onSubmit={handleSubmit}>
           <input
             type='text'
@@ -117,7 +124,7 @@ function CommentList({ diaryIdx, isToggle, groupIdx }) {
       )}
       <div className='comments-body'>
         {commentList.map((comment, idx) => (
-          <CommentDetail key={idx} item={comment} />
+          <CommentDetail key={idx} item={comment} userIdx={userIdx} />
         ))}
       </div>
     </div>

@@ -1,9 +1,8 @@
 // import { useState } from 'react';
 import axios_api from '../../config/Axios';
-import emo_joy from '../../src_assets/img/emotion/emo_joy.png';
 import Swal from 'sweetalert2';
 
-function TrashItem({ diaryIdx, diaryDate, content }) {
+function TrashItem({ diaryIdx, diaryDate, content, emo, picture }) {
   const diarydate = diaryDate.split('-');
   // 일기 복구하기
   const recovery = () => {
@@ -41,7 +40,7 @@ function TrashItem({ diaryIdx, diaryDate, content }) {
   return (
     <div className='my-2'>
       <div className='flex p-2 m-1 mb-3 item-center w-[500px]'>
-        <img src={emo_joy} alt='DALL:E2' className='w-20 h-20 p-1 rounded-lg' />
+        <img src={picture} alt='DALL:E2' className='w-20 h-20 p-1 rounded-lg' />
         <div className='w-3/4 px-1 m-1 text-sm '>
           <div className='flex justify-between mb-1'>
             <span className='text-xl'>
