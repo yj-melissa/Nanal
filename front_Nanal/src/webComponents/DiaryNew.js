@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
 import axios_api from '../config/Axios';
 import { onLogin } from '../config/Login';
 import Swal from 'sweetalert2';
@@ -7,7 +6,7 @@ import nmg from '../src_assets/img/bookmark-name/name-mark-green.svg';
 import diaryImgGreen from '../src_assets/img/diary-img/diary-img-green.svg';
 import spinner from '../src_assets/img/emotion/spinner.gif';
 
-const DiaryNew = ({ today }) => {
+const DiaryNew = ({ today, changeHomeStateZero }) => {
   // 날짜, 일기, 그룹여부 데이터 받기
   const [date, setDate] = useState(today);
   const [content, setContent] = useState('');
@@ -73,7 +72,7 @@ const DiaryNew = ({ today }) => {
                         text: '작성하신 일기가 작성 완료됐습니다.',
                         width: '35%',
                       });
-                      navigate('/home', { replace: true });
+                      changeHomeStateZero();
                     }
                   } else {
                     console.log('알림 저장 오류: ');
@@ -108,8 +107,6 @@ const DiaryNew = ({ today }) => {
     }
   };
 
-  // 뒤로가기 기능
-  const navigate = useNavigate();
   // 그룹 리스트 데이터 가져오기
   const [groupList, setGroupList] = useState([]);
 
@@ -142,8 +139,8 @@ const DiaryNew = ({ today }) => {
       {loaded ? (
         <>
           <div className='flex flex-col items-center justify-center h-screen'>
-            <img src={spinner} alt='emotion_gif' className='w-16 h-16' />
-            <p className='my-2 text-xl font-bold animate-bounce text-rose-500'>
+            <img src={spinner} alt='emotion_gif' className='w-32 h-32' />
+            <p className='my-2 text-2xl font-bold animate-bounce text-rose-500'>
               달리가 그림을 만드는 중...
             </p>
           </div>

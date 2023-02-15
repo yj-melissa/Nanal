@@ -6,7 +6,7 @@ import addIcon from '../../src_assets/img/group_add_icon.png';
 import downarrow from '../../src_assets/img/arrow_drop_down.png';
 import uparrow from '../../src_assets/img/arrow_drop_up.png';
 
-function GroupList({setGroupCompo, setGroupIdx}) {
+function GroupList({ setGroupCompo, setGroupIdx }) {
   const [view, setView] = useState(false);
   const [groupList, setGroupList] = useState([]);
 
@@ -18,7 +18,6 @@ function GroupList({setGroupCompo, setGroupIdx}) {
           setGroupList(null);
           if (data.data.responseMessage === '그룹 리스트 조회 성공') {
             setGroupList(data.data.groupList);
-            // console.log(data.data.groupList);
           }
         } else {
           console.log(data.statusCode);
@@ -57,7 +56,7 @@ function GroupList({setGroupCompo, setGroupIdx}) {
   }, []);
 
   return (
-    <div id='group-list' className='overflow-auto w-80 h-80 pr-2'>
+    <div id='group-list' className='pr-2 overflow-auto w-80 h-80'>
       <div id='group-list-title' className='mb-2'>
         <h1 className='inline m-1 ml-2 font-bold'>그룹 리스트</h1>
         <ul
@@ -101,14 +100,19 @@ function GroupList({setGroupCompo, setGroupIdx}) {
           )}
         </ul>
         <div
-          className='inline-block float-right ml-5 pl-5'
+          className='inline-block float-right pl-5 ml-5'
           onClick={() => setGroupCompo([false, true, false, false, false])}
         >
           <img src={addIcon} className='w-[22px] h-[22px] mx-1.5' />
         </div>
       </div>
       {groupList.map((groupItem) => (
-        <GroupItem key={groupItem.groupDetail.groupIdx} item={groupItem} setGroupIdx={setGroupIdx} setGroupCompo={setGroupCompo} />
+        <GroupItem
+          key={groupItem.groupDetail.groupIdx}
+          item={groupItem}
+          setGroupIdx={setGroupIdx}
+          setGroupCompo={setGroupCompo}
+        />
       ))}
     </div>
   );
