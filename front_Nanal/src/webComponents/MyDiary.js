@@ -45,7 +45,7 @@ const MyDiary = ({ changeHomeStateThree, setToday }) => {
         className='absolute w-[1280px] z-10 left-12 top-8'
       />
 
-      <div className='absolute z-20 w-[720px] inset-y-32 right-32'>
+      <div className='absolute z-20 w-[720px] inset-y-32 right-40'>
         <DiaryList
           isToggle={0}
           curDate={checkedDate}
