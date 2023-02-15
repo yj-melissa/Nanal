@@ -1,14 +1,10 @@
 package com.dbd.nanal.config.oauth;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static org.springframework.web.util.UriComponentsBuilder.fromUriString;
 
-import com.dbd.nanal.config.common.ResponseMessage;
 import com.dbd.nanal.config.security.JwtTokenProvider;
 import com.dbd.nanal.config.security.JwtTokenDTO;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
-import java.util.HashMap;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -47,22 +43,26 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         response.setCharacterEncoding("utf-8");
 
         response.addCookie(refreshTokenCookie);
-        response.setStatus(200);
-        response.addHeader("accessToken", jwtTokenDTO.getAccessToken());
-        response.setHeader("kakaoAccessToken", oAuth2AccessToken.getTokenValue());
+//        response.setStatus(200);
+//        response.addHeader("accessToken", jwtTokenDTO.getAccessToken());
+//        response.setHeader("kakaoAccessToken", oAuth2AccessToken.getTokenValue());
 
-        HashMap<String, Object> responseDTO = new HashMap<>();
-        responseDTO.put("statusCode", 200);
-        HashMap<String, Object> data = new HashMap<>();
-        data.put("responseMessage", ResponseMessage.LOGIN_SUCCESS);
-        responseDTO.put("data", data);
+//        HashMap<String, Object> responseDTO = new HashMap<>();
+//        responseDTO.put("statusCode", 200);
+//        HashMap<String, Object> data = new HashMap<>();
+//        data.put("responseMessage", ResponseMessage.LOGIN_SUCCESS);
+//        responseDTO.put("data", data);
 
-        new ObjectMapper().writeValue(response.getWriter(), responseDTO);
-        response.getWriter().flush();
+//        new ObjectMapper().writeValue(response.getWriter(), responseDTO);
+//        response.getWriter().flush();
 
         String targetUrl = UriComponentsBuilder.fromUriString("/home")
-            .build().toUriString();
+                .queryParam("accessToken", jwtTokenDTO.getAccessToken())
+                .queryParam("kakaoAccessToken", oAuth2AccessToken.getTokenValue())
+                    .build().toUriString();
+
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
+
     }
 
 
