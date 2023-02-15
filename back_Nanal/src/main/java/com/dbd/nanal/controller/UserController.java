@@ -48,7 +48,7 @@ public class UserController {
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 
-    @ApiOperation(value = "회원가입", notes =
+    @ApiOperation(value = "회원가입", hidden = true, notes =
             "회원가입을 진행합니다 \n" +
                     "[Front] \n" +
                     "{userId(String), password(String), email(String), nickname(String)} \n\n" +
@@ -131,7 +131,7 @@ public class UserController {
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "로그인", notes =
+    @ApiOperation(value = "로그인", hidden = true, notes =
             "로그인을 진행합니다. \n" +
                     "[Front] \n" +
                     "{userId(String), password(String)} \n\n" +
@@ -173,7 +173,7 @@ public class UserController {
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "로그아웃", notes =
+    @ApiOperation(value = "로그아웃", hidden = true, notes =
             "로그아웃을 진행합니다. \n" +
                     "[Front] \n" +
                     "{} \n" +
@@ -238,7 +238,7 @@ public class UserController {
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "회원 정보 수정", notes =
+    @ApiOperation(value = "회원 정보 수정", hidden = true, notes =
             "회원 정보를 수정합니다.\n" +
                     "[Front] \n" +
                     "{nickname(String), introduction(String)} \n\n" +
@@ -268,7 +268,7 @@ public class UserController {
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "회원 탈퇴", notes =
+    @ApiOperation(value = "회원 탈퇴", hidden = true, notes =
             "회원 탈퇴를 진행합니다. \n\n" +
                     "[Front] \n" +
                     "{} \n\n" +
@@ -285,7 +285,7 @@ public class UserController {
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "비밀번호 확인", notes =
+    @ApiOperation(value = "비밀번호 확인", hidden = true, notes =
             "[Front] \n" +
                     "{password(String)} \n\n" +
                     "[Back] \n" +
@@ -309,7 +309,7 @@ public class UserController {
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "비밀번호 수정", notes =
+    @ApiOperation(value = "비밀번호 수정", hidden = true, notes =
             "비밀번호를 수정합니다. \n" +
                     "[Front] \n" +
                     "{password(String)} \n\n" +
