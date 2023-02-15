@@ -88,8 +88,8 @@ public class JwtTokenProvider {
         ApplicationOAuth2User userPrincipal = (ApplicationOAuth2User) authentication.getPrincipal();
         String userId = userPrincipal.getName();
         int userIdx = userRepository.findByUserId(userId).getUserIdx();
-        String accessToken = createToken(userId, accessTokenExpiryDate);
-        String refreshToken = createToken(userId, refreshTokenExpiryDate);
+        String accessToken = createToken(userIdx, accessTokenExpiryDate);
+        String refreshToken = createToken(userIdx, refreshTokenExpiryDate);
 
         JwtTokenDTO jwtTokenDTO= JwtTokenDTO.builder()
             .accessToken(accessToken)
@@ -144,25 +144,7 @@ public class JwtTokenProvider {
         claims.put("roles", user.getRoles());
         claims.put("userIdx", userIdx);
 
-        String token = Jwts.builder()
-            .signWith(SignatureAlgorithm.HS512, secretKey)
-            .setClaims(claims)
-            .setIssuer("nanal")
-            .setIssuedAt(new Date())
-            .setExpiration(expiryDate)
-            .compact();
-
-        log.debug("[createToken] 토큰 생성 완료");
-        return token;
-    }
-    
-    // oauth용
-    public String createToken(String userId, Date expiryDate){
-        log.debug("[createToken] 토큰 생성 시작");
-        UserEntity user = userRepository.findByUserId(userId);
-        Claims claims = Jwts.claims()
-            .setSubject(userId);
-        claims.put("roles", user.getRoles());
+//        String secretKey = "daybydayNanalPutanXonmychestonmychestButImstillstandingcauseIwontforgetThehellonearthyouputmethroughIllsavemyselfinspiteofyou";
 
         String token = Jwts.builder()
             .signWith(SignatureAlgorithm.HS512, secretKey)

@@ -37,10 +37,10 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
         // 토큰
 
-        int expTime = 10;
+        int expTime = 24 * 60 * 60;
 
         Cookie refreshTokenCookie = new Cookie("refreshToken", jwtTokenDTO.getRefreshToken());
-        refreshTokenCookie.setMaxAge(expTime * 60);    // 초 단위
+        refreshTokenCookie.setMaxAge(expTime * 14);    // 초 단위
         refreshTokenCookie.setPath("/");     // 모든 경로에서 접근 가능
 
         response.setStatus(HttpServletResponse.SC_OK);
