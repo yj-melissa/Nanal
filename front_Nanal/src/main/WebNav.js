@@ -122,7 +122,10 @@ function Nav({ setHomeState }) {
               ref={alarmRef}
               className='absolute right-40 inset-y-[48px] rounded-md box-border border border-black w-80 h-[500px] z-40 bg-slate-100 grid grid-cols-1 justify-items-center overflow-auto'
             >
-              <AlarmList setUseAlarm={setUseAlarm} />
+              <AlarmList
+                setUseAlarm={setUseAlarm}
+                toggleAlarmMenu={toggleAlarmMenu}
+              />
             </div>
           )}
 
@@ -156,7 +159,7 @@ function Nav({ setHomeState }) {
                   {userProfile.introduction}
                 </p>
               )}
-              <Tuning />
+              <Tuning toggleProfileMenu={toggleProfileMenu} />
             </div>
           )}
         </div>

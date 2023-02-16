@@ -3,7 +3,7 @@ import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
 import AlarmItem from './AlarmItem';
 
-function AlarmList({ setUseAlarm }) {
+function AlarmList({ setUseAlarm, toggleAlarmMenu }) {
   const [isAlarmList, setIsAlarmList] = useState([]);
 
   // DB에서 알람 리스트 다 땡겨와야함.
@@ -53,7 +53,11 @@ function AlarmList({ setUseAlarm }) {
         ) : (
           <div className='mx-1'>
             {isAlarmList.map((ar) => (
-              <AlarmItem key={ar.noticeIdx} {...ar} />
+              <AlarmItem
+                key={ar.noticeIdx}
+                toggleAlarmMenu={toggleAlarmMenu}
+                {...ar}
+              />
             ))}
           </div>
         )}

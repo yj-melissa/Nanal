@@ -4,7 +4,7 @@ import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
 import Modal from '../modal/Modal';
 
-const TuningProfile = () => {
+const TuningProfile = ({ toggleProfileMenu }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const openModal = () => {
     setModalOpen(true);
@@ -14,46 +14,27 @@ const TuningProfile = () => {
   };
 
   const [profile, setProfile] = useState({});
+  let originName = '';
   let currentName = useRef('');
   let currentInfo = useRef('');
 
   // 사용자 닉네임
   const [nickName, setNickName] = useState('');
   const [nickNameMessage, setNickNameMessage] = useState('');
-  const [isNickname, setIsNickname] = useState(false);
+  const [isNickname, setIsNickname] = useState(true);
 
   const nickNameMessageCss = isNickname === true ? '' : 'text-rose-600';
 
   const onChangeNickName = (e) => {
-    console.log('hihihi');
     currentName.current = e.target.value;
     setNickName(currentName.current);
-    console.log(currentName.current);
 
     if (currentName.current.length < 2 || currentName.current.length > 8) {
       setNickNameMessage('닉네임은 2글자 이상 8글자 이하로 입력해주세요!');
       setIsNickname(false);
     } else {
-      axios_api
-        .get(`user/check/nickname/${currentName.current}`)
-        .then(({ data }) => {
-          if (data.statusCode === 200) {
-            if (data.data.responseMessage === '사용 가능') {
-              setNickNameMessage('사용가능한 닉네임 입니다.');
-              setIsNickname(true);
-            } else if (data.data.responseMessage === '사용 불가') {
-              setNickNameMessage('중복된 닉네임 입니다.');
-              setIsNickname(false);
-            }
-          } else {
-            console.log('닉네임 중복 확인 오류: ');
-            console.log(data.statusCode);
-            console.log(data.data.responseMessage);
-          }
-        })
-        .catch((error) => {
-          console.log('닉네임 중복 확인 오류: ' + error);
-        });
+      setNickNameMessage('');
+      setIsNickname(true);
     }
   };
 
@@ -125,7 +106,6 @@ const TuningProfile = () => {
         })
         .then(({ data }) => {
           if (data.statusCode === 200) {
-            console.log(data);
             if (data.data.responseMessage === '회원 정보 수정 성공') {
               // 이미지를 변경하는 경우
               if (isImgChecked === true) {
@@ -199,12 +179,15 @@ const TuningProfile = () => {
                   });
               } else {
                 // 이미지를 변경하지 않는 경우
+                console.log('이미지를 변경하지 않는 경우');
                 axios_api
                   .get('user/profile')
                   .then(({ data }) => {
+                    console.log(data);
                     if (data.statusCode === 200) {
                       if (data.data.responseMessage === '회원 정보 조회 성공') {
                         // console.log(data.data.profile);
+                        // console.log('회원 정보 조회 성공');
                         window.localStorage.setItem(
                           'profileDays',
                           data.data.profile.days
@@ -221,7 +204,8 @@ const TuningProfile = () => {
                           'profileNickname',
                           data.data.profile.nickname
                         );
-                        window.location.reload();
+                        // 여긴데... 흠...
+                        // window.location.reload();
                       }
                     } else {
                       console.log('회원 정보 오류: ');
@@ -232,8 +216,21 @@ const TuningProfile = () => {
                   .catch(({ error }) => {
                     console.log('회원 정보 조회: ' + error);
                   });
-                closeModal();
+                // console.log('안녕하세요');
+                // openModal();
+                // closeModal();
               }
+            } else if (data.data.responseMessage === '사용 불가') {
+              // Swal.fire({
+              //   icon: 'warning',
+              //   text: '이미 사용중인 닉네임입니다.',
+              //   width: '30%',
+              // }).then(function () {
+              //   setNickName(originName);
+              //   // toggleProfileMenu();
+              // });
+              // openModal();
+              alert('이미 사용중인 닉네임입니다.');
             }
           } else {
             console.log('회원 정보 수정 오류: ');
@@ -245,11 +242,11 @@ const TuningProfile = () => {
           console.log('회원 정보 수정 오류: ' + error);
         });
     } else {
-      Swal.fire({
-        icon: 'warning',
-        text: '닉네임을 다시 확인해주세요.',
-        width: '60%',
-      }).then(function () {});
+      // Swal.fire({
+      //   icon: 'warning',
+      //   text: '닉네임을 다시 확인해주세요.',
+      //   width: '60%',
+      // }).then(function () {});
     }
   };
 
@@ -261,6 +258,7 @@ const TuningProfile = () => {
         if (data.statusCode === 200) {
           if (data.data.responseMessage === '회원 정보 조회 성공') {
             setProfile(data.data.profile);
+            originName = data.data.profile.nickname;
             currentName.current = data.data.profile.nickname;
             currentInfo.current = data.data.profile.introduction;
           } else {
@@ -302,10 +300,8 @@ const TuningProfile = () => {
                   type='text'
                   id='user-nickname'
                   defaultValue={currentName.current || ''}
-                  value={nickName}
                   onChange={(e) => {
                     onChangeNickName(e);
-                    console.log('hihihi');
                   }}
                   className='font-medium m-0.5 mx-1 px-1 p-0.5 text-sm rounded-lg'
                 ></input>
@@ -348,7 +344,7 @@ const TuningProfile = () => {
                   id='user-name'
                   defaultValue={currentInfo.current || ''}
                   onChange={onChangeInfo}
-                  className='font-medium m-0.5 w-full h-28 rounded-md text-sm border border-teal-600 indent-2'
+                  className='font-medium m-0.5 w-full h-28 rounded-md text-sm border border-teal-600 indent-2 p-1'
                 ></textarea>
                 <p className='text-xs'>{infoMessage}</p>
               </div>

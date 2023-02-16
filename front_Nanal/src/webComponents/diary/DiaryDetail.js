@@ -126,35 +126,32 @@ function DiaryDetail() {
         alt='bg-img'
         className='absolute w-[1280px] z-10 left-12'
       />
+      {/* 날짜 & 북마크 */}
       <div>
-        <p className='absolute z-20 text-2xl font-bold inset-y-24 right-40'>
+        <p className='absolute z-20 inline-block text-2xl font-bold inset-y-20 right-48'>
           {diarydate[0]}년 {diarydate[1]}월 {diarydate[2]}일의 일기
         </p>
-        <p className='absolute z-20 text-3xl font-bold inset-y-24 right-40'>
-          {diaryDetail.nickname}
-        </p>
+        {isBook ? (
+          <img
+            src={bookmark_filled}
+            alt='bookmark_filled'
+            onClick={bookmarkDelete}
+            className='absolute z-20 inline-block w-7 inset-y-20 right-40'
+          />
+        ) : (
+          <img
+            src={bookmark}
+            alt='bookmark'
+            onClick={bookmarkSave}
+            className='absolute z-20 inline-block w-7 inset-y-20 right-40'
+          />
+        )}
       </div>
 
-      {/* 감정 & 북마크 */}
-      <div className='flex items-center absolute z-20 inset-y-24 mt-1 left-[275px]'>
-        <img
-          src={diaryDetail.emo}
-          alt='Emotion'
-          className='w-12 h-12 mr-4'
-        ></img>
-        {isBook ? (
-          <div>
-            <img
-              src={bookmark_filled}
-              alt='bookmark_filled'
-              onClick={bookmarkDelete}
-            />
-          </div>
-        ) : (
-          <div>
-            <img src={bookmark} alt='bookmark' onClick={bookmarkSave} />
-          </div>
-        )}
+      {/* 닉네임 & 감정 */}
+      <div className='absolute z-20 flex items-center mt-1 inset-y-24 left-48'>
+        <p className='mr-4 text-3xl font-bold'>{diaryDetail.nickname}</p>
+        <img src={diaryDetail.emo} alt='Emotion' className='w-12 h-12'></img>
       </div>
 
       {/* 그림 */}

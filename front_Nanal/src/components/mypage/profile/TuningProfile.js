@@ -201,6 +201,17 @@ const TuningProfile = () => {
                   replace: true,
                 });
               }
+            } else if (data.data.responseMessage === '사용 불가') {
+              // Swal.fire({
+              //   icon: 'warning',
+              //   text: '이미 사용중인 닉네임입니다.',
+              //   width: '30%',
+              // }).then(function () {
+              //   setNickName(originName);
+              //   // toggleProfileMenu();
+              // });
+              // openModal();
+              alert('이미 사용중인 닉네임입니다.');
             }
           } else {
             console.log('회원 정보 수정 오류: ');
