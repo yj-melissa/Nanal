@@ -35,7 +35,7 @@ function GroupDetail({ groupIdx, setGroupCompo }) {
   }, [groupIdx]);
 
   return (
-    <div className='absolute text-center z-40 -top-24 w-[550px]'>
+    <div className='absolute z-20 w-[720px] inset-y-20 -top-20 -left-40'>
       <div
         onClick={() => {
           setGroupCompo([false, false, false, true, false]);
@@ -43,10 +43,8 @@ function GroupDetail({ groupIdx, setGroupCompo }) {
       >
         <img src={settingIcon} className='w-[20px] h-[20px] mx-1.5' />
       </div>
-      <div>
-        <p className='mb-1 text-2xl font-bold text-center'>
-          {groupDetail.groupName}
-        </p>
+      <div className='text-center'>
+        <p className='mx-1 text-2xl font-bold'>{groupDetail.groupName}</p>
         {groupTag.map((tagging, idx) => {
           return (
             <span
