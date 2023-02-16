@@ -72,6 +72,8 @@ function DiaryUpdate() {
                 state: {
                   diaryIdx: location.state.diaryDetail.diaryIdx,
                   diarydate: changeDate,
+                  groupIdx: location.state.groupIdx,
+                  isToggle: location.state.isToggle,
                 },
                 replace: true,
               });

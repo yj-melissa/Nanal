@@ -130,8 +130,8 @@ function DiaryDetail() {
         <p className='absolute z-20 text-2xl font-bold inset-y-24 right-40'>
           {diarydate[0]}년 {diarydate[1]}월 {diarydate[2]}일의 일기
         </p>
-        <p>
-          <p className='text-sm font-bold text-left'>{diaryDetail.nickname}</p>
+        <p className='absolute z-20 text-3xl font-bold inset-y-24 right-40'>
+          {diaryDetail.nickname}
         </p>
       </div>
 
