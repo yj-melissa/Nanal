@@ -22,7 +22,7 @@ function DiaryItem({
         diaryDate: diaryDate,
       }}
     >
-      <div className='flex items-center p-2 m-1'>
+      <div className='flex items-center justify-center p-2 m-1 ml-6'>
         {isToggle !== 0 ? (
           <img
             src={picture}
