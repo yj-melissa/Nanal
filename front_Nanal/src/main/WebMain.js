@@ -86,7 +86,7 @@ const AppMain = ({ homeState, setHomeState }) => {
         <Route path='/SignUp' element={<SignUp />}></Route>
         <Route path='/Diary/Detail' element={<DiaryDetail />}></Route>
         <Route path='/Diary/Edit' element={<DiaryUpdate />}></Route>
-        <Route path='/nanal/kakaoLogin' element={<KaKaoLogin />}></Route>
+        <Route path='/kakaoLogin' element={<KaKaoLogin />}></Route>
         <Route path='*' element={<NotFound />}></Route>
       </Routes>
       {accessToken !== undefined ? (
