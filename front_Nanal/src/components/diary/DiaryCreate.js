@@ -5,13 +5,6 @@ import { onLogin } from '../../config/Login';
 import Swal from 'sweetalert2';
 import spinner from '../../src_assets/img/emotion/spinner.gif';
 
-const getStringDate = (date) => {
-  // 대한민국의 offset을 수동으로 추가한 뒤 날짜 전달
-  const offset = date.getTimezoneOffset() * 60000;
-  const dateOffset = new Date(date.getTime() - offset);
-  return dateOffset.toISOString().slice(0, 10);
-};
-
 function DiaryCreate() {
   // 뒤로가기 기능
   const navigate = useNavigate();
@@ -142,6 +135,7 @@ function DiaryCreate() {
           setGroupList(null);
           if (data.data.responseMessage === '그룹 리스트 조회 성공') {
             setGroupList(data.data.groupList);
+            setDate(state.curDate);
           }
         } else {
           console.log('그룹 리스트 불러오기 오류: ');

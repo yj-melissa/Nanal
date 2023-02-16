@@ -122,6 +122,22 @@ function BookCase() {
       });
   }, []);
 
+  // 날짜를 'YYYY-MM-DD' 형태로 바꾸는 함수들
+  const leftPad = (value) => {
+    if (value >= 10) {
+      return value;
+    }
+    return `0${value}`;
+  };
+
+  const toStringByFormatting = (value, delimeter = '-') => {
+    const year = value.getFullYear();
+    const month = leftPad(value.getMonth() + 1);
+    const date = leftPad(value.getDate());
+
+    return [year, month, date].join(delimeter);
+  };
+
   return (
     <div>
       {/* bookshelf 마진처리 해야함!!! */}
@@ -391,7 +407,11 @@ function BookCase() {
       {/* 일기쓰러가기 버튼 */}
       <img
         src={ballpenIcon}
-        onClick={() => navigate('/Diary/Create')}
+        onClick={() =>
+          navigate('/Diary/Create', {
+            state: { curDate: toStringByFormatting(new Date()) },
+          })
+        }
         className='fixed z-50 flex p-1 cursor-pointer w-9 bottom-10 right-10'
       ></img>
     </div>
