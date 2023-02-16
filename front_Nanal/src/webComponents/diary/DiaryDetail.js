@@ -126,9 +126,14 @@ function DiaryDetail() {
         alt='bg-img'
         className='absolute w-[1280px] z-10 left-12'
       />
-      <p className='absolute z-20 text-2xl font-bold inset-y-24 right-40'>
-        {diarydate[0]}년 {diarydate[1]}월 {diarydate[2]}일의 일기
-      </p>
+      <div>
+        <p className='absolute z-20 text-2xl font-bold inset-y-24 right-40'>
+          {diarydate[0]}년 {diarydate[1]}월 {diarydate[2]}일의 일기
+        </p>
+        <p className='absolute z-20 text-3xl font-bold inset-y-24 right-40'>
+          {diaryDetail.nickname}
+        </p>
+      </div>
 
       {/* 감정 & 북마크 */}
       <div className='flex items-center absolute z-20 inset-y-24 mt-1 left-[275px]'>

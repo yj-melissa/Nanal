@@ -156,7 +156,7 @@ const DiaryNew = ({ today, changeHomeStateZero }) => {
             />
 
             {/* 그룹 여부 선택란 */}
-            <div className='absolute z-20 mt-2 left-60 inset-y-56'>
+            <div className='absolute z-20 mt-2 left-52 inset-y-56'>
               <p className='my-1 mb-2 text-xl font-bold'>공개 범위 설정</p>
               <input
                 className='cursor-pointer'

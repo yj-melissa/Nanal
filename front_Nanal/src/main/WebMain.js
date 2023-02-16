@@ -31,16 +31,10 @@ const getStringDate = (date) => {
   return dateOffset.toISOString().slice(0, 10);
 };
 
-const AppMain = () => {
+const AppMain = ({ homeState, setHomeState }) => {
   const [today, setToday] = useState(getStringDate(new Date()));
   const accessToken = getCookie('accessToken');
-  const [homeState, setHomeState] = useState([
-    true,
-    false,
-    false,
-    false,
-    false,
-  ]);
+
   const changeHomeStateZero = () => {
     setHomeState([true, false, false, false, false]);
   };
