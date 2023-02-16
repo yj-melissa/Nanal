@@ -4,7 +4,7 @@ import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
 import Modal from '../modal/Modal';
 
-const TuningProfile = ({ toggleProfileMenu }) => {
+const TuningProfile = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const openModal = () => {
     setModalOpen(true);
@@ -205,7 +205,7 @@ const TuningProfile = ({ toggleProfileMenu }) => {
                           data.data.profile.nickname
                         );
                         // 여긴데... 흠...
-                        // window.location.reload();
+                        window.location.reload();
                       }
                     } else {
                       console.log('회원 정보 오류: ');
@@ -218,7 +218,7 @@ const TuningProfile = ({ toggleProfileMenu }) => {
                   });
                 // console.log('안녕하세요');
                 // openModal();
-                // closeModal();
+                closeModal();
               }
             } else if (data.data.responseMessage === '사용 불가') {
               // Swal.fire({
