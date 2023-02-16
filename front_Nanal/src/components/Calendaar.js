@@ -46,7 +46,9 @@ function Calendaar() {
       <div className='flex justify-center'>
         <button
           className='p-2 font-bold rounded-lg cursor-pointer bg-violet-100 text-violet-700 whitespace-nowrap'
-          onClick={() => navigate('/Diary/Create')}
+          onClick={() =>
+            navigate('/Diary/Create', { state: toStringByFormatting(value) })
+          }
         >
           일기 쓰기 🖊
         </button>

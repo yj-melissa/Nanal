@@ -17,7 +17,7 @@ function DiaryCreate() {
   const navigate = useNavigate();
   const { state } = useLocation();
   // 날짜, 일기, 그룹여부 데이터 받기
-  const [date, setDate] = useState(getStringDate(new Date()));
+  const [date, setDate] = useState(state);
   const [content, setContent] = useState('');
   const [group, setGroup] = useState('개인');
 
@@ -154,7 +154,6 @@ function DiaryCreate() {
       });
 
     if (state && state.groupIdx !== null) {
-      // console.log(state);
       setGroup('그룹');
       setShow(true);
       setCheckedList([state.groupIdx]);
