@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
 import { getCookie } from '../config/Cookie';
+import Etc from '../webComponents/Etc';
 import LogoHome from '../webComponents/LogoHome';
 import MyDiary from '../webComponents/MyDiary';
 import GroupDiary from '../webComponents/GroupDiary';
 import FriendList from '../webComponents/FriendList';
-import RecycleBin from '../webComponents/RecycleBin';
 import DiaryNew from '../webComponents/DiaryNew';
 import SignUp from '../webComponents/account/SignUp';
 import SignIn from '../webComponents/account/SignIn';
@@ -80,7 +80,7 @@ const AppMain = ({ homeState, setHomeState }) => {
             }
           ></Route>
         ) : homeState[4] === true ? (
-          <Route path='/home' element={<RecycleBin />}></Route>
+          <Route path='/home' element={<Etc />}></Route>
         ) : null}
         <Route path='/SignIn' element={<SignIn />}></Route>
         <Route path='/SignUp' element={<SignUp />}></Route>

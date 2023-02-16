@@ -27,10 +27,10 @@ function BookmarkList() {
 
   return (
     <div>
-      <h4 className='my-5 font-bold text-center'>
+      <p className='absolute inset-y-12 left-20 font-bold text-2xl'>
         좋아하는 일기 개수는 총 {favoriteDiary.length}개 입니다.
-      </h4>
-      <div className='grid grid-cols-3 gap-3'>
+      </p>
+      <div className='grid grid-cols-3 gap-3 overflow-auto h-96 absolute inset-y-20 right-12'>
         {favoriteDiary.map((pictures, idx) => (
           <BookmarkItem key={idx} {...pictures} />
         ))}

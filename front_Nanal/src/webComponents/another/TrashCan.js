@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import axios_api from '../config/Axios';
-import { onLogin } from '../config/Login';
-import TrashItem from '../webComponents/another/TrashItem';
+import axios_api from '../../config/Axios';
+import { onLogin } from '../../config/Login';
+import TrashItem from './TrashItem';
 import Swal from 'sweetalert2';
-import nmb from '../src_assets/img/bookmark-name/name-mark-blue.svg';
-import diaryImgBlue from '../src_assets/img/diary-img/diary-img-blue.svg';
 
-const RecycleBin = () => {
+const TrashCan = () => {
   // 휴지통 내 일기 데이터 받기
   const [trashDiary, setTrashDiary] = useState([]);
 
@@ -52,18 +50,10 @@ const RecycleBin = () => {
   }, []);
 
   return (
-    <div className='absolute w-[1440px] mx-auto'>
-      <p className='absolute z-30 left-[330px] inset-y-36'>휴지통</p>
-      <img src={nmb} alt='bg' className='absolute z-20 left-60 inset-y-28' />
-      <img
-        src={diaryImgBlue}
-        alt='bg'
-        className='absolute w-[1280px] z-10 left-12 top-8'
-      />
-
+    <div className='absolute w-[720px] mx-auto'>
       <div className='flex justify-center my-2'>
         {trashDiary.length > 0 ? (
-          <div className='absolute z-30 left-[240px] inset-y-72'>
+          <div className='absolute z-30 inset-y-12 left-52 mb-2'>
             <button
               className='px-2 py-1 my-2 text-lg font-bold text-white bg-rose-500 hover:bg-rose-600 rounded-xl'
               onClick={() => {
@@ -88,11 +78,11 @@ const RecycleBin = () => {
           </div>
         ) : null}
 
-        <p className='absolute z-30 left-[200px] inset-y-60 text-2xl font-bold'>
+        <p className='absolute z-30 inset-y-4 text-2xl font-bold left-24'>
           휴지통에 일기가 {trashDiary.length}개 있습니다.
         </p>
       </div>
-      <div className='absolute z-20 justify-between mt-5 inset-y-28 right-60'>
+      <div className='absolute z-20 justify-between mt-5 inset-y-20'>
         <div className='pr-2 overflow-auto h-96'>
           {trashDiary.map((diary, idx) => (
             <TrashItem key={idx} {...diary} />
@@ -103,4 +93,4 @@ const RecycleBin = () => {
   );
 };
 
-export default RecycleBin;
+export default TrashCan;
