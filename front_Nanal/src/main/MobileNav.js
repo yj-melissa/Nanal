@@ -103,16 +103,18 @@ function Nav({ changeIsBookCase }) {
         </div>
         <div className='flex items-center m-auto'>
           <Link to='/Search'>
-            <img src={search} className='w-[18px] h-[18px] my-3' />
+            <img src={search} className='w-[18px] h-[18px] my-3 mx-1' />
           </Link>
           <Link to='/Alarm'>
-            <img src={bell} className='w-6 h-6 my-3 ml-2.5' />
-            {checkAlarm === true ? (
-              <span className='absolute flex w-3 h-3 right-[70px] top-2'>
-                <span className='absolute inline-flex w-2 h-2 rounded-full opacity-75 animate-ping bg-sky-300'></span>
-                <span className='relative inline-flex w-2 h-2 rounded-full bg-sky-400'></span>
-              </span>
-            ) : null}
+            <div className='relative'>
+              <img src={bell} className='w-6 h-6 my-3 ml-2.5' />
+              {checkAlarm === true ? (
+                <span className='absolute flex w-3 h-3 -right-2 -top-0'>
+                  <span className='absolute inline-flex w-2 h-2 rounded-full opacity-75 animate-ping bg-sky-300'></span>
+                  <span className='relative inline-flex w-2 h-2 rounded-full bg-sky-400'></span>
+                </span>
+              ) : null}
+            </div>
           </Link>
           {location.pathname === '/home' ? (
             <Link to='/MyPage' className='ml-2.5 w-[36px]'>
