@@ -25,7 +25,7 @@ const GroupDiary = () => {
         src={diaryImgOrange}
         className='absolute w-[1280px] z-10 left-12 top-8'
       />
-      <div className='absolute z-20 left-60 inset-y-[216px]'>
+      <div className='absolute z-20 left-36 inset-y-[216px]'>
         <GroupList setGroupCompo={setGroupCompo} setGroupIdx={setGroupIdx} />
       </div>
       {groupCompo[0] === true ? (

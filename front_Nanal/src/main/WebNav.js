@@ -3,12 +3,13 @@ import bell from '../src_assets/img/bell.svg';
 import logo from '../src_assets/img/nanalLogo.svg';
 import Tuning from '../webComponents/setting/Tuning';
 import AlarmList from '../webComponents/another/AlarmList';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import { onLogin } from '../config/Login';
 import axios_api from '../config/Axios';
 
-function Nav() {
-  // animate-ping 쓸지말지 고민 좀 해보자.
+function Nav({ setHomeState }) {
+  // Logo 누르면 캘린더페이지 보여주게 해줄 녀석.
+
   const [useAlarm, setUseAlarm] = useState(true);
   const userProfile = {
     days: window.localStorage.getItem('profileDays'),
@@ -86,12 +87,12 @@ function Nav() {
   return (
     <div>
       <nav className='flex justify-between h-16 m-auto space-x-4'>
-        <Link
-          to='/home'
+        <div
           className='w-24 h-16 py-1 pr-1 my-auto font-medium rounded-lg text-slate-700 hover:bg-slate-100 hover:text-slate-900'
+          onClick={() => setHomeState([true, false, false, false, false])}
         >
           <img src={logo} alt='logo' />
-        </Link>
+        </div>
         <div className='m-auto'>
           <p>나날과 함께한지 {userProfile.days}일 째 되는 날입니다.</p>
         </div>

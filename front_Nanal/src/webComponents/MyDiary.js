@@ -27,7 +27,7 @@ const MyDiary = ({ changeHomeStateThree, setToday }) => {
 
   return (
     <div className='absolute w-[1440px] mx-auto'>
-      <div className='absolute z-20 border-none inset-y-60 left-60'>
+      <div className='absolute z-20 border-none inset-y-60 left-36'>
         <Calendar
           onChange={onChange}
           value={value}
