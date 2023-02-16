@@ -44,8 +44,9 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
         response.addCookie(refreshTokenCookie);
 
-        String targetUrl = UriComponentsBuilder.fromUriString("/kakaoLogin")
-                .queryParam("accessToken", jwtTokenDTO.getAccessToken())
+        String targetUrl = UriComponentsBuilder.fromHttpUrl("https://i8d110.p.ssafy.io/nanal/kakaoLogin")
+//        String targetUrl = UriComponentsBuilder.fromUriString("/kakaoLogin")
+            .queryParam("accessToken", jwtTokenDTO.getAccessToken())
                 .queryParam("kakaoAccessToken", oAuth2AccessToken.getTokenValue())
                 .build().toUriString();
 
