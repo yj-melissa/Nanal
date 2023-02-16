@@ -103,7 +103,7 @@ function Nav({ changeIsBookCase }) {
         </div>
         <div className='flex items-center m-auto'>
           <Link to='/Search'>
-            <img src={search} className='w-[18px] h-[18px] my-3 mx-1' />
+            <img src={search} className='w-[18px] h-[18px] my-3 mx-2.5' />
           </Link>
           <Link to='/Alarm'>
             <div className='relative'>
