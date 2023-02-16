@@ -31,18 +31,22 @@ public class CustomOAuthUserService extends DefaultOAuth2UserService {
 
         Map<String, Object> kakaoAccount = (Map<String, Object>) oAuth2User.getAttributes().get("kakao_account");
         Map<String, Object> kakaoProfile = (Map<String, Object>) kakaoAccount.get("profile");
-        long id = (long) oAuth2User.getAttributes().get("id");
-        String userId = Long.toString(id);
-        final String email = (String) kakaoAccount.get("email");
+        String userId = oAuth2User.getAttributes().get("id").toString();
+        String email = oAuth2User.getAttributes().get("id").toString();     // 이메일 사용 동의 없다면 카카오id로 대체
+        if (null != kakaoAccount.get("email")) {
+            email = (String) kakaoAccount.get("email");
+        }
         int socialCode = 1;         // 카카오 socialCode = 1
 
         UserEntity user;
         UserProfileEntity profile;
 
         // 기존 유저라면 프로필 업데이트
-        if(userRepository.existsByEmail(email)) {
-            user = userRepository.findByEmail(email);
-            profile = userProfileRepository.findByProfileIdx(userRepository.findByEmail(email).getUserIdx());
+        if(userRepository.existsByUserId(userId)) {
+            user = userRepository.findByUserId(userId);
+            user.setEmail(email);
+            user = userRepository.save(user);
+            profile = user.getUserProfile();
             profile.setNickname((String) kakaoProfile.get("nickname"));
             profile.setImg((String) kakaoProfile.get("thumbnail_image_url"));
             userProfileRepository.save(profile);
