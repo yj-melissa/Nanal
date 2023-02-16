@@ -82,7 +82,6 @@ public class DiaryService {
         diaryEntity.setDiaryDate(diary.getDiaryDate());
         diaryEntity.setContent(diary.getContent());
         diaryEntity.setPainting(diary.getPainting());
-        diaryEntity.setMusic(diary.getMusic());
         diaryEntity.setEmo(diary.getEmo());
         diaryEntity.setImgUrl(diary.getImgUrl());
         diaryEntity.setPainting(diary.getPainting());
