@@ -100,7 +100,7 @@ def key_sentence():
 
     # 품사 나누기
     tag_arr = pos_tag(result)
-    tag = ['NN', 'JJ', 'JJR', 'JJS', 'NN', 'NNS', 'VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ']
+    tag = ['NN']
     result = []
     for word in tag_arr:
         if word[1] in tag:
@@ -120,8 +120,6 @@ def key_sentence():
 
     result_arr = []
 
-    # for i in range(0, len(count) // 2):
-    #     result_arr.append(count[i])
     for i in range(0, len(count)):
         if (count[i][1] > 1):
             result_arr.append(count[i])
@@ -130,12 +128,7 @@ def key_sentence():
     sentence = sent_tokenize(value)  # 문장 단위로 자르기
 
     temp = []
-    # for s in sentence:
-    #     cnt = 0
-    #     for c in result_arr:
-    #         if c[0] in s:
-    #             cnt += 1
-    #     temp.append(cnt)
+
     for s in sentence:
         cnt = 0
         arr = word_tokenize(s)
@@ -147,7 +140,6 @@ def key_sentence():
         temp.append(cnt)
 
     # 빈도수가 높은 단어가 포함된 문장 뽑기
-    # max_value = max(temp)
     sorted_arr = sorted(temp, reverse=True)
 
     str_temp = 0
@@ -158,7 +150,7 @@ def key_sentence():
             if (temp[j] == sorted_arr[i]):
                 if (str_temp + len(sentence[j]) < 260):
                     idx_temp.append(j)
-                    temp[j] = 0
+                    temp[j] = -1
                     str_temp += len(sentence[j])
                 else:
                     break
@@ -167,102 +159,6 @@ def key_sentence():
     str = ""
     for i in range(len(idx_temp)):
         str += sentence[idx_temp[i]]
-
-    # for i in range(len(temp)):
-    #     if (temp[i] == max_value):
-    #         str += sentence[i]
-
-    return str
-
-
-@app.route("/key", methods=['POST'])
-def key_sentence2():
-    get_value = request.get_json()
-    value = get_value['content']
-
-    # 전처리
-    en_arr = word_tokenize(value)
-
-    # 원형 복원
-    lm = WordNetLemmatizer()
-    result = [lm.lemmatize(word, pos='v') for word in en_arr]
-    result = [lm.lemmatize(word, pos='n') for word in result]
-
-    print(len(result))
-
-    # 품사 나누기
-    tag_arr = pos_tag(result)
-    tag = ['NN', 'JJ', 'JJR', 'JJS', 'NN', 'NNS', 'VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ']
-    result = []
-    for word in tag_arr:
-        if word[1] in tag:
-            result.append(word[0])
-
-    # 불용어 처리
-    stop_words = stopwords.words('english')
-
-    result_arr = []
-    for word in result:
-        if word not in stop_words:
-            result_arr.append(word)
-
-    # 빈도수
-    count = Counter(result_arr)
-    count = count.most_common()
-
-    result_arr = []
-
-    # for i in range(0, len(count) // 2):
-    #     result_arr.append(count[i])
-    for i in range(0, len(count)):
-        if (count[i][1] > 1):
-            result_arr.append(count[i])
-
-    # 핵심 문장 추출
-    sentence = sent_tokenize(value)  # 문장 단위로 자르기
-
-    temp = []
-    # for s in sentence:
-    #     cnt = 0
-    #     for c in result_arr:
-    #         if c[0] in s:
-    #             cnt += 1
-    #     temp.append(cnt)
-    for s in sentence:
-        cnt = 0
-        arr = word_tokenize(s)
-        arr = [lm.lemmatize(word, pos='v') for word in arr]
-        arr = [lm.lemmatize(word, pos='n') for word in arr]
-        for c in result_arr:
-            if c[0] in arr:
-                cnt += 1
-        temp.append(cnt)
-
-    # 빈도수가 높은 단어가 포함된 문장 뽑기
-    # max_value = max(temp)
-    sorted_arr = sorted(temp, reverse=True)
-
-    str_temp = 0
-    idx_temp = []
-
-    for i in range(len(temp)):
-        for j in range(len(temp)):
-            if (temp[j] == sorted_arr[i]):
-                if (str_temp + len(sentence[j]) < 260):
-                    idx_temp.append(j)
-                    temp[j] = 0
-                    str_temp += len(sentence[j])
-                else:
-                    break
-    idx_temp.sort()
-
-    str = ""
-    for i in range(len(idx_temp)):
-        str += sentence[idx_temp[i]]
-
-    # for i in range(len(temp)):
-    #     if (temp[i] == max_value):
-    #         str += sentence[i]
 
     return str
 
