@@ -1,10 +1,6 @@
-import React, { useEffect } from 'react';
-import axios_api from '../../config/Axios';
 import { useNavigate } from 'react-router-dom';
 // import { Link, useNavigate } from 'react-router-dom';
 import { setCookie } from '../../config/Cookie';
-import { ConsoleView } from 'react-device-detect';
-import { onLogin } from '../../config/Login';
 
 function KaKaoLogin() {
   const navigate = useNavigate();
