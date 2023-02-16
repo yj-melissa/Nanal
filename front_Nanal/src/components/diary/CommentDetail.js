@@ -106,6 +106,7 @@ function CommentDetail({ item, userIdx }) {
               />
               <span className='text-sm font-bold'>{item.nickname}</span>
             </div>
+
             {userIdx === item.userIdx ? (
               <div className='float-right mx-1 text-sm'>
                 <button
@@ -115,7 +116,7 @@ function CommentDetail({ item, userIdx }) {
                   수정
                 </button>
                 <button
-                  className='ml-2 bg-rose-100 text-rose-700 px-2.5 py-1 rounded-3xl  font-bold'
+                  className='ml-2 bg-rose-100 text-rose-700 px-2.5 py-1 rounded-3xl font-bold'
                   onClick={() => {
                     Swal.fire({
                       icon: 'warning',
