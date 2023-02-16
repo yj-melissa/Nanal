@@ -246,18 +246,20 @@ public class UserController {
                     "{img(String), nickname(String), days(int), introduction(String)} \n\n")
     @PutMapping("/profile")
     public ResponseEntity<?> updateProfile(@AuthenticationPrincipal UserEntity userInfo, @RequestBody @Valid UserRequestDTO userRequest) {
-        log.info("updateProfile 실행 : {}", userInfo.getUserProfile().getNickname());
-
         HashMap<String, Object> responseDTO = new HashMap<>();
 
         if (userRequest == null) {
             responseDTO.put("responseMessage", ResponseMessage.USER_UPDATE_FAIL);
-        } else{
-            HashMap<String, Object> profile = userService.updateProfile(userInfo.getUserIdx(), userRequest);
-
-            responseDTO.put("responseMessage", ResponseMessage.USER_UPDATE_SUCCESS);
-            responseDTO.put("profile", profile);
+        } else if (!userInfo.getUserProfile().getNickname().equals(userRequest.getNickname())) {
+            if (userService.checkNickname(userRequest.getNickname())) {
+                responseDTO.put("responseMessage", ResponseMessage.DUPLICATED_KEY);
+                return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+            }
         }
+        HashMap<String, Object> profile = userService.updateProfile(userInfo.getUserIdx(), userRequest);
+
+        responseDTO.put("responseMessage", ResponseMessage.USER_UPDATE_SUCCESS);
+        responseDTO.put("profile", profile);
 
         return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
     }
