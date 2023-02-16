@@ -251,14 +251,8 @@ public class UserController {
         HashMap<String, Object> responseDTO = new HashMap<>();
 
         if (userRequest == null) {
-            log.info("updateProfile : userRequest == null");
             responseDTO.put("responseMessage", ResponseMessage.USER_UPDATE_FAIL);
-        } else if (userInfo.getUserProfile().getNickname().equals(userRequest.getNickname())) {
-            // 닉네임 변경한 경우 중복 체크
-            if (userService.checkNickname(userRequest.getNickname())) {
-                responseDTO.put("responseMessage", ResponseMessage.DUPLICATED_KEY);
-            }
-        }else{
+        } else{
             HashMap<String, Object> profile = userService.updateProfile(userInfo.getUserIdx(), userRequest);
 
             responseDTO.put("responseMessage", ResponseMessage.USER_UPDATE_SUCCESS);
