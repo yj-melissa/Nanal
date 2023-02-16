@@ -127,7 +127,9 @@ function DiaryDetail() {
       <div className='flex justify-between'>
         <div>
           {/* 닉네임 */}
-          <p className='text-sm font-bold text-left'>{diaryDetail.nickname}</p>
+          <p className='text-sm font-bold text-left rounded-md bg-gradient-to-t from-green-200'>
+            {diaryDetail.nickname}
+          </p>
         </div>
         <div className='flex justify-end w-30'>
           {/* 감정 넣는 곳 */}
