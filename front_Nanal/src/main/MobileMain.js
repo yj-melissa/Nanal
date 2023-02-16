@@ -4,7 +4,7 @@ import Calendar from '../components/Calendaar.js';
 import BookCase from '../components/BookCase.js';
 import SignIn from '../components/account/SignIn.js';
 import SignUp from '../components/account/SignUp.js';
-import KakaoLogin from '../components/account/KakaoLogin';
+import KakaoLogin from '../components/account/KaKaoLogin.js';
 import DiaryCreate from '../components/diary/DiaryCreate';
 import DiaryList from '../components/diary/DiaryList';
 import DiaryUpdate from '../components/diary/DiaryUpdate.js';
