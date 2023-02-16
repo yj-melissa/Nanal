@@ -127,7 +127,7 @@ const TuningUserInfo = () => {
 
     Swal.fire({
       title: '정말로 저희와 헤어지실 건가요?',
-      text: '승인을 하면 탈퇴가 됩니다.🥲',
+      text: '승인을 하면 탈퇴가 됩니다.',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#d33',
@@ -154,6 +154,7 @@ const TuningUserInfo = () => {
                   navigate(`/`, {
                     replace: true,
                   });
+                  window.location.reload();
                 });
               } else {
                 console.log('회원 탈퇴 실패=====');

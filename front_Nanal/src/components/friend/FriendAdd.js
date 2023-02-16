@@ -67,14 +67,14 @@ function FriendAdd() {
       </p>
       <form
         onSubmit={searchFriend}
-        className='flex justify-around m-1 h-18 w-70'
+        className='grid grid-cols-2 m-auto h-18 w-70'
       >
         <input
           type='text'
           id='searchId'
-          className='p-1 rounded-lg w-46 h-18'
-        ></input>
-        <button type='submit' className='w-16 h-18'>
+          className='p-1 rounded-lg w-46 h-18 m-auto'
+        />
+        <button type='submit' className='w-16 h-18 m-auto'>
           검색하기
         </button>
       </form>
