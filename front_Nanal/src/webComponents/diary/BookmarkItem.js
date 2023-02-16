@@ -13,11 +13,11 @@ function BookmarkItem({
       to={'/Diary/Detail'}
       state={{ diaryIdx: diaryIdx, diaryDate: diaryDate }}
     >
-      <div className='relative my-5 group'>
+      <div className='relative group'>
         <img
           src={picture}
           alt='DALL:E2'
-          className='absolute inset-0 object-cover p-1 rounded-lg group-hover:opacity-50'
+          className='absolute inset-y-8 object-cover p-1 rounded-lg group-hover:opacity-50'
         />
         <div className='transition-all transform translate-y-8 opacity-0 group-hover:opacity-100 group-hover:translate-y-0'>
           <div className='p-2'>
