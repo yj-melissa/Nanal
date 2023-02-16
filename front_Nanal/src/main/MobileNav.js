@@ -106,7 +106,7 @@ function Nav({ changeIsBookCase }) {
             <img src={search} className='w-[18px] h-[18px] my-3 mx-2.5' />
           </Link>
           <Link to='/Alarm'>
-            <div className='relative'>
+            <div className='relative mx-2.5'>
               <img src={bell} className='w-6 h-6 my-3 ml-2.5' />
               {checkAlarm === true ? (
                 <span className='absolute flex w-3 h-3 -right-2 -top-0'>

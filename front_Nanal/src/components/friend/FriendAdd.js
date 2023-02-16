@@ -72,7 +72,7 @@ function FriendAdd() {
         <input
           type='text'
           id='searchId'
-          className='p-auto rounded-lg w-full h-18 m-auto'
+          className='pl-2 rounded-lg w-full h-18 m-auto'
         />
         <button type='submit' className='w-16 h-18 m-auto'>
           검색하기
