@@ -1,7 +1,4 @@
-import {
-  BrowserView,
-  MobileView,
-} from 'react-device-detect';
+import { BrowserView, MobileView } from 'react-device-detect';
 import './App.css';
 import React, { useState } from 'react';
 import { getCookie } from './config/Cookie';
@@ -9,6 +6,8 @@ import MobileNav from './main/MobileNav';
 import MobileMain from './main/MobileMain.js';
 import WebNav from './main/WebNav';
 import WebMain from './main/WebMain.js';
+import { useEffect } from 'react';
+// import { useEffect } from 'react';
 
 function App() {
   const accessToken = getCookie('accessToken');
@@ -18,6 +17,14 @@ function App() {
     setIsBookCase(e);
   };
 
+  const [homeState, setHomeState] = useState([
+    true,
+    false,
+    false,
+    false,
+    false,
+  ]);
+
   return (
     <div id='App'>
       {/* 브라우저인 경우 */}
@@ -25,11 +32,11 @@ function App() {
         <div className='justify-center App'>
           {accessToken !== undefined ? (
             <div>
-              <WebNav />
+              <WebNav setHomeState={setHomeState} />
               <hr className='mb-3 border-slate-500/75' />
             </div>
           ) : null}
-          <WebMain />
+          <WebMain homeState={homeState} setHomeState={setHomeState} />
         </div>
       </BrowserView>
       {/* 모바일인 경우 */}

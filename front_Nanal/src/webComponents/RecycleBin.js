@@ -88,7 +88,7 @@ const RecycleBin = () => {
           </div>
         ) : null}
 
-        <p className='absolute z-30 left-[240px] inset-y-60 text-2xl font-bold'>
+        <p className='absolute z-30 left-[200px] inset-y-60 text-2xl font-bold'>
           휴지통에 일기가 {trashDiary.length}개 있습니다.
         </p>
       </div>

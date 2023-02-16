@@ -17,7 +17,7 @@ const FriendList = () => {
         src={diaryImgYellow}
         className='absolute w-[1280px] z-10 left-12 top-8'
       />
-      <div className='absolute z-20 left-60 inset-y-[216px]'>
+      <div className='absolute z-20 left-36 inset-y-[216px]'>
         <FList setFriendAdd={setFriendCompo} setUserIdx={setUserIdx} />
       </div>
       {friendCompo[0] === true ? (
