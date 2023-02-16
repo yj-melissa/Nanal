@@ -42,10 +42,6 @@ public class DiaryEntity {
     @JoinColumn(name="pictureIdx")
     private PaintingEntity painting;
 
-    @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    @JoinColumn(name="music_idx")
-    private MusicEntity music;
-
     @Column(name="is_deleted")
     private boolean isDeleted;
 
@@ -75,7 +71,7 @@ public class DiaryEntity {
 
     @Builder
     public DiaryEntity(int diaryIdx, UserEntity user, LocalDateTime creationDate, Date diaryDate,
-                       String content, PaintingEntity painting, MusicEntity music, boolean isDeleted,
+                       String content, PaintingEntity painting, boolean isDeleted,
                        Date deleteDate, Date expireDate, String emo, String imgUrl) {
         this.diaryIdx=diaryIdx;
         this.user=user;
@@ -83,7 +79,6 @@ public class DiaryEntity {
         this.diaryDate=diaryDate;
         this.content=content;
         this.painting=painting;
-        this.music=music;
         this.isDeleted=isDeleted;
         this.deleteDate=deleteDate;
         this.expireDate=expireDate;
