@@ -35,7 +35,7 @@ function GroupDetail({ groupIdx, setGroupCompo }) {
   }, [groupIdx]);
 
   return (
-    <div className='absolute text-center z-40 -top-24 w-[500px]'>
+    <div className='absolute text-center z-40 -top-24 w-[550px]'>
       <div
         onClick={() => {
           setGroupCompo([false, false, false, true, false]);
