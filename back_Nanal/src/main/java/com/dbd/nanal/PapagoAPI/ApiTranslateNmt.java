@@ -43,10 +43,6 @@ public class ApiTranslateNmt {
         requestHeaders.put("X-Naver-Client-Secret", clientSecret);
         String responseBody = post(apiURL, requestHeaders, text);
 
-//        System.out.println(responseBody);
-
-        ObjectMapper objectMapper = new ObjectMapper();
-
         return responseBody;
     }
     public void setContent(String content){
