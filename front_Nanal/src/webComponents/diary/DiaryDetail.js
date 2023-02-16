@@ -31,10 +31,12 @@ function DiaryDetail() {
 
   // 북마크 저장 함수
   const bookmarkSave = () => {
+    console.log(`diary/bookmark/${diaryIdx}`);
     axios_api
       .get(`diary/bookmark/${diaryIdx}`)
       .then(({ data }) => {
         if (data.statusCode === 200) {
+          console.log(data);
           if (data.data.responseMessage === '일기 북마크 저장 성공') {
             setIsBook(!isBook);
           }
@@ -164,7 +166,7 @@ function DiaryDetail() {
         />
       </div>
 
-      {/* 수정/삭제 버튼 */}
+      {/* 작성자와 일치할 경우, 수정/삭제 버튼 존재 */}
       {userIdx === diaryDetail.userIdx ? (
         <div className='absolute z-20 my-10 inset-y-[420px] left-[250px]'>
           <div className='flex justify-start mt-4'>
@@ -174,6 +176,7 @@ function DiaryDetail() {
                 diaryDetail: diaryDetail,
                 originGroupList: originGroupList,
                 isToggle: isToggle,
+                groupIdx: groupIdx,
               }}
             >
               <button className='font-bold hover:bg-cyan-500 bg-cyan-400 text-white px-2.5 py-1 rounded-3xl m-auto block text-2xl'>
