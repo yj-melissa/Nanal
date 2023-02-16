@@ -70,7 +70,12 @@ function DiaryCreate() {
                         text: '작성하신 일기가 작성 완료됐습니다.',
                         width: '90%',
                       });
-                      navigate('/', { replace: true });
+                      navigate('/Diary/Detail', {
+                        state: {
+                          diaryIdx: diaryIdx,
+                        },
+                        replace: true,
+                      });
                     }
                   } else {
                     console.log('알림 저장 오류: ');

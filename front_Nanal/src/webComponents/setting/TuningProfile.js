@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import Swal from 'sweetalert2';
 import axios_api from '../../config/Axios';
 import { onLogin } from '../../config/Login';
-import Modal from '../modal/Modal'
+import Modal from '../modal/Modal';
 
 const TuningProfile = () => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -18,18 +18,42 @@ const TuningProfile = () => {
   let currentInfo = useRef('');
 
   // 사용자 닉네임
-  const [nicknameMessage, setNicknameMessage] = useState('');
-  const [isNickname, setIsNickname] = useState(true);
+  const [nickName, setNickName] = useState('');
+  const [nickNameMessage, setNickNameMessage] = useState('');
+  const [isNickname, setIsNickname] = useState(false);
 
-  const onChangeNickname = (e) => {
+  const nickNameMessageCss = isNickname === true ? '' : 'text-rose-600';
+
+  const onChangeNickName = (e) => {
+    console.log('hihihi');
     currentName.current = e.target.value;
+    setNickName(currentName.current);
+    console.log(currentName.current);
 
     if (currentName.current.length < 2 || currentName.current.length > 8) {
-      setNicknameMessage('닉네임은 2글자 이상 8글자 이하로 입력해주세요!');
+      setNickNameMessage('닉네임은 2글자 이상 8글자 이하로 입력해주세요!');
       setIsNickname(false);
     } else {
-      setNicknameMessage('');
-      setIsNickname(true);
+      axios_api
+        .get(`user/check/nickname/${currentName.current}`)
+        .then(({ data }) => {
+          if (data.statusCode === 200) {
+            if (data.data.responseMessage === '사용 가능') {
+              setNickNameMessage('사용가능한 닉네임 입니다.');
+              setIsNickname(true);
+            } else if (data.data.responseMessage === '사용 불가') {
+              setNickNameMessage('중복된 닉네임 입니다.');
+              setIsNickname(false);
+            }
+          } else {
+            console.log('닉네임 중복 확인 오류: ');
+            console.log(data.statusCode);
+            console.log(data.data.responseMessage);
+          }
+        })
+        .catch((error) => {
+          console.log('닉네임 중복 확인 오류: ' + error);
+        });
     }
   };
 
@@ -101,6 +125,7 @@ const TuningProfile = () => {
         })
         .then(({ data }) => {
           if (data.statusCode === 200) {
+            console.log(data);
             if (data.data.responseMessage === '회원 정보 수정 성공') {
               // 이미지를 변경하는 경우
               if (isImgChecked === true) {
@@ -129,13 +154,28 @@ const TuningProfile = () => {
                           .get('user/profile')
                           .then(({ data }) => {
                             if (data.statusCode === 200) {
-                              if (data.data.responseMessage === '회원 정보 조회 성공') {
+                              if (
+                                data.data.responseMessage ===
+                                '회원 정보 조회 성공'
+                              ) {
                                 // console.log(data.data.profile);
-                                window.localStorage.setItem('profileDays', data.data.profile.days)
-                                window.localStorage.setItem('profileImg', data.data.profile.img)
-                                window.localStorage.setItem('profileIntroduction', data.data.profile.introduction)
-                                window.localStorage.setItem('profileNickname', data.data.profile.nickname)
-                                window.location.reload()
+                                window.localStorage.setItem(
+                                  'profileDays',
+                                  data.data.profile.days
+                                );
+                                window.localStorage.setItem(
+                                  'profileImg',
+                                  data.data.profile.img
+                                );
+                                window.localStorage.setItem(
+                                  'profileIntroduction',
+                                  data.data.profile.introduction
+                                );
+                                window.localStorage.setItem(
+                                  'profileNickname',
+                                  data.data.profile.nickname
+                                );
+                                window.location.reload();
                               }
                             } else {
                               console.log('회원 정보 오류: ');
@@ -145,8 +185,8 @@ const TuningProfile = () => {
                           })
                           .catch(({ error }) => {
                             console.log('회원 정보 조회: ' + error);
-                          }); 
-                        closeModal()
+                          });
+                        closeModal();
                       }
                     } else {
                       console.log('그림 저장 오류 : ');
@@ -165,11 +205,23 @@ const TuningProfile = () => {
                     if (data.statusCode === 200) {
                       if (data.data.responseMessage === '회원 정보 조회 성공') {
                         // console.log(data.data.profile);
-                        window.localStorage.setItem('profileDays', data.data.profile.days)
-                        window.localStorage.setItem('profileImg', data.data.profile.img)
-                        window.localStorage.setItem('profileIntroduction', data.data.profile.introduction)
-                        window.localStorage.setItem('profileNickname', data.data.profile.nickname)
-                        window.location.reload()
+                        window.localStorage.setItem(
+                          'profileDays',
+                          data.data.profile.days
+                        );
+                        window.localStorage.setItem(
+                          'profileImg',
+                          data.data.profile.img
+                        );
+                        window.localStorage.setItem(
+                          'profileIntroduction',
+                          data.data.profile.introduction
+                        );
+                        window.localStorage.setItem(
+                          'profileNickname',
+                          data.data.profile.nickname
+                        );
+                        window.location.reload();
                       }
                     } else {
                       console.log('회원 정보 오류: ');
@@ -179,8 +231,8 @@ const TuningProfile = () => {
                   })
                   .catch(({ error }) => {
                     console.log('회원 정보 조회: ' + error);
-                  }); 
-                closeModal()
+                  });
+                closeModal();
               }
             }
           } else {
@@ -222,98 +274,107 @@ const TuningProfile = () => {
         console.log('회원 정보 조회 오류: ' + error);
       });
   }, []);
-    return (
-      <React.Fragment>
-        <div
-          className='box-border flex justify-between h-12 font-bold rounded-lg indent-4 bg-lime-400/75 cursor-pointer'
-          onClick={openModal}
-        >
-          <div className='self-center'>프로필 수정</div>
-        </div>
-        <Modal open={modalOpen} close={closeModal} header={<div
-              className='box-border flex justify-between h-12 mb-1 rounded-lg indent-4 bg-emerald-200/75'
-            >
-              <div className='self-center font-bold'>프로필 수정</div>
-            </div>}>
-          <div>
-            
-            <div id='user-Update mx-1'>
-              <form className='px-4'>
-                <div id='user-nickname-div'>
-                  <label htmlFor='user-nickname' className='text-sm'>
-                    💙 닉네임 :
-                  </label>
-                  <input
-                    type='text'
-                    id='user-nickname'
-                    defaultValue={currentName.current || ''}
-                    onChange={onChangeNickname}
-                    className='font-medium m-0.5 mx-1 px-1 p-0.5 text-sm rounded-lg'
-                  ></input>
-                  <p className='text-xs'>{nicknameMessage}</p>
-                </div>
-                <div id='user-image' className='my-2'>
-                  <p className='text-sm'>💙 프로필 이미지 </p>
+  return (
+    <React.Fragment>
+      <div
+        className='box-border flex justify-between h-12 font-bold rounded-lg cursor-pointer indent-4 bg-lime-400/75'
+        onClick={openModal}
+      >
+        <div className='self-center'>프로필 수정</div>
+      </div>
+      <Modal
+        open={modalOpen}
+        close={closeModal}
+        header={
+          <div className='box-border flex justify-between h-12 mb-1 rounded-lg indent-4 bg-emerald-200/75'>
+            <div className='self-center font-bold'>프로필 수정</div>
+          </div>
+        }
+      >
+        <div>
+          <div id='user-Update mx-1'>
+            <form className='px-4'>
+              <div id='user-nickname-div'>
+                <label htmlFor='user-nickname' className='text-sm'>
+                  💙 닉네임 :
+                </label>
+                <input
+                  type='text'
+                  id='user-nickname'
+                  defaultValue={currentName.current || ''}
+                  value={nickName}
+                  onChange={(e) => {
+                    onChangeNickName(e);
+                    console.log('hihihi');
+                  }}
+                  className='font-medium m-0.5 mx-1 px-1 p-0.5 text-sm rounded-lg'
+                ></input>
+                <p className={`text-xs ${nickNameMessageCss}`}>
+                  {nickNameMessage}
+                </p>
+              </div>
+              <div id='user-image' className='my-2'>
+                <p className='text-sm'>💙 프로필 이미지 </p>
+                <div className='flex'>
+                  <img
+                    src={profile.img}
+                    className='inline-block w-20 h-20 p-1 mr-3 rounded-md'
+                  ></img>
                   <div className='flex'>
-                    <img
-                      src={profile.img}
-                      className='inline-block w-20 h-20 p-1 mr-3 rounded-md'
-                    ></img>
-                    <div className='flex'>
-                      <p className='my-2'>
-                        <input
-                          type='file'
-                          accept='image/*'
-                          onChange={onUploadImage}
-                          className='inline-block w-full text-sm text-slate-500 file:text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:font-semibold file:bg-violet-100 file:text-violet-700 hover:file:bg-violet-200'
-                        />
-                        <button
-                          type='button'
-                          className='inline-block px-4 py-2 my-2 text-xs font-semibold border-0 rounded-full bg-violet-100 text-violet-500 hover:bg-violet-200'
-                          onClick={onUploadBaseImage}
-                        >
-                          기본 이미지로 선택하기
-                        </button>
-                      </p>
-                    </div>
+                    <p className='my-2'>
+                      <input
+                        type='file'
+                        accept='image/*'
+                        onChange={onUploadImage}
+                        className='inline-block w-full text-sm text-slate-500 file:text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:font-semibold file:bg-violet-100 file:text-violet-700 hover:file:bg-violet-200'
+                      />
+                      <button
+                        type='button'
+                        className='inline-block px-4 py-2 my-2 text-xs font-semibold border-0 rounded-full bg-violet-100 text-violet-500 hover:bg-violet-200'
+                        onClick={onUploadBaseImage}
+                      >
+                        기본 이미지로 선택하기
+                      </button>
+                    </p>
                   </div>
                 </div>
-                <div id='user-introduction-div'>
-                  <label htmlFor='user-name' className='text-sm'>
-                    💙 프로필 소개글 :
-                  </label>
-                  <textarea
-                    type='text'
-                    id='user-name'
-                    defaultValue={currentInfo.current || ''}
-                    onChange={onChangeInfo}
-                    className='font-medium m-0.5 w-full h-28 rounded-md text-sm border border-teal-600 indent-2'
-                  ></textarea>
-                  <p className='text-xs'>{infoMessage}</p>
-                </div>
-                <div className='flex justify-end'>
-                  <button
-                    className='hover:bg-sky-700 bg-cyan-600 text-white px-2.5 py-1 rounded-3xl my-auto mr-5 block text-sm'
-                    onClick={userUpdate}
-                  >
-                    수정하기
-                  </button>
-                  <button
-                    className='hover:bg-red-700 bg-red-500 text-white px-2.5 py-1 rounded-3xl my-auto block text-sm'
-                    onClick={closeModal}
-                  >
-                    닫기
-                  </button>
-                </div>
-              </form>
-            </div>
+              </div>
+              <div id='user-introduction-div'>
+                <label htmlFor='user-name' className='text-sm'>
+                  💙 프로필 소개글 :
+                </label>
+                <textarea
+                  type='text'
+                  id='user-name'
+                  defaultValue={currentInfo.current || ''}
+                  onChange={onChangeInfo}
+                  className='font-medium m-0.5 w-full h-28 rounded-md text-sm border border-teal-600 indent-2'
+                ></textarea>
+                <p className='text-xs'>{infoMessage}</p>
+              </div>
+              <div className='flex justify-end'>
+                <button
+                  className='hover:bg-sky-700 bg-cyan-600 text-white px-2.5 py-1 rounded-3xl my-auto mr-5 block text-sm'
+                  onClick={userUpdate}
+                >
+                  수정하기
+                </button>
+                <button
+                  className='hover:bg-red-700 bg-red-500 text-white px-2.5 py-1 rounded-3xl my-auto block text-sm'
+                  onClick={closeModal}
+                >
+                  닫기
+                </button>
+              </div>
+            </form>
           </div>
-        </Modal>
-      </React.Fragment>
-    );
-    // return (
-      
-    // );
-  }
+        </div>
+      </Modal>
+    </React.Fragment>
+  );
+  // return (
+
+  // );
+};
 
 export default TuningProfile;
