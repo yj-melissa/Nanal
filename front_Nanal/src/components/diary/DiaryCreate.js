@@ -53,39 +53,56 @@ function DiaryCreate() {
             if (data.data.responseMessage === '일기 생성 성공') {
               const diaryIdx = data.data.diary.diaryIdx;
               setLoaded(false);
-              axios_api
-                .post('/notification/diary', {
-                  request_diary_idx: diaryIdx,
-                  request_group_idx: checkedList,
-                })
-                .then(({ data }) => {
-                  if (data.statusCode === 200) {
-                    if (data.data.responseMessage === '알림 저장 성공') {
-                      // 저장 후 일기 데이터 초기화
-                      setContent('');
-                      setGroup('private');
+              if (checkedList.length !== 0) {
+                axios_api
+                  .post('/notification/diary', {
+                    request_diary_idx: diaryIdx,
+                    request_group_idx: checkedList,
+                  })
+                  .then(({ data }) => {
+                    if (data.statusCode === 200) {
+                      if (data.data.responseMessage === '알림 저장 성공') {
+                        // 저장 후 일기 데이터 초기화
+                        setContent('');
+                        setGroup('private');
 
-                      Swal.fire({
-                        icon: 'success',
-                        text: '작성하신 일기가 작성 완료됐습니다.',
-                        width: '90%',
-                      });
-                      navigate('/Diary/Detail', {
-                        state: {
-                          diaryIdx: diaryIdx,
-                        },
-                        replace: true,
-                      });
+                        Swal.fire({
+                          icon: 'success',
+                          text: '작성하신 일기가 작성 완료됐습니다.',
+                          width: '90%',
+                        });
+                        navigate('/Diary/Detail', {
+                          state: {
+                            diaryIdx: diaryIdx,
+                            groupIdx: state.groupIdx,
+                            isToggle: 2,
+                          },
+                          replace: true,
+                        });
+                      }
+                    } else {
+                      console.log('알림 저장 오류: ');
+                      console.log(data.statusCode);
+                      console.log(data.data.responseMessage);
                     }
-                  } else {
-                    console.log('알림 저장 오류: ');
-                    console.log(data.statusCode);
-                    console.log(data.data.responseMessage);
-                  }
-                })
-                .catch(({ error }) => {
-                  console.log('알림 저장 오류: ' + error);
+                  })
+                  .catch(({ error }) => {
+                    console.log('알림 저장 오류: ' + error);
+                  });
+              } else {
+                Swal.fire({
+                  icon: 'success',
+                  text: '작성하신 일기가 작성 완료됐습니다.',
+                  width: '90%',
                 });
+                navigate('/Diary/Detail', {
+                  state: {
+                    diaryIdx: diaryIdx,
+                    isToggle: 0,
+                  },
+                  replace: true,
+                });
+              }
             }
           } else {
             console.log('일기 생성 오류: ');

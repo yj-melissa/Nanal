@@ -14,6 +14,7 @@ function GroupCreate() {
   const [friendList, setFriendList] = useState([]);
   const [includeFriend, setIncludeFriend] = useState([]);
   const [includeFriendIdx, setIncludeFriendIdx] = useState([]);
+  const [imageFile, setImageFile] = useState(null);
 
   // 그룹명
   const [currentGMessage, setCurrentGMessage] = useState('');
@@ -96,7 +97,8 @@ function GroupCreate() {
       type: 'image/jpeg',
     });
     const file = new File([blob], 'image.jpg');
-    formData.append('multipartFile', file);
+    // formData.append('multipartFile', file);
+    setImageFile(file);
 
     // formData.append('multipartFile', file);
 
@@ -137,7 +139,6 @@ function GroupCreate() {
 
     actionImgCompress(e.target.files[0]);
 
-    // setIsImgChecked(true);
     // setImageFile(e.target.files[0]);
     // console.log(e.target.files[0]);
   };
@@ -202,8 +203,10 @@ function GroupCreate() {
                 })
               );
 
-              if (formData.get('multipartFile') === null) {
+              if (imageFile === null) {
                 formData.append('multipartFile', null);
+              } else {
+                formData.append('multipartFile', imageFile);
               }
 
               // 이미지 업로드
