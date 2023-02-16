@@ -119,9 +119,7 @@ public class UserService {
 
     @Transactional
     public void updateUserImg(int userIdx, int pictureIdx, String newImgUrl) {
-        System.out.println("useridx : "+userIdx+ " newImgUrl : "+newImgUrl);
         UserProfileEntity userProfileEntity = userProfileRepository.getReferenceById(userIdx);
-        System.out.println("userIdx : "+userIdx+" 변경 전 img idx : "+userProfileEntity.getImg()+" 변경 후 img idx : "+newImgUrl);
         userProfileEntity.setImg(newImgUrl);
 
         PaintingEntity painting = paintingRepository.getReferenceById(pictureIdx);

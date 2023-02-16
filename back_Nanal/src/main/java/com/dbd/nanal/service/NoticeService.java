@@ -58,6 +58,9 @@ public class NoticeService {
     //save comment notice
     public NotificationResponseDTO saveCommentNotice(NotificationRequestDTO notice){
         DiaryEntity diaryEntity=diaryRepository.getReferenceById(notice.getRequest_diary_idx());
+        if(notice.getRequest_user_idx() == diaryEntity.getUser().getUserIdx()) {
+            return new NotificationResponseDTO();
+        }
         String userName=userProfileRepository.getReferenceById(diaryEntity.getUser().getUserIdx()).getNickname();
         String nickname=userProfileRepository.getReferenceById(notice.getRequest_user_idx()).getNickname();
 
