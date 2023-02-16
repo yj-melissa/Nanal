@@ -9,6 +9,7 @@ import axios_api from '../../config/Axios';
 // 새 댓글 알림 = 해달 글로 이동
 
 function AlarmItem({
+  toggleAlarmMenu,
   content,
   noticeType,
   requestDiaryIdx,
@@ -131,6 +132,7 @@ function AlarmItem({
         if (data.statusCode === 200) {
           if (data.data.responseMessage === '알림 조회 성공') {
             // navigate(`diary/${requestDiaryIdx}`);
+            toggleAlarmMenu();
             navigate('/Diary/Detail', {
               state: {
                 diaryIdx: requestDiaryIdx,

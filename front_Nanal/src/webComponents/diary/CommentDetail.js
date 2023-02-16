@@ -65,13 +65,13 @@ function CommentDetail({ item, userIdx }) {
       {isEdit ? (
         <div>
           <div className='flex justify-between mx-1'>
-            <div className='flex justify-center items-center'>
+            <div className='flex items-center justify-center'>
               <img
                 src={item.img}
                 alt='UserProfielImage'
-                className='inline-block w-10 m-1 rounded-lg h-10'
+                className='inline-block w-10 h-10 m-1 rounded-lg'
               />
-              <span className='text-sm font-bold ml-2'>{item.nickname}</span>
+              <span className='ml-2 text-sm font-bold'>{item.nickname}</span>
             </div>
             <div className='m-1 text-sm'>
               <button
@@ -98,19 +98,16 @@ function CommentDetail({ item, userIdx }) {
       ) : (
         <div>
           <div className='flex justify-between mx-1'>
-            <div className='flex justify-center items-center'>
+            <div className='flex items-center justify-center'>
               <img
                 src={item.img}
-                alt='DALL:E2'
-                className='inline-block w-10 m-1 rounded-lg h-10'
+                alt='UserProfielImage'
+                className='inline-block w-10 h-10 m-1 rounded-lg'
               />
-              <span className='ml-2 font-bold text-center'>
-                {item.nickname}
-              </span>
+              <span className='ml-2 text-sm font-bold'>{item.nickname}</span>
             </div>
-
             {userIdx === item.userIdx ? (
-              <div className='float-right mx-1 text-sm w-full'>
+              <div className='mx-1 text-sm '>
                 <button
                   className='mt-2 ml-4 bg-violet-100 text-violet-700 rounded-3xl cursor-pointer px-2.5 py-1 whitespace-nowrap font-bold'
                   onClick={toggleIsEdit}
@@ -142,7 +139,7 @@ function CommentDetail({ item, userIdx }) {
               <p className='float-right mx-1 my-2 text-sm'>&nbsp;</p>
             )}
           </div>
-          <p className='ml-2 mt-2 px-1 text-sm font-bold'>{commentDetail}</p>
+          <p className='px-1 mt-2 ml-2 text-sm font-bold'>{commentDetail}</p>
         </div>
       )}
     </div>
