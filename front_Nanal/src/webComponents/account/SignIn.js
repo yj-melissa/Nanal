@@ -43,23 +43,34 @@ function SignIn() {
         if (data.statusCode === 200) {
           if (data.data.responseMessage === '로그인 성공') {
             onLoginSuccess(data.data.token);
-            onLogin()
+            onLogin();
             axios_api
               .get('user/profile')
               .then(({ data }) => {
                 if (data.statusCode === 200) {
                   if (data.data.responseMessage === '회원 정보 조회 성공') {
                     // console.log(data.data.profile);
-                    window.localStorage.setItem('profileDays', data.data.profile.days)
-                    window.localStorage.setItem('profileImg', data.data.profile.img)
-                    window.localStorage.setItem('profileIntroduction', data.data.profile.introduction)
-                    window.localStorage.setItem('profileNickname', data.data.profile.nickname)
+                    window.localStorage.setItem(
+                      'profileDays',
+                      data.data.profile.days
+                    );
+                    window.localStorage.setItem(
+                      'profileImg',
+                      data.data.profile.img
+                    );
+                    window.localStorage.setItem(
+                      'profileIntroduction',
+                      data.data.profile.introduction
+                    );
+                    window.localStorage.setItem(
+                      'profileNickname',
+                      data.data.profile.nickname
+                    );
                     navigate(`/home`, {
                       replace: true,
                     });
-                    window.location.reload()
+                    window.location.reload();
                   }
-
                 } else {
                   console.log('회원 정보 오류: ');
                   console.log(data.statusCode);
@@ -68,8 +79,7 @@ function SignIn() {
               })
               .catch(({ error }) => {
                 console.log('회원 정보 조회: ' + error);
-              }); 
-            
+              });
           }
         } else if (data.statusCode === 500) {
           if (data.data.responseMessage === '로그인 실패') {
@@ -154,12 +164,12 @@ function SignIn() {
                 />
               </div>
               <div className='mr-2 text-right'>
-                <Link>
+                {/* <Link>
                   <span className='text-sm'>ID 찾기 | </span>
                 </Link>
                 <Link>
                   <span className='text-sm'>PW 찾기 | </span>
-                </Link>
+                </Link> */}
                 <Link to='/SignUp'>
                   <span className='text-sm'>회원가입</span>
                 </Link>
