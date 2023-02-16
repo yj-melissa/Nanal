@@ -36,6 +36,22 @@ function GroupDetail() {
       });
   }, []);
 
+  // 날짜를 'YYYY-MM-DD' 형태로 바꾸는 함수들
+  const leftPad = (value) => {
+    if (value >= 10) {
+      return value;
+    }
+    return `0${value}`;
+  };
+
+  const toStringByFormatting = (value, delimeter = '-') => {
+    const year = value.getFullYear();
+    const month = leftPad(value.getMonth() + 1);
+    const date = leftPad(value.getDate());
+
+    return [year, month, date].join(delimeter);
+  };
+
   return (
     <div className='text-center'>
       <Link
@@ -66,7 +82,12 @@ function GroupDetail() {
       <img
         src={ballpenIcon}
         onClick={() =>
-          navigate('/Diary/Create', { state: { groupIdx: state.groupIdx } })
+          navigate('/Diary/Create', {
+            state: {
+              groupIdx: state.groupIdx,
+              curDate: toStringByFormatting(new Date()),
+            },
+          })
         }
         className='fixed z-50 flex w-10 p-1 cursor-pointer bottom-10 right-10'
       ></img>
