@@ -81,19 +81,14 @@ public class NotificationController {
     public ResponseEntity<?> saveCommentNotice(@ApiParam(value = "알림 정보")@RequestBody NotificationRequestDTO notice, @AuthenticationPrincipal UserEntity userInfo) {
         HashMap<String, Object> responseDTO = new HashMap<>();
 
-        if(userInfo.getUserIdx() != notice.getRequest_user_idx()){
-            notice.setRequest_user_idx(userInfo.getUserIdx());
-            notice.setNotice_type(3);
-            NotificationResponseDTO notificationResponseDTO=noticeService.saveCommentNotice(notice);
-            if(notificationResponseDTO != null){
-                responseDTO.put("responseMessage", ResponseMessage.NOTICE_SAVE_SUCCESS);
-                return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-            }else{
-                responseDTO.put("responseMessage", ResponseMessage.NOTICE_SAVE_FAIL);
-                return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-            }
-        }else{
+        notice.setRequest_user_idx(userInfo.getUserIdx());
+        notice.setNotice_type(3);
+        NotificationResponseDTO notificationResponseDTO=noticeService.saveCommentNotice(notice);
+        if(notificationResponseDTO != null){
             responseDTO.put("responseMessage", ResponseMessage.NOTICE_SAVE_SUCCESS);
+            return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
+        }else{
+            responseDTO.put("responseMessage", ResponseMessage.NOTICE_SAVE_FAIL);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }
     }
