@@ -46,7 +46,7 @@ public class DiaryController {
     @Value("${Dalle-API-Key}")
     private String key;
 
-    @ApiOperation(value = "일기 생성",hidden = true, notes =
+    @ApiOperation(value = "일기 생성", hidden = true, notes =
             "일기를 생성합니다.\n" +
                     "[Front] \n" +
                     "{content(String), groupIdx(List<Integer>)} \n\n" +
@@ -64,7 +64,7 @@ public class DiaryController {
 
         // save diary
         DiaryResponseDTO diaryResponseDTO = diaryService.save(diary);
-        if(diaryResponseDTO != null){
+        if (diaryResponseDTO != null) {
             int diaryIdx = diaryResponseDTO.getDiaryIdx();
 
             // save diary-group
@@ -79,7 +79,7 @@ public class DiaryController {
             responseDTO.put("responseMessage", ResponseMessage.DIARY_SAVE_SUCCESS);
             responseDTO.put("diary", diaryResponseDTO);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-        }else{
+        } else {
             responseDTO.put("responseMessage", ResponseMessage.DIARY_SAVE_FAIL);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }
@@ -167,7 +167,7 @@ public class DiaryController {
             // save keyword
             diaryService.saveKeyword(diaryResponseDTO.getDiaryIdx(), keywordList);
         }
-        if(diaryResponseDTO != null){
+        if (diaryResponseDTO != null) {
             int diaryIdx = diary.getDiaryIdx();
             //delete diary-group
             diaryService.deleteDiaryGroup(diaryIdx);
@@ -181,7 +181,7 @@ public class DiaryController {
             responseDTO.put("responseMessage", ResponseMessage.DIARY_UPDATE_SUCCESS);
             responseDTO.put("diary", diaryResponseDTO);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-        }else{
+        } else {
             responseDTO.put("responseMessage", ResponseMessage.DIARY_UPDATE_FAIL);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }
@@ -213,11 +213,11 @@ public class DiaryController {
         HashMap<String, Object> responseDTO = new HashMap<>();
 
         List<DiaryResponseDTO> diaryResponseDTOList = diaryService.diaryList(groupIdx);
-        if(diaryResponseDTOList != null){
+        if (diaryResponseDTOList != null) {
             responseDTO.put("responseMessage", ResponseMessage.DIARY_LIST_FIND_SUCCESS);
             responseDTO.put("diary", diaryResponseDTOList);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-        }else{
+        } else {
             responseDTO.put("responseMessage", ResponseMessage.DIARY_LIST_FIND_FAIL);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }
@@ -244,11 +244,11 @@ public class DiaryController {
             java.sql.Date findDate = java.sql.Date.valueOf(date);
             diaryResponseDTOList = diaryService.getDateDiaryList(findDate, userInfo.getUserIdx());
         }
-        if(diaryResponseDTOList != null){
+        if (diaryResponseDTOList != null) {
             responseDTO.put("responseMessage", ResponseMessage.DIARY_LIST_FIND_SUCCESS);
             responseDTO.put("diary", diaryResponseDTOList);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-        }else{
+        } else {
             responseDTO.put("responseMessage", ResponseMessage.DIARY_LIST_FIND_FAIL);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }
@@ -265,11 +265,11 @@ public class DiaryController {
         HashMap<String, Object> responseDTO = new HashMap<>();
 
         List<DiaryResponseDTO> diaryResponseDTOList = diaryService.userDiaryList(userInfo.getUserIdx());
-        if(diaryResponseDTOList != null ){
+        if (diaryResponseDTOList != null) {
             responseDTO.put("responseMessage", ResponseMessage.DIARY_LIST_FIND_SUCCESS);
             responseDTO.put("diary", diaryResponseDTOList);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-        }else{
+        } else {
             responseDTO.put("responseMessage", ResponseMessage.DIARY_LIST_FIND_FAIL);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }
@@ -303,11 +303,11 @@ public class DiaryController {
 
         diaryCommentRequestDTO.setUserIdx(userInfo.getUserIdx());
         DiaryCommentResponseDTO diaryCommentResponseDTO = diaryService.saveComment(diaryCommentRequestDTO);
-        if(diaryCommentResponseDTO != null){
+        if (diaryCommentResponseDTO != null) {
             responseDTO.put("responseMessage", ResponseMessage.DIARY_COMMENT_SAVE_SUCCESS);
             responseDTO.put("diaryComment", diaryCommentResponseDTO);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-        }else{
+        } else {
             responseDTO.put("responseMessage", ResponseMessage.DIARY_COMMENT_SAVE_FAIL);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }
@@ -324,11 +324,11 @@ public class DiaryController {
         HashMap<String, Object> responseDTO = new HashMap<>();
 
         DiaryCommentResponseDTO diaryCommentResponseDTO = diaryService.updateComment(diaryCommentRequestDTO);
-        if(diaryCommentResponseDTO != null ){
+        if (diaryCommentResponseDTO != null) {
             responseDTO.put("responseMessage", ResponseMessage.DIARY_COMMENT_UPDATE_SUCCESS);
             responseDTO.put("diaryComment", diaryCommentResponseDTO);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-        }else{
+        } else {
             responseDTO.put("responseMessage", ResponseMessage.DIARY_COMMENT_UPDATE_FAIL);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }
@@ -345,11 +345,11 @@ public class DiaryController {
         HashMap<String, Object> responseDTO = new HashMap<>();
 
         List<DiaryCommentResponseDTO> diaryCommentList = diaryService.getDiaryCommentList(groupIdx, diaryIdx);
-        if(diaryCommentList != null){
+        if (diaryCommentList != null) {
             responseDTO.put("responseMessage", ResponseMessage.DIARY_COMMENT_LIST_FIND_SUCCESS);
             responseDTO.put("diaryComment", diaryCommentList);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-        }else{
+        } else {
             responseDTO.put("responseMessage", ResponseMessage.DIARY_COMMENT_LIST_FIND_FAIL);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }
@@ -366,11 +366,11 @@ public class DiaryController {
         HashMap<String, Object> responseDTO = new HashMap<>();
 
         List<DiaryCommentResponseDTO> diaryCommentList = diaryService.getDiaryCommentListAll(diaryIdx);
-        if(diaryCommentList != null ){
+        if (diaryCommentList != null) {
             responseDTO.put("responseMessage", ResponseMessage.DIARY_COMMENT_LIST_FIND_SUCCESS);
             responseDTO.put("diaryComment", diaryCommentList);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-        }else{
+        } else {
             responseDTO.put("responseMessage", ResponseMessage.DIARY_COMMENT_LIST_FIND_FAIL);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }
@@ -403,11 +403,11 @@ public class DiaryController {
         HashMap<String, Object> responseDTO = new HashMap<>();
 
         List<DiaryResponseDTO> diaryResponseDTOList = diaryService.getTrashDiary(userInfo.getUserIdx());
-        if(diaryResponseDTOList != null ){
+        if (diaryResponseDTOList != null) {
             responseDTO.put("responseMessage", ResponseMessage.DIARY_LIST_FIND_SUCCESS);
             responseDTO.put("diary", diaryResponseDTOList);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-        }else{
+        } else {
             responseDTO.put("responseMessage", ResponseMessage.DIARY_LIST_FIND_FAIL);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }
@@ -439,11 +439,11 @@ public class DiaryController {
         HashMap<String, Object> responseDTO = new HashMap<>();
 
         DiaryResponseDTO diaryResponseDTO = diaryService.reDiary(diaryIdx);
-        if(diaryResponseDTO != null ){
+        if (diaryResponseDTO != null) {
             responseDTO.put("responseMessage", ResponseMessage.DIARY_RETURN_SUCCESS);
             responseDTO.put("diaryComment", diaryResponseDTO);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-        }else{
+        } else {
             responseDTO.put("responseMessage", ResponseMessage.DIARY_RETURN_FAIL);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }
@@ -460,11 +460,11 @@ public class DiaryController {
     public ResponseEntity<?> saveBookmark(@ApiParam(value = "북마크 정보") @PathVariable("diaryIdx") int diaryIdx, @AuthenticationPrincipal UserEntity userInfo) {
         HashMap<String, Object> responseDTO = new HashMap<>();
 
-        BookmarkResponseDTO bookmarkResponseDTO=diaryService.saveBookmark(diaryIdx, userInfo.getUserIdx());
-        if(bookmarkResponseDTO!= null){
+        BookmarkResponseDTO bookmarkResponseDTO = diaryService.saveBookmark(diaryIdx, userInfo.getUserIdx());
+        if (bookmarkResponseDTO != null) {
             responseDTO.put("responseMessage", ResponseMessage.DIARY_BOOKMARK_SAVE_SUCCESS);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-        }else{
+        } else {
             responseDTO.put("responseMessage", ResponseMessage.DIARY_BOOKMARK_SAVE_FAIL);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }
@@ -481,11 +481,11 @@ public class DiaryController {
         HashMap<String, Object> responseDTO = new HashMap<>();
 
         List<BookmarkResponseDTO> bookmarkList = diaryService.getBookmarkList(userInfo.getUserIdx());
-        if(bookmarkList != null ){
+        if (bookmarkList != null) {
             responseDTO.put("responseMessage", ResponseMessage.DIARY_BOOKMARK_LIST_SUCCESS);
             responseDTO.put("BookmarkList", bookmarkList);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
-        }else{
+        } else {
             responseDTO.put("responseMessage", ResponseMessage.DIARY_BOOKMARK_LIST_FAIL);
             return new ResponseEntity<>(DefaultRes.res(200, responseDTO), HttpStatus.OK);
         }
@@ -523,7 +523,6 @@ public class DiaryController {
     }
 
     private void requestToEmotionFlask(DiaryRequestDTO diary) throws JsonProcessingException, ParseException {
-        System.out.println("content : " + diary.getContent());
         RestTemplate restTemplate = new RestTemplate();
         // url
         String url = "http://i8d110.p.ssafy.io:5000/predict";
@@ -538,10 +537,6 @@ public class DiaryController {
         HttpEntity<?> requestMessage = new HttpEntity<>(body, httpHeaders);
         // Request
         ResponseEntity<String> response = restTemplate.postForEntity(url, requestMessage, String.class);
-
-        // 요청 후 응답 확인
-        System.out.println(response.getStatusCode());
-        System.out.println(response.getBody());
 
         JSONObject jsonObj = (JSONObject) new JSONParser().parse(response.getBody().toString());
 
@@ -571,12 +566,10 @@ public class DiaryController {
 
     private String requestToDalleFlask(String content) throws JsonProcessingException, ParseException {
 
-
         RestTemplate restTemplate = new RestTemplate();
         // url
         String url = "http://i8d110.p.ssafy.io:5000/dalle";
         // String url = "http://127.0.0.1:5000/dalle";
-
 
         // Header set
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -588,10 +581,6 @@ public class DiaryController {
         HttpEntity<?> requestMessage = new HttpEntity<>(body, httpHeaders);
         // Request
         ResponseEntity<String> response = restTemplate.postForEntity(url, requestMessage, String.class);
-
-        // 요청 후 응답 확인
-        System.out.println(response.getStatusCode());
-        System.out.println(response.getBody());
 
         JSONObject jsonObj = (JSONObject) new JSONParser().parse(response.getBody().toString());
         JSONObject data = (JSONObject) ((ArrayList) jsonObj.get("data")).get(0);
@@ -619,7 +608,6 @@ public class DiaryController {
         ResponseEntity<String> response = restTemplate.postForEntity(url, requestMessage, String.class);
 
         String result = response.getBody();
-        System.out.println("sentence: " + result);
 
         return result;
     }
