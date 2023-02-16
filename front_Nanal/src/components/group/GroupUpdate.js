@@ -242,6 +242,11 @@ function GroupUpdate() {
                             .catch(({ error }) => {
                               console.log('알림 저장 오류 : ' + error);
                             });
+                        } else {
+                          navigate(`/Group/Setting`, {
+                            state: { groupIdx: groupidx },
+                            replace: true,
+                          });
                         }
                       }
                     } else {

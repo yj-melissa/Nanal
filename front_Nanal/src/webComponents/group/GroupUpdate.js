@@ -180,7 +180,7 @@ function GroupUpdate({ groupIdx, setGroupCompo }) {
           tags: currentTag.current,
         })
         .then(({ data }) => {
-          console.log(data);
+          // console.log(data);
           if (data.statusCode === 200) {
             if (data.data.responseMessage === '그룹 수정 성공') {
               // console.log(data.data.groupDetail);
@@ -226,6 +226,7 @@ function GroupUpdate({ groupIdx, setGroupCompo }) {
                               userIdx: includeFriendIdx,
                             })
                             .then(({ data }) => {
+                              // console.log(data)
                               if (data.statusCode === 200) {
                                 if (
                                   data.data.responseMessage === '알림 저장 성공'
@@ -252,6 +253,14 @@ function GroupUpdate({ groupIdx, setGroupCompo }) {
                             .catch(({ error }) => {
                               console.log('알림 저장 오류 : ' + error);
                             });
+                        } else {
+                          setGroupCompo([
+                            false,
+                            false,
+                            true,
+                            false,
+                            false,
+                          ]);
                         }
                       }
                     } else {
@@ -309,7 +318,7 @@ function GroupUpdate({ groupIdx, setGroupCompo }) {
     axios_api
       .get(`/group/${groupIdx}`)
       .then(({ data }) => {
-        console.log(data);
+        // console.log(data);
         if (data.statusCode === 200) {
           setGroupName(null);
           setGroupTag(null);
