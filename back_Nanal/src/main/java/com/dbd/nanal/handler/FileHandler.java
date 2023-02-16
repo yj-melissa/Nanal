@@ -91,23 +91,7 @@ public class FileHandler {
         file.setReadable(true);
         ImageIO.write(image, "png", file);
 
-        // 파일 만들기
-
         return file;
     }
 
-//    private void deleteFile(ProductImageVO image) {
-//        log.info("delete imageFile");
-//        try {
-//            // delete original image on s3
-//            s3service.fileDelete(image.getImage_uploadPath()+"/"+image.getImage_uuid()+"_"+image.getImage_name());
-//
-//            // delete thumbnail image on s3
-//            if(image.getImage_type().contains("mainImage")) {
-//                s3service.fileDelete(image.getImage_uploadPath()+"/"+image.getImage_uuid()+"_"+image.getImage_name());
-//            }
-//        }catch(Exception e) {
-//            log.error("delete file error"+e.getMessage());
-//        }
-//    }
 }
