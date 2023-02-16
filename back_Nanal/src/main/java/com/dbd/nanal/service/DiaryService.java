@@ -197,9 +197,11 @@ public class DiaryService {
 
     // save bookmark
     public BookmarkResponseDTO saveBookmark(int diaryIdx, int userIdx){
+        UserEntity user=userRepository.findByUserIdx(userIdx);
+        DiaryEntity diary=diaryRepository.getReferenceById(diaryIdx);
         ScrapEntity scrapEntity=ScrapEntity.builder()
-                .user(UserEntity.builder().userIdx(userIdx).build())
-                .diary(DiaryEntity.builder().diaryIdx(diaryIdx).build())
+                .user(user)
+                .diary(diary)
                 .build();
         return new BookmarkResponseDTO(bookmarkRepository.save(scrapEntity));
     }
