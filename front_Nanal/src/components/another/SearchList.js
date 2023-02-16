@@ -41,14 +41,14 @@ function SearchList() {
       </p>
       <form
         onSubmit={searchDiary}
-        className='flex justify-around m-1 h-18 w-70'
+        className='grid grid-cols-2 m-auto h-18 w-70'
       >
         <input
           type='text'
           id='searchDiary'
-          className='p-1 rounded-lg w-46 h-18'
+          className='pl-2 rounded-lg w-full h-18 m-auto'
         ></input>
-        <button type='submit' className='w-16 h-18'>
+        <button type='submit' className='w-16 h-18 m-auto'>
           검색하기
         </button>
       </form>
