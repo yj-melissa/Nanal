@@ -4,6 +4,7 @@ import { removeCookie } from '../../config/Cookie';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router';
 import TuningProfile from './TuningProfile';
+import TuningUserInfo from "./TuningUserInfo";
 
 const Tuning = ({ toggleProfileMenu }) => {
   useEffect(() => {
@@ -38,13 +39,14 @@ const Tuning = ({ toggleProfileMenu }) => {
     <div className='grid w-64 grid-cols-1 gap-1 mb-5 place-content-evenly'>
       <TuningProfile toggleProfileMenu={toggleProfileMenu} />
       {/* PDF 미구현 */}
-      <div className='box-border flex justify-between h-12 font-bold rounded-lg cursor-not-allowed indent-4 bg-lime-400/75'>
-        <div className='self-center'>PDF로 내보내기</div>
-      </div>
+      <TuningUserInfo />
+      {/* <div className='box-border flex justify-between h-12 font-bold rounded-lg cursor-not-allowed indent-4 bg-lime-400/75'>
+        <div className='self-center'>회원 정보 수정</div>
+      </div> */}
       {/* 테마설정 미구현 */}
-      <div className='box-border flex justify-between h-12 font-bold rounded-lg cursor-not-allowed indent-4 bg-lime-400/75'>
+      {/* <div className='box-border flex justify-between h-12 font-bold rounded-lg cursor-not-allowed indent-4 bg-lime-400/75'>
         <div className='self-center'>테마 설정</div>
-      </div>
+      </div> */}
       {/* <hr className='my-4 w-80 border-slate-500/75' /> */}
       <div
         className='box-border flex justify-between h-12 font-bold rounded-lg cursor-pointer indent-4 bg-lime-400/75'
