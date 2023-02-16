@@ -2,11 +2,13 @@ package com.dbd.nanal.dto;
 
 import com.dbd.nanal.model.NoticeEntity;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
+@NoArgsConstructor
 public class NotificationResponseDTO {
     private int noticeIdx;
     private int userIdx;
