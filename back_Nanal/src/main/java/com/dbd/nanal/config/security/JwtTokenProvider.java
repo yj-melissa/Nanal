@@ -35,17 +35,14 @@ public class JwtTokenProvider {
     String secretKey;
 
 
-    // Access Token 기한 = 10분
-//    private final Date accessTokenExpiryDate = Date.from(
-//        Instant.now().plus(1, ChronoUnit.MINUTES)
-//    );
+    // Access Token 기한 = 1일
 
-    private final Date accessTokenExpiryDate = Date.from(
+    private Date accessTokenExpiryDate = Date.from(
         Instant.now().plus(1, ChronoUnit.DAYS)
     );
 
     // Refresh Token 기한 = 2주
-    private final Date refreshTokenExpiryDate = Date.from(
+    private Date refreshTokenExpiryDate = Date.from(
         Instant.now().plus(14, ChronoUnit.DAYS)
     );
 
