@@ -36,15 +36,10 @@ public class JwtTokenProvider {
 
 
     // Access Token 기한 = 1일
-
-    private Date accessTokenExpiryDate = Date.from(
-        Instant.now().plus(1, ChronoUnit.DAYS)
-    );
+    private final long accessTokenExpiryDate = 1;
 
     // Refresh Token 기한 = 2주
-    private Date refreshTokenExpiryDate = Date.from(
-        Instant.now().plus(14, ChronoUnit.DAYS)
-    );
+    private final long refreshTokenExpiryDate = 14;
 
     // 토큰 생성
     // 일반 로그인
@@ -135,7 +130,7 @@ public class JwtTokenProvider {
     }
 
     // Token 발급
-    public String createToken(int userIdx, Date expiryDate){
+    public String createToken(int userIdx, long expiryDate){
         log.debug("[createToken] 토큰 생성 시작");
         UserEntity user = userRepository.findByUserIdx(userIdx);
         Claims claims = Jwts.claims()
@@ -148,7 +143,7 @@ public class JwtTokenProvider {
             .setClaims(claims)
             .setIssuer("nanal")
             .setIssuedAt(new Date())
-            .setExpiration(expiryDate)
+            .setExpiration(Date.from(Instant.now().plus(expiryDate, ChronoUnit.DAYS)))
             .compact();
 
         log.debug("[createToken] 토큰 생성 완료");

@@ -10,8 +10,6 @@ import lombok.Setter;
 @Data
 @Builder
 @Getter @Setter
-//@NoArgsConstructor
-//@AllArgsConstructor
 public class JwtTokenDTO {
 
     private String grantType;
