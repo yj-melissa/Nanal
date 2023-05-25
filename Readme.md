@@ -6,7 +6,7 @@ SSAFY 8기 2학기 공통 프로젝트 - **DBD 나날**
 
 ## ✨ 팀원 소개
 
-![팀원 역할 분배.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/1c26b5eb-b330-4a65-bb85-484c74860ded/%ED%8C%80%EC%9B%90_%EC%97%AD%ED%95%A0_%EB%B6%84%EB%B0%B0.png)
+![team.png](exec/assets/2a5536d6937a810fc9e971e9872ac1a3bf7410c2.png)
 
 ## ✨ 기획 배경
 
@@ -36,28 +36,28 @@ AI를 통하여 일기의 내용을 그림으로 그려주기도 하며, 그날�
 
 ### - 자연어 처리를 통한 감정 분석
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/e74e46a0-17b1-4c36-bd66-a4187bf93d3e/Untitled.png)
+![emotion.png](exec/assets/c25d12aef904a3b29e0e3dbd59d48e3ac097bfaa.png)
 
 - 감정은 총 6 개(슬픔, 기쁨, 보통, 당황, 화남, 불안)로 분류하며 그 중 1개의 이모티콘으로 표현됩니다.
 - 분석 방법으로는 4만건의 데이터를 받아와 형태소 분석, 텍스트 정규화, 감정 라벨링을 통해 전처리를 진행했습니다.
-이후 학습시킨 모델을 활용해 사용자가 작성한 일기에서 감정을 분석합니다.
+  이후 학습시킨 모델을 활용해 사용자가 작성한 일기에서 감정을 분석합니다.
 
 ### - 자연어 처리를 통한 핵심 문장 추출
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/ae5317d3-a0f8-47e5-be02-bee85073df17/Untitled.png)
+![sentence.png](exec/assets/1cb5d7402fff873dee8fc7bc037101e759e78942.png)
 
 - 유저가 일기만 작성하면 일기 내용을 자동으로 파파고가 영어로 번역하며, 번역한 문장에서 키워드를 추출하고, 핵심 문장을 선별합니다. 이때 핵심 문장은 작성된 일기의 양에 따라 여러 개가 나올 수도 있습니다.
 - 핵심 문장 추출 과정
-    1. 일기 300자 이내 작성
-    2. 파파고 API 통해 영어로 번역
-    3. 전처리(단어 토큰화/ 명사, 동사 원형 복원/ 불용어 처리)
-    4. 단어 빈도수로 뽑기 (빈도수 2이상)
-    5. 문장 중에서 4)에서 뽑은 단어가 많이 나오는 문장 뽑기
-    (여러 문장 가능하며 문장 길이에 따라 문장 수는 달라짐)
+  1. 일기 300자 이내 작성
+  2. 파파고 API 통해 영어로 번역
+  3. 전처리(단어 토큰화/ 명사, 동사 원형 복원/ 불용어 처리)
+  4. 단어 빈도수로 뽑기 (빈도수 2이상)
+  5. 문장 중에서 4)에서 뽑은 단어가 많이 나오는 문장 뽑기
+     (여러 문장 가능하며 문장 길이에 따라 문장 수는 달라짐)
 
 ### - 교환일기를 쓸 수 있는 공유 플랫폼 제공
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/ff0d96ca-1f94-448d-a209-050ae6df2da4/Untitled.png)
+![Untitled](exec/assets/5eb0fe1b8e93a3b654a64673765a2428f0fa20a9.png)
 
 - 일기를 작성할 때 본인이 속한 그룹을 다중 선택할 수 있으며 해당 일기를 친구들과 나눌 수 있습니다.
 - 해당 그룹 내 인원들끼리만 댓글을 주고 받을 수 있어 함께한 사람들과의 추억을 나눌 수 있습니다.
@@ -104,14 +104,89 @@ AI를 통하여 일기의 내용을 그림으로 그려주기도 하며, 그날�
 **CI/CD**
 
 - AWS EC2
-Ubuntu 20.04
-Docker 20.10.23
+  Ubuntu 20.04
+  Docker 20.10.23
 - Jenkins
 - NGINX
 - SSL
 
 ## ✅ 프로젝트 파일 구조
-추후 변경
 
+<details>
+<summary>back_Nanal</summary>
+<div markdown="1">
+
+  ```
+  📦nanal
+ ┣ 📂config
+ ┃ ┣ 📂common 
+ ┃ ┣ 📂oauth  
+ ┃ ┣ 📂security  
+ ┣ 📂controller  
+ ┣ 📂dto  
+ ┣ 📂exception    
+ ┣ 📂handler    
+ ┣ 📂model  
+ ┣ 📂PapagoAPI  
+ ┣ 📂repository  
+ ┣ 📂S3Uploader  
+ ┣ 📂service
+ ┗ 📜NanalApplication.java
+  ```
+  </div>
+</details>
+
+<details>
+  <summary>front_Nanal</summary>
+    <div markdown="1">
+
+  ```
+    📦src
+    ┣ 📂components
+    ┃ ┣ 📂account
+    ┃ ┣ 📂another
+    ┃ ┣ 📂diary
+    ┃ ┣ 📂friend
+    ┃ ┣ 📂group
+    ┃ ┣ 📂mypage
+    ┃ ┃ ┣ 📂profile
+    ┃ ┃ ┣ 📂setting
+    ┣ 📂config
+    ┣ 📂main
+    ┣ 📂src_assets
+    ┃ ┣ 📂css
+    ┃ ┣ 📂fonts
+    ┃ ┗ 📂img
+    ┃ ┃ ┣ 📂bookmark
+    ┃ ┃ ┣ 📂bookmark-name
+    ┃ ┃ ┣ 📂diary-img
+    ┃ ┃ ┣ 📂emotion
+    ┣ 📂store
+    ┣ 📂webComponents
+    ┃ ┣ 📂account
+    ┃ ┣ 📂another
+    ┃ ┣ 📂diary
+    ┃ ┣ 📂friend
+    ┃ ┣ 📂group
+    ┃ ┣ 📂modal
+    ┃ ┣ 📂setting
+    ┣ 📜App.css
+    ┣ 📜App.js
+    ┣ 📜index.css
+    ┣ 📜index.js
+  ```
+
+  </div>
+  </details>
+  
+<details>
+  <summary>flask_Nanal</summary>
+    <div markdown="1">
+    </div>
+  </details>
+
+      
+      
 ## ✅ 프로젝트 산출물 및 결과물
+
 GitLab 및 exec 폴더 참조
